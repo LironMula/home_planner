@@ -692,6 +692,52 @@
       transform: translateX(-50%) translateY(-5px);
     }
 
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.42);
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .project-dialog {
+      width: min(440px, 100%);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .project-dialog h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .project-dialog .muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .empty-state {
       border: 1px dashed #c8d4e2;
       border-radius: 8px;
@@ -1058,6 +1104,32 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="githubProjectModal" aria-hidden="true">
+    <div class="project-dialog" role="dialog" aria-modal="true" aria-labelledby="githubProjectTitle">
+      <h2 id="githubProjectTitle">GitHub project</h2>
+      <div class="field" id="githubNewProjectField">
+        <label for="githubNewProjectInput">New project name</label>
+        <input id="githubNewProjectInput" type="text" placeholder="example: main-house" />
+      </div>
+      <div class="field">
+        <label for="githubProjectSort">Sort projects by</label>
+        <select id="githubProjectSort">
+          <option value="modified">Last modified</option>
+          <option value="name">Name</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="githubProjectSelect">Existing projects</label>
+        <select id="githubProjectSelect"></select>
+      </div>
+      <div class="muted" id="githubProjectHelp">Loading projects from GitHub...</div>
+      <div class="dialog-actions">
+        <button class="ghost-btn" id="githubProjectCancel" type="button">Cancel</button>
+        <button class="primary-btn" id="githubProjectConfirm" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -1237,6 +1309,15 @@
       resetCameraBtn: document.getElementById("resetCameraBtn"),
       viewFloorSelect: document.getElementById("viewFloorSelect"),
       viewToggles: document.getElementById("viewToggles"),
+      githubProjectModal: document.getElementById("githubProjectModal"),
+      githubProjectTitle: document.getElementById("githubProjectTitle"),
+      githubNewProjectField: document.getElementById("githubNewProjectField"),
+      githubNewProjectInput: document.getElementById("githubNewProjectInput"),
+      githubProjectSort: document.getElementById("githubProjectSort"),
+      githubProjectSelect: document.getElementById("githubProjectSelect"),
+      githubProjectHelp: document.getElementById("githubProjectHelp"),
+      githubProjectCancel: document.getElementById("githubProjectCancel"),
+      githubProjectConfirm: document.getElementById("githubProjectConfirm"),
       toast: document.getElementById("toast")
     };
 
@@ -3074,21 +3155,12 @@
         .replace(/^[-_.]+|[-_.]+$/g, "");
     }
 
-    function githubProjectName(actionLabel) {
-      const previous = window.localStorage.getItem(githubPlanConfig.projectKey) || githubPlanConfig.defaultProject;
-      const raw = window.prompt(`${actionLabel}: enter project name`, previous);
-      if (raw === null) return "";
-      const projectName = sanitizeGithubProjectName(raw);
-      if (!projectName) {
-        showToast("Project name required");
-        return "";
-      }
-      window.localStorage.setItem(githubPlanConfig.projectKey, projectName);
-      return projectName;
-    }
-
     function githubApiUrl(path) {
       return `https://api.github.com/repos/${githubPlanConfig.owner}/${githubPlanConfig.repo}/contents/${encodeURIComponent(path).replaceAll("%2F", "/")}`;
+    }
+
+    function githubRepoApiUrl(endpoint) {
+      return `https://api.github.com/repos/${githubPlanConfig.owner}/${githubPlanConfig.repo}/${endpoint.replace(/^\/+/, "")}`;
     }
 
     function utf8ToBase64(text) {
@@ -3113,10 +3185,10 @@
       return token.trim();
     }
 
-    async function githubRequest(path, options = {}) {
+    async function githubFetch(url, options = {}) {
       const token = githubToken();
       if (!token) throw new Error("Missing GitHub token");
-      const response = await fetch(githubApiUrl(path), {
+      const response = await fetch(url, {
         ...options,
         headers: {
           Accept: "application/vnd.github+json",
@@ -3133,9 +3205,144 @@
       return response.json();
     }
 
+    async function githubRequest(path, options = {}) {
+      return githubFetch(githubApiUrl(path), options);
+    }
+
+    async function githubRepoRequest(endpoint, options = {}) {
+      return githubFetch(githubRepoApiUrl(endpoint), options);
+    }
+
+    async function githubProjectFiles() {
+      const files = await githubRequest(githubPlanConfig.directory);
+      if (!Array.isArray(files)) return [];
+      const projects = files
+        .filter(file => file.type === "file" && /\.json$/i.test(file.name))
+        .map(file => ({
+          name: sanitizeGithubProjectName(file.name),
+          path: file.path,
+          sha: file.sha,
+          modified: ""
+        }));
+      await Promise.all(projects.map(async project => {
+        try {
+          const commits = await githubRepoRequest(`commits?path=${encodeURIComponent(project.path)}&per_page=1&sha=${encodeURIComponent(githubPlanConfig.branch)}`);
+          project.modified = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date || "";
+        } catch (error) {
+          project.modified = "";
+        }
+      }));
+      return projects;
+    }
+
+    function sortedGithubProjects(projects, sortMode) {
+      return [...projects].sort((a, b) => {
+        if (sortMode === "name") return a.name.localeCompare(b.name);
+        const timeDiff = new Date(b.modified || 0).getTime() - new Date(a.modified || 0).getTime();
+        return timeDiff || a.name.localeCompare(b.name);
+      });
+    }
+
+    function renderGithubProjectOptions(projects) {
+      const previous = els.githubProjectSelect.value;
+      const sorted = sortedGithubProjects(projects, els.githubProjectSort.value);
+      els.githubProjectSelect.innerHTML = "";
+      sorted.forEach(project => {
+        const option = document.createElement("option");
+        option.value = project.name;
+        const dateLabel = project.modified ? new Date(project.modified).toLocaleString() : "unknown date";
+        option.textContent = `${project.name} - ${dateLabel}`;
+        els.githubProjectSelect.appendChild(option);
+      });
+      if (sorted.some(project => project.name === previous)) els.githubProjectSelect.value = previous;
+    }
+
+    async function chooseGithubProject(mode) {
+      const previous = window.localStorage.getItem(githubPlanConfig.projectKey) || githubPlanConfig.defaultProject;
+      const isSave = mode === "save";
+      els.githubProjectTitle.textContent = isSave ? "Save GitHub Project" : "Load GitHub Project";
+      els.githubProjectConfirm.textContent = isSave ? "Save" : "Load";
+      els.githubNewProjectField.style.display = isSave ? "" : "none";
+      els.githubNewProjectInput.value = isSave ? previous : "";
+      els.githubProjectSelect.innerHTML = `<option value="">Loading...</option>`;
+      els.githubProjectSelect.disabled = true;
+      els.githubProjectSort.disabled = true;
+      els.githubProjectConfirm.disabled = true;
+      els.githubProjectHelp.textContent = "Loading projects from GitHub...";
+      els.githubProjectModal.classList.add("show");
+      els.githubProjectModal.setAttribute("aria-hidden", "false");
+
+      let projects = [];
+      try {
+        projects = await githubProjectFiles();
+      } catch (error) {
+        if (error.message === "Missing GitHub token") {
+          closeGithubProjectModal();
+          throw error;
+        }
+        projects = [];
+      }
+
+      els.githubProjectSelect.disabled = false;
+      els.githubProjectSort.disabled = false;
+      els.githubProjectConfirm.disabled = !isSave && !projects.length;
+      els.githubProjectHelp.textContent = projects.length
+        ? "Choose an existing project, or type a new name at the top when saving."
+        : (isSave ? "No saved GitHub projects found. Type a new name at the top." : "No saved GitHub projects found.");
+      renderGithubProjectOptions(projects);
+      if (projects.some(project => project.name === previous)) els.githubProjectSelect.value = previous;
+      if (isSave) els.githubNewProjectInput.focus();
+      else els.githubProjectSelect.focus();
+
+      return new Promise(resolve => {
+        const cleanup = () => {
+          els.githubProjectCancel.removeEventListener("click", onCancel);
+          els.githubProjectConfirm.removeEventListener("click", onConfirm);
+          els.githubProjectSort.removeEventListener("change", onSort);
+          els.githubProjectModal.removeEventListener("click", onBackdrop);
+          window.removeEventListener("keydown", onKey);
+        };
+        const finish = value => {
+          cleanup();
+          closeGithubProjectModal();
+          resolve(value);
+        };
+        const onCancel = () => finish("");
+        const onConfirm = () => {
+          const raw = isSave ? (els.githubNewProjectInput.value || els.githubProjectSelect.value) : els.githubProjectSelect.value;
+          const projectName = sanitizeGithubProjectName(raw);
+          if (!projectName) {
+            showToast("Project name required");
+            return;
+          }
+          window.localStorage.setItem(githubPlanConfig.projectKey, projectName);
+          finish(projectName);
+        };
+        const onSort = () => renderGithubProjectOptions(projects);
+        const onBackdrop = event => {
+          if (event.target === els.githubProjectModal) finish("");
+        };
+        const onKey = event => {
+          if (!els.githubProjectModal.classList.contains("show")) return;
+          if (event.key === "Escape") finish("");
+          if (event.key === "Enter" && document.activeElement !== els.githubProjectSort) onConfirm();
+        };
+        els.githubProjectCancel.addEventListener("click", onCancel);
+        els.githubProjectConfirm.addEventListener("click", onConfirm);
+        els.githubProjectSort.addEventListener("change", onSort);
+        els.githubProjectModal.addEventListener("click", onBackdrop);
+        window.addEventListener("keydown", onKey);
+      });
+    }
+
+    function closeGithubProjectModal() {
+      els.githubProjectModal.classList.remove("show");
+      els.githubProjectModal.setAttribute("aria-hidden", "true");
+    }
+
     async function savePlanToGithub() {
       try {
-        const projectName = githubProjectName("Save GitHub project");
+        const projectName = await chooseGithubProject("save");
         if (!projectName) return;
         const path = githubPlanPath(projectName);
         const snapshot = { ...planSnapshot(), projectName };
@@ -3159,7 +3366,7 @@
 
     async function loadPlanFromGithub() {
       try {
-        const projectName = githubProjectName("Load GitHub project");
+        const projectName = await chooseGithubProject("load");
         if (!projectName) return;
         const file = await githubRequest(githubPlanPath(projectName));
         if (!file?.content) return showToast("No GitHub plan file found");
