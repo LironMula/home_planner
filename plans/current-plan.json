@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "savedAt": "2026-05-29T21:17:30.813Z",
-  "scale": 17.623416832000007,
+  "savedAt": "2026-05-29T21:28:16.030Z",
+  "scale": 17.62341683200001,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 11.559,
-      "y": 0.796,
-      "z": 8.581
+      "x": 28.784,
+      "y": 12.635,
+      "z": 26.959
     },
-    "yaw": 36.516,
-    "pitch": -0.105
+    "yaw": 23.118,
+    "pitch": -0.275
   },
   "splitRatio": 0.4059244791666667,
   "activeFloorId": "floor-1",
@@ -1059,7 +1059,7 @@
       "w": 6.6,
       "h": 25,
       "elevation": 0,
-      "height": 0.1,
+      "height": 0.05,
       "rotation": 0,
       "color": "#4f9d4e",
       "opacity": 0.86
@@ -1075,7 +1075,7 @@
       "w": 5.7,
       "h": 15.8,
       "elevation": 0,
-      "height": 0.1,
+      "height": 0.05,
       "rotation": 0,
       "color": "#4f9d4e",
       "opacity": 0.86
@@ -1106,7 +1106,7 @@
       "y": 9.8,
       "w": 10.6,
       "h": 0.9,
-      "elevation": 0,
+      "elevation": 0.1,
       "height": 0.15,
       "rotation": 0,
       "color": "#c8c7c1",
@@ -1126,6 +1126,55 @@
       "height": 0.15,
       "rotation": 0,
       "color": "#c8c7c1",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-4ucuzzz",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Road 1",
+      "elementKind": "road",
+      "x": 10.17,
+      "y": -0.76,
+      "w": 25.67,
+      "h": 9.53,
+      "elevation": 0,
+      "height": 0.05,
+      "rotation": 90,
+      "color": "#2f343b",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-kcq94yz",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Road 1 copy",
+      "elementKind": "road",
+      "x": 6.6,
+      "y": 22.6,
+      "w": 25.67,
+      "h": 9.53,
+      "elevation": 0,
+      "height": 0.05,
+      "rotation": 110,
+      "color": "#2f343b",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-3wepfmy",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Pool 1",
+      "elementKind": "pool",
+      "type1": "round",
+      "x": -8.4,
+      "y": 12.4,
+      "w": 3.05,
+      "h": 3.05,
+      "elevation": 0,
+      "height": 0.8,
+      "rotation": 0,
+      "color": "#38bdf8",
       "opacity": 0.86
     }
   ],
@@ -1220,6 +1269,34 @@
         "fx": 0.9999999999999999,
         "fy": 0.2537185834053247
       },
+      "anchorB": null,
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-mgww916",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 6",
+      "x1": 0.3508213063062419,
+      "y1": -0.2902196492212642,
+      "x2": 12.351914999043816,
+      "y2": -0.24652634694187983,
+      "anchorA": null,
+      "anchorB": null,
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-uyl699w",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 7",
+      "x1": -13.86,
+      "y1": 0.63,
+      "x2": -13.77,
+      "y2": 8.73,
+      "anchorA": null,
       "anchorB": null,
       "color": "#1f2937",
       "opacity": 1
