@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-05-29T21:41:47.083Z",
+  "savedAt": "2026-05-29T21:43:19.157Z",
   "projectName": "ruchama_20_v01_2026_05_30",
   "scale": 17.62341683200001,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 0.147,
-      "y": 1.074,
-      "z": 7.211
+      "x": 2.285,
+      "y": 0.909,
+      "z": 7.825
     },
-    "yaw": 30.216,
-    "pitch": -0.25
+    "yaw": 29.97,
+    "pitch": -0.075
   },
-  "splitRatio": 0.3681640625,
+  "splitRatio": 0.2119140625,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -847,8 +847,8 @@
       "floorId": "floor-1",
       "name": "Avocado tree 2",
       "elementKind": "avocado-tree",
-      "x": -11.4,
-      "y": 14.8,
+      "x": -11.5,
+      "y": 13.1,
       "w": 3.3,
       "h": 2.9,
       "elevation": 0,
@@ -1184,8 +1184,8 @@
       "floorId": "floor-1",
       "name": "Outdoor ninja exercise set 1",
       "elementKind": "ninja-set",
-      "x": -8.6,
-      "y": 23.8,
+      "x": -8.8,
+      "y": 0.9,
       "w": 1.6,
       "h": 2.9,
       "elevation": 0,
