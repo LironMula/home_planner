@@ -4642,18 +4642,46 @@
       if (kind === "ninja-set") {
         const postR = Math.max(0.035, Math.min(w, d) * 0.025);
         const railH = h * 0.92;
+        const wallX = -w * 0.34;
+        const ladderX = w * 0.02;
+        const barsX = w * 0.3;
+        const wallColor = 0x8b6f4e;
         [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
           addElementCylinder(group, sx * w * 0.42, 0, sz * d * 0.35, postR, railH, color, opacity, { segments: 12, metalness: 0.18 });
         }));
         addElementCylinder(group, 0, railH, -d * 0.35, postR, w * 0.84, color, opacity, { rotateZ: Math.PI / 2, segments: 12, metalness: 0.18 });
         addElementCylinder(group, 0, railH, d * 0.35, postR, w * 0.84, color, opacity, { rotateZ: Math.PI / 2, segments: 12, metalness: 0.18 });
+
+        addElementBox(group, wallX, 0, d * 0.36, w * 0.26, h * 0.78, 0.08, wallColor, 0.92, { roughness: 0.86 });
+        addElementBox(group, wallX, h * 0.1, d * 0.31, w * 0.2, h * 0.06, 0.08, 0x6b4f35, 0.9);
+        [
+          [-0.08, 0.18], [0.04, 0.28], [-0.02, 0.42], [0.08, 0.55],
+          [-0.06, 0.66], [0.02, 0.74], [0.09, 0.36], [-0.1, 0.52]
+        ].forEach(([xOff, y]) => {
+          addElementSphere(group, wallX + xOff * w, y * h, d * 0.29, Math.max(0.035, w * 0.012), 0xfacc15, 0.95, { widthSegments: 10, heightSegments: 8 });
+        });
+
+        addElementCylinder(group, ladderX - w * 0.08, 0, -d * 0.34, postR * 0.8, railH * 0.84, metal, 0.95, { segments: 10, metalness: 0.32 });
+        addElementCylinder(group, ladderX + w * 0.08, 0, -d * 0.34, postR * 0.8, railH * 0.84, metal, 0.95, { segments: 10, metalness: 0.32 });
         for (let i = 0; i < 5; i += 1) {
-          const x = (i / 4 - 0.5) * w * 0.68;
-          addElementCylinder(group, x, railH - h * 0.08, 0, postR * 0.75, d * 0.7, metal, 0.9, { rotateX: Math.PI / 2, segments: 10, metalness: 0.28 });
+          const y = h * (0.22 + i * 0.13);
+          addElementCylinder(group, ladderX, y, -d * 0.34, postR * 0.65, w * 0.18, 0xf97316, 0.95, { rotateZ: Math.PI / 2, segments: 10, metalness: 0.18 });
+          addElementBox(group, ladderX - w * 0.13, y - h * 0.015, -d * 0.34, w * 0.08, h * 0.03, d * 0.055, 0xf97316, 0.9);
+          addElementBox(group, ladderX + w * 0.13, y - h * 0.015, -d * 0.34, w * 0.08, h * 0.03, d * 0.055, 0xf97316, 0.9);
+        }
+
+        for (let i = 0; i < 6; i += 1) {
+          const x = barsX + (i / 5 - 0.5) * w * 0.28;
+          addElementCylinder(group, x, railH - h * 0.08, 0, postR * 0.72, d * 0.7, metal, 0.92, { rotateX: Math.PI / 2, segments: 10, metalness: 0.28 });
+          if (i < 5) {
+            const holdX = barsX + ((i + 0.5) / 5 - 0.5) * w * 0.28;
+            addElementCylinder(group, holdX, railH - h * 0.2, 0, postR * 0.58, h * 0.18, 0x22c55e, 0.92, { segments: 8 });
+            addElementCylinder(group, holdX, railH - h * 0.22, 0, Math.max(0.045, d * 0.04), 0.025, 0x22c55e, 0.92, { rotateX: Math.PI / 2, segments: 18 });
+          }
         }
         [-0.18, 0.18].forEach(x => {
-          addElementCylinder(group, x * w, railH - h * 0.28, 0, Math.max(0.07, d * 0.06), 0.025, 0xfacc15, 0.95, { rotateX: Math.PI / 2, segments: 24 });
-          addElementCylinder(group, x * w, railH - h * 0.26, 0, postR * 0.6, h * 0.22, 0xfacc15, 0.9, { segments: 8 });
+          addElementCylinder(group, x * w, railH - h * 0.38, d * 0.28, Math.max(0.055, d * 0.045), 0.025, 0xfacc15, 0.95, { rotateX: Math.PI / 2, segments: 24 });
+          addElementCylinder(group, x * w, railH - h * 0.36, d * 0.28, postR * 0.55, h * 0.22, 0xfacc15, 0.9, { segments: 8 });
         });
         addElementBox(group, 0, 0, 0, w * 0.9, h * 0.025, d * 0.86, 0x6b7280, 0.28, { castShadow: false });
         return;
