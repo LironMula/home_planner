@@ -1,16 +1,17 @@
 {
   "version": 1,
-  "savedAt": "2026-05-29T21:28:16.030Z",
+  "savedAt": "2026-05-29T21:34:09.903Z",
+  "projectName": "current-plan",
   "scale": 17.62341683200001,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 28.784,
-      "y": 12.635,
-      "z": 26.959
+      "x": 4.598,
+      "y": 1.426,
+      "z": 17.307
     },
-    "yaw": 23.118,
-    "pitch": -0.275
+    "yaw": 24.096,
+    "pitch": -0.06
   },
   "splitRatio": 0.4059244791666667,
   "activeFloorId": "floor-1",
@@ -1175,6 +1176,22 @@
       "height": 0.8,
       "rotation": 0,
       "color": "#38bdf8",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-r8354az",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Closet 5",
+      "elementKind": "closet",
+      "x": -6.994651209085144,
+      "y": 25.167885204430252,
+      "w": 1.2,
+      "h": 0.6,
+      "elevation": 0,
+      "height": 2.1,
+      "rotation": 0,
+      "color": "#6b7280",
       "opacity": 0.86
     }
   ],
