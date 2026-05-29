@@ -861,6 +861,8 @@
           <button class="ghost-btn" id="saveBtn" type="button" title="Save this plan in this browser">Save</button>
           <button class="ghost-btn" id="saveDiskBtn" type="button" title="Download this plan to disk">Save Disk</button>
           <button class="ghost-btn" id="loadDiskBtn" type="button" title="Load a saved plan JSON file">Load Disk</button>
+          <button class="ghost-btn" id="saveGithubBtn" type="button" title="Save this plan to the GitHub repository">Save GitHub</button>
+          <button class="ghost-btn" id="loadGithubBtn" type="button" title="Load this plan from the GitHub repository">Load GitHub</button>
           <button class="ghost-btn" id="loadObjectBtn" type="button" title="Load an object JSON bundle from clipboard">Load Object</button>
           <input id="loadDiskInput" type="file" accept="application/json,.json" hidden />
           <button class="ghost-btn" id="undoBtn" type="button" title="Undo the last plan change">Undo</button>
@@ -1213,6 +1215,8 @@
       saveDiskBtn: document.getElementById("saveDiskBtn"),
       loadDiskBtn: document.getElementById("loadDiskBtn"),
       loadDiskInput: document.getElementById("loadDiskInput"),
+      saveGithubBtn: document.getElementById("saveGithubBtn"),
+      loadGithubBtn: document.getElementById("loadGithubBtn"),
       loadObjectBtn: document.getElementById("loadObjectBtn"),
       undoBtn: document.getElementById("undoBtn"),
       groupBtn: document.getElementById("groupBtn"),
@@ -1232,6 +1236,13 @@
     const round = (value, places = 1) => Number(value.toFixed(places));
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const storageKey = "home-floor-planner-v1";
+    const githubPlanConfig = {
+      owner: "LironMula",
+      repo: "home_planner",
+      branch: "main",
+      path: "plans/current-plan.json",
+      tokenKey: "home-floor-planner-github-token"
+    };
 
     function activeFloor() {
       return state.floors.find(floor => floor.id === state.activeFloorId) || state.floors[0];
@@ -3036,6 +3047,85 @@
         showToast("Plan saved in this browser");
       } catch (error) {
         showToast("Could not save plan");
+      }
+    }
+
+    function githubApiUrl(path = githubPlanConfig.path) {
+      return `https://api.github.com/repos/${githubPlanConfig.owner}/${githubPlanConfig.repo}/contents/${encodeURIComponent(path).replaceAll("%2F", "/")}`;
+    }
+
+    function utf8ToBase64(text) {
+      const bytes = new TextEncoder().encode(text);
+      let binary = "";
+      bytes.forEach(byte => binary += String.fromCharCode(byte));
+      return btoa(binary);
+    }
+
+    function base64ToUtf8(content) {
+      const binary = atob(String(content || "").replace(/\s/g, ""));
+      const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+
+    function githubToken() {
+      let token = window.localStorage.getItem(githubPlanConfig.tokenKey) || "";
+      if (!token) {
+        token = window.prompt("Paste a fine-grained GitHub token for LironMula/home_planner with Contents: Read and write. It will be stored in this browser only.") || "";
+        if (token.trim()) window.localStorage.setItem(githubPlanConfig.tokenKey, token.trim());
+      }
+      return token.trim();
+    }
+
+    async function githubRequest(path, options = {}) {
+      const token = githubToken();
+      if (!token) throw new Error("Missing GitHub token");
+      const response = await fetch(githubApiUrl(path), {
+        ...options,
+        headers: {
+          Accept: "application/vnd.github+json",
+          Authorization: `Bearer ${token}`,
+          "X-GitHub-Api-Version": "2022-11-28",
+          ...(options.headers || {})
+        }
+      });
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        const detail = await response.text().catch(() => "");
+        throw new Error(detail || `GitHub request failed: ${response.status}`);
+      }
+      return response.json();
+    }
+
+    async function savePlanToGithub() {
+      try {
+        const existing = await githubRequest(githubPlanConfig.path);
+        const body = {
+          message: `Save home plan ${new Date().toISOString()}`,
+          branch: githubPlanConfig.branch,
+          content: utf8ToBase64(JSON.stringify(planSnapshot(), null, 2))
+        };
+        if (existing?.sha) body.sha = existing.sha;
+        await githubRequest(githubPlanConfig.path, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        showToast("Plan saved to GitHub");
+      } catch (error) {
+        showToast(error.message === "Missing GitHub token" ? "GitHub token required" : "Could not save to GitHub");
+      }
+    }
+
+    async function loadPlanFromGithub() {
+      try {
+        const file = await githubRequest(githubPlanConfig.path);
+        if (!file?.content) return showToast("No GitHub plan file found");
+        const saved = JSON.parse(base64ToUtf8(file.content));
+        if (!saved || !Array.isArray(saved.floors)) return showToast("GitHub plan file is invalid");
+        pushUndoSnapshot();
+        applyPlanSnapshot(saved, "Plan loaded from GitHub");
+      } catch (error) {
+        showToast(error.message === "Missing GitHub token" ? "GitHub token required" : "Could not load from GitHub");
       }
     }
 
@@ -5023,6 +5113,8 @@
     els.saveDiskBtn.addEventListener("click", savePlanToDisk);
     els.loadDiskBtn.addEventListener("click", loadPlanWithSystemPicker);
     els.loadDiskInput.addEventListener("change", () => loadPlanFromDisk(els.loadDiskInput.files?.[0]));
+    els.saveGithubBtn.addEventListener("click", savePlanToGithub);
+    els.loadGithubBtn.addEventListener("click", loadPlanFromGithub);
     els.loadObjectBtn.addEventListener("click", loadObjectFromClipboard);
     els.undoBtn.addEventListener("click", undoPlan);
     els.groupBtn.addEventListener("click", groupSelected);
