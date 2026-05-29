@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-05-29T21:36:28.643Z",
+  "savedAt": "2026-05-29T21:41:47.083Z",
   "projectName": "ruchama_20_v01_2026_05_30",
   "scale": 17.62341683200001,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 4.598,
-      "y": 1.426,
-      "z": 17.307
+      "x": 0.147,
+      "y": 1.074,
+      "z": 7.211
     },
-    "yaw": 24.096,
-    "pitch": -0.06
+    "yaw": 30.216,
+    "pitch": -0.25
   },
-  "splitRatio": 0.4059244791666667,
+  "splitRatio": 0.3681640625,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -1192,6 +1192,38 @@
       "height": 2.1,
       "rotation": 0,
       "color": "#475569",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-gvyw822",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Car 1",
+      "elementKind": "car",
+      "x": 13.3,
+      "y": 1.4,
+      "w": 4,
+      "h": 2,
+      "elevation": 0,
+      "height": 1.6,
+      "rotation": 0,
+      "color": "#2563eb",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-3v42z1k",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Car 1 copy",
+      "elementKind": "car",
+      "x": 13.3,
+      "y": 3.9,
+      "w": 4,
+      "h": 2,
+      "elevation": 0,
+      "height": 1.6,
+      "rotation": 0,
+      "color": "#8d8bee",
       "opacity": 0.86
     }
   ],
