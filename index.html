@@ -924,9 +924,13 @@
                 <option value="sofa">Sofa</option>
                 <option value="table">Table</option>
                 <option value="chair">Chair</option>
+                <option value="car">Car</option>
+                <option value="bed">Bed</option>
+                <option value="electric-piano">Electric piano</option>
                 <option value="grass">Grass field</option>
                 <option value="tree">Tree</option>
                 <option value="avocado-tree">Avocado tree</option>
+                <option value="ninja-set">Outdoor ninja exercise set</option>
                 <option value="building">Building</option>
                 <option value="road">Road</option>
                 <option value="concrete-pavement">Smooth flattened concrete pavement</option>
@@ -1125,9 +1129,13 @@
       sofa: { label: "Sofa", color: "#b7846f", w: 2.0, h: 0.9, length: 0.85 },
       table: { label: "Table", color: "#b08968", w: 1.4, h: 0.9, length: 0.75 },
       chair: { label: "Chair", color: "#8ab17d", w: 0.55, h: 0.55, length: 0.9 },
+      car: { label: "Car", color: "#2563eb", w: 4.4, h: 1.9, length: 1.55 },
+      bed: { label: "Bed", color: "#94a3b8", w: 2.0, h: 2.1, length: 0.75 },
+      "electric-piano": { label: "Electric piano", color: "#111827", w: 1.45, h: 0.48, length: 0.95 },
       grass: { label: "Grass field", color: "#4f9d4e", w: 4, h: 3, length: 0.05 },
       tree: { label: "Tree", color: "#3f8f46", w: 1.4, h: 1.4, length: 3.2, maxHeight: 12 },
       "avocado-tree": { label: "Avocado tree", color: "#2f7d32", w: 3, h: 3, length: 3.5, maxHeight: 12 },
+      "ninja-set": { label: "Outdoor ninja exercise set", color: "#475569", w: 4, h: 1.4, length: 2.2 },
       building: { label: "Building", color: "#8b95a1", w: 3, h: 4, length: 6, maxHeight: 50 },
       road: { label: "Road", color: "#2f343b", w: 5, h: 3, length: 0.04 },
       "concrete-pavement": { label: "Smooth concrete pavement", color: "#c8c7c1", w: 4, h: 2.4, length: 0.08 },
@@ -4380,6 +4388,67 @@
         }
         addElementBox(group, 0, h + 0.006, -d * 0.38, w, 0.01, Math.max(0.025, d * 0.035), 0xfacc15, 0.86, { castShadow: false });
         addElementBox(group, 0, h + 0.006, d * 0.38, w, 0.01, Math.max(0.025, d * 0.035), 0xfacc15, 0.86, { castShadow: false });
+        return;
+      }
+
+      if (kind === "car") {
+        const wheelR = Math.max(0.12, Math.min(w, d) * 0.08);
+        addElementBox(group, 0, wheelR * 1.2, 0, w * 0.92, h * 0.34, d * 0.82, color, opacity, { roughness: 0.5 });
+        addElementBox(group, -w * 0.08, h * 0.34 + wheelR * 1.2, -d * 0.02, w * 0.45, h * 0.26, d * 0.68, color, opacity, { roughness: 0.46 });
+        addElementBox(group, -w * 0.08, h * 0.56 + wheelR * 1.2, -d * 0.35, w * 0.34, h * 0.08, 0.035, glass, 0.7, { castShadow: false });
+        addElementBox(group, -w * 0.08, h * 0.56 + wheelR * 1.2, d * 0.35, w * 0.34, h * 0.08, 0.035, glass, 0.7, { castShadow: false });
+        [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
+          addElementCylinder(group, sx * w * 0.32, wheelR, sz * d * 0.42, wheelR, d * 0.08, 0x111827, 0.95, { rotateX: Math.PI / 2, segments: 18 });
+          addElementCylinder(group, sx * w * 0.32, wheelR, sz * d * 0.43, wheelR * 0.46, d * 0.085, metal, 0.9, { rotateX: Math.PI / 2, segments: 14, metalness: 0.32 });
+        }));
+        addElementBox(group, -w * 0.47, h * 0.32, 0, 0.035, h * 0.1, d * 0.42, 0xffffff, 0.75, { castShadow: false });
+        addElementBox(group, w * 0.47, h * 0.32, 0, 0.035, h * 0.08, d * 0.36, 0xef4444, 0.8, { castShadow: false });
+        return;
+      }
+
+      if (kind === "bed") {
+        addElementBox(group, 0, 0, 0, w, h * 0.28, d, wood, opacity, { roughness: 0.78 });
+        addElementBox(group, 0, h * 0.26, d * 0.04, w * 0.9, h * 0.22, d * 0.82, color, opacity, { roughness: 0.74 });
+        addElementBox(group, 0, h * 0.5, -d * 0.34, w * 0.92, h * 0.34, d * 0.08, wood, opacity);
+        addElementBox(group, -w * 0.24, h * 0.5, -d * 0.24, w * 0.36, h * 0.1, d * 0.18, pale, 0.95);
+        addElementBox(group, w * 0.24, h * 0.5, -d * 0.24, w * 0.36, h * 0.1, d * 0.18, pale, 0.95);
+        addElementBox(group, 0, h * 0.48, d * 0.14, w * 0.82, h * 0.08, d * 0.44, 0xffffff, 0.42, { castShadow: false });
+        return;
+      }
+
+      if (kind === "electric-piano") {
+        addElementBox(group, 0, h * 0.62, 0, w, h * 0.18, d, color, opacity, { roughness: 0.42 });
+        addElementBox(group, 0, h * 0.78, -d * 0.26, w * 0.92, h * 0.06, d * 0.16, accent, 0.9);
+        const keyCount = 14;
+        for (let i = 0; i < keyCount; i += 1) {
+          const x = (i / keyCount - 0.5) * w + w / keyCount / 2;
+          addElementBox(group, x, h * 0.82, d * 0.08, w / keyCount * 0.82, h * 0.035, d * 0.32, 0xffffff, 0.94, { castShadow: false });
+          if (![2, 6, 9, 13].includes(i)) addElementBox(group, x + w / keyCount * 0.34, h * 0.855, d * 0.02, w / keyCount * 0.36, h * 0.04, d * 0.18, 0x111827, 0.96, { castShadow: false });
+        }
+        [-1, 1].forEach(sx => {
+          addElementCylinder(group, sx * w * 0.36, 0, -d * 0.32, Math.max(0.025, d * 0.035), h * 0.62, metal, 0.9, { segments: 10, metalness: 0.28 });
+          addElementCylinder(group, sx * w * 0.36, 0, d * 0.32, Math.max(0.025, d * 0.035), h * 0.62, metal, 0.9, { segments: 10, metalness: 0.28 });
+        });
+        return;
+      }
+
+      if (kind === "ninja-set") {
+        const postR = Math.max(0.035, Math.min(w, d) * 0.025);
+        const railH = h * 0.92;
+        [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
+          addElementCylinder(group, sx * w * 0.42, 0, sz * d * 0.35, postR, railH, color, opacity, { segments: 12, metalness: 0.18 });
+        }));
+        addElementCylinder(group, 0, railH, -d * 0.35, postR, w * 0.84, color, opacity, { rotateZ: Math.PI / 2, segments: 12, metalness: 0.18 });
+        addElementCylinder(group, 0, railH, d * 0.35, postR, w * 0.84, color, opacity, { rotateZ: Math.PI / 2, segments: 12, metalness: 0.18 });
+        for (let i = 0; i < 5; i += 1) {
+          const x = (i / 4 - 0.5) * w * 0.68;
+          addElementCylinder(group, x, railH - h * 0.08, 0, postR * 0.75, d * 0.7, metal, 0.9, { rotateX: Math.PI / 2, segments: 10, metalness: 0.28 });
+        }
+        [-0.18, 0.18].forEach(x => {
+          addElementCylinder(group, x * w, railH - h * 0.28, 0, Math.max(0.07, d * 0.06), 0.025, 0xfacc15, 0.95, { rotateX: Math.PI / 2, segments: 24 });
+          addElementCylinder(group, x * w, railH - h * 0.26, 0, postR * 0.6, h * 0.22, 0xfacc15, 0.9, { segments: 8 });
+        });
+        addElementBox(group, 0, 0, 0, w * 0.9, h * 0.025, d * 0.86, 0x6b7280, 0.28, { castShadow: false });
         return;
       }
 
