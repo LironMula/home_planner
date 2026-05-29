@@ -1240,8 +1240,10 @@
       owner: "LironMula",
       repo: "home_planner",
       branch: "main",
-      path: "plans/current-plan.json",
-      tokenKey: "home-floor-planner-github-token"
+      directory: "plans",
+      defaultProject: "current-plan",
+      tokenKey: "home-floor-planner-github-token",
+      projectKey: "home-floor-planner-github-project"
     };
 
     function activeFloor() {
@@ -2992,6 +2994,7 @@
       return {
         version: 1,
         savedAt: new Date().toISOString(),
+        projectName: window.localStorage.getItem(githubPlanConfig.projectKey) || "",
         scale: state.scale,
         wallHeight: state.wallHeight,
         camera: cameraSnapshot(),
@@ -3050,7 +3053,33 @@
       }
     }
 
-    function githubApiUrl(path = githubPlanConfig.path) {
+    function githubPlanPath(projectName) {
+      return `${githubPlanConfig.directory}/${projectName}.json`;
+    }
+
+    function sanitizeGithubProjectName(name) {
+      return String(name || "")
+        .trim()
+        .replace(/\.json$/i, "")
+        .replace(/[^a-z0-9._-]+/gi, "-")
+        .replace(/-+/g, "-")
+        .replace(/^[-_.]+|[-_.]+$/g, "");
+    }
+
+    function githubProjectName(actionLabel) {
+      const previous = window.localStorage.getItem(githubPlanConfig.projectKey) || githubPlanConfig.defaultProject;
+      const raw = window.prompt(`${actionLabel}: enter project name`, previous);
+      if (raw === null) return "";
+      const projectName = sanitizeGithubProjectName(raw);
+      if (!projectName) {
+        showToast("Project name required");
+        return "";
+      }
+      window.localStorage.setItem(githubPlanConfig.projectKey, projectName);
+      return projectName;
+    }
+
+    function githubApiUrl(path) {
       return `https://api.github.com/repos/${githubPlanConfig.owner}/${githubPlanConfig.repo}/contents/${encodeURIComponent(path).replaceAll("%2F", "/")}`;
     }
 
@@ -3070,7 +3099,7 @@
     function githubToken() {
       let token = window.localStorage.getItem(githubPlanConfig.tokenKey) || "";
       if (!token) {
-        token = window.prompt("Paste a fine-grained GitHub token for LironMula/home_planner with Contents: Read and write. It will be stored in this browser only.") || "";
+        token = window.prompt("Paste a fine-grained GitHub token for LironMula/home_planner with Contents: Write. It will be stored in this browser only.") || "";
         if (token.trim()) window.localStorage.setItem(githubPlanConfig.tokenKey, token.trim());
       }
       return token.trim();
@@ -3098,19 +3127,23 @@
 
     async function savePlanToGithub() {
       try {
-        const existing = await githubRequest(githubPlanConfig.path);
+        const projectName = githubProjectName("Save GitHub project");
+        if (!projectName) return;
+        const path = githubPlanPath(projectName);
+        const snapshot = { ...planSnapshot(), projectName };
+        const existing = await githubRequest(path);
         const body = {
-          message: `Save home plan ${new Date().toISOString()}`,
+          message: `Save home plan ${projectName}`,
           branch: githubPlanConfig.branch,
-          content: utf8ToBase64(JSON.stringify(planSnapshot(), null, 2))
+          content: utf8ToBase64(JSON.stringify(snapshot, null, 2))
         };
         if (existing?.sha) body.sha = existing.sha;
-        await githubRequest(githubPlanConfig.path, {
+        await githubRequest(path, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)
         });
-        showToast("Plan saved to GitHub");
+        showToast(`${projectName} saved to GitHub`);
       } catch (error) {
         showToast(error.message === "Missing GitHub token" ? "GitHub token required" : "Could not save to GitHub");
       }
@@ -3118,12 +3151,15 @@
 
     async function loadPlanFromGithub() {
       try {
-        const file = await githubRequest(githubPlanConfig.path);
+        const projectName = githubProjectName("Load GitHub project");
+        if (!projectName) return;
+        const file = await githubRequest(githubPlanPath(projectName));
         if (!file?.content) return showToast("No GitHub plan file found");
         const saved = JSON.parse(base64ToUtf8(file.content));
         if (!saved || !Array.isArray(saved.floors)) return showToast("GitHub plan file is invalid");
         pushUndoSnapshot();
-        applyPlanSnapshot(saved, "Plan loaded from GitHub");
+        window.localStorage.setItem(githubPlanConfig.projectKey, projectName);
+        applyPlanSnapshot(saved, `${projectName} loaded from GitHub`);
       } catch (error) {
         showToast(error.message === "Missing GitHub token" ? "GitHub token required" : "Could not load from GitHub");
       }
