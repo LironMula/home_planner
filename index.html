@@ -71,6 +71,55 @@
       flex-direction: column;
     }
 
+    .sidebar {
+      position: relative;
+      overflow: visible;
+      transition: background 160ms ease;
+    }
+
+    .control-autohide-btn {
+      position: absolute;
+      top: 13px;
+      right: 7px;
+      z-index: 8;
+      width: 30px;
+      min-width: 30px;
+      height: 38px;
+      min-height: 38px;
+      padding: 0;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #263445;
+      box-shadow: 0 8px 18px rgba(28, 40, 58, 0.1);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .control-autohide-btn.active {
+      color: var(--accent-strong);
+      border-color: #8ad2cb;
+      background: var(--accent-soft);
+    }
+
+    .app.controls-collapsed .sidebar {
+      overflow: hidden;
+      background: #f8fafc;
+    }
+
+    .app.controls-collapsed .brand {
+      padding: 0;
+      justify-content: center;
+    }
+
+    .app.controls-collapsed .brand .mark,
+    .app.controls-collapsed .brand-text,
+    .app.controls-collapsed .side-scroll {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-18px);
+    }
+
     .inspector {
       border-right: 0;
       border-left: 1px solid var(--line);
@@ -764,6 +813,10 @@
         display: none;
       }
 
+      .control-autohide-btn {
+        display: none;
+      }
+
       .view-shell {
         grid-column: 1 / -1;
         min-height: 560px;
@@ -813,6 +866,7 @@
 <body>
   <div class="app">
     <aside class="sidebar" aria-label="Planner controls">
+      <button class="control-autohide-btn" id="controlAutoHideBtn" type="button" title="Toggle auto-hide controls">Auto</button>
       <div class="brand">
         <div class="mark" aria-hidden="true"></div>
         <div class="brand-text">
@@ -1145,6 +1199,9 @@
       selectedId: null,
       selectedIds: [],
       splitRatio: 0.58,
+      controlAutoHide: false,
+      controlCollapsed: false,
+      controlExpandedWidth: 340,
       drag: null,
       hitCycle: null,
       offset: { x: 0, y: 0 },
@@ -1254,6 +1311,7 @@
     const els = {
       app: document.querySelector(".app"),
       sidebar: document.querySelector(".sidebar"),
+      controlAutoHideBtn: document.getElementById("controlAutoHideBtn"),
       splitResizer: document.getElementById("splitResizer"),
       toolButtons: Array.from(document.querySelectorAll(".tool-btn")),
       floorList: document.getElementById("floorList"),
@@ -1510,10 +1568,16 @@
       if (window.innerWidth <= 1180) {
         els.app.style.gridTemplateColumns = "";
         els.app.style.gridTemplateRows = "";
+        state.controlCollapsed = false;
+        els.app.classList.remove("controls-collapsed", "controls-autohide");
         return;
       }
       const appRect = els.app.getBoundingClientRect();
-      const sidebarWidth = els.sidebar.getBoundingClientRect().width;
+      if (!state.controlAutoHide || !state.controlCollapsed) {
+        const measured = els.sidebar.getBoundingClientRect().width;
+        if (measured > 80) state.controlExpandedWidth = clamp(measured, 280, 360);
+      }
+      const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || 340, 280, 360);
       const resizerWidth = els.splitResizer?.getBoundingClientRect().width || 8;
       const usableWidth = Math.max(720, appRect.width - sidebarWidth - resizerWidth);
       const minPaneWidth = 320;
@@ -1521,6 +1585,8 @@
       state.splitRatio = clamp(state.splitRatio || 0.58, minRatio, 1 - minRatio);
       const planWidth = Math.round(usableWidth * state.splitRatio);
       const viewWidth = Math.max(minPaneWidth, Math.round(usableWidth - planWidth));
+      els.app.classList.toggle("controls-autohide", state.controlAutoHide);
+      els.app.classList.toggle("controls-collapsed", state.controlAutoHide && state.controlCollapsed);
       els.app.style.gridTemplateColumns = `${Math.round(sidebarWidth)}px ${planWidth}px ${Math.round(resizerWidth)}px ${viewWidth}px`;
       els.app.style.gridTemplateRows = "";
     }
@@ -1554,7 +1620,7 @@
       const updateFromPointer = event => {
         if (window.innerWidth <= 1180) return;
         const appRect = els.app.getBoundingClientRect();
-        const sidebarWidth = els.sidebar.getBoundingClientRect().width;
+        const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || els.sidebar.getBoundingClientRect().width, 280, 360);
         const resizerWidth = els.splitResizer.getBoundingClientRect().width || 8;
         const usableWidth = Math.max(1, appRect.width - sidebarWidth - resizerWidth);
         const minRatio = clamp(320 / usableWidth, 0.16, 0.45);
@@ -1594,6 +1660,49 @@
         else state.splitRatio = clamp(state.splitRatio + (event.key === "ArrowLeft" ? -0.03 : 0.03), 0.2, 0.8);
         resizeCanvases();
       });
+    }
+
+    function setControlCollapsed(collapsed) {
+      if (!state.controlAutoHide) collapsed = false;
+      if (state.controlCollapsed === collapsed) return;
+      state.controlCollapsed = collapsed;
+      resizeCanvases();
+    }
+
+    function updateControlAutoHideButton() {
+      if (!els.controlAutoHideBtn) return;
+      els.controlAutoHideBtn.classList.toggle("active", state.controlAutoHide);
+      els.controlAutoHideBtn.textContent = state.controlAutoHide ? "On" : "Auto";
+      els.controlAutoHideBtn.title = state.controlAutoHide ? "Auto-hide controls is on" : "Turn on auto-hide controls";
+    }
+
+    function attachControlAutoHide() {
+      if (!els.controlAutoHideBtn || !els.app || !els.sidebar) return;
+      els.controlAutoHideBtn.addEventListener("click", () => {
+        state.controlAutoHide = !state.controlAutoHide;
+        if (!state.controlAutoHide) state.controlCollapsed = false;
+        else state.controlCollapsed = true;
+        updateControlAutoHideButton();
+        resizeCanvases();
+      });
+      window.addEventListener("pointermove", event => {
+        if (!state.controlAutoHide || window.innerWidth <= 1180) return;
+        const expandedWidth = clamp(state.controlExpandedWidth || 340, 280, 360);
+        const collapsedWidth = 42;
+        const openDistance = collapsedWidth + 72;
+        const closeDistance = expandedWidth + 52;
+        if (state.controlCollapsed) {
+          if (event.clientX <= openDistance) setControlCollapsed(false);
+          return;
+        }
+        if (event.clientX > closeDistance || event.clientX < 0 || event.clientY < 0 || event.clientY > window.innerHeight) {
+          setControlCollapsed(true);
+        }
+      });
+      window.addEventListener("blur", () => {
+        if (state.controlAutoHide) setControlCollapsed(true);
+      });
+      updateControlAutoHideButton();
     }
 
     function setTool(tool) {
@@ -5504,6 +5613,7 @@
 
     window.addEventListener("resize", resizeCanvases);
     attachSplitResizer();
+    attachControlAutoHide();
     window.addEventListener("keydown", event => {
       const active = document.activeElement;
       if (["w", "a", "s", "d", "q", "e"].includes(event.key.toLowerCase())) {
