@@ -628,7 +628,8 @@
     }
 
     .viewbar .ghost-btn,
-    .viewbar select {
+    .viewbar select,
+    .viewbar input {
       color: #e7eef6;
       background: #223146;
       border-color: rgba(255, 255, 255, 0.16);
@@ -636,6 +637,23 @@
 
     .viewbar select {
       min-width: 150px;
+    }
+
+    .camera-height-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #b8c5d4;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .camera-height-control input {
+      width: 78px;
+      min-height: 36px;
+      padding: 7px 8px;
+      text-align: right;
     }
 
     .viewstage {
@@ -1124,6 +1142,12 @@
           <select id="viewFloorSelect" title="Choose floor to inspect"></select>
         </div>
         <div class="toolbar-group">
+          <label class="camera-height-control" for="cameraHeightInput">
+            <span>Height</span>
+            <input id="cameraHeightInput" type="number" step="0.1" min="0" max="120" />
+            <span>m</span>
+          </label>
+          <button class="ghost-btn" id="horizonCameraBtn" type="button" title="Look straight toward the horizon">Horizon</button>
           <button class="ghost-btn" id="resetCameraBtn" type="button" title="Reset 3D camera">Reset View</button>
         </div>
       </div>
@@ -1365,6 +1389,8 @@
       fitBtn: document.getElementById("fitBtn"),
       sampleBtn: document.getElementById("sampleBtn"),
       resetCameraBtn: document.getElementById("resetCameraBtn"),
+      horizonCameraBtn: document.getElementById("horizonCameraBtn"),
+      cameraHeightInput: document.getElementById("cameraHeightInput"),
       viewFloorSelect: document.getElementById("viewFloorSelect"),
       viewToggles: document.getElementById("viewToggles"),
       githubProjectModal: document.getElementById("githubProjectModal"),
@@ -4144,6 +4170,30 @@
       updateCamera();
     }
 
+    function setCameraHorizon() {
+      if (!three.orbit.position) return;
+      three.orbit.pitch = 0;
+      updateCamera();
+    }
+
+    function updateCameraHeightControl() {
+      if (!els.cameraHeightInput || !three.orbit.position) return;
+      if (document.activeElement === els.cameraHeightInput) return;
+      els.cameraHeightInput.value = round(three.orbit.position.y, 1);
+    }
+
+    function applyCameraHeightInput() {
+      if (!three.orbit.position || !els.cameraHeightInput) return;
+      const nextHeight = Number(els.cameraHeightInput.value);
+      if (!Number.isFinite(nextHeight)) {
+        updateCameraHeightControl();
+        return;
+      }
+      three.orbit.position.y = clamp(nextHeight, 0, 120);
+      els.cameraHeightInput.value = round(three.orbit.position.y, 1);
+      updateCamera();
+    }
+
     function cameraForwardVector() {
       const cosPitch = Math.cos(three.orbit.pitch);
       return new THREE.Vector3(
@@ -4243,6 +4293,7 @@
       const target = three.orbit.position.clone().add(cameraForwardVector());
       three.camera.position.copy(three.orbit.position);
       three.camera.lookAt(target);
+      updateCameraHeightControl();
       three.renderer.render(three.scene, three.camera);
       draw();
     }
@@ -5576,7 +5627,12 @@
     els.deleteBtn.addEventListener("click", deleteSelected);
     els.fitBtn.addEventListener("click", centerPlan);
     els.sampleBtn.addEventListener("click", loadSample);
+    els.horizonCameraBtn.addEventListener("click", setCameraHorizon);
     els.resetCameraBtn.addEventListener("click", resetCamera);
+    els.cameraHeightInput.addEventListener("change", applyCameraHeightInput);
+    els.cameraHeightInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") applyCameraHeightInput();
+    });
     els.scaleInput.addEventListener("change", () => {
       pushUndoSnapshot();
       state.scale = clamp(Number(els.scaleInput.value) || 52, 10, 300);
