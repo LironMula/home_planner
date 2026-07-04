@@ -1035,6 +1035,7 @@
               <select id="elementTypeInput">
                 <option value="closet">Closet</option>
                 <option value="refrigerator">Refrigerator</option>
+                <option value="sliding-window-opening">Sliding window opening</option>
                 <option value="sink">Sink</option>
                 <option value="oven">Oven</option>
                 <option value="toilet">Toilet</option>
@@ -1278,6 +1279,7 @@
     const elementTypes = {
       closet: { label: "Closet", color: "#6b7280", w: 1.2, h: 0.6, length: 2.1 },
       refrigerator: { label: "Refrigerator", color: "#d8dee8", w: 0.75, h: 0.75, length: 2.0 },
+      "sliding-window-opening": { label: "Sliding window opening", color: "#45a9d8", w: 1.8, h: 0.16, length: 1.2, defaultElevation: 0.9 },
       sink: { label: "Sink", color: "#70b7c8", w: 0.7, h: 0.55, length: 0.85 },
       oven: { label: "Oven", color: "#3f4856", w: 0.7, h: 0.65, length: 0.9 },
       toilet: { label: "Toilet", color: "#e8edf2", w: 0.65, h: 0.8, length: 0.75 },
@@ -1873,7 +1875,7 @@
         y: opts.y ?? 2,
         w: opts.w ?? spec.w,
         h: opts.h ?? spec.h,
-        elevation: opts.elevation ?? opts.level ?? 0,
+        elevation: opts.elevation ?? opts.level ?? spec.defaultElevation ?? 0,
         height: clamp(opts.height ?? opts.length ?? spec.length, 0.05, elementHeightMax(elementKind)),
         rotation: opts.rotation ?? 0,
         color: opts.color || spec.color,
@@ -5076,6 +5078,24 @@
         addElementBox(group, w * 0.34, h * 0.68, -d * 0.535, w * 0.045, h * 0.38, 0.035, metal, 0.95, { metalness: 0.45 });
         addElementBox(group, w * 0.34, h * 0.24, -d * 0.535, w * 0.045, h * 0.30, 0.035, metal, 0.95, { metalness: 0.45 });
         addElementBox(group, -w * 0.34, h * 0.78, -d * 0.535, w * 0.16, h * 0.06, 0.025, 0xbfd7ea, 0.7, { castShadow: false });
+        return;
+      }
+
+      if (kind === "sliding-window-opening") {
+        const frame = Math.max(0.035, Math.min(w, h, d) * 0.08);
+        const paneOpacity = Math.min(0.7, opacity * 0.72);
+        const paneW = Math.max(0.2, w * 0.52);
+        const paneH = Math.max(0.2, h * 0.84);
+        const railH = Math.max(0.035, h * 0.035);
+        addElementBox(group, 0, 0, 0, w, frame, d, accent, Math.min(1, opacity + 0.08));
+        addElementBox(group, 0, h - frame, 0, w, frame, d, accent, Math.min(1, opacity + 0.08));
+        addElementBox(group, -w / 2 + frame / 2, 0, 0, frame, h, d, accent, Math.min(1, opacity + 0.08));
+        addElementBox(group, w / 2 - frame / 2, 0, 0, frame, h, d, accent, Math.min(1, opacity + 0.08));
+        addElementBox(group, 0, h * 0.5, 0, frame * 0.75, h * 0.88, d * 1.08, accent, 0.58);
+        addElementBox(group, -w * 0.14, h * 0.08, -d * 0.08, paneW, paneH, d * 0.42, glass, paneOpacity, { castShadow: false });
+        addElementBox(group, w * 0.14, h * 0.08, d * 0.08, paneW, paneH, d * 0.42, glass, paneOpacity, { castShadow: false });
+        addElementBox(group, 0, h * 0.18, -d * 0.55, w * 0.88, railH, d * 0.16, metal, 0.72, { metalness: 0.35, castShadow: false });
+        addElementBox(group, 0, h * 0.82, -d * 0.55, w * 0.88, railH, d * 0.16, metal, 0.72, { metalness: 0.35, castShadow: false });
         return;
       }
 
