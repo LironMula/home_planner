@@ -4433,16 +4433,17 @@
         const visibleRoomIds = new Set(rooms.map(room => room.id));
         const visibleWallIds = new Set(walls.map(wall => wall.id));
         const openings = state.openings.filter(opening => opening.floorId === floor.id);
-        const freeOpenings = openings.filter(opening => !opening.roomId && !opening.wallId);
         const elements = state.elements.filter(element => element.floorId === floor.id);
+        const freeOpenings = openings.filter(opening => !opening.roomId && !opening.wallId);
+        const wallCutouts = [...openings, ...elements.map(elementWindowCutout).filter(Boolean)];
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
         if (state.view.boundary && boundary) addBoundary3D(boundary, floor);
         rooms
           .filter(room => room.type !== "space" || state.view.spaces)
-          .forEach(room => addRoom3D(room, floor, roomOpeningsFor3D(room, openings, freeOpenings)));
+          .forEach(room => addRoom3D(room, floor, roomOpeningsFor3D(room, openings, wallCutouts.filter(opening => !opening.roomId && !opening.wallId))));
         if (state.view.stairs) stairs.forEach(stair => addStair3D(stair, floor));
         if (state.view.elements) elements.forEach(element => addElement3D(element, floor));
-        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, openings));
+        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, wallCutouts));
         if (state.view.doors) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
         if (state.view.windows) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
         if (state.view.doors) freeOpenings.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
@@ -4634,20 +4635,44 @@
       return [...attached, ...overlaps];
     }
 
+    function isOpeningCutout(opening) {
+      return ["door", "window"].includes(opening?.type);
+    }
+
+    function elementWindowCutout(element) {
+      if (element.elementKind !== "sliding-window-opening") return null;
+      return {
+        id: `${element.id}-wall-cutout`,
+        type: "window",
+        floorId: element.floorId,
+        roomId: null,
+        wallId: null,
+        side: "free",
+        t: 0.5,
+        x: element.x + element.w / 2,
+        y: element.y + element.h / 2,
+        rotation: normalizeAngle(Number(element.rotation) || 0),
+        width: Math.max(0.2, Number(element.w) || 1.2),
+        height: Math.max(0.2, Number(element.height) || Number(element.length) || 1.1),
+        sill: Math.max(0, Number(element.elevation) || Number(element.level) || 0),
+        color: itemColor(element),
+        opacity: itemOpacity(element),
+        gapOnly: true
+      };
+    }
+
     function roomEdgeOpeningGap(room, opening) {
-      if (!["door", "window"].includes(opening.type)) return null;
+      if (!isOpeningCutout(opening)) return null;
       const pos = openingPosition(opening);
       if (!pos.free) return null;
-      const angle = normalizeAngle(Number(opening.rotation) || 0);
       const candidates = [
-        { side: "top", dist: Math.abs(pos.y - room.y), t: (pos.x - room.x) / room.w, axis: 0, inside: pos.x >= room.x && pos.x <= room.x + room.w },
-        { side: "bottom", dist: Math.abs(pos.y - (room.y + room.h)), t: (pos.x - room.x) / room.w, axis: 0, inside: pos.x >= room.x && pos.x <= room.x + room.w },
-        { side: "left", dist: Math.abs(pos.x - room.x), t: (pos.y - room.y) / room.h, axis: 90, inside: pos.y >= room.y && pos.y <= room.y + room.h },
-        { side: "right", dist: Math.abs(pos.x - (room.x + room.w)), t: (pos.y - room.y) / room.h, axis: 90, inside: pos.y >= room.y && pos.y <= room.y + room.h }
+        { side: "top", dist: Math.abs(pos.y - room.y), t: (pos.x - room.x) / room.w, inside: pos.x >= room.x && pos.x <= room.x + room.w },
+        { side: "bottom", dist: Math.abs(pos.y - (room.y + room.h)), t: (pos.x - room.x) / room.w, inside: pos.x >= room.x && pos.x <= room.x + room.w },
+        { side: "left", dist: Math.abs(pos.x - room.x), t: (pos.y - room.y) / room.h, inside: pos.y >= room.y && pos.y <= room.y + room.h },
+        { side: "right", dist: Math.abs(pos.x - (room.x + room.w)), t: (pos.y - room.y) / room.h, inside: pos.y >= room.y && pos.y <= room.y + room.h }
       ].filter(candidate =>
         candidate.inside
         && candidate.dist <= 0.16
-        && angleDifference(angle, candidate.axis) <= 12
       );
       candidates.sort((a, b) => a.dist - b.dist);
       if (!candidates.length) return null;
@@ -4655,7 +4680,7 @@
     }
 
     function customWallOpeningGap(wall, opening) {
-      if (!["door", "window"].includes(opening.type)) return null;
+      if (!isOpeningCutout(opening)) return null;
       const horizontal = wall.w >= wall.h;
       const length = horizontal ? wall.w : wall.h;
       if (opening.wallId === wall.id) {
@@ -4677,8 +4702,6 @@
       const along = horizontal ? localX + wall.w / 2 : localY + wall.h / 2;
       const across = horizontal ? localY : localX;
       const thickness = horizontal ? wall.h : wall.w;
-      const wallAxis = normalizeAngle(rotation + (horizontal ? 0 : 90));
-      if (angleDifference(Number(opening.rotation) || 0, wallAxis) > 12) return null;
       if (Math.abs(across) > Math.max(thickness / 2 + 0.12, 0.16)) return null;
 
       const half = (Number(opening.width) || 0.8) / 2;
@@ -4688,11 +4711,6 @@
         to: clamp(along + half, 0, length),
         opening
       };
-    }
-
-    function angleDifference(a, b) {
-      const diff = Math.abs(normalizeAngle(a - b));
-      return Math.min(diff, Math.abs(180 - diff));
     }
 
     function addWallSegments(room, floor, openings) {
