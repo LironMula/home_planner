@@ -1,33 +1,33 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T18:46:54.622Z",
+  "savedAt": "2026-07-04T19:05:24.621Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 300,
-  "wallHeight": 2.8,
+  "scale": 61.30393650367891,
+  "wallHeight": 3,
   "camera": {
     "position": {
-      "x": 4.992,
-      "y": 2.661,
-      "z": 5.296
+      "x": -4.67,
+      "y": 11.677,
+      "z": 12.631
     },
-    "yaw": 5.5444,
-    "pitch": -0.31
+    "yaw": 27.3624,
+    "pitch": -0.85
   },
-  "splitRatio": 0.5693435524982903,
+  "splitRatio": 0.35067045916294187,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
-    "floor": true,
-    "ceiling": false,
-    "room": true,
-    "spaces": true,
-    "walls": true,
-    "stairs": true,
-    "windows": true,
-    "doors": true,
-    "elements": true,
-    "roof": false,
-    "boundary": true
+    "floor": 1,
+    "ceiling": 1,
+    "room": 1,
+    "spaces": 1,
+    "walls": 1,
+    "stairs": 1,
+    "windows": 0.5,
+    "doors": 0.25,
+    "elements": 1,
+    "roof": 0,
+    "boundary": 1
   },
   "floors": [
     {
@@ -39,7 +39,7 @@
     {
       "id": "floor-wh30cki",
       "name": "Second floor",
-      "elevation": 3.15,
+      "elevation": 3.35,
       "color": "#2563eb"
     }
   ],
@@ -77,7 +77,7 @@
       "floorId": "floor-1",
       "name": "Stairs 1",
       "x": 4.5,
-      "y": -0.3,
+      "y": -0.25,
       "w": 2.1,
       "h": 4.4,
       "shape": "turned",
@@ -347,22 +347,20 @@
       "h": 1,
       "height": 2.8,
       "color": "#ffffff",
-      "opacity": 0.95,
-      "groupId": "group-daugp2y"
+      "opacity": 0.95
     },
     {
       "id": "wall-eol1huf",
       "type": "wall",
       "floorId": "floor-1",
       "name": "Wall 20",
-      "x": -0.9,
+      "x": -3.1,
       "y": 8.8,
-      "w": 3.4,
+      "w": 5.6,
       "h": 0.2,
       "height": 2.8,
       "color": "#ffffff",
-      "opacity": 0.95,
-      "groupId": "group-daugp2y"
+      "opacity": 0.95
     },
     {
       "id": "wall-pwkc4cq",
@@ -375,8 +373,7 @@
       "h": 5.3,
       "height": 2.8,
       "color": "#ffffff",
-      "opacity": 0.95,
-      "groupId": "group-daugp2y"
+      "opacity": 0.95
     },
     {
       "id": "wall-6uptmmr",
@@ -389,8 +386,7 @@
       "h": 0.18,
       "height": 2.8,
       "color": "#ffffff",
-      "opacity": 0.95,
-      "groupId": "group-daugp2y"
+      "opacity": 0.95
     },
     {
       "id": "wall-ekuqkwo",
@@ -446,6 +442,26 @@
     }
   ],
   "openings": [
+    {
+      "id": "window-570zgle",
+      "type": "window",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": null,
+      "name": "Window 4",
+      "side": "free",
+      "t": 0.5,
+      "x": -1.5,
+      "y": 8.9,
+      "rotation": 0,
+      "width": 2.4,
+      "height": 2.8,
+      "sill": 0,
+      "swing": 0,
+      "glass": false,
+      "color": "#45a9d8",
+      "opacity": 0.58
+    },
     {
       "id": "window-errme39",
       "type": "window",
@@ -535,27 +551,6 @@
       "rotation": -90
     },
     {
-      "id": "window-570zgle",
-      "type": "window",
-      "floorId": "floor-1",
-      "roomId": null,
-      "wallId": null,
-      "name": "Window 4",
-      "side": "free",
-      "t": 0.5,
-      "x": -1.9,
-      "y": 8.9,
-      "rotation": 0,
-      "width": 2.4,
-      "height": 2.8,
-      "sill": 0,
-      "swing": 0,
-      "glass": false,
-      "color": "#45a9d8",
-      "opacity": 0.58,
-      "groupId": "group-daugp2y"
-    },
-    {
       "id": "door-275e584",
       "type": "door",
       "floorId": "floor-1",
@@ -591,6 +586,46 @@
       "glass": false,
       "color": "#c87a35",
       "opacity": 0.82
+    },
+    {
+      "id": "window-xtgj5sl",
+      "type": "window",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": null,
+      "name": "Window 4 copy",
+      "side": "free",
+      "t": 0.5,
+      "x": -3,
+      "y": 6.4,
+      "rotation": 90,
+      "width": 4.6,
+      "height": 2.8,
+      "sill": 0,
+      "swing": 0,
+      "glass": false,
+      "color": "#45a9d8",
+      "opacity": 0.58
+    },
+    {
+      "id": "window-jt82hhv",
+      "type": "window",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": null,
+      "name": "Window 6",
+      "side": "free",
+      "t": 0.5,
+      "width": 2.3,
+      "height": 2,
+      "sill": 0.6,
+      "swing": 0,
+      "glass": false,
+      "color": "#45a9d8",
+      "opacity": 0.58,
+      "x": 1.6,
+      "y": 2,
+      "rotation": 90
     }
   ],
   "elements": [
@@ -943,7 +978,7 @@
       "elevation": 0,
       "height": 2.1,
       "rotation": 0,
-      "color": "#1e788a",
+      "color": "#9fafb2",
       "opacity": 0.86
     },
     {
@@ -953,13 +988,13 @@
       "name": "Closet 2 copy copy",
       "elementKind": "closet",
       "x": 7.9,
-      "y": 2.35,
+      "y": 2.5,
       "w": 2.96,
-      "h": 0.7,
+      "h": 0.6,
       "elevation": 0,
       "height": 2.1,
       "rotation": 180,
-      "color": "#1e788a",
+      "color": "#a3b4b8",
       "opacity": 0.86
     },
     {
@@ -969,7 +1004,7 @@
       "name": "Kitchen island 1",
       "elementKind": "kitchen-island",
       "x": 8.5,
-      "y": 5.4,
+      "y": 5.5,
       "w": 2.5,
       "h": 1,
       "elevation": 0,
@@ -1167,6 +1202,28 @@
       "y2": 0.62,
       "anchorA": null,
       "anchorB": null,
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-84y1bwf",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 2",
+      "x1": 10.503024213669747,
+      "y1": 7.5,
+      "x2": 10.503024213669747,
+      "y2": 6.4,
+      "anchorA": {
+        "itemId": "element-etadtyi",
+        "fx": 0.7042637432721752,
+        "fy": 0
+      },
+      "anchorB": {
+        "itemId": "element-jbsbi23",
+        "fx": 0.8012096854678987,
+        "fy": 1
+      },
       "color": "#1f2937",
       "opacity": 1
     }
