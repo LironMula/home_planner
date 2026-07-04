@@ -2140,6 +2140,22 @@
       }
     }
 
+    function detachOpeningAtRotation(opening, rotation) {
+      const pos = openingPosition(opening);
+      opening.roomId = null;
+      opening.wallId = null;
+      opening.side = "free";
+      opening.t = 0.5;
+      opening.x = snap(pos.x);
+      opening.y = snap(pos.y);
+      opening.rotation = normalizeAngle(rotation);
+      if (opening.type === "door" && opening.glass) {
+        opening.glass = false;
+        opening.color = defaults.door.color;
+        opening.opacity = defaults.door.opacity;
+      }
+    }
+
     function snapOpeningToSpecificRoom(room, point) {
       const candidates = [
         { side: "top", dist: Math.abs(point.y - room.y), t: (point.x - room.x) / room.w, inside: point.x >= room.x && point.x <= room.x + room.w },
@@ -2276,10 +2292,7 @@
 
       [...state.openings].reverse().forEach(opening => {
         if (opening.floorId !== state.activeFloorId) return false;
-        const pos = openingPosition(opening);
-        const size = opening.type === "door" ? 18 : 16;
-        const sp = toCanvas(pos);
-        if (Math.hypot(sp.x - screenPoint.x, sp.y - screenPoint.y) <= size) {
+        if (pointHitsOpening(opening, world)) {
           hits.push({ item: opening, action: "move" });
         }
       });
@@ -2305,6 +2318,22 @@
         seen.add(key);
         return true;
       });
+    }
+
+    function pointHitsOpening(opening, point) {
+      const pos = openingPosition(opening);
+      const dx = point.x - pos.x;
+      const dy = point.y - pos.y;
+      const angle = pos.angle || 0;
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      const localX = dx * cos + dy * sin;
+      const localY = -dx * sin + dy * cos;
+      const horizontal = opening.side === "top" || opening.side === "bottom" || opening.side === "wall-h";
+      const hostThickness = pos.wall ? (horizontal ? pos.wall.h : pos.wall.w) : 0.08;
+      const selectableLength = Math.max(0.2, Number(opening.width) || 0.2);
+      const selectableWidth = Math.max(0.2, hostThickness);
+      return Math.abs(localX) <= selectableLength / 2 && Math.abs(localY) <= selectableWidth / 2;
     }
 
     function hitRectItems(items, screenPoint, world, edgeOnly) {
@@ -4013,16 +4042,16 @@
           els.yInput.value = round(pos.y, 2);
           els.rotationInput.disabled = false;
           els.rotationInput.value = round(item.rotation || 0, 0);
-        } else if (item.type === "door") {
+        } else {
           els.rotationInput.disabled = false;
-          els.rotationInput.value = Number(item.swing || 0) === 180 ? 180 : 0;
+          els.rotationInput.value = item.type === "door" ? (Number(item.swing || 0) === 180 ? 180 : 0) : round((pos.angle || 0) * 180 / Math.PI, 0);
         }
         const hostLabel = pos.wall ? pos.wall.name : pos.room ? pos.room.name : "free position";
         const edgeLabel = freeOpening ? "free edge" : item.side === "wall-h" || item.side === "wall-v" ? "wall" : `${item.side} edge`;
         const openingLabel = item.type === "door"
           ? `${item.glass ? "Glass door" : "Door"} opening ${freeOpening ? `rotation ${round(item.rotation || 0, 0)} deg` : Number(item.swing || 0) === 180 ? "outward/opposite" : "inward/default"}`
           : "Window";
-        els.selectedCopy.textContent = `${openingLabel} on the ${edgeLabel} of ${hostLabel}. Drag it close to a wall or room edge to snap, or away to keep it free.`;
+        els.selectedCopy.textContent = `${openingLabel} on the ${edgeLabel} of ${hostLabel}. Drag it close to a wall or room edge to snap, or away to keep it free. Use a non-0/180 rotation on a hosted opening to detach it.`;
       }
     }
 
@@ -4150,9 +4179,13 @@
           if (shouldApplyInput(changedInput, els.rotationInput)) {
             item.rotation = normalizeAngle(numericInputValue(els.rotationInput, item.rotation || 0));
           }
-        } else if (item.type === "door") {
-          const nextSwing = Number(els.rotationInput.value);
-          item.swing = Math.abs(nextSwing) >= 90 ? 180 : 0;
+        } else if (shouldApplyInput(changedInput, els.rotationInput)) {
+          const nextRotation = normalizeAngle(numericInputValue(els.rotationInput, 0));
+          if (item.type === "door" && (Math.abs(nextRotation) < 1 || Math.abs(Math.abs(nextRotation) - 180) < 1)) {
+            item.swing = Math.abs(nextRotation) >= 90 ? 180 : 0;
+          } else {
+            detachOpeningAtRotation(item, nextRotation);
+          }
         }
       }
       renderAll();
