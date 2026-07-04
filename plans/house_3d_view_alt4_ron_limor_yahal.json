@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T14:35:10.170Z",
+  "savedAt": "2026-07-04T14:50:10.788Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 10,
+  "scale": 43.6349311165262,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 9.979,
-      "y": 3.837,
-      "z": -1.257
+      "x": 1.611,
+      "y": 0.308,
+      "z": 5.476
     },
-    "yaw": 0.47,
-    "pitch": 0.02
+    "yaw": 4.2609,
+    "pitch": -0.0618
   },
   "splitRatio": 0.7433816070351034,
   "activeFloorId": "floor-1",
@@ -277,8 +277,8 @@
       "type": "wall",
       "floorId": "floor-1",
       "name": "Wall 17",
-      "x": 4.22,
-      "y": 6.89,
+      "x": 4.2,
+      "y": 6.8,
       "w": 2.3,
       "h": 0.11,
       "height": 2.8,
@@ -374,17 +374,20 @@
       "type": "door",
       "floorId": "floor-1",
       "roomId": null,
-      "wallId": "wall-t8k8ej5",
+      "wallId": null,
       "name": "Door 2",
-      "side": "wall-h",
-      "t": 0.13277935887318756,
+      "side": "free",
+      "t": 0.5,
       "width": 0.7,
       "height": 2.1,
       "sill": 0,
       "swing": 0,
       "glass": false,
       "color": "#c87a35",
-      "opacity": 0.82
+      "opacity": 0.82,
+      "x": 5.3,
+      "y": 7.1,
+      "rotation": -90
     }
   ],
   "elements": [
@@ -801,8 +804,8 @@
       "elevation": 0,
       "height": 0.85,
       "rotation": 180,
-      "color": "#e8edf2",
-      "opacity": 0.86
+      "color": "#548ac0",
+      "opacity": 1
     },
     {
       "id": "element-nqa5iy8",
