@@ -1931,22 +1931,22 @@
 
     function addOpening(kind, point) {
       const snapped = snapOpeningToHost(kind, point);
-      if (!snapped) {
-        showToast(`${kind === "door" ? "Doors" : "Windows"} need to sit on a room edge or wall`);
-        return null;
-      }
       pushUndoSnapshot();
-      const isGlassDoor = kind === "door" && snapped.wall?.type === "glass-wall";
+      const isGlassDoor = kind === "door" && snapped?.wall?.type === "glass-wall";
+      const free = snapped || freeOpeningSnap(point);
 
       const opening = {
         id: id(kind),
         type: kind,
         floorId: state.activeFloorId,
-        roomId: snapped.room?.id || null,
-        wallId: snapped.wall?.id || null,
+        roomId: snapped?.room?.id || null,
+        wallId: snapped?.wall?.id || null,
         name: `${isGlassDoor ? "Glass Door" : kind === "door" ? "Door" : "Window"} ${state.openings.filter(item => item.type === kind).length + 1}`,
-        side: snapped.side,
-        t: snapped.t,
+        side: free.side,
+        t: free.t,
+        x: free.x,
+        y: free.y,
+        rotation: free.rotation,
         width: kind === "door" ? 0.9 : 1.2,
         height: kind === "door" ? 2.1 : 1.1,
         sill: kind === "door" ? 0 : 0.9,
@@ -1960,6 +1960,18 @@
       state.selectedIds = [opening.id];
       renderAll();
       return opening;
+    }
+
+    function freeOpeningSnap(point, rotation = 0) {
+      return {
+        room: null,
+        wall: null,
+        side: "free",
+        t: 0.5,
+        x: snap(point.x),
+        y: snap(point.y),
+        rotation: normalizeAngle(rotation)
+      };
     }
 
     function addRuler(point) {
@@ -2046,13 +2058,31 @@
       const room = state.rooms.find(item => item.id === opening.roomId);
       if (!room && opening.wallId) {
         const wall = state.walls.find(item => item.id === opening.wallId);
-        if (!wall) return { x: 0, y: 0, angle: 0, room: null, wall: null };
+        if (!wall) {
+          return {
+            x: Number.isFinite(opening.x) ? opening.x : 0,
+            y: Number.isFinite(opening.y) ? opening.y : 0,
+            angle: (Number(opening.rotation) || 0) * Math.PI / 180,
+            room: null,
+            wall: null,
+            free: true
+          };
+        }
         const horizontal = wall.w >= wall.h;
         return horizontal
           ? { x: wall.x + wall.w * opening.t, y: wall.y + wall.h / 2, angle: 0, room: null, wall }
           : { x: wall.x + wall.w / 2, y: wall.y + wall.h * opening.t, angle: Math.PI / 2, room: null, wall };
       }
-      if (!room) return { x: 0, y: 0, angle: 0, room: null, wall: null };
+      if (!room) {
+        return {
+          x: Number.isFinite(opening.x) ? opening.x : 0,
+          y: Number.isFinite(opening.y) ? opening.y : 0,
+          angle: (Number(opening.rotation) || 0) * Math.PI / 180,
+          room: null,
+          wall: null,
+          free: true
+        };
+      }
       if (opening.side === "top") return { x: room.x + room.w * opening.t, y: room.y, angle: 0, room };
       if (opening.side === "bottom") return { x: room.x + room.w * opening.t, y: room.y + room.h, angle: Math.PI, room };
       if (opening.side === "left") return { x: room.x, y: room.y + room.h * opening.t, angle: -Math.PI / 2, room };
@@ -2065,22 +2095,7 @@
         applyOpeningHostSnap(opening, hostSnap);
         return;
       }
-
-      if (opening.wallId) {
-        const wall = state.walls.find(item => item.id === opening.wallId);
-        if (!wall) return;
-        const snapped = snapOpeningToSpecificWall(wall, worldPoint);
-        if (snapped) {
-          applyOpeningHostSnap(opening, { ...snapped, wall });
-        }
-        return;
-      }
-      const room = state.rooms.find(item => item.id === opening.roomId);
-      if (!room) return;
-      const snapped = snapOpeningToSpecificRoom(room, worldPoint);
-      if (snapped) {
-        applyOpeningHostSnap(opening, { ...snapped, room });
-      }
+      applyOpeningFreePosition(opening, worldPoint);
     }
 
     function applyOpeningHostSnap(opening, snapped) {
@@ -2089,12 +2104,31 @@
       opening.wallId = snapped.wall?.id || null;
       opening.side = snapped.side;
       opening.t = snapped.t;
+      delete opening.x;
+      delete opening.y;
+      delete opening.rotation;
       if (opening.type === "door") {
         opening.glass = snapped.wall?.type === "glass-wall";
         if (opening.glass !== wasGlass) {
           opening.color = opening.glass ? defaults["glass-wall"].color : defaults.door.color;
           opening.opacity = opening.glass ? 0.62 : defaults.door.opacity;
         }
+      }
+    }
+
+    function applyOpeningFreePosition(opening, point) {
+      const pos = openingPosition(opening);
+      opening.roomId = null;
+      opening.wallId = null;
+      opening.side = "free";
+      opening.t = 0.5;
+      opening.x = snap(point.x);
+      opening.y = snap(point.y);
+      opening.rotation = normalizeAngle(Number(opening.rotation) || pos.angle * 180 / Math.PI || 0);
+      if (opening.type === "door" && opening.glass) {
+        opening.glass = false;
+        opening.color = defaults.door.color;
+        opening.opacity = defaults.door.opacity;
       }
     }
 
@@ -2759,14 +2793,12 @@
 
     function drawOpening(opening) {
       const pos = openingPosition(opening);
-      if (!pos.room && !pos.wall) return;
       const p = toCanvas(pos);
-      const horizontal = opening.side === "top" || opening.side === "bottom" || opening.side === "wall-h";
       const len = metersToPx(opening.width);
       const active = isSelected(opening);
       ctx.save();
       ctx.translate(p.x, p.y);
-      ctx.rotate(horizontal ? 0 : Math.PI / 2);
+      ctx.rotate(pos.angle || 0);
       ctx.lineCap = "round";
       if (opening.type === "window") {
         ctx.strokeStyle = active ? "#137da7" : colorWithAlpha(itemColor(opening), itemOpacity(opening));
@@ -3050,7 +3082,12 @@
       const copy = { ...item, id: id(item.type), name: `${item.name} copy` };
       delete copy.groupId;
       if (item.type === "door" || item.type === "window") {
-        copy.t = clamp(item.t + 0.08, 0.08, 0.92);
+        if (Number.isFinite(copy.x) && Number.isFinite(copy.y) && !copy.roomId && !copy.wallId) {
+          copy.x += 0.3;
+          copy.y += 0.3;
+        } else {
+          copy.t = clamp((item.t ?? 0.5) + 0.08, 0.08, 0.92);
+        }
         state.openings.push(copy);
       } else if (item.type === "element") {
         copy.x += 0.3;
@@ -3959,17 +3996,25 @@
         els.widthInput.value = round(item.width, 1);
         els.depthInput.value = round(item.height, 1);
         els.heightInput.value = item.sill;
-        if (item.type === "door") {
+        const pos = openingPosition(item);
+        const freeOpening = !item.roomId && !item.wallId;
+        if (freeOpening) {
+          els.xInput.disabled = false;
+          els.yInput.disabled = false;
+          els.xInput.value = round(pos.x, 2);
+          els.yInput.value = round(pos.y, 2);
+          els.rotationInput.disabled = false;
+          els.rotationInput.value = round(item.rotation || 0, 0);
+        } else if (item.type === "door") {
           els.rotationInput.disabled = false;
           els.rotationInput.value = Number(item.swing || 0) === 180 ? 180 : 0;
         }
-        const pos = openingPosition(item);
-        const hostLabel = pos.wall ? pos.wall.name : pos.room ? pos.room.name : "host";
-        const edgeLabel = item.side === "wall-h" || item.side === "wall-v" ? "wall" : `${item.side} edge`;
+        const hostLabel = pos.wall ? pos.wall.name : pos.room ? pos.room.name : "free position";
+        const edgeLabel = freeOpening ? "free edge" : item.side === "wall-h" || item.side === "wall-v" ? "wall" : `${item.side} edge`;
         const openingLabel = item.type === "door"
-          ? `${item.glass ? "Glass door" : "Door"} opening ${Number(item.swing || 0) === 180 ? "outward/opposite" : "inward/default"}`
+          ? `${item.glass ? "Glass door" : "Door"} opening ${freeOpening ? `rotation ${round(item.rotation || 0, 0)} deg` : Number(item.swing || 0) === 180 ? "outward/opposite" : "inward/default"}`
           : "Window";
-        els.selectedCopy.textContent = `${openingLabel} on the ${edgeLabel} of ${hostLabel}. Drag it along the wall in the 2D plan.`;
+        els.selectedCopy.textContent = `${openingLabel} on the ${edgeLabel} of ${hostLabel}. Drag it close to a wall or room edge to snap, or away to keep it free.`;
       }
     }
 
@@ -4081,7 +4126,18 @@
         item.width = Math.max(0.3, Number(els.widthInput.value) || item.width);
         item.height = Math.max(0.2, Number(els.depthInput.value) || item.height);
         item.sill = Math.max(0, Number(els.heightInput.value) || 0);
-        if (item.type === "door") {
+        const freeOpening = !item.roomId && !item.wallId;
+        if (freeOpening) {
+          if (shouldApplyInput(changedInput, els.xInput)) {
+            item.x = numericInputValue(els.xInput, item.x ?? openingPosition(item).x);
+          }
+          if (shouldApplyInput(changedInput, els.yInput)) {
+            item.y = numericInputValue(els.yInput, item.y ?? openingPosition(item).y);
+          }
+          if (shouldApplyInput(changedInput, els.rotationInput)) {
+            item.rotation = normalizeAngle(numericInputValue(els.rotationInput, item.rotation || 0));
+          }
+        } else if (item.type === "door") {
           const nextSwing = Number(els.rotationInput.value);
           item.swing = Math.abs(nextSwing) >= 90 ? 180 : 0;
         }
@@ -4327,6 +4383,7 @@
         const visibleRoomIds = new Set(rooms.map(room => room.id));
         const visibleWallIds = new Set(walls.map(wall => wall.id));
         const openings = state.openings.filter(opening => opening.floorId === floor.id);
+        const freeOpenings = openings.filter(opening => !opening.roomId && !opening.wallId);
         const elements = state.elements.filter(element => element.floorId === floor.id);
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
         if (state.view.boundary && boundary) addBoundary3D(boundary, floor);
@@ -4338,6 +4395,8 @@
         if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, openings.filter(opening => opening.wallId === wall.id)));
         if (state.view.doors) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
         if (state.view.windows) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        if (state.view.doors) freeOpenings.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
+        if (state.view.windows) freeOpenings.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
         if (state.view.roof) roofs.forEach(roof => addRoof3D(roof, floor));
         if (state.view.room) addFloorLabel(floor, yBase, rooms);
       });
@@ -4544,12 +4603,31 @@
 
     function addOpening3D(opening, floor) {
       const pos = openingPosition(opening);
-      if (!pos.room && !pos.wall) return;
       const color = colorToHex(itemColor(opening));
       const y = floor.elevation + opening.sill + opening.height / 2;
       const horizontal = opening.side === "top" || opening.side === "bottom" || opening.side === "wall-h";
       const thick = pos.wall ? (horizontal ? pos.wall.h : pos.wall.w) : 0.18;
       const depth = 0.08;
+      if (pos.free) {
+        const group = new THREE.Group();
+        group.position.set(pos.x, 0, pos.y);
+        group.rotation.y = -(Number(opening.rotation) || 0) * Math.PI / 180;
+        three.root.add(group);
+        const mesh = makeBox(opening.width, opening.height, depth, color, itemOpacity(opening));
+        mesh.position.set(0, y, 0);
+        group.add(mesh);
+        if (opening.type === "door") {
+          const marker = new THREE.Mesh(
+            new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
+            new THREE.MeshBasicMaterial({ color, transparent: itemOpacity(opening) < 1, opacity: itemOpacity(opening) })
+          );
+          marker.position.set(0, floor.elevation + 0.035, 0);
+          marker.rotation.x = Math.PI / 2;
+          if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
+          group.add(marker);
+        }
+        return;
+      }
       const mesh = horizontal
         ? makeBox(opening.width, opening.height, depth, color, itemOpacity(opening))
         : makeBox(depth, opening.height, opening.width, color, itemOpacity(opening));
@@ -5581,7 +5659,8 @@
 
     function nudgeSelected(dx, dy) {
       const item = selectedItem();
-      if (!item || item.type === "boundary" || item.type === "door" || item.type === "window") return false;
+      if (!item || item.type === "boundary") return false;
+      if ((item.type === "door" || item.type === "window") && (item.roomId || item.wallId)) return false;
       const members = moveMembersFor(item);
       if (!members.length) return false;
       pushUndoSnapshot();
