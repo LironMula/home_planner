@@ -1042,6 +1042,7 @@
                 <option value="shower">Shower</option>
                 <option value="sofa">Sofa</option>
                 <option value="table">Table</option>
+                <option value="round-table">Round table</option>
                 <option value="kitchen-island">Kitchen island</option>
                 <option value="chair">Chair</option>
                 <option value="car">Car</option>
@@ -1284,6 +1285,7 @@
       shower: { label: "Shower", color: "#9bd5e5", w: 0.9, h: 0.9, length: 2.1 },
       sofa: { label: "Sofa", color: "#b7846f", w: 2.0, h: 0.9, length: 0.85 },
       table: { label: "Table", color: "#b08968", w: 1.4, h: 0.9, length: 0.75 },
+      "round-table": { label: "Round table", color: "#b08968", w: 1.2, h: 1.2, length: 0.75 },
       "kitchen-island": { label: "Kitchen island", color: "#d6c6ad", w: 2.7, h: 1.1, length: 0.92 },
       chair: { label: "Chair", color: "#8ab17d", w: 0.55, h: 0.55, length: 0.9 },
       car: { label: "Car", color: "#2563eb", w: 4.4, h: 1.9, length: 1.55 },
@@ -2563,7 +2565,7 @@
       ctx.fillStyle = colorWithAlpha(itemColor(element), fillOpacity);
       ctx.strokeStyle = active ? "#264653" : colorWithAlpha(itemColor(element), 0.95);
       ctx.lineWidth = active ? 4 : 2;
-      if (element.elementKind === "pool" && element.type1 === "round") {
+      if ((element.elementKind === "pool" && element.type1 === "round") || element.elementKind === "round-table") {
         ctx.beginPath();
         ctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2);
         ctx.fill();
@@ -2575,7 +2577,7 @@
 
       ctx.strokeStyle = colorWithAlpha("#ffffff", 0.38);
       ctx.lineWidth = 1;
-      if (element.elementKind === "pool") {
+      if (element.elementKind === "pool" || element.elementKind === "round-table") {
         ctx.beginPath();
         ctx.ellipse(0, 0, w * 0.36, h * 0.32, 0, 0, Math.PI * 2);
         ctx.stroke();
@@ -4084,6 +4086,11 @@
             item.w = diameter;
             item.h = diameter;
           }
+        } else if (nextKind === "round-table") {
+          const diameter = Math.max(0.2, shouldApplyInput(changedInput, els.depthInput) ? item.h : item.w);
+          item.w = diameter;
+          item.h = diameter;
+          delete item.type1;
         } else {
           delete item.type1;
         }
@@ -4984,6 +4991,16 @@
         [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
           addElementBox(group, sx * (w / 2 - legW), 0, sz * (d / 2 - legW), legW, h * 0.82, legW, wood, opacity);
         }));
+        return;
+      }
+
+      if (kind === "round-table") {
+        const diameter = Math.max(0.2, Math.min(w, d));
+        const radius = diameter / 2;
+        addElementCylinder(group, 0, h * 0.82, 0, radius, h * 0.12, color, opacity, { segments: 48 });
+        addElementCylinder(group, 0, 0, 0, Math.max(0.055, radius * 0.09), h * 0.82, wood, opacity, { segments: 20 });
+        addElementCylinder(group, 0, 0, 0, radius * 0.34, h * 0.05, wood, opacity, { segments: 32 });
+        addElementCylinder(group, 0, h * 0.955, 0, radius * 0.82, h * 0.015, 0xf8fafc, opacity * 0.28, { segments: 48, castShadow: false });
         return;
       }
 
