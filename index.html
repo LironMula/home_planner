@@ -4333,8 +4333,8 @@
         const step = wheelStepForEvent(event, "forward");
         three.orbit.position.addScaledVector(cameraForwardVector(), scrollY < 0 ? step : -step);
       } else if (Math.abs(scrollX) > 0) {
-        const step = wheelStepForEvent(event, "vertical");
-        three.orbit.position.y += scrollX < 0 ? step : -step;
+        const turnAmount = clamp(Math.abs(scrollX) / 500, 0.04, 0.16);
+        three.orbit.yaw += scrollX < 0 ? turnAmount : -turnAmount;
       }
     }
 
