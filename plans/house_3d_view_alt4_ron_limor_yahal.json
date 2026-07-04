@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T13:28:55.353Z",
+  "savedAt": "2026-07-04T13:45:45.075Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 300,
+  "scale": 68.75225703894345,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 8.795,
-      "y": 21.101,
-      "z": 15.456
+      "x": 0.442,
+      "y": 14.075,
+      "z": 30.735
     },
-    "yaw": 9.4109,
-    "pitch": -1.1682
+    "yaw": 15.6491,
+    "pitch": -0.8091
   },
-  "splitRatio": 0.6698041205412633,
+  "splitRatio": 0.6692691527902779,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -199,16 +199,77 @@
       "type": "wall",
       "floorId": "floor-1",
       "name": "Wall 11",
-      "x": 7.9,
+      "x": 7.8,
       "y": 3.1,
-      "w": 3.35,
+      "w": 4.3,
       "h": 0.1,
       "height": 2.8,
       "color": "#364154",
       "opacity": 0.94
+    },
+    {
+      "id": "wall-izvh422",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 12",
+      "x": 11.95,
+      "y": 1.25,
+      "w": 0.2,
+      "h": 1.9,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
+    },
+    {
+      "id": "wall-xelan7i",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 13",
+      "x": 11.9,
+      "y": 3.2,
+      "w": 0.2,
+      "h": 4.95,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
     }
   ],
-  "openings": [],
+  "openings": [
+    {
+      "id": "window-errme39",
+      "type": "window",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": "wall-izvh422",
+      "name": "Window 1",
+      "side": "wall-v",
+      "t": 0.36745245874994586,
+      "width": 0.6,
+      "height": 1.3,
+      "sill": 1.3,
+      "swing": 0,
+      "glass": false,
+      "color": "#45a9d8",
+      "opacity": 0.58
+    },
+    {
+      "id": "door-j5wzd9v",
+      "type": "door",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": "wall-g9m49jp",
+      "name": "Door 1",
+      "side": "wall-h",
+      "t": 0.8032549485851449,
+      "width": 0.9,
+      "height": 2.1,
+      "sill": 0,
+      "swing": 0,
+      "glass": false,
+      "color": "#c87a35",
+      "opacity": 0.82
+    }
+  ],
   "elements": [
     {
       "id": "site-element-mhana1n",
@@ -432,6 +493,22 @@
       "height": 0.05,
       "rotation": 110,
       "color": "#2f343b",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-1idcuo1",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Closet 1",
+      "elementKind": "closet",
+      "x": 7.9,
+      "y": 3.2,
+      "w": 2.1,
+      "h": 0.6,
+      "elevation": 0,
+      "height": 2.1,
+      "rotation": 0,
+      "color": "#6b7280",
       "opacity": 0.86
     }
   ],
