@@ -4439,10 +4439,10 @@
         if (state.view.boundary && boundary) addBoundary3D(boundary, floor);
         rooms
           .filter(room => room.type !== "space" || state.view.spaces)
-          .forEach(room => addRoom3D(room, floor, openings.filter(opening => opening.roomId === room.id)));
+          .forEach(room => addRoom3D(room, floor, roomOpeningsFor3D(room, openings, freeOpenings)));
         if (state.view.stairs) stairs.forEach(stair => addStair3D(stair, floor));
         if (state.view.elements) elements.forEach(element => addElement3D(element, floor));
-        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, openings.filter(opening => opening.wallId === wall.id)));
+        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, openings));
         if (state.view.doors) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
         if (state.view.windows) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
         if (state.view.doors) freeOpenings.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
@@ -4479,11 +4479,11 @@
       }
 
       if (state.view.windows && !isSpace) {
-        openings.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        openings.filter(opening => opening.type === "window" && !opening.gapOnly).forEach(opening => addOpening3D(opening, floor));
       }
 
       if (state.view.doors && !isSpace) {
-        openings.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
+        openings.filter(opening => opening.type === "door" && !opening.gapOnly).forEach(opening => addOpening3D(opening, floor));
       }
     }
 
@@ -4511,33 +4511,50 @@
       const height = wall.height ?? state.wallHeight;
       const color = colorToHex(itemColor(wall));
       const opacity = itemOpacity(wall);
-      if (Number(wall.rotation)) {
-        const group = new THREE.Group();
-        group.position.set(wall.x + wall.w / 2, floor.elevation, wall.y + wall.h / 2);
-        group.rotation.y = -(Number(wall.rotation) || 0) * Math.PI / 180;
-        const mesh = makeBox(wall.w, height, wall.h, color, opacity);
-        mesh.position.set(0, height / 2, 0);
-        mesh.castShadow = wall.type !== "glass-wall";
-        mesh.receiveShadow = true;
-        group.add(mesh);
-        three.root.add(group);
-        return;
-      }
       const horizontal = wall.w >= wall.h;
       const length = horizontal ? wall.w : wall.h;
       const thickness = horizontal ? wall.h : wall.w;
       const gaps = openings
-        .filter(opening => opening.type === "door" || opening.type === "window")
-        .map(opening => {
-          const half = opening.width / 2;
-          const center = clamp(opening.t, 0, 1) * length;
-          return {
-            from: clamp(center - half, 0, length),
-            to: clamp(center + half, 0, length),
-            opening
-          };
-        })
+        .map(opening => customWallOpeningGap(wall, opening))
+        .filter(Boolean)
         .sort((a, b) => a.from - b.from);
+      const rotated = Number(wall.rotation) || 0;
+
+      if (rotated) {
+        const group = new THREE.Group();
+        group.position.set(wall.x + wall.w / 2, floor.elevation, wall.y + wall.h / 2);
+        group.rotation.y = -rotated * Math.PI / 180;
+        three.root.add(group);
+
+        if (gaps.length) {
+          let cursor = 0;
+          gaps.forEach(gap => {
+            addCustomWallPieceLocal(group, wall, cursor, gap.from, height, thickness, color, opacity, horizontal);
+            if (gap.opening.type === "window") {
+              const belowH = clamp(gap.opening.sill || 0, 0, height);
+              const aboveStart = clamp((gap.opening.sill || 0) + gap.opening.height, 0, height);
+              const aboveH = Math.max(0, height - aboveStart);
+              if (belowH > 0.08) addCustomWallPieceLocal(group, wall, gap.from, gap.to, belowH, thickness, color, opacity, horizontal, 0);
+              if (aboveH > 0.08) addCustomWallPieceLocal(group, wall, gap.from, gap.to, aboveH, thickness, color, opacity, horizontal, aboveStart);
+            } else {
+              const transomStart = clamp(gap.opening.height, 0, height);
+              const transomH = Math.max(0, height - transomStart);
+              if (transomH > 0.08) addCustomWallPieceLocal(group, wall, gap.from, gap.to, transomH, thickness, color, opacity, horizontal, transomStart);
+            }
+            cursor = Math.max(cursor, gap.to);
+          });
+          addCustomWallPieceLocal(group, wall, cursor, length, height, thickness, color, opacity, horizontal);
+          return;
+        }
+
+        const mesh = makeBox(wall.w, height, wall.h, color, opacity);
+        mesh.position.set(0, height / 2, 0);
+        mesh.castShadow = wall.type !== "glass-wall";
+        mesh.receiveShadow = true;
+        applyGlassWallMaterial(mesh, wall);
+        group.add(mesh);
+        return;
+      }
 
       if (gaps.length) {
         let cursor = 0;
@@ -4564,11 +4581,7 @@
       mesh.position.set(wall.x + wall.w / 2, floor.elevation + height / 2, wall.y + wall.h / 2);
       mesh.castShadow = wall.type !== "glass-wall";
       mesh.receiveShadow = true;
-      if (wall.type === "glass-wall") {
-        mesh.material.roughness = 0.12;
-        mesh.material.metalness = 0.04;
-        mesh.material.side = THREE.DoubleSide;
-      }
+      applyGlassWallMaterial(mesh, wall);
       three.root.add(mesh);
     }
 
@@ -4585,12 +4598,101 @@
       );
       mesh.castShadow = wall.type !== "glass-wall";
       mesh.receiveShadow = true;
-      if (wall.type === "glass-wall") {
-        mesh.material.roughness = 0.12;
-        mesh.material.metalness = 0.04;
-        mesh.material.side = THREE.DoubleSide;
-      }
+      applyGlassWallMaterial(mesh, wall);
       three.root.add(mesh);
+    }
+
+    function addCustomWallPieceLocal(group, wall, from, to, height, thickness, color, opacity, horizontal, base = 0) {
+      const len = to - from;
+      if (len <= 0.04) return;
+      const mesh = horizontal
+        ? makeBox(len, height, thickness, color, opacity)
+        : makeBox(thickness, height, len, color, opacity);
+      mesh.position.set(
+        horizontal ? -wall.w / 2 + from + len / 2 : 0,
+        base + height / 2,
+        horizontal ? 0 : -wall.h / 2 + from + len / 2
+      );
+      mesh.castShadow = wall.type !== "glass-wall";
+      mesh.receiveShadow = true;
+      applyGlassWallMaterial(mesh, wall);
+      group.add(mesh);
+    }
+
+    function applyGlassWallMaterial(mesh, wall) {
+      if (wall.type !== "glass-wall") return;
+      mesh.material.roughness = 0.12;
+      mesh.material.metalness = 0.04;
+      mesh.material.side = THREE.DoubleSide;
+    }
+
+    function roomOpeningsFor3D(room, openings, freeOpenings) {
+      const attached = openings.filter(opening => opening.roomId === room.id);
+      const overlaps = freeOpenings
+        .map(opening => roomEdgeOpeningGap(room, opening))
+        .filter(Boolean);
+      return [...attached, ...overlaps];
+    }
+
+    function roomEdgeOpeningGap(room, opening) {
+      if (!["door", "window"].includes(opening.type)) return null;
+      const pos = openingPosition(opening);
+      if (!pos.free) return null;
+      const angle = normalizeAngle(Number(opening.rotation) || 0);
+      const candidates = [
+        { side: "top", dist: Math.abs(pos.y - room.y), t: (pos.x - room.x) / room.w, axis: 0, inside: pos.x >= room.x && pos.x <= room.x + room.w },
+        { side: "bottom", dist: Math.abs(pos.y - (room.y + room.h)), t: (pos.x - room.x) / room.w, axis: 0, inside: pos.x >= room.x && pos.x <= room.x + room.w },
+        { side: "left", dist: Math.abs(pos.x - room.x), t: (pos.y - room.y) / room.h, axis: 90, inside: pos.y >= room.y && pos.y <= room.y + room.h },
+        { side: "right", dist: Math.abs(pos.x - (room.x + room.w)), t: (pos.y - room.y) / room.h, axis: 90, inside: pos.y >= room.y && pos.y <= room.y + room.h }
+      ].filter(candidate =>
+        candidate.inside
+        && candidate.dist <= 0.16
+        && angleDifference(angle, candidate.axis) <= 12
+      );
+      candidates.sort((a, b) => a.dist - b.dist);
+      if (!candidates.length) return null;
+      return { ...opening, side: candidates[0].side, t: clamp(candidates[0].t, 0, 1), gapOnly: true };
+    }
+
+    function customWallOpeningGap(wall, opening) {
+      if (!["door", "window"].includes(opening.type)) return null;
+      const horizontal = wall.w >= wall.h;
+      const length = horizontal ? wall.w : wall.h;
+      if (opening.wallId === wall.id) {
+        const center = clamp(opening.t, 0, 1) * length;
+        const half = (Number(opening.width) || 0.8) / 2;
+        return { from: clamp(center - half, 0, length), to: clamp(center + half, 0, length), opening };
+      }
+      if (opening.roomId || opening.wallId) return null;
+
+      const pos = openingPosition(opening);
+      const rotation = Number(wall.rotation) || 0;
+      const cx = wall.x + wall.w / 2;
+      const cy = wall.y + wall.h / 2;
+      const dx = pos.x - cx;
+      const dy = pos.y - cy;
+      const rad = rotation * Math.PI / 180;
+      const localX = dx * Math.cos(rad) + dy * Math.sin(rad);
+      const localY = -dx * Math.sin(rad) + dy * Math.cos(rad);
+      const along = horizontal ? localX + wall.w / 2 : localY + wall.h / 2;
+      const across = horizontal ? localY : localX;
+      const thickness = horizontal ? wall.h : wall.w;
+      const wallAxis = normalizeAngle(rotation + (horizontal ? 0 : 90));
+      if (angleDifference(Number(opening.rotation) || 0, wallAxis) > 12) return null;
+      if (Math.abs(across) > Math.max(thickness / 2 + 0.12, 0.16)) return null;
+
+      const half = (Number(opening.width) || 0.8) / 2;
+      if (along + half < 0 || along - half > length) return null;
+      return {
+        from: clamp(along - half, 0, length),
+        to: clamp(along + half, 0, length),
+        opening
+      };
+    }
+
+    function angleDifference(a, b) {
+      const diff = Math.abs(normalizeAngle(a - b));
+      return Math.min(diff, Math.abs(180 - diff));
     }
 
     function addWallSegments(room, floor, openings) {
