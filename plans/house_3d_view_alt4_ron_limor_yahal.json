@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T14:08:52.415Z",
+  "savedAt": "2026-07-04T14:11:18.275Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 267.49930465099254,
+  "scale": 43.634931116526204,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 6.584,
-      "y": 3.147,
-      "z": 4.898
+      "x": 9.289,
+      "y": 1.678,
+      "z": 6.943
     },
-    "yaw": 26.4218,
-    "pitch": -0.6545
+    "yaw": 34.6854,
+    "pitch": -0.0727
   },
   "splitRatio": 0.5732202572776552,
   "activeFloorId": "floor-1",
@@ -665,6 +665,38 @@
       "height": 0.2,
       "rotation": 180,
       "color": "#70b7c8",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-3p4oc25",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Closet 2 copy",
+      "elementKind": "closet",
+      "x": 7.9,
+      "y": 0.85,
+      "w": 4,
+      "h": 0.6,
+      "elevation": 0,
+      "height": 2.1,
+      "rotation": 0,
+      "color": "#1e788a",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-ysifuj1",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Closet 2 copy copy",
+      "elementKind": "closet",
+      "x": 7.9,
+      "y": 2.35,
+      "w": 2.96,
+      "h": 0.7,
+      "elevation": 0,
+      "height": 2.1,
+      "rotation": 180,
+      "color": "#1e788a",
       "opacity": 0.86
     }
   ],
