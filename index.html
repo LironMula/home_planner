@@ -57,7 +57,7 @@
 
     .app {
       display: grid;
-      grid-template-columns: minmax(280px, 360px) minmax(420px, 1.4fr) 8px minmax(360px, 1fr);
+      grid-template-columns: minmax(180px, 230px) minmax(420px, 1.4fr) 8px minmax(360px, 1fr);
       height: 100vh;
       min-height: 640px;
     }
@@ -185,7 +185,7 @@
 
     .side-scroll {
       overflow: auto;
-      padding: 16px;
+      padding: 12px;
     }
 
     .section {
@@ -216,8 +216,8 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: 1fr;
+      gap: 6px;
     }
 
     .tool-btn,
@@ -232,8 +232,9 @@
       align-items: center;
       justify-content: center;
       gap: 7px;
-      padding: 8px 10px;
+      padding: 7px 8px;
       font-weight: 700;
+      white-space: nowrap;
       transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 140ms ease;
     }
 
@@ -259,6 +260,22 @@
       font-size: 12px;
       font-weight: 900;
       flex: 0 0 auto;
+    }
+
+    .tool-btn {
+      min-height: 32px;
+      justify-content: flex-start;
+      font-size: 12px;
+    }
+
+    .small-btn {
+      min-height: 30px;
+      padding: 5px 6px;
+      font-size: 10px;
+    }
+
+    .section-title .toolbar-group {
+      gap: 4px;
     }
 
     .tool-icon.room {
@@ -371,6 +388,11 @@
     .floor-row {
       grid-template-columns: 1fr auto;
       align-items: center;
+      cursor: grab;
+    }
+
+    .floor-row.dragging {
+      opacity: 0.55;
     }
 
     .floor-row.active {
@@ -689,7 +711,7 @@
     .toggle-btn {
       min-height: 34px;
       border-radius: 7px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(15, 118, 110, var(--toggle-bg-opacity, 0.45));
       color: #e8f0f8;
       border: 1px solid rgba(255, 255, 255, 0.14);
       padding: 7px 9px;
@@ -704,7 +726,6 @@
     .toggle-btn.active {
       color: #ecfffc;
       border-color: rgba(89, 213, 201, 0.75);
-      background: rgba(15, 118, 110, 0.45);
     }
 
     .legend {
@@ -823,7 +844,7 @@
       .app {
         height: auto;
         min-height: 100vh;
-        grid-template-columns: 310px minmax(560px, 1fr);
+        grid-template-columns: 230px minmax(560px, 1fr);
         grid-template-rows: minmax(720px, 78vh) minmax(560px, 72vh);
       }
 
@@ -937,6 +958,7 @@
             Floors
             <span class="toolbar-group">
               <button class="small-btn" id="boundaryBtn" type="button" title="Edit this floor boundary">Boundary</button>
+              <button class="small-btn" id="addBasementBtn" type="button" title="Add a basement below the ground floor">Basement</button>
               <button class="small-btn" id="addFloorBtn" type="button" title="Add another floor">Add</button>
             </span>
           </div>
@@ -946,10 +968,7 @@
         <section class="section">
           <div class="section-title">Scale</div>
           <div class="field-grid">
-            <div class="field">
-              <label for="scaleInput">Pixels per meter</label>
-              <input id="scaleInput" type="number" min="10" max="300" step="5" value="52" />
-            </div>
+            <input id="scaleInput" type="hidden" min="10" max="300" step="5" value="52" />
             <div class="field">
               <label for="wallInput">Wall height</label>
               <input id="wallInput" type="number" min="2.2" max="4.5" step="0.1" value="2.8" />
@@ -1229,23 +1248,23 @@
       splitRatio: 0.58,
       controlAutoHide: false,
       controlCollapsed: false,
-      controlExpandedWidth: 340,
+      controlExpandedWidth: 210,
       drag: null,
       hitCycle: null,
       offset: { x: 0, y: 0 },
       viewFloor: "all",
       view: {
-        floor: true,
-        ceiling: true,
-        room: true,
-        spaces: true,
-        walls: true,
-        stairs: true,
-        windows: true,
-        doors: true,
-        elements: true,
-        roof: true,
-        boundary: true
+        floor: 1,
+        ceiling: 1,
+        room: 1,
+        spaces: 1,
+        walls: 1,
+        stairs: 1,
+        windows: 1,
+        doors: 1,
+        elements: 1,
+        roof: 1,
+        boundary: 1
       },
       floors: [
         { id: "floor-1", name: "Ground floor", elevation: 0, color: "#0f766e" }
@@ -1379,6 +1398,7 @@
       scaleInput: document.getElementById("scaleInput"),
       wallInput: document.getElementById("wallInput"),
       addFloorBtn: document.getElementById("addFloorBtn"),
+      addBasementBtn: document.getElementById("addBasementBtn"),
       boundaryBtn: document.getElementById("boundaryBtn"),
       quickRoomBtn: document.getElementById("quickRoomBtn"),
       saveBtn: document.getElementById("saveBtn"),
@@ -1549,7 +1569,59 @@
 
     function normalizePlanSnapshot(snapshot) {
       normalizeElements(snapshot.elements || []);
+      snapshot.view = normalizeViewState(snapshot.view);
       return snapshot;
+    }
+
+    const viewOpacityLevels = [1, 0.5, 0.25, 0];
+    const toggleBackgroundOpacity = {
+      1: 1,
+      0.5: 0.75,
+      0.25: 0.5,
+      0: 0.25
+    };
+
+    function normalizeViewValue(value) {
+      if (value === false || value === 0) return 0;
+      if (value === true || value === undefined || value === null) return 1;
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return 1;
+      if (numeric <= 0) return 0;
+      if (numeric <= 0.25) return 0.25;
+      if (numeric <= 0.5) return 0.5;
+      return 1;
+    }
+
+    function normalizeViewState(view = {}) {
+      const base = {
+        floor: 1,
+        ceiling: 1,
+        room: 1,
+        spaces: 1,
+        walls: 1,
+        stairs: 1,
+        windows: 1,
+        doors: 1,
+        elements: 1,
+        roof: 1,
+        boundary: 1
+      };
+      Object.keys(base).forEach(key => {
+        base[key] = normalizeViewValue(view[key] ?? base[key]);
+      });
+      return base;
+    }
+
+    function viewOpacity(key) {
+      return normalizeViewValue(state.view?.[key]);
+    }
+
+    function viewVisible(key) {
+      return viewOpacity(key) > 0;
+    }
+
+    function opacityForView(opacity, key) {
+      return clamp((Number(opacity) || 0) * viewOpacity(key), 0, 1);
     }
 
     function itemColor(item) {
@@ -1609,9 +1681,9 @@
       const appRect = els.app.getBoundingClientRect();
       if (!state.controlAutoHide || !state.controlCollapsed) {
         const measured = els.sidebar.getBoundingClientRect().width;
-        if (measured > 80) state.controlExpandedWidth = clamp(measured, 280, 360);
+        if (measured > 80) state.controlExpandedWidth = clamp(measured, 180, 230);
       }
-      const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || 340, 280, 360);
+      const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || 210, 180, 230);
       const resizerWidth = els.splitResizer?.getBoundingClientRect().width || 8;
       const usableWidth = Math.max(720, appRect.width - sidebarWidth - resizerWidth);
       const minPaneWidth = 320;
@@ -1654,7 +1726,7 @@
       const updateFromPointer = event => {
         if (window.innerWidth <= 1180) return;
         const appRect = els.app.getBoundingClientRect();
-        const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || els.sidebar.getBoundingClientRect().width, 280, 360);
+        const sidebarWidth = state.controlAutoHide && state.controlCollapsed ? 42 : clamp(state.controlExpandedWidth || els.sidebar.getBoundingClientRect().width, 180, 230);
         const resizerWidth = els.splitResizer.getBoundingClientRect().width || 8;
         const usableWidth = Math.max(1, appRect.width - sidebarWidth - resizerWidth);
         const minRatio = clamp(320 / usableWidth, 0.16, 0.45);
@@ -1721,7 +1793,7 @@
       });
       window.addEventListener("pointermove", event => {
         if (!state.controlAutoHide || window.innerWidth <= 1180) return;
-        const expandedWidth = clamp(state.controlExpandedWidth || 340, 280, 360);
+        const expandedWidth = clamp(state.controlExpandedWidth || 210, 180, 230);
         const collapsedWidth = 42;
         const openDistance = collapsedWidth + 72;
         const closeDistance = expandedWidth + 52;
@@ -1758,21 +1830,52 @@
       els.modeHud.textContent = labels[tool] || "Select mode";
     }
 
-    function addFloor() {
+    function floorStepHeight() {
+      return state.wallHeight + 0.35;
+    }
+
+    function groundFloorIndex() {
+      const explicit = state.floors.findIndex(floor => floor.id === "floor-1" || /ground/i.test(floor.name || ""));
+      return explicit >= 0 ? explicit : 0;
+    }
+
+    function reflowFloorElevations() {
+      const groundIndex = groundFloorIndex();
+      state.floors.forEach((floor, index) => {
+        floor.elevation = round((index - groundIndex) * floorStepHeight(), 2);
+      });
+    }
+
+    function addFloor(kind = "upper") {
       pushUndoSnapshot();
       const index = state.floors.length + 1;
+      const basementCount = state.floors.filter(floor => /basement/i.test(floor.name || "")).length;
       const floor = {
         id: id("floor"),
-        name: index === 2 ? "Second floor" : `Floor ${index}`,
-        elevation: (index - 1) * (state.wallHeight + 0.35),
+        name: kind === "basement" ? basementCount ? `Basement ${basementCount + 1}` : "Basement" : index === 2 ? "Second floor" : `Floor ${index}`,
+        elevation: 0,
         color: colors[(index - 1) % colors.length]
       };
-      state.floors.push(floor);
+      if (kind === "basement") state.floors.splice(groundFloorIndex(), 0, floor);
+      else state.floors.push(floor);
+      reflowFloorElevations();
       addBoundaryForFloor(floor);
       state.activeFloorId = floor.id;
       state.viewFloor = "all";
       renderAll();
       showToast(`${floor.name} added`);
+    }
+
+    function swapFloors(sourceId, targetId) {
+      if (!sourceId || !targetId || sourceId === targetId) return;
+      const from = state.floors.findIndex(floor => floor.id === sourceId);
+      const to = state.floors.findIndex(floor => floor.id === targetId);
+      if (from < 0 || to < 0) return;
+      pushUndoSnapshot();
+      [state.floors[from], state.floors[to]] = [state.floors[to], state.floors[from]];
+      reflowFloorElevations();
+      renderAll();
+      showToast("Floors reordered");
     }
 
     function addBoundaryForFloor(floor, opts = {}) {
@@ -3303,7 +3406,7 @@
         splitRatio: state.splitRatio,
         activeFloorId: state.activeFloorId,
         viewFloor: state.viewFloor,
-        view: state.view,
+        view: normalizeViewState(state.view),
         floors: state.floors,
         boundaries: state.boundaries,
         rooms: state.rooms,
@@ -3661,7 +3764,7 @@
       state.splitRatio = clamp(saved.splitRatio || state.splitRatio || 0.58, 0.16, 0.84);
       state.activeFloorId = saved.activeFloorId || saved.floors[0]?.id || state.activeFloorId;
       state.viewFloor = saved.viewFloor || "all";
-      state.view = { ...state.view, ...(saved.view || {}) };
+      state.view = normalizeViewState({ ...state.view, ...(saved.view || {}) });
       state.floors = saved.floors || [];
       state.boundaries = saved.boundaries || [];
       state.rooms = saved.rooms || [];
@@ -3807,13 +3910,29 @@
         const row = document.createElement("button");
         row.type = "button";
         row.className = `floor-row ${floor.id === state.activeFloorId ? "active" : ""}`;
+        row.draggable = true;
+        row.dataset.floorId = floor.id;
         row.innerHTML = `
           <span>
             <span class="floor-name">${floor.name}</span>
-            <span class="floor-meta">${rooms.length} rooms/spaces - ${round(area, 1)} m2</span>
+            <span class="floor-meta">${rooms.length} rooms/spaces - ${round(area, 1)} m2 - ${round(floor.elevation, 2)} m</span>
           </span>
           <span class="swatch" style="background:${floor.color}"></span>
         `;
+        row.addEventListener("dragstart", event => {
+          row.classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", floor.id);
+        });
+        row.addEventListener("dragend", () => row.classList.remove("dragging"));
+        row.addEventListener("dragover", event => {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "move";
+        });
+        row.addEventListener("drop", event => {
+          event.preventDefault();
+          swapFloors(event.dataTransfer.getData("text/plain"), floor.id);
+        });
         row.addEventListener("click", () => {
           state.activeFloorId = floor.id;
           const firstRoom = state.rooms.find(room => room.floorId === floor.id);
@@ -4201,10 +4320,27 @@
       updateRoomList();
       updateRoofList();
       updateViewFloorSelect();
+      updateViewToggles();
       updateInspector();
       updateUndoControl();
       draw();
       render3D();
+    }
+
+    function nextViewOpacity(key) {
+      const current = viewOpacity(key);
+      const index = viewOpacityLevels.findIndex(level => Math.abs(level - current) < 0.001);
+      return viewOpacityLevels[(index + 1) % viewOpacityLevels.length];
+    }
+
+    function updateViewToggles() {
+      els.viewToggles.querySelectorAll(".toggle-btn").forEach(btn => {
+        const key = btn.dataset.toggle;
+        const value = viewOpacity(key);
+        btn.classList.toggle("active", value > 0);
+        btn.style.setProperty("--toggle-bg-opacity", String(toggleBackgroundOpacity[value] ?? 0.25));
+        btn.title = `${btn.textContent.trim()}: ${Math.round(value * 100)}%`;
+      });
     }
 
     function init3D() {
@@ -4458,21 +4594,21 @@
           wallGapLists.set(wall.id, gaps);
         });
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
-        if (state.view.boundary && boundary) addBoundary3D(boundary, floor);
+        if (viewVisible("boundary") && boundary) addBoundary3D(boundary, floor);
         rooms
-          .filter(room => room.type !== "space" || state.view.spaces)
+          .filter(room => room.type !== "space" || viewVisible("spaces"))
           .forEach(room => addRoom3D(room, floor, roomOpeningLists.get(room.id) || []));
-        if (state.view.stairs) stairs.forEach(stair => addStair3D(stair, floor));
-        if (state.view.elements) elements.forEach(element => addElement3D(element, floor));
-        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, wallGapLists.get(wall.id) || []));
-        if (state.view.doors) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.windows) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.doors) wallOpeningVisuals.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.windows) wallOpeningVisuals.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.doors) freeOpenings.filter(opening => opening.type === "door" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
-        if (state.view.windows) freeOpenings.filter(opening => opening.type === "window" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
-        if (state.view.roof) roofs.forEach(roof => addRoof3D(roof, floor));
-        if (state.view.room) addFloorLabel(floor, yBase, rooms);
+        if (viewVisible("stairs")) stairs.forEach(stair => addStair3D(stair, floor));
+        if (viewVisible("elements")) elements.forEach(element => addElement3D(element, floor));
+        if (viewVisible("walls")) walls.forEach(wall => addCustomWall3D(wall, floor, wallGapLists.get(wall.id) || []));
+        if (viewVisible("doors")) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("windows")) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("doors")) wallOpeningVisuals.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("windows")) wallOpeningVisuals.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("doors")) freeOpenings.filter(opening => opening.type === "door" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("windows")) freeOpenings.filter(opening => opening.type === "window" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
+        if (viewVisible("roof")) roofs.forEach(roof => addRoof3D(roof, floor));
+        if (viewVisible("room")) addFloorLabel(floor, yBase, rooms);
       });
 
       updateCamera();
@@ -4485,41 +4621,41 @@
       const cz = room.y + room.h / 2;
       const isSpace = room.type === "space";
 
-      if (state.view.floor) {
-        const floorMesh = makeBox(room.w, 0.08, room.h, colorToHex(itemColor(room)), itemOpacity(room));
+      if (viewVisible("floor")) {
+        const floorMesh = makeBox(room.w, 0.08, room.h, colorToHex(itemColor(room)), opacityForView(itemOpacity(room), "floor"));
         floorMesh.position.set(cx, yBase, cz);
         floorMesh.receiveShadow = true;
         three.root.add(floorMesh);
       }
 
-      if (state.view.ceiling && !isSpace) {
-        const ceilingMesh = makeBox(room.w, 0.06, room.h, 0xdfe7ef, 0.28);
+      if (viewVisible("ceiling") && !isSpace) {
+        const ceilingMesh = makeBox(room.w, 0.06, room.h, 0xdfe7ef, opacityForView(0.28, "ceiling"));
         ceilingMesh.position.set(cx, yBase + wallH, cz);
         three.root.add(ceilingMesh);
       }
 
-      if (state.view.walls && !isSpace) {
+      if (viewVisible("walls") && !isSpace) {
         addWallSegments(room, floor, openings);
       }
 
-      if (state.view.windows && !isSpace) {
+      if (viewVisible("windows") && !isSpace) {
         openings.filter(opening => opening.type === "window" && !opening.gapOnly).forEach(opening => addOpening3D(opening, floor));
       }
 
-      if (state.view.doors && !isSpace) {
+      if (viewVisible("doors") && !isSpace) {
         openings.filter(opening => opening.type === "door" && !opening.gapOnly).forEach(opening => addOpening3D(opening, floor));
       }
     }
 
     function addBoundary3D(boundary, floor) {
       const y = floor.elevation - 0.035;
-      const mesh = makeBox(boundary.w, 0.035, boundary.h, colorToHex(itemColor(boundary)), itemOpacity(boundary));
+      const mesh = makeBox(boundary.w, 0.035, boundary.h, colorToHex(itemColor(boundary)), opacityForView(itemOpacity(boundary), "boundary"));
       mesh.position.set(boundary.x + boundary.w / 2, y, boundary.y + boundary.h / 2);
       mesh.receiveShadow = true;
       three.root.add(mesh);
 
       const edgeColor = colorToHex(itemColor(boundary));
-      const mat = new THREE.LineBasicMaterial({ color: edgeColor, transparent: true, opacity: 0.86 });
+      const mat = new THREE.LineBasicMaterial({ color: edgeColor, transparent: true, opacity: opacityForView(0.86, "boundary") });
       const points = [
         new THREE.Vector3(boundary.x, y + 0.04, boundary.y),
         new THREE.Vector3(boundary.x + boundary.w, y + 0.04, boundary.y),
@@ -4534,7 +4670,7 @@
     function addCustomWall3D(wall, floor, gaps = []) {
       const height = wall.height ?? state.wallHeight;
       const color = colorToHex(itemColor(wall));
-      const opacity = itemOpacity(wall);
+      const opacity = opacityForView(itemOpacity(wall), "walls");
       const horizontal = wall.w >= wall.h;
       const length = horizontal ? wall.w : wall.h;
       const thickness = horizontal ? wall.h : wall.w;
@@ -4760,6 +4896,7 @@
     function addWallSegments(room, floor, openings) {
       const thickness = 0.14;
       const wallColor = colorToHex(roomWallColor(room));
+      const wallOpacity = opacityForView(itemOpacity(room), "walls");
       const y = floor.elevation + state.wallHeight / 2;
       const sides = [
         { side: "top", length: room.w, horizontal: true, x: room.x, z: room.y },
@@ -4782,20 +4919,20 @@
 
         let cursor = 0;
         gaps.forEach(gap => {
-          addWallPiece(side, cursor, gap.from, y, state.wallHeight, thickness, wallColor, itemOpacity(room));
+          addWallPiece(side, cursor, gap.from, y, state.wallHeight, thickness, wallColor, wallOpacity);
           if (gap.opening.type === "window") {
             const belowH = gap.opening.sill;
             const aboveStart = gap.opening.sill + gap.opening.height;
             const aboveH = Math.max(0, state.wallHeight - aboveStart);
-            if (belowH > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + belowH / 2, belowH, thickness, wallColor, itemOpacity(room));
-            if (aboveH > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + aboveStart + aboveH / 2, aboveH, thickness, wallColor, itemOpacity(room));
+            if (belowH > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + belowH / 2, belowH, thickness, wallColor, wallOpacity);
+            if (aboveH > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + aboveStart + aboveH / 2, aboveH, thickness, wallColor, wallOpacity);
           } else {
             const transom = Math.max(0, state.wallHeight - gap.opening.height);
-            if (transom > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + gap.opening.height + transom / 2, transom, thickness, wallColor, itemOpacity(room));
+            if (transom > 0.08) addWallPiece(side, gap.from, gap.to, floor.elevation + gap.opening.height + transom / 2, transom, thickness, wallColor, wallOpacity);
           }
           cursor = gap.to;
         });
-        addWallPiece(side, cursor, side.length, y, state.wallHeight, thickness, wallColor, itemOpacity(room));
+        addWallPiece(side, cursor, side.length, y, state.wallHeight, thickness, wallColor, wallOpacity);
       });
     }
 
@@ -4804,10 +4941,10 @@
       if (len <= 0.04 || height <= 0.04) return;
       let mesh;
       if (side.horizontal) {
-        mesh = makeBox(len, height, thickness, color, clamp(opacity, 0.3, 0.96));
+        mesh = makeBox(len, height, thickness, color, clamp(opacity, 0, 0.96));
         mesh.position.set(side.x + from + len / 2, y, side.z);
       } else {
-        mesh = makeBox(thickness, height, len, color, clamp(opacity, 0.3, 0.96));
+        mesh = makeBox(thickness, height, len, color, clamp(opacity, 0, 0.96));
         mesh.position.set(side.x, y, side.z + from + len / 2);
       }
       mesh.castShadow = true;
@@ -4818,6 +4955,8 @@
     function addOpening3D(opening, floor) {
       const pos = openingPosition(opening);
       const color = colorToHex(itemColor(opening));
+      const viewKey = opening.type === "door" ? "doors" : "windows";
+      const openingOpacity = opacityForView(itemOpacity(opening), viewKey);
       const y = floor.elevation + opening.sill + opening.height / 2;
       const horizontal = opening.side === "top" || opening.side === "bottom" || opening.side === "wall-h";
       const thick = pos.wall ? (horizontal ? pos.wall.h : pos.wall.w) : 0.18;
@@ -4827,13 +4966,13 @@
         group.position.set(pos.x, 0, pos.y);
         group.rotation.y = -(Number(opening.rotation) || 0) * Math.PI / 180;
         three.root.add(group);
-        const mesh = makeBox(opening.width, opening.height, depth, color, itemOpacity(opening));
+        const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
         mesh.position.set(0, y, 0);
         group.add(mesh);
         if (opening.type === "door") {
           const marker = new THREE.Mesh(
             new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
-            new THREE.MeshBasicMaterial({ color, transparent: itemOpacity(opening) < 1, opacity: itemOpacity(opening) })
+            new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
           );
           marker.position.set(0, floor.elevation + 0.035, 0);
           marker.rotation.x = Math.PI / 2;
@@ -4843,8 +4982,8 @@
         return;
       }
       const mesh = horizontal
-        ? makeBox(opening.width, opening.height, depth, color, itemOpacity(opening))
-        : makeBox(depth, opening.height, opening.width, color, itemOpacity(opening));
+        ? makeBox(opening.width, opening.height, depth, color, openingOpacity)
+        : makeBox(depth, opening.height, opening.width, color, openingOpacity);
       mesh.position.set(pos.x, y, pos.y);
       if (opening.side === "top") mesh.position.z -= thick / 2;
       if (opening.side === "bottom") mesh.position.z += thick / 2;
@@ -4855,7 +4994,7 @@
       if (opening.type === "door") {
         const marker = new THREE.Mesh(
           new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
-          new THREE.MeshBasicMaterial({ color, transparent: itemOpacity(opening) < 1, opacity: itemOpacity(opening) })
+          new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
         );
         marker.position.set(pos.x, floor.elevation + 0.035, pos.y);
         marker.rotation.x = Math.PI / 2;
@@ -4873,7 +5012,7 @@
       const height = element.height ?? element.length ?? spec.length;
       const elevation = element.elevation ?? element.level ?? 0;
       const color = colorToHex(itemColor(element));
-      const opacity = itemOpacity(element);
+      const opacity = opacityForView(itemOpacity(element), "elements");
       const group = new THREE.Group();
       group.position.set(element.x + element.w / 2, floor.elevation + elevation, element.y + element.h / 2);
       group.rotation.y = -(Number(element.rotation) || 0) * Math.PI / 180;
@@ -5363,6 +5502,7 @@
       const landing = (stair.shape === "turned" || stair.shape === "uturn") ? stairLandingRect(stair) : null;
       const totalTravel = runs.reduce((sum, run) => sum + (run.dir === "x" ? run.w : run.h), 0) + (landing ? Math.min(landing.w, landing.h) : 0);
       const color = colorToHex(itemColor(stair));
+      const opacity = opacityForView(itemOpacity(stair), "stairs");
       const group = new THREE.Group();
       const center = { x: stair.x + stair.w / 2, z: stair.y + stair.h / 2 };
       group.position.set(center.x, 0, center.z);
@@ -5370,23 +5510,23 @@
       three.root.add(group);
       let progress = 0;
 
-      progress = addStairRun3D(runs[0], stair, floor, progress, totalTravel, color, group, center);
+      progress = addStairRun3D(runs[0], stair, floor, progress, totalTravel, color, opacity, group, center);
 
       if (landing) {
         const stairHeight = stair.height ?? state.wallHeight;
         const baseLevel = floor.elevation + (stair.level ?? 0);
         const landingHeight = baseLevel + (progress / Math.max(0.1, totalTravel)) * stairHeight;
-        const platform = makeBox(landing.w, 0.1, landing.h, color, itemOpacity(stair));
+        const platform = makeBox(landing.w, 0.1, landing.h, color, opacity);
         platform.position.set(landing.x + landing.w / 2 - center.x, landingHeight, landing.y + landing.h / 2 - center.z);
         platform.castShadow = true;
         platform.receiveShadow = true;
         group.add(platform);
         progress += Math.min(landing.w, landing.h);
-        progress = addStairRun3D(runs[1], stair, floor, progress, totalTravel, color, group, center);
+        progress = addStairRun3D(runs[1], stair, floor, progress, totalTravel, color, opacity, group, center);
       }
     }
 
-    function addStairRun3D(run, stair, floor, progressStart, totalTravel, color, group, center) {
+    function addStairRun3D(run, stair, floor, progressStart, totalTravel, color, opacity, group, center) {
       if (!run) return progressStart;
       const travel = run.dir === "x" ? run.w : run.h;
       const steps = Math.max(4, Math.floor(travel / 0.32));
@@ -5397,8 +5537,8 @@
         const heightAtStep = ((progressStart + stepTravel * (i + 0.55)) / Math.max(0.1, totalTravel)) * stairHeight;
         const stepIndex = run.reverse ? steps - i - 1 : i;
         const slab = run.dir === "x"
-          ? makeBox(stepTravel * 0.9, 0.08, run.h, color, itemOpacity(stair))
-          : makeBox(run.w, 0.08, stepTravel * 0.9, color, itemOpacity(stair));
+          ? makeBox(stepTravel * 0.9, 0.08, run.h, color, opacity)
+          : makeBox(run.w, 0.08, stepTravel * 0.9, color, opacity);
         slab.position.set(
           (run.dir === "x" ? run.x + stepTravel * stepIndex + stepTravel / 2 : run.x + run.w / 2) - center.x,
           baseLevel + heightAtStep,
@@ -5413,7 +5553,7 @@
 
     function addRoof3D(roof, floor) {
       const color = colorToHex(itemColor(roof));
-      const opacity = itemOpacity(roof);
+      const opacity = opacityForView(itemOpacity(roof), "roof");
       const vertices = [
         roof.x, roofHeightAt(roof, floor, 0, 0), roof.y,
         roof.x + roof.w, roofHeightAt(roof, floor, roof.w, 0), roof.y,
@@ -5509,7 +5649,7 @@
       const area = rooms.reduce((sum, room) => sum + room.w * room.h, 0);
       labelCtx.fillText(`${round(area, 1)} m2`, 28, 94);
       const texture = new THREE.CanvasTexture(canvasLabel);
-      const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.88 });
+      const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: opacityForView(0.88, "room") });
       const sprite = new THREE.Sprite(mat);
       sprite.scale.set(3.2, 0.8, 1);
       sprite.position.set(minX, yBase + state.wallHeight + 0.8, minZ);
@@ -5978,7 +6118,8 @@
     els.toolButtons.forEach(btn => {
       btn.addEventListener("click", () => setTool(btn.dataset.tool));
     });
-    els.addFloorBtn.addEventListener("click", addFloor);
+    els.addFloorBtn.addEventListener("click", () => addFloor("upper"));
+    els.addBasementBtn.addEventListener("click", () => addFloor("basement"));
     els.boundaryBtn.addEventListener("click", () => {
       const boundary = activeBoundary();
       if (boundary) {
@@ -6025,9 +6166,7 @@
       pushUndoSnapshot();
       state.wallHeight = clamp(Number(els.wallInput.value) || 2.8, 2.2, 4.5);
       els.wallInput.value = state.wallHeight;
-      state.floors.forEach((floor, index) => {
-        floor.elevation = index * (state.wallHeight + 0.35);
-      });
+      reflowFloorElevations();
       renderAll();
     });
     [els.nameInput, els.elementTypeInput, els.widthInput, els.depthInput, els.xInput, els.yInput, els.heightInput, els.angleInput, els.tiltInput, els.stairShapeInput, els.turnInput, els.landingInput, els.rotationInput, els.stairHeightInput, els.colorInput, els.wallColorInput, els.opacityInput].forEach(input => {
@@ -6044,8 +6183,8 @@
       const btn = event.target.closest(".toggle-btn");
       if (!btn) return;
       const key = btn.dataset.toggle;
-      state.view[key] = !state.view[key];
-      btn.classList.toggle("active", state.view[key]);
+      state.view[key] = nextViewOpacity(key);
+      updateViewToggles();
       render3D();
     });
 
