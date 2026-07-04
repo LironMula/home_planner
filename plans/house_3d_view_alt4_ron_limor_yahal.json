@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T16:12:46.296Z",
+  "savedAt": "2026-07-04T18:24:21.070Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 68.6604088841204,
+  "scale": 43.6349311165262,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 5.592,
-      "y": 5.072,
-      "z": 5.345
+      "x": 5.377,
+      "y": 8.913,
+      "z": 7.68
     },
     "yaw": 3.05,
     "pitch": -1.0227
