@@ -1034,6 +1034,7 @@
               <label for="elementTypeInput">Element type</label>
               <select id="elementTypeInput">
                 <option value="closet">Closet</option>
+                <option value="refrigerator">Refrigerator</option>
                 <option value="sink">Sink</option>
                 <option value="oven">Oven</option>
                 <option value="toilet">Toilet</option>
@@ -1274,6 +1275,7 @@
     };
     const elementTypes = {
       closet: { label: "Closet", color: "#6b7280", w: 1.2, h: 0.6, length: 2.1 },
+      refrigerator: { label: "Refrigerator", color: "#d8dee8", w: 0.75, h: 0.75, length: 2.0 },
       sink: { label: "Sink", color: "#70b7c8", w: 0.7, h: 0.55, length: 0.85 },
       oven: { label: "Oven", color: "#3f4856", w: 0.7, h: 0.65, length: 0.9 },
       toilet: { label: "Toilet", color: "#e8edf2", w: 0.65, h: 0.8, length: 0.75 },
@@ -5008,6 +5010,16 @@
         addElementBox(group, 0, h * 0.08, -d * 0.51, 0.018, h * 0.84, 0.025, accent, 0.55);
         addElementBox(group, -w * 0.12, h * 0.46, -d * 0.53, 0.035, h * 0.22, 0.035, 0xd8dee7, 0.9, { metalness: 0.35 });
         addElementBox(group, w * 0.12, h * 0.46, -d * 0.53, 0.035, h * 0.22, 0.035, 0xd8dee7, 0.9, { metalness: 0.35 });
+        return;
+      }
+
+      if (kind === "refrigerator") {
+        addElementBox(group, 0, 0, 0, w, h, d, color, opacity, { metalness: 0.12, roughness: 0.42 });
+        addElementBox(group, 0, h * 0.98, 0, w * 0.96, h * 0.04, d * 0.96, 0xf8fafc, opacity * 0.92, { metalness: 0.08 });
+        addElementBox(group, 0, h * 0.62, -d * 0.515, w * 0.92, h * 0.018, 0.025, accent, 0.46);
+        addElementBox(group, w * 0.34, h * 0.68, -d * 0.535, w * 0.045, h * 0.38, 0.035, metal, 0.95, { metalness: 0.45 });
+        addElementBox(group, w * 0.34, h * 0.24, -d * 0.535, w * 0.045, h * 0.30, 0.035, metal, 0.95, { metalness: 0.45 });
+        addElementBox(group, -w * 0.34, h * 0.78, -d * 0.535, w * 0.16, h * 0.06, 0.025, 0xbfd7ea, 0.7, { castShadow: false });
         return;
       }
 
