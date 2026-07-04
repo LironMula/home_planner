@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T14:29:47.818Z",
+  "savedAt": "2026-07-04T14:35:10.170Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 170.0006440664275,
+  "scale": 10,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 6.475,
-      "y": 1.094,
-      "z": 6.642
+      "x": 9.979,
+      "y": 3.837,
+      "z": -1.257
     },
-    "yaw": -1.5282,
-    "pitch": -0.1273
+    "yaw": 0.47,
+    "pitch": 0.02
   },
-  "splitRatio": 0.5779469614375844,
+  "splitRatio": 0.7433816070351034,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -374,20 +374,17 @@
       "type": "door",
       "floorId": "floor-1",
       "roomId": null,
-      "wallId": null,
+      "wallId": "wall-t8k8ej5",
       "name": "Door 2",
-      "side": "free",
-      "t": 0.5,
-      "width": 0.9,
+      "side": "wall-h",
+      "t": 0.13277935887318756,
+      "width": 0.7,
       "height": 2.1,
       "sill": 0,
       "swing": 0,
       "glass": false,
       "color": "#c87a35",
-      "opacity": 0.82,
-      "x": 4.2,
-      "y": 7.1,
-      "rotation": 0
+      "opacity": 0.82
     }
   ],
   "elements": [
