@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T18:24:21.070Z",
+  "savedAt": "2026-07-04T18:46:54.622Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 43.6349311165262,
+  "scale": 300,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 5.377,
-      "y": 8.913,
-      "z": 7.68
+      "x": 4.992,
+      "y": 2.661,
+      "z": 5.296
     },
-    "yaw": 3.05,
-    "pitch": -1.0227
+    "yaw": 5.5444,
+    "pitch": -0.31
   },
   "splitRatio": 0.5693435524982903,
   "activeFloorId": "floor-1",
@@ -35,6 +35,12 @@
       "name": "Ground floor - Alt 4 north-up rebuild",
       "elevation": 0,
       "color": "#0f766e"
+    },
+    {
+      "id": "floor-wh30cki",
+      "name": "Second floor",
+      "elevation": 3.15,
+      "color": "#2563eb"
     }
   ],
   "boundaries": [
@@ -49,6 +55,18 @@
       "h": 2.2,
       "color": "#94a3b8",
       "opacity": 0.07
+    },
+    {
+      "id": "boundary-floor-wh30cki",
+      "type": "boundary",
+      "floorId": "floor-wh30cki",
+      "name": "Second floor Boundary",
+      "x": 11,
+      "y": -21.8,
+      "w": 10,
+      "h": 7.5,
+      "color": "#94a3b8",
+      "opacity": 0.18
     }
   ],
   "rooms": [],
@@ -409,6 +427,19 @@
       "y": 0.5,
       "w": 0.2,
       "h": 2.9,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
+    },
+    {
+      "id": "wall-ekqpzzs",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 26",
+      "x": 6.705526025237794,
+      "y": 1.9020977398924557,
+      "w": 0.18,
+      "h": 2.055332939222241,
       "height": 2.8,
       "color": "#ffffff",
       "opacity": 0.95
@@ -794,13 +825,13 @@
       "name": "Closet 1",
       "elementKind": "closet",
       "x": 7.85,
-      "y": 3.25,
-      "w": 1.2,
-      "h": 0.5,
+      "y": 3.2,
+      "w": 1.22,
+      "h": 0.58,
       "elevation": 0,
       "height": 2.1,
       "rotation": 180,
-      "color": "#6b7280",
+      "color": "#8b6145",
       "opacity": 0.86
     },
     {
@@ -825,14 +856,14 @@
       "floorId": "floor-1",
       "name": "Closet 2",
       "elementKind": "closet",
-      "x": 9.1,
+      "x": 9.08,
       "y": 3.2,
-      "w": 1.1,
-      "h": 0.5,
+      "w": 1.12,
+      "h": 0.57,
       "elevation": 0,
       "height": 2.1,
       "rotation": 180,
-      "color": "#6b7280",
+      "color": "#8b6145",
       "opacity": 0.86
     },
     {
@@ -848,7 +879,7 @@
       "elevation": 0,
       "height": 1,
       "rotation": 0,
-      "color": "#49591c",
+      "color": "#8b6145",
       "opacity": 0.86
     },
     {
@@ -864,7 +895,7 @@
       "elevation": 0,
       "height": 1,
       "rotation": -90,
-      "color": "#49591c",
+      "color": "#8b6027",
       "opacity": 0.86
     },
     {
@@ -1089,6 +1120,38 @@
       "height": 0.55,
       "rotation": 0,
       "color": "#b08968",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-lwcxbmv",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Table 3",
+      "elementKind": "table",
+      "x": 3.1,
+      "y": 2.4,
+      "w": 2.5,
+      "h": 1.3,
+      "elevation": 0,
+      "height": 0.8,
+      "rotation": 0,
+      "color": "#b08968",
+      "opacity": 0.86
+    },
+    {
+      "id": "element-1klajij",
+      "type": "element",
+      "floorId": "floor-1",
+      "name": "Closet 8",
+      "elementKind": "closet",
+      "x": 5.4,
+      "y": 5.7,
+      "w": 1.1,
+      "h": 0.5,
+      "elevation": 0,
+      "height": 2.8,
+      "rotation": 0,
+      "color": "#b19377",
       "opacity": 0.86
     }
   ],
