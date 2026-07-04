@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T19:05:24.621Z",
+  "savedAt": "2026-07-04T19:18:10.139Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 61.30393650367891,
+  "scale": 43.63493111652618,
   "wallHeight": 3,
   "camera": {
     "position": {
-      "x": -4.67,
-      "y": 11.677,
-      "z": 12.631
+      "x": 1.332,
+      "y": 0.883,
+      "z": 6.84
     },
-    "yaw": 27.3624,
-    "pitch": -0.85
+    "yaw": 23.7804,
+    "pitch": 0.095
   },
-  "splitRatio": 0.35067045916294187,
+  "splitRatio": 0.45743034055727555,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -635,10 +635,10 @@
       "floorId": "floor-1",
       "name": "Avocado tree 1",
       "elementKind": "avocado-tree",
-      "x": -11.3,
-      "y": 0,
-      "w": 2.7,
-      "h": 3.4,
+      "x": -12,
+      "y": 0.8,
+      "w": 4,
+      "h": 4,
       "elevation": 0,
       "height": 8,
       "rotation": 0,
@@ -651,10 +651,10 @@
       "floorId": "floor-1",
       "name": "Avocado tree 4",
       "elementKind": "avocado-tree",
-      "x": -10.8,
+      "x": -12.05,
       "y": 5,
-      "w": 2.7,
-      "h": 2.9,
+      "w": 4,
+      "h": 4,
       "elevation": 0,
       "height": 8,
       "rotation": 0,
@@ -669,8 +669,8 @@
       "elementKind": "avocado-tree",
       "x": -11.5,
       "y": 8.9,
-      "w": 2.7,
-      "h": 2.7,
+      "w": 4,
+      "h": 4,
       "elevation": 0,
       "height": 8,
       "rotation": 0,
@@ -685,8 +685,8 @@
       "elementKind": "avocado-tree",
       "x": -11.5,
       "y": 13.1,
-      "w": 3.3,
-      "h": 2.9,
+      "w": 4,
+      "h": 4,
       "elevation": 0,
       "height": 8,
       "rotation": 0,
@@ -1223,6 +1223,72 @@
         "itemId": "element-jbsbi23",
         "fx": 0.8012096854678987,
         "fy": 1
+      },
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-e5gvdn7",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 3",
+      "x1": -1.2934245755192495,
+      "y1": 0.5,
+      "x2": -1.2677570662247104,
+      "y2": 3.42,
+      "anchorA": {
+        "itemId": "site-wall-pmwxuje",
+        "fx": 0.33527750599590206,
+        "fy": 0
+      },
+      "anchorB": {
+        "itemId": "wall-6uptmmr",
+        "fx": 0.3728176454841042,
+        "fy": 0
+      },
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-zrqppkb",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 4",
+      "x1": -2.1661198915335715,
+      "y1": 3.6,
+      "x2": -2.1917874008281104,
+      "y2": 8.8,
+      "anchorA": {
+        "itemId": "wall-6uptmmr",
+        "fx": 0.18167661882264435,
+        "fy": 1
+      },
+      "anchorB": {
+        "itemId": "wall-eol1huf",
+        "fx": 0.1621808212806946,
+        "fy": 0
+      },
+      "color": "#1f2937",
+      "opacity": 1
+    },
+    {
+      "id": "ruler-13veoys",
+      "type": "ruler",
+      "floorId": "floor-1",
+      "name": "Ruler 5",
+      "x1": -2.9,
+      "y1": 4.775836784874421,
+      "x2": 12,
+      "y2": 4.884019792368895,
+      "anchorA": {
+        "itemId": "wall-pwkc4cq",
+        "fx": 1,
+        "fy": 0.22185599714611723
+      },
+      "anchorB": {
+        "itemId": "wall-xelan7i",
+        "fx": 0,
+        "fy": 0.34020601866038286
       },
       "color": "#1f2937",
       "opacity": 1
