@@ -2097,7 +2097,11 @@
       return { x: room.x + room.w, y: room.y + room.h * opening.t, angle: Math.PI / 2, room };
     }
 
-    function moveOpening(opening, worldPoint) {
+    function moveOpening(opening, worldPoint, drag = null) {
+      if (drag?.startedFree) {
+        applyOpeningFreePosition(opening, worldPoint);
+        return;
+      }
       const hostSnap = snapOpeningToHost(opening.type, worldPoint);
       if (hostSnap) {
         applyOpeningHostSnap(opening, hostSnap);
@@ -5452,7 +5456,13 @@
           state.selectedId = hit.item.id;
         }
         if (hit.item.type === "door" || hit.item.type === "window") {
-          state.drag = { kind: "move-opening", itemId: hit.item.id, undoSnapshot: historySnapshot(), undoCaptured: false };
+          state.drag = {
+            kind: "move-opening",
+            itemId: hit.item.id,
+            startedFree: !hit.item.roomId && !hit.item.wallId,
+            undoSnapshot: historySnapshot(),
+            undoCaptured: false
+          };
         } else if (hit.item.type === "ruler") {
           const a = rulerEndpoint(hit.item, "a");
           const b = rulerEndpoint(hit.item, "b");
@@ -5560,7 +5570,7 @@
 
       if (state.drag.kind === "move-opening" && item) {
         ensureDragUndo();
-        moveOpening(item, world);
+        moveOpening(item, world, state.drag);
       }
 
       if ((state.drag.kind === "move-ruler-a" || state.drag.kind === "move-ruler-b") && item) {
