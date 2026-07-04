@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T13:20:05.520Z",
+  "savedAt": "2026-07-04T13:28:55.353Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 135.52347262948595,
+  "scale": 300,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 12.988,
-      "y": 5.343,
-      "z": 1.088
+      "x": 8.795,
+      "y": 21.101,
+      "z": 15.456
     },
-    "yaw": 10.6709,
-    "pitch": -0.8864
+    "yaw": 9.4109,
+    "pitch": -1.1682
   },
-  "splitRatio": 0.6682710590849464,
+  "splitRatio": 0.6698041205412633,
   "activeFloorId": "floor-1",
   "viewFloor": "all",
   "view": {
@@ -166,6 +166,45 @@
       "h": 0.6,
       "height": 2.8,
       "color": "#ffffff",
+      "opacity": 0.94
+    },
+    {
+      "id": "wall-afqvs49",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 9",
+      "x": 7.8,
+      "y": 0.6,
+      "w": 4.17272705078125,
+      "h": 0.18,
+      "height": 2.8,
+      "color": "#364154",
+      "opacity": 0.94
+    },
+    {
+      "id": "wall-ui9h59e",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 10",
+      "x": 7.8,
+      "y": 0.8,
+      "w": 0.1,
+      "h": 2.37,
+      "height": 2.8,
+      "color": "#364154",
+      "opacity": 0.94
+    },
+    {
+      "id": "wall-g9m49jp",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 11",
+      "x": 7.9,
+      "y": 3.1,
+      "w": 3.35,
+      "h": 0.1,
+      "height": 2.8,
+      "color": "#364154",
       "opacity": 0.94
     }
   ],
