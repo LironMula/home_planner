@@ -4436,18 +4436,41 @@
         const elements = state.elements.filter(element => element.floorId === floor.id);
         const freeOpenings = openings.filter(opening => !opening.roomId && !opening.wallId);
         const wallCutouts = [...openings, ...elements.map(elementWindowCutout).filter(Boolean)];
+        const renderedAsHosted = new Set();
+        const roomOpeningLists = new Map();
+        rooms.forEach(room => {
+          const roomOpenings = roomOpeningsFor3D(room, openings, wallCutouts.filter(opening => !opening.roomId && !opening.wallId));
+          roomOpenings.forEach(opening => {
+            if (opening.sourceId && !opening.gapOnly) renderedAsHosted.add(opening.sourceId);
+          });
+          roomOpeningLists.set(room.id, roomOpenings);
+        });
+        const wallOpeningVisuals = [];
+        const wallGapLists = new Map();
+        walls.forEach(wall => {
+          const gaps = customWallOpeningGaps(wall, wallCutouts);
+          gaps.forEach(gap => {
+            if (!Number(wall.rotation) && gap.opening.sourceId && !gap.opening.gapOnly && !renderedAsHosted.has(gap.opening.sourceId)) {
+              renderedAsHosted.add(gap.opening.sourceId);
+              wallOpeningVisuals.push(gap.opening);
+            }
+          });
+          wallGapLists.set(wall.id, gaps);
+        });
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
         if (state.view.boundary && boundary) addBoundary3D(boundary, floor);
         rooms
           .filter(room => room.type !== "space" || state.view.spaces)
-          .forEach(room => addRoom3D(room, floor, roomOpeningsFor3D(room, openings, wallCutouts.filter(opening => !opening.roomId && !opening.wallId))));
+          .forEach(room => addRoom3D(room, floor, roomOpeningLists.get(room.id) || []));
         if (state.view.stairs) stairs.forEach(stair => addStair3D(stair, floor));
         if (state.view.elements) elements.forEach(element => addElement3D(element, floor));
-        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, wallCutouts));
+        if (state.view.walls) walls.forEach(wall => addCustomWall3D(wall, floor, wallGapLists.get(wall.id) || []));
         if (state.view.doors) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "door").forEach(opening => addOpening3D(opening, floor));
         if (state.view.windows) openings.filter(opening => opening.wallId && visibleWallIds.has(opening.wallId) && opening.type === "window").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.doors) freeOpenings.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
-        if (state.view.windows) freeOpenings.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        if (state.view.doors) wallOpeningVisuals.filter(opening => opening.type === "door").forEach(opening => addOpening3D(opening, floor));
+        if (state.view.windows) wallOpeningVisuals.filter(opening => opening.type === "window").forEach(opening => addOpening3D(opening, floor));
+        if (state.view.doors) freeOpenings.filter(opening => opening.type === "door" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
+        if (state.view.windows) freeOpenings.filter(opening => opening.type === "window" && !renderedAsHosted.has(opening.id)).forEach(opening => addOpening3D(opening, floor));
         if (state.view.roof) roofs.forEach(roof => addRoof3D(roof, floor));
         if (state.view.room) addFloorLabel(floor, yBase, rooms);
       });
@@ -4508,17 +4531,13 @@
       three.root.add(line);
     }
 
-    function addCustomWall3D(wall, floor, openings = []) {
+    function addCustomWall3D(wall, floor, gaps = []) {
       const height = wall.height ?? state.wallHeight;
       const color = colorToHex(itemColor(wall));
       const opacity = itemOpacity(wall);
       const horizontal = wall.w >= wall.h;
       const length = horizontal ? wall.w : wall.h;
       const thickness = horizontal ? wall.h : wall.w;
-      const gaps = openings
-        .map(opening => customWallOpeningGap(wall, opening))
-        .filter(Boolean)
-        .sort((a, b) => a.from - b.from);
       const rotated = Number(wall.rotation) || 0;
 
       if (rotated) {
@@ -4676,7 +4695,22 @@
       );
       candidates.sort((a, b) => a.dist - b.dist);
       if (!candidates.length) return null;
-      return { ...opening, side: candidates[0].side, t: clamp(candidates[0].t, 0, 1), gapOnly: true };
+      return {
+        ...opening,
+        roomId: room.id,
+        wallId: null,
+        side: candidates[0].side,
+        t: clamp(candidates[0].t, 0, 1),
+        sourceId: opening.id,
+        gapOnly: !!opening.gapOnly
+      };
+    }
+
+    function customWallOpeningGaps(wall, openings) {
+      return openings
+        .map(opening => customWallOpeningGap(wall, opening))
+        .filter(Boolean)
+        .sort((a, b) => a.from - b.from);
     }
 
     function customWallOpeningGap(wall, opening) {
@@ -4706,10 +4740,20 @@
 
       const half = (Number(opening.width) || 0.8) / 2;
       if (along + half < 0 || along - half > length) return null;
+      const t = clamp(along / Math.max(0.1, length), 0, 1);
+      const hostedOpening = {
+        ...opening,
+        roomId: null,
+        wallId: wall.id,
+        side: horizontal ? "wall-h" : "wall-v",
+        t,
+        sourceId: opening.id,
+        gapOnly: !!opening.gapOnly
+      };
       return {
         from: clamp(along - half, 0, length),
         to: clamp(along + half, 0, length),
-        opening
+        opening: hostedOpening
       };
     }
 
