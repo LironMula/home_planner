@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "savedAt": "2026-07-04T14:50:10.788Z",
+  "savedAt": "2026-07-04T14:58:34.072Z",
   "projectName": "house_3d_view_alt4_ron_limor_yahal",
-  "scale": 43.6349311165262,
+  "scale": 48.93649855291049,
   "wallHeight": 2.8,
   "camera": {
     "position": {
-      "x": 1.611,
-      "y": 0.308,
-      "z": 5.476
+      "x": 2.484,
+      "y": 1.5,
+      "z": 6.84
     },
-    "yaw": 4.2609,
-    "pitch": -0.0618
+    "yaw": 10.8064,
+    "pitch": -0.3455
   },
   "splitRatio": 0.7433816070351034,
   "activeFloorId": "floor-1",
@@ -298,6 +298,58 @@
       "height": 2.8,
       "color": "#ffffff",
       "opacity": 0.95
+    },
+    {
+      "id": "wall-ufy3nfk",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 19",
+      "x": 5.2,
+      "y": 8,
+      "w": 0.2,
+      "h": 1,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
+    },
+    {
+      "id": "wall-eol1huf",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 20",
+      "x": 1.8,
+      "y": 8.8,
+      "w": 3.4,
+      "h": 0.2,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
+    },
+    {
+      "id": "wall-pwkc4cq",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 21",
+      "x": -0.4,
+      "y": 3.6,
+      "w": 0.2,
+      "h": 5.3,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
+    },
+    {
+      "id": "wall-6uptmmr",
+      "type": "wall",
+      "floorId": "floor-1",
+      "name": "Wall 22",
+      "x": -0.32,
+      "y": 3.42,
+      "w": 4.7,
+      "h": 0.18,
+      "height": 2.8,
+      "color": "#ffffff",
+      "opacity": 0.95
     }
   ],
   "openings": [
@@ -388,6 +440,26 @@
       "x": 5.3,
       "y": 7.1,
       "rotation": -90
+    },
+    {
+      "id": "window-570zgle",
+      "type": "window",
+      "floorId": "floor-1",
+      "roomId": null,
+      "wallId": null,
+      "name": "Window 4",
+      "side": "free",
+      "t": 0.5,
+      "x": 0.8,
+      "y": 8.9,
+      "rotation": 0,
+      "width": 2.4,
+      "height": 2.8,
+      "sill": 0,
+      "swing": 0,
+      "glass": false,
+      "color": "#45a9d8",
+      "opacity": 0.58
     }
   ],
   "elements": [
