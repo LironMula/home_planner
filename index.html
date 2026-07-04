@@ -2741,7 +2741,7 @@
       const secondX = stair.turn === "left" ? stair.x + landing : stair.x;
       return [
         { x: sideX, y: stair.y, w: landing, h: firstRunH, dir: "z" },
-        { x: secondX, y: stair.y + stair.h - landing, w: secondRunW, h: landing, dir: "x" }
+        { x: secondX, y: stair.y + stair.h - landing, w: secondRunW, h: landing, dir: "x", reverse: stair.turn === "right" }
       ];
     }
 
