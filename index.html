@@ -1179,7 +1179,6 @@
         <div class="view-overlay">
           <div class="toggle-grid" id="viewToggles">
             <button class="toggle-btn active" data-toggle="floor" type="button">Floor</button>
-            <button class="toggle-btn active" data-toggle="ceiling" type="button">Ceiling</button>
             <button class="toggle-btn active" data-toggle="room" type="button">Room View</button>
             <button class="toggle-btn active" data-toggle="spaces" type="button">Spaces</button>
             <button class="toggle-btn active" data-toggle="walls" type="button">Walls</button>
@@ -1255,7 +1254,6 @@
       viewFloor: "all",
       view: {
         floor: 1,
-        ceiling: 1,
         room: 1,
         spaces: 1,
         walls: 1,
@@ -1595,7 +1593,6 @@
     function normalizeViewState(view = {}) {
       const base = {
         floor: 1,
-        ceiling: 1,
         room: 1,
         spaces: 1,
         walls: 1,
@@ -4617,21 +4614,15 @@
     function addRoom3D(room, floor, openings) {
       const yBase = floor.elevation;
       const wallH = state.wallHeight;
-      const cx = room.x + room.w / 2;
-      const cz = room.y + room.h / 2;
       const isSpace = room.type === "space";
 
       if (viewVisible("floor")) {
-        const floorMesh = makeBox(room.w, 0.08, room.h, colorToHex(itemColor(room)), opacityForView(itemOpacity(room), "floor"));
-        floorMesh.position.set(cx, yBase, cz);
-        floorMesh.receiveShadow = true;
-        three.root.add(floorMesh);
-      }
-
-      if (viewVisible("ceiling") && !isSpace) {
-        const ceilingMesh = makeBox(room.w, 0.06, room.h, 0xdfe7ef, opacityForView(0.28, "ceiling"));
-        ceilingMesh.position.set(cx, yBase + wallH, cz);
-        three.root.add(ceilingMesh);
+        const floorHoles = stairHolesForSlab(room, floor, true);
+        addSlabPieces3D(room, yBase, 0.08, colorToHex(itemColor(room)), opacityForView(itemOpacity(room), "floor"), floorHoles, true);
+        if (!isSpace) {
+          const upperSlabHoles = stairHolesForSlab(room, floor, false);
+          addSlabPieces3D(room, yBase + wallH, 0.06, 0xdfe7ef, opacityForView(0.28, "floor"), upperSlabHoles, false);
+        }
       }
 
       if (viewVisible("walls") && !isSpace) {
@@ -4645,6 +4636,50 @@
       if (viewVisible("doors") && !isSpace) {
         openings.filter(opening => opening.type === "door" && !opening.gapOnly).forEach(opening => addOpening3D(opening, floor));
       }
+    }
+
+    function stairHolesForSlab(room, floor, includeFloorBelow) {
+      const floorIndex = state.floors.findIndex(entry => entry.id === floor.id);
+      const belowFloorId = includeFloorBelow && floorIndex > 0 ? state.floors[floorIndex - 1].id : null;
+      return state.stairs
+        .filter(stair => stair.floorId === floor.id || (belowFloorId && stair.floorId === belowFloorId))
+        .map(stair => ({
+          x: Math.max(room.x, stair.x),
+          y: Math.max(room.y, stair.y),
+          w: Math.min(room.x + room.w, stair.x + stair.w) - Math.max(room.x, stair.x),
+          h: Math.min(room.y + room.h, stair.y + stair.h) - Math.max(room.y, stair.y)
+        }))
+        .filter(hole => hole.w > 0.05 && hole.h > 0.05);
+    }
+
+    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true) {
+      let pieces = [{ x: room.x, y: room.y, w: room.w, h: room.h }];
+      holes.forEach(hole => {
+        pieces = pieces.flatMap(piece => subtractRect(piece, hole));
+      });
+      pieces.forEach(piece => {
+        if (piece.w <= 0.04 || piece.h <= 0.04) return;
+        const mesh = makeBox(piece.w, thickness, piece.h, color, opacity);
+        mesh.position.set(piece.x + piece.w / 2, y, piece.y + piece.h / 2);
+        mesh.receiveShadow = receiveShadow;
+        three.root.add(mesh);
+      });
+    }
+
+    function subtractRect(rect, cut) {
+      const x1 = Math.max(rect.x, cut.x);
+      const y1 = Math.max(rect.y, cut.y);
+      const x2 = Math.min(rect.x + rect.w, cut.x + cut.w);
+      const y2 = Math.min(rect.y + rect.h, cut.y + cut.h);
+      if (x2 <= x1 || y2 <= y1) return [rect];
+      const pieces = [];
+      const rectRight = rect.x + rect.w;
+      const rectBottom = rect.y + rect.h;
+      if (y1 > rect.y) pieces.push({ x: rect.x, y: rect.y, w: rect.w, h: y1 - rect.y });
+      if (y2 < rectBottom) pieces.push({ x: rect.x, y: y2, w: rect.w, h: rectBottom - y2 });
+      if (x1 > rect.x) pieces.push({ x: rect.x, y: y1, w: x1 - rect.x, h: y2 - y1 });
+      if (x2 < rectRight) pieces.push({ x: x2, y: y1, w: rectRight - x2, h: y2 - y1 });
+      return pieces;
     }
 
     function addBoundary3D(boundary, floor) {
