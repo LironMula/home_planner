@@ -1267,7 +1267,7 @@
       door: { color: "#c87a35", opacity: 0.82 },
       roof: { color: "#9f4b2e", opacity: 0.88 },
       boundary: { color: "#94a3b8", opacity: 0.18 },
-      wall: { color: "#364154", opacity: 0.94 },
+      wall: { color: "#ffffff", opacity: 0.95 },
       "glass-wall": { color: "#67c7e8", opacity: 0.45 },
       element: { color: "#8ab17d", opacity: 0.86 },
       ruler: { color: "#1f2937", opacity: 1 }
@@ -3667,8 +3667,8 @@
         h: round(thickness, 3),
         rotation: round(Math.atan2(dy, dx) * 180 / Math.PI, 3),
         height: clamp(Number(opts.wallHeight ?? opts.height ?? 0.1), 0.03, 50),
-        color: opts.color || "#ffffff",
-        opacity: clamp(Number(opts.opacity ?? 1), 0.1, 1),
+        color: opts.color || defaults.wall.color,
+        opacity: clamp(Number(opts.opacity ?? defaults.wall.opacity), 0.1, 1),
         groupId
       };
     }
