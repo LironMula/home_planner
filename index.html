@@ -1156,19 +1156,24 @@
                 <option value="sliding-window-opening">Sliding window opening</option>
                 <option value="mirror">Mirror</option>
                 <option value="wall-art">Wall art</option>
+                <option value="wallpaper">Decorative wallpaper</option>
                 <option value="sink">Sink</option>
                 <option value="oven">Oven</option>
                 <option value="toilet">Toilet</option>
                 <option value="bath">Bath</option>
                 <option value="shower">Shower</option>
                 <option value="sofa">Sofa</option>
+                <option value="corner-sofa">Corner sofa</option>
+                <option value="rug">Rug</option>
                 <option value="table">Table</option>
+                <option value="study-desk">Study desk and chair</option>
                 <option value="round-table">Round table</option>
                 <option value="kitchen-work-surface">Kitchen work surface</option>
                 <option value="kitchen-island">Kitchen island</option>
                 <option value="chair">Chair</option>
                 <option value="car">Car</option>
                 <option value="bed">Bed</option>
+                <option value="open-closet">Open closet</option>
                 <option value="electric-piano">Electric piano</option>
                 <option value="grass">Grass field</option>
                 <option value="tree">Tree</option>
@@ -1411,19 +1416,24 @@
       "sliding-window-opening": { label: "Sliding window opening", color: "#45a9d8", w: 1.8, h: 0.16, length: 1.2, defaultElevation: 0.9 },
       mirror: { label: "Mirror", color: "#b9d5df", w: 0.8, h: 0.08, length: 0.9, defaultElevation: 1.05, maxHeight: 3 },
       "wall-art": { label: "Wall art", color: "#ffffff", w: 2.7, h: 0.08, length: 1.22, defaultElevation: 1.25, maxHeight: 3 },
+      wallpaper: { label: "Decorative wallpaper", color: "#e8dfcf", w: 2.8, h: 0.04, length: 2.65, defaultElevation: 0.04, maxHeight: 4 },
       sink: { label: "Sink", color: "#70b7c8", w: 0.7, h: 0.55, length: 0.85 },
       oven: { label: "Oven", color: "#3f4856", w: 0.7, h: 0.65, length: 0.9 },
       toilet: { label: "Toilet", color: "#e8edf2", w: 0.65, h: 0.8, length: 0.75 },
       bath: { label: "Bath", color: "#d9f0f5", w: 1.8, h: 0.8, length: 0.65 },
       shower: { label: "Shower", color: "#9bd5e5", w: 0.9, h: 0.9, length: 2.1 },
       sofa: { label: "Sofa", color: "#b7846f", w: 2.0, h: 0.9, length: 0.85 },
+      "corner-sofa": { label: "Corner sofa", color: "#b7846f", w: 2.8, h: 2.1, length: 0.85 },
+      rug: { label: "Rug", color: "#b9a58e", w: 2.4, h: 1.8, length: 0.035 },
       table: { label: "Table", color: "#b08968", w: 1.4, h: 0.9, length: 0.75 },
+      "study-desk": { label: "Study desk and chair", color: "#b08968", w: 1.6, h: 0.65, length: 0.78 },
       "round-table": { label: "Round table", color: "#b08968", w: 1.2, h: 1.2, length: 0.75 },
       "kitchen-work-surface": { label: "Kitchen work surface", color: "#d7d0c2", w: 2.4, h: 0.65, length: 0.92 },
       "kitchen-island": { label: "Kitchen island", color: "#d6c6ad", w: 2.7, h: 1.1, length: 0.92 },
       chair: { label: "Chair", color: "#8ab17d", w: 0.55, h: 0.55, length: 0.9 },
       car: { label: "Car", color: "#2563eb", w: 4.4, h: 1.9, length: 1.55 },
       bed: { label: "Bed", color: "#94a3b8", w: 2.0, h: 2.1, length: 0.75 },
+      "open-closet": { label: "Open closet", color: "#9b7653", w: 2.4, h: 0.6, length: 2.3 },
       "electric-piano": { label: "Electric piano", color: "#111827", w: 1.45, h: 0.48, length: 0.95 },
       grass: { label: "Grass field", color: "#4f9d4e", w: 4, h: 3, length: 0.05 },
       tree: { label: "Tree", color: "#3f8f46", w: 1.4, h: 1.4, length: 3.2, maxHeight: 12 },
@@ -2494,7 +2504,7 @@
       ];
       return items.filter(item => !items.some(other => {
         if (other.id === item.id) return false;
-        if (other.type === "space") return false;
+        if (item.type === "space" || other.type === "space") return false;
         return itemOpacity(other) > itemOpacity(item) && itemsMeaningfullyOverlap(item, other);
       }));
     }
@@ -3685,26 +3695,80 @@
       return githubFetch(githubRepoApiUrl(endpoint), options);
     }
 
-    async function githubProjectFiles() {
-      const files = await githubRequest(githubPlanConfig.directory);
-      if (!Array.isArray(files)) return [];
-      const projects = files
-        .filter(file => file.type === "file" && /\.json$/i.test(file.name))
-        .map(file => ({
-          name: sanitizeGithubProjectName(file.name),
-          path: file.path,
-          sha: file.sha,
-          modified: ""
-        }));
-      await Promise.all(projects.map(async project => {
-        try {
-          const commits = await githubRepoRequest(`commits?path=${encodeURIComponent(project.path)}&per_page=1&sha=${encodeURIComponent(githubPlanConfig.branch)}`);
-          project.modified = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date || "";
-        } catch (error) {
-          project.modified = "";
+    async function publicGithubFetch(url) {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28"
         }
-      }));
-      return projects;
+      });
+      if (response.status === 404) return null;
+      if (!response.ok) throw new Error(`Public GitHub request failed: ${response.status}`);
+      return response.json();
+    }
+
+    async function publishedProjectManifest() {
+      try {
+        const response = await fetch(`${githubPlanConfig.directory}/projects.json`, { cache: "no-store" });
+        if (!response.ok) return [];
+        const manifest = await response.json();
+        return Array.isArray(manifest.projects) ? manifest.projects : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    async function githubProjectFiles() {
+      const projects = new Map();
+      (await publishedProjectManifest()).forEach(project => {
+        const name = sanitizeGithubProjectName(project.name || project.path);
+        if (!name) return;
+        projects.set(name, {
+          name,
+          path: project.path || githubPlanPath(name),
+          sha: project.sha || "",
+          modified: project.modified || ""
+        });
+      });
+
+      try {
+        const files = await publicGithubFetch(`${githubApiUrl(githubPlanConfig.directory)}?ref=${encodeURIComponent(githubPlanConfig.branch)}`);
+        if (Array.isArray(files)) {
+          files
+            .filter(file => file.type === "file" && /\.json$/i.test(file.name) && file.name !== "projects.json")
+            .forEach(file => {
+              const name = sanitizeGithubProjectName(file.name);
+              const existing = projects.get(name) || {};
+              projects.set(name, {
+                name,
+                path: file.path,
+                sha: file.sha,
+                modified: existing.modified || ""
+              });
+            });
+        }
+      } catch (error) {
+        // The checked-in manifest keeps loading available during API rate limits.
+      }
+      return [...projects.values()];
+    }
+
+    async function loadPublishedGithubPlan(projectName) {
+      const relativePath = githubPlanPath(projectName);
+      for (const url of [
+        relativePath,
+        `https://raw.githubusercontent.com/${githubPlanConfig.owner}/${githubPlanConfig.repo}/${githubPlanConfig.branch}/${relativePath}`
+      ]) {
+        try {
+          const response = await fetch(url, { cache: "no-store" });
+          if (!response.ok) continue;
+          const saved = await response.json();
+          if (saved && Array.isArray(saved.floors)) return saved;
+        } catch (error) {
+          // Continue to the next public source before trying authenticated access.
+        }
+      }
+      return null;
     }
 
     function sortedGithubProjects(projects, sortMode) {
@@ -3840,9 +3904,12 @@
       try {
         const projectName = await chooseGithubProject("load");
         if (!projectName) return;
-        const file = await githubRequest(githubPlanPath(projectName));
-        if (!file?.content) return showToast("No GitHub plan file found");
-        const saved = JSON.parse(base64ToUtf8(file.content));
+        let saved = await loadPublishedGithubPlan(projectName);
+        if (!saved) {
+          const file = await githubRequest(githubPlanPath(projectName));
+          if (!file?.content) return showToast("No GitHub plan file found");
+          saved = JSON.parse(base64ToUtf8(file.content));
+        }
         if (!saved || !Array.isArray(saved.floors)) return showToast("GitHub plan file is invalid");
         pushUndoSnapshot();
         window.localStorage.setItem(githubPlanConfig.projectKey, projectName);
@@ -4947,7 +5014,7 @@
         const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
         if (viewVisible("boundary") && boundary && isGroundBaseline) addBoundary3D(boundary, floor);
         rooms
-          .filter(room => room.type !== "space" || viewVisible("spaces"))
+          .filter(room => room.type !== "space" || room.structuralSlab || viewVisible("spaces"))
           .forEach(room => addRoom3D(room, floor, roomOpeningLists.get(room.id) || []));
         if (viewVisible("stairs")) stairs.forEach(stair => addStair3D(stair, floor));
         if (viewVisible("elements")) elements.forEach(element => addElement3D(element, floor));
@@ -4969,8 +5036,11 @@
       const yBase = floor.elevation;
       const wallH = state.wallHeight;
       const isSpace = room.type === "space";
+      const isStructuralSlab = room.structuralSlab === true;
+      const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
+      const cameraInsideFloor = cameraIsInsideFloor(floor);
 
-      if (viewVisible("floor")) {
+      if (viewVisible("floor") && (!isStructuralSlab || isGroundBaseline || cameraInsideFloor || state.viewFloor === floor.id)) {
         const floorHoles = stairHolesForSlab(room, floor, true);
         addSlabPieces3D(
           room,
@@ -4982,7 +5052,7 @@
           true,
           floor.finish
         );
-        if (!isSpace && cameraIsInsideFloor(floor)) {
+        if ((!isSpace || isStructuralSlab) && cameraInsideFloor) {
           const upperSlabHoles = stairHolesForSlab(room, floor, false);
           addSlabPieces3D(room, yBase + wallH, 0.06, 0xf3f4f6, opacityForView(0.97, "floor"), upperSlabHoles, false);
         }
@@ -5687,6 +5757,25 @@
         return;
       }
 
+      if (kind === "wallpaper") {
+        const panelDepth = Math.max(0.025, d);
+        addElementBox(group, 0, 0, 0, w, h, panelDepth, color, opacity, { roughness: 0.9, castShadow: false });
+        const ink = 0x78906f;
+        const flower = 0xc9a878;
+        const columns = Math.max(3, Math.round(w / 0.42));
+        for (let index = 0; index < columns; index += 1) {
+          const x = ((index + 0.5) / columns - 0.5) * w;
+          const stemHeight = h * (0.36 + (index % 3) * 0.13);
+          addElementBox(group, x, h * 0.12, -panelDepth * 0.54, 0.018, stemHeight, 0.012, ink, opacity * 0.72, { castShadow: false });
+          [-1, 1].forEach(side => {
+            const leaf = addElementBox(group, x + side * 0.06, h * (0.24 + (index % 2) * 0.12), -panelDepth * 0.56, 0.11, 0.045, 0.014, ink, opacity * 0.7, { castShadow: false });
+            leaf.rotation.z = side * 0.5;
+          });
+          addElementSphere(group, x, h * (0.56 + (index % 3) * 0.11), -panelDepth * 0.58, 0.055, flower, opacity * 0.76, { widthSegments: 12, heightSegments: 8, castShadow: false });
+        }
+        return;
+      }
+
       if (kind === "grass") {
         addElementBox(group, 0, 0, 0, w, Math.max(0.025, h), d, color, opacity, { roughness: 0.92, castShadow: false });
         const bladeColor = 0x2f7d32;
@@ -5949,6 +6038,24 @@
         return;
       }
 
+      if (kind === "study-desk") {
+        const deskH = h * 0.72;
+        addElementBox(group, 0, deskH, 0, w, h * 0.08, d, color, opacity);
+        const legW = Math.max(0.035, Math.min(w, d) * 0.065);
+        [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
+          addElementBox(group, sx * w * 0.45, 0, sz * d * 0.38, legW, deskH, legW, wood, opacity);
+        }));
+        const monitorW = Math.min(w * 0.48, 0.62);
+        addElementBox(group, 0, deskH + h * 0.12, -d * 0.22, monitorW, h * 0.3, 0.035, 0x253447, 0.96, { metalness: 0.18 });
+        addElementBox(group, 0, deskH + h * 0.08, -d * 0.2, 0.05, h * 0.12, 0.05, metal, 0.9, { metalness: 0.28 });
+        for (let index = 0; index < 5; index += 1) {
+          addElementBox(group, -w * 0.38 + index * 0.045, deskH + h * 0.08, -d * 0.31, 0.035, h * (0.18 + (index % 2) * 0.05), 0.13, index % 2 ? 0xc2574a : 0x4f77a5, 0.92);
+        }
+        addElementBox(group, 0, h * 0.35, d * 0.68, Math.min(0.5, w * 0.5), h * 0.09, Math.min(0.42, d * 0.7), 0x8ab17d, 0.9);
+        addElementBox(group, 0, h * 0.43, d * 0.83, Math.min(0.5, w * 0.5), h * 0.48, 0.09, 0x8ab17d, 0.9);
+        return;
+      }
+
       if (kind === "kitchen-work-surface") {
         const topH = Math.max(0.045, h * 0.07);
         const baseH = Math.max(0.25, h - topH);
@@ -6026,11 +6133,59 @@
         return;
       }
 
+      if (kind === "corner-sofa") {
+        const seatH = h * 0.46;
+        const armW = Math.max(0.12, Math.min(w, d) * 0.08);
+        addElementBox(group, 0, 0, -d * 0.31, w, seatH, d * 0.38, color, opacity);
+        addElementBox(group, -w * 0.37, 0, d * 0.02, w * 0.26, seatH, d * 0.82, color, opacity);
+        addElementBox(group, 0, seatH * 0.64, -d * 0.48, w, h * 0.52, d * 0.12, color, opacity);
+        addElementBox(group, -w * 0.49, seatH * 0.64, 0, armW, h * 0.52, d, color, opacity);
+        addElementBox(group, w * 0.49, seatH * 0.2, -d * 0.31, armW, h * 0.42, d * 0.38, color, opacity);
+        return;
+      }
+
+      if (kind === "rug") {
+        addElementBox(group, 0, 0, 0, w, Math.max(0.02, h), d, color, opacity, { roughness: 1, castShadow: false });
+        for (let index = 1; index < 6; index += 1) {
+          const x = (index / 6 - 0.5) * w;
+          addElementBox(group, x, h + 0.002, 0, 0.018, 0.004, d * 0.92, 0xf2eadf, opacity * 0.38, { castShadow: false });
+        }
+        return;
+      }
+
       if (kind === "closet") {
         addElementBox(group, 0, 0, 0, w, h, d, color, opacity);
-        addElementBox(group, 0, h * 0.08, -d * 0.51, 0.018, h * 0.84, 0.025, accent, 0.55);
-        addElementBox(group, -w * 0.12, h * 0.46, -d * 0.53, 0.035, h * 0.22, 0.035, 0xd8dee7, 0.9, { metalness: 0.35 });
-        addElementBox(group, w * 0.12, h * 0.46, -d * 0.53, 0.035, h * 0.22, 0.035, 0xd8dee7, 0.9, { metalness: 0.35 });
+        const doorCount = Math.max(1, Math.round(w / 0.68));
+        for (let index = 1; index < doorCount; index += 1) {
+          const x = (index / doorCount - 0.5) * w;
+          addElementBox(group, x, h * 0.08, -d * 0.51, 0.018, h * 0.84, 0.025, accent, 0.5, { castShadow: false });
+        }
+        for (let index = 0; index < doorCount; index += 1) {
+          const panelCenter = ((index + 0.5) / doorCount - 0.5) * w;
+          const handleX = panelCenter + (index % 2 ? -1 : 1) * Math.min(0.08, w / doorCount * 0.18);
+          addElementBox(group, handleX, h * 0.46, -d * 0.535, 0.05, h * 0.24, 0.045, 0x374151, 0.98, { metalness: 0.46 });
+        }
+        return;
+      }
+
+      if (kind === "open-closet") {
+        const backDepth = Math.max(0.045, d * 0.08);
+        addElementBox(group, 0, 0, d * 0.46, w, h, backDepth, color, opacity);
+        addElementBox(group, 0, 0, 0, w, h * 0.05, d, color, opacity);
+        addElementBox(group, 0, h * 0.94, 0, w, h * 0.06, d, color, opacity);
+        const bays = Math.max(2, Math.round(w / 0.8));
+        for (let index = 0; index <= bays; index += 1) {
+          const x = (index / bays - 0.5) * w;
+          addElementBox(group, x, 0, 0, 0.035, h, d, color, opacity);
+        }
+        for (let index = 0; index < bays; index += 1) {
+          const x = ((index + 0.5) / bays - 0.5) * w;
+          addElementCylinder(group, x, h * 0.72, -d * 0.05, 0.018, w / bays * 0.78, metal, 0.9, { rotateZ: Math.PI / 2, segments: 10, metalness: 0.4 });
+          for (let shelf = 1; shelf <= 3; shelf += 1) {
+            addElementBox(group, x, h * (0.08 + shelf * 0.12), 0, w / bays * 0.82, 0.025, d * 0.82, 0xcaa77d, opacity * 0.9);
+          }
+          addElementBox(group, x, h * 0.52, -d * 0.08, w / bays * 0.55, h * 0.28, d * 0.34, index % 2 ? 0xd6b4a2 : 0x9cb2c8, 0.88);
+        }
         return;
       }
 
@@ -6221,6 +6376,7 @@
         addBarrelRoof3D(roof, floor, color, opacity);
         return;
       }
+
       const vertices = [
         roof.x, roofHeightAt(roof, floor, 0, 0), roof.y,
         roof.x + roof.w, roofHeightAt(roof, floor, roof.w, 0), roof.y,

@@ -21,7 +21,16 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Fit paired entrance leaves to the adjacent wall posts so they meet at the center; use dark wood for the main entrance and light cream for internal doors.
 - Raise the integrated kitchen sink so its basin rim is flush with the 0.92 m work surface and its tap remains exposed.
 - Use light-gray granite on the entrance floor and parquet on the living floor. Render an opaque ceiling only while the camera is inside that floor.
-- Place the master bed from its full green CAD footprint and hang the wide waterfall-and-woods artwork on its head wall.
+- Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Outside the house, keep only the ground baseline; while the camera is inside a floor, render that floor and its opaque ceiling.
+- Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
+- Kitchen base-cabinet handles must face the room. Rotate the long run inward and model perpendicular returns with swapped width/depth plus the corresponding quarter turn.
+- Treat exploded green furniture linework as semantic objects: distinguish beds, X-marked closets, and desk-plus-chair symbols instead of assigning every rectangle to a generic table.
+- In paired bedrooms, rebuild both sets of bed, closet, study desk, chair, and doorway. A study desk includes a monitor and books; internal doors use the light-cream finish.
+- Pantry storage uses the two complete 4.15 m opposing cabinet runs. Orient both fronts toward the pantry and render one visible handle per door panel.
+- Keep the two source sofas and coffee table as separate living-room objects, remove duplicate manual sofas, and place a rug beneath the group.
+- Recover living-room exterior edges as continuous host walls and let free windows cut the wall. Preserve matching upper-floor window continuations where the elevation shows them.
+- The master bed is 2.00 x 2.10 m with its head at the neighbor wall. Put botanical wallpaper behind it, the waterfall artwork on the opposing wall, open wardrobe banks inside the walk-in closet, cream doors at both entries, and a sliding window opening toward the porch.
+- Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
 
 ## Site Context
 
@@ -34,4 +43,6 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Check every window center against its intended wall and verify its 3D cutout.
 - Check door centers against wall gaps and verify swing direction after rotation.
 - Check counters touch walls, sinks overlap counters, and sanitary fixtures remain inside their rooms.
+- Check every repeated cabinet run for complete length, inward-facing fronts, panel divisions, and visible handles.
+- Compare imported furniture symbols as a room set so duplicate sofas, missing desks, and incomplete wardrobes are caught together.
 - Review all floors together for a shared footprint and review each floor separately for local alignment.

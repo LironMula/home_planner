@@ -90,6 +90,7 @@
     {
       "id": "architect-alt-3-basement-slab",
       "type": "space",
+      "structuralSlab": true,
       "floorId": "architect-alt-3-basement",
       "name": "Basement slab",
       "x": 8.76,
@@ -98,11 +99,12 @@
       "h": 9.15,
       "color": "#d9dee5",
       "wallColor": "#ffffff",
-      "opacity": 0.72
+      "opacity": 0.94
     },
     {
       "id": "architect-alt-3-ground-slab",
       "type": "space",
+      "structuralSlab": true,
       "floorId": "architect-alt-3-ground",
       "name": "Ground floor slab",
       "x": 8.76,
@@ -111,11 +113,12 @@
       "h": 9.15,
       "color": "#d9dee5",
       "wallColor": "#ffffff",
-      "opacity": 0.72
+      "opacity": 0.94
     },
     {
       "id": "architect-alt-3-upper-slab",
       "type": "space",
+      "structuralSlab": true,
       "floorId": "architect-alt-3-upper",
       "name": "Upper floor slab",
       "x": 8.76,
@@ -124,7 +127,7 @@
       "h": 9.15,
       "color": "#d9dee5",
       "wallColor": "#ffffff",
-      "opacity": 0.72
+      "opacity": 0.94
     }
   ],
   "stairs": [

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "name": "architect-alt-4-sheet-1",
+      "path": "plans/architect-alt-4-sheet-1.json",
+      "modified": "2026-09-21T08:00:00Z"
+    },
+    {
+      "name": "architect-alt-4-sheet-11",
+      "path": "plans/architect-alt-4-sheet-11.json",
+      "modified": "2026-09-21T08:00:00Z"
+    },
+    {
+      "name": "architect-alt-3",
+      "path": "plans/architect-alt-3.json",
+      "modified": "2026-09-21T08:00:00Z"
+    },
+    {
+      "name": "architect-alt-5",
+      "path": "plans/architect-alt-5.json",
+      "modified": "2026-09-21T08:00:00Z"
+    },
+    {
+      "name": "house_3d_view_alt4_ron_limor_yahal",
+      "path": "plans/house_3d_view_alt4_ron_limor_yahal.json",
+      "modified": "2026-07-04T19:31:38Z"
+    },
+    {
+      "name": "ruchama_20_v01_2026_05_30",
+      "path": "plans/ruchama_20_v01_2026_05_30.json",
+      "modified": "2026-05-31T18:43:15Z"
+    },
+    {
+      "name": "current-plan",
+      "path": "plans/current-plan.json",
+      "modified": "2026-07-04T13:00:32Z"
+    }
+  ]
+}

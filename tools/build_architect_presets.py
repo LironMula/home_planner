@@ -543,7 +543,7 @@ ALT4_BLOCK_ELEMENTS = {
     "BED": ("bed", "Bed", 0.75, "#94a3b8"),
     "CH": ("chair", "Chair", 0.90, "#8ab17d"),
     "SOFA-60": ("sofa", "Sofa", 0.82, "#b7846f"),
-    "SOFA-CRN": ("sofa", "Corner sofa", 0.82, "#b7846f"),
+    "SOFA-CRN": ("corner-sofa", "Corner sofa", 0.82, "#b7846f"),
     "HARSA506": ("toilet", "Toilet", 0.75, "#e8edf2"),
     "SS01": ("sink", "Sink", 0.85, "#70b7c8"),
     "BATH": ("bath", "Bath", 0.65, "#d9f0f5"),
@@ -608,18 +608,19 @@ ALT4_MANUAL_ELEMENTS = {
         ("closet", "Kitchen storage", 9.83, 13.99, 3.25, 0.65, 2.10, "#9c8269"),
         ("closet", "Pantry storage", 9.83, 14.74, 3.15, 0.60, 2.10, "#9c8269"),
         ("table", "Dining table", 16.17, 14.24, 2.00, 1.10, 0.76, "#b08968"),
-        ("sofa", "Living room sofa", 19.03, 10.48, 3.00, 0.95, 0.82, "#b7846f"),
         ("table", "Living room coffee table", 20.45, 11.58, 1.08, 0.62, 0.48, "#b08968"),
         ("toilet", "Guest toilet", 14.48, 9.86, 0.65, 0.80, 0.75, "#e8edf2"),
         ("sink", "Guest toilet sink", 14.48, 11.25, 0.65, 0.40, 0.85, "#70b7c8"),
     ),
     "living": (
-        ("bed", "Master bedroom bed", 8.20, 13.75, 3.25, 3.25, 0.75, "#94a3b8"),
-        ("wall-art", "Master bedroom waterfall artwork", 8.50, 17.12, 2.70, 0.08, 1.22, "#ffffff"),
+        ("bed", "Master bedroom bed", 9.13, 14.89, 2.00, 2.10, 0.75, "#94a3b8"),
+        ("wall-art", "Master bedroom waterfall artwork", 9.00, 13.87, 2.70, 0.08, 1.22, "#ffffff"),
         ("bed", "Bedroom bed 1", 14.27, 8.58, 1.20, 2.00, 0.75, "#94a3b8"),
         ("bed", "Bedroom bed 2", 18.78, 8.59, 1.20, 2.00, 0.75, "#94a3b8"),
-        ("closet", "Living floor wardrobe", 8.90, 13.84, 2.58, 0.60, 2.10, "#8b6145"),
-        ("table", "Living floor desk", 18.23, 12.04, 1.80, 0.60, 0.75, "#b08968"),
+        ("closet", "Bedroom 1 closet", 14.23, 12.04, 1.80, 0.60, 2.10, "#8b6145"),
+        ("closet", "Bedroom 2 closet", 18.23, 12.04, 1.80, 0.60, 2.10, "#8b6145"),
+        ("study-desk", "Bedroom 1 study desk", 16.40, 9.28, 0.65, 1.60, 0.78, "#b08968"),
+        ("study-desk", "Bedroom 2 study desk", 17.21, 9.28, 0.65, 1.60, 0.78, "#b08968"),
     ),
     "floor2": (
         ("bed", "Floor 2 bed", 18.77, 10.48, 1.20, 2.00, 0.75, "#94a3b8"),
@@ -871,6 +872,244 @@ def rotate_alt4_house_180(plan: dict) -> None:
                 }.get(item["tilt"], item["tilt"])
 
 
+def repair_alt4_ground_kitchen_wall(plan: dict, design: Design) -> None:
+    """Join the CAD window gaps into one exterior wall with two cutouts."""
+    ground_id = f"{design.key}-ground"
+    wall_left = 5.415
+    wall_right = 12.495
+    wall_center_y = 8.077
+
+    def belongs_to_recovered_span(wall: dict) -> bool:
+        if wall.get("floorId") != ground_id:
+            return False
+        rotation = float(wall.get("rotation", 0)) % 180
+        if min(rotation, abs(rotation - 180)) > 2:
+            return False
+        center_y = float(wall.get("y", 0)) + float(wall.get("h", 0)) / 2
+        if abs(center_y - wall_center_y) > 0.08:
+            return False
+        left = float(wall.get("x", 0))
+        right = left + float(wall.get("w", 0))
+        return right > wall_left and left < wall_right
+
+    plan["walls"] = [wall for wall in plan.get("walls", []) if not belongs_to_recovered_span(wall)]
+    plan["walls"].append({
+        "id": f"{ground_id}-kitchen-wc-exterior-wall",
+        "type": "wall",
+        "floorId": ground_id,
+        "name": "Kitchen and guest toilet exterior wall",
+        "x": wall_left,
+        "y": 7.952,
+        "w": round_number(wall_right - wall_left),
+        "h": 0.25,
+        "height": 2.79,
+        "rotation": 0,
+        "color": "#ffffff",
+        "opacity": 0.95,
+        "groupId": f"{ground_id}-structure",
+    })
+
+
+def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
+    ground_id = f"{design.key}-ground"
+    for element in plan.get("elements", []):
+        if element.get("floorId") != ground_id:
+            continue
+        if element.get("name") == "Kitchen work surface":
+            # Cabinet fronts are drawn on local -Z; zero rotation faces them
+            # into the kitchen and away from the exterior wall.
+            element["rotation"] = 0
+        elif element.get("name") == "Kitchen work surface return":
+            center_x = float(element["x"]) + float(element["w"]) / 2
+            center_y = float(element["y"]) + float(element["h"]) / 2
+            element["w"], element["h"] = element["h"], element["w"]
+            element["x"] = round_number(center_x - float(element["w"]) / 2)
+            element["y"] = round_number(center_y - float(element["h"]) / 2)
+            element["rotation"] = 90
+        elif element.get("name") == "Kitchen storage":
+            element.update({
+                "name": "Pantry north closets",
+                "x": 8.08,
+                "y": 3.15,
+                "w": 4.15,
+                "h": 0.60,
+                "rotation": 0,
+            })
+        elif element.get("name") == "Pantry storage":
+            element.update({
+                "name": "Pantry south closets",
+                "x": 8.08,
+                "y": 0.59,
+                "w": 4.15,
+                "h": 0.60,
+                "rotation": 180,
+            })
+
+
+def add_alt4_element(plan: dict, design: Design, floor_key: str, name: str, kind: str, **values) -> None:
+    floor_id = f"{design.key}-{floor_key}"
+    plan["elements"].append({
+        "id": f"{floor_id}-{name.lower().replace(' ', '-')}",
+        "type": "element",
+        "floorId": floor_id,
+        "name": name,
+        "elementKind": kind,
+        "x": values.pop("x"),
+        "y": values.pop("y"),
+        "w": values.pop("w"),
+        "h": values.pop("h"),
+        "elevation": values.pop("elevation", 0),
+        "height": values.pop("height"),
+        "rotation": values.pop("rotation", 0),
+        "color": values.pop("color"),
+        "opacity": values.pop("opacity", 0.9),
+        **values,
+    })
+
+
+def add_alt4_opening(plan: dict, design: Design, floor_key: str, name: str, kind: str, **values) -> None:
+    floor_id = f"{design.key}-{floor_key}"
+    plan["openings"].append({
+        "id": f"{floor_id}-{name.lower().replace(' ', '-')}",
+        "type": kind,
+        "floorId": floor_id,
+        "roomId": None,
+        "wallId": None,
+        "name": name,
+        "side": "free",
+        "t": 0.5,
+        "x": values.pop("x"),
+        "y": values.pop("y"),
+        "rotation": values.pop("rotation"),
+        "width": values.pop("width"),
+        "height": values.pop("height"),
+        "sill": values.pop("sill", 0),
+        "swing": values.pop("swing", 0),
+        "color": values.pop("color"),
+        "opacity": values.pop("opacity", 0.9),
+        **values,
+    })
+
+
+def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
+    ground_id = f"{design.key}-ground"
+    living_windows = {
+        "North picture window",
+        "East full-height window",
+        "East window",
+    }
+    for opening in plan["openings"]:
+        if opening.get("floorId") == ground_id and opening.get("name") in living_windows:
+            if opening["name"] != "North picture window":
+                opening["x"] = -3.105
+
+    # Use complete host walls. Free windows cut their own openings in 3D, so
+    # importing fragmented CAD sill/lintel lines only creates stray wall slabs.
+    def is_living_exterior_fragment(wall: dict) -> bool:
+        if wall.get("floorId") != ground_id or wall.get("context"):
+            return False
+        rotation = float(wall.get("rotation", 0)) % 180
+        cx = float(wall.get("x", 0)) + float(wall.get("w", 0)) / 2
+        cy = float(wall.get("y", 0)) + float(wall.get("h", 0)) / 2
+        horizontal = min(rotation, abs(rotation - 180)) < 2 and 8.95 < cy < 9.55 and -3.5 < cx < 4.5
+        vertical = abs(rotation - 90) < 2 and -3.8 < cx < -2.7 and 3.3 < cy < 9.7
+        return horizontal or vertical
+
+    plan["walls"] = [wall for wall in plan["walls"] if not is_living_exterior_fragment(wall)]
+    plan["walls"].extend((
+        {
+            "id": f"{ground_id}-living-north-exterior-wall",
+            "type": "wall", "floorId": ground_id, "name": "Living room north exterior wall",
+            "x": -3.23, "y": 9.277, "w": 7.20, "h": 0.25, "height": 2.79,
+            "rotation": 0, "color": "#ffffff", "opacity": 0.95,
+            "groupId": f"{ground_id}-structure",
+        },
+        {
+            "id": f"{ground_id}-living-east-exterior-wall",
+            "type": "wall", "floorId": ground_id, "name": "Living room east exterior wall",
+            "x": -6.105, "y": 6.477, "w": 6.00, "h": 0.25, "height": 2.79,
+            "rotation": 270, "color": "#ffffff", "opacity": 0.95,
+            "groupId": f"{ground_id}-structure",
+        },
+    ))
+
+    add_alt4_element(
+        plan, design, "ground", "Living room rug", "rug",
+        x=-2.05, y=5.40, w=4.45, h=3.35, height=0.035,
+        color="#b9a58e", opacity=0.82,
+    )
+    rug = plan["elements"].pop()
+    plan["elements"].insert(0, rug)
+    add_alt4_element(
+        plan, design, "ground", "Guest bathroom botanical wallpaper", "wallpaper",
+        x=5.945, y=6.985, w=1.65, h=0.035, elevation=0.04, height=2.65,
+        rotation=270, color="#eee6d8", opacity=0.98,
+    )
+
+
+def repair_alt4_living_floor(plan: dict, design: Design) -> None:
+    living_id = f"{design.key}-living"
+    for wall in plan["walls"]:
+        if wall.get("floorId") == living_id and not wall.get("context"):
+            wall["color"] = "#ffffff"
+            wall["opacity"] = 1.0
+
+    # The source has several overlapping swing arcs. Replace those detections
+    # with one opening for each actual room doorway.
+    plan["openings"] = [
+        opening for opening in plan["openings"]
+        if not (opening.get("floorId") == living_id and opening.get("type") == "door")
+    ]
+    cream = "#f3ead7"
+    for name, x, y, width, rotation, swing in (
+        ("Bedroom 1 door", 4.625, 5.102, 0.85, 180, 0),
+        ("Bedroom 2 door", 3.575, 5.102, 0.85, 180, 180),
+        ("Master bathroom door", 8.20, 5.102, 0.80, 180, 0),
+        ("Master bedroom door", 8.85, 4.575, 1.00, 270, 0),
+        ("Master walk-in closet door", 9.20, 3.652, 1.00, 0, 180),
+    ):
+        add_alt4_opening(
+            plan, design, "living", name, "door",
+            x=x, y=y, width=width, height=2.10, rotation=rotation,
+            swing=swing, color=cream, opacity=0.94,
+        )
+
+    by_name = {element.get("name"): element for element in plan["elements"]}
+    master_bed = by_name.get("Master bedroom bed")
+    if master_bed:
+        master_bed.update({"x": 10.10, "y": 0.85, "w": 2.0, "h": 2.10, "rotation": 0})
+    artwork = by_name.get("Master bedroom waterfall artwork")
+    if artwork:
+        artwork.update({"x": 9.75, "y": 3.58, "w": 2.70, "h": 0.06, "rotation": 0, "elevation": 1.20})
+
+    add_alt4_element(
+        plan, design, "living", "Master bedroom neighbor-wall wallpaper", "wallpaper",
+        x=9.15, y=0.68, w=4.00, h=0.035, elevation=0.04, height=2.65,
+        rotation=180, color="#e8dfcf", opacity=0.98,
+    )
+    add_alt4_element(
+        plan, design, "living", "Master walk-in closet long bank", "open-closet",
+        x=6.925, y=2.025, w=3.25, h=0.60, height=2.30,
+        rotation=90, color="#9b7653", opacity=0.96,
+    )
+    add_alt4_element(
+        plan, design, "living", "Master walk-in closet short bank", "open-closet",
+        x=8.90, y=3.18, w=1.55, h=0.55, height=2.30,
+        rotation=180, color="#9b7653", opacity=0.96,
+    )
+
+    plan["openings"] = [
+        opening for opening in plan["openings"]
+        if not (opening.get("floorId") == living_id and opening.get("name") == "Living south-west window")
+    ]
+    add_alt4_opening(
+        plan, design, "living", "Master bedroom sliding window to porch", "window",
+        x=13.67, y=2.30, width=2.40, height=2.30, sill=0.10,
+        rotation=270, color="#45a9d8", opacity=0.62,
+        openingStyle="sliding",
+    )
+
+
 def close_alt4_main_entrance(plan: dict, design: Design) -> None:
     ground_id = f"{design.key}-ground"
     doors = sorted(
@@ -927,6 +1166,10 @@ def transform_alt4_to_saved_site(
                 item["y"] = round_number(item["y"] + dy)
 
     rotate_alt4_house_180(plan)
+    repair_alt4_ground_kitchen_wall(plan, design)
+    orient_alt4_kitchen_cabinets(plan, design)
+    repair_alt4_ground_living_room(plan, design)
+    repair_alt4_living_floor(plan, design)
     close_alt4_main_entrance(plan, design)
 
     floor_bounds = {
@@ -1077,11 +1320,66 @@ def validate_alt4_plan(plan: dict) -> None:
         "Guest toilet privacy window",
         "Master bedroom bed",
         "Master bedroom waterfall artwork",
+        "Guest bathroom botanical wallpaper",
+        "Living room rug",
+        "Pantry north closets",
+        "Pantry south closets",
+        "Bedroom 1 door",
+        "Bedroom 2 door",
+        "Bedroom 1 closet",
+        "Bedroom 2 closet",
+        "Bedroom 1 study desk",
+        "Bedroom 2 study desk",
+        "Master bedroom door",
+        "Master walk-in closet door",
+        "Master walk-in closet long bank",
+        "Master bedroom sliding window to porch",
+        "Master bedroom neighbor-wall wallpaper",
     }
     present_names = {item.get("name") for item in [*plan["openings"], *plan["elements"]]}
     missing_names = required_names - present_names
     if missing_names:
         raise ValueError(f"Missing Alt 4 guest-WC items: {sorted(missing_names)}")
+
+    slabs = [room for room in plan["rooms"] if str(room.get("id", "")).endswith("-slab")]
+    if not slabs or any(not slab.get("structuralSlab") for slab in slabs):
+        raise ValueError("Architectural floor slabs must be marked as structural")
+
+    exterior_wall = next(
+        (wall for wall in structural_walls if wall.get("name") == "Kitchen and guest toilet exterior wall"),
+        None,
+    )
+    if not exterior_wall:
+        raise ValueError("Missing continuous kitchen and guest-WC exterior wall")
+    for opening_name in ("Window above kitchen work surface", "Guest toilet privacy window"):
+        opening = next(item for item in plan["openings"] if item.get("name") == opening_name)
+        distance = project_to_segment(
+            (opening["x"], opening["y"]),
+            *planner_wall_segment(exterior_wall),
+        )[0]
+        if distance > 0.14:
+            raise ValueError(f"{opening_name} is detached from the recovered exterior wall")
+
+    if by_name["Kitchen work surface"].get("rotation") != 0:
+        raise ValueError("Kitchen work surface cabinet fronts do not face inward")
+    return_surface = by_name["Kitchen work surface return"]
+    if return_surface.get("rotation") != 90 or return_surface["w"] <= return_surface["h"]:
+        raise ValueError("Kitchen work surface return orientation is invalid")
+
+    pantry_north = by_name["Pantry north closets"]
+    pantry_south = by_name["Pantry south closets"]
+    if pantry_north["w"] < 4 or pantry_south["w"] < 4:
+        raise ValueError("Pantry closet banks do not cover the planned wall runs")
+    if pantry_north["rotation"] != 0 or pantry_south["rotation"] != 180:
+        raise ValueError("Pantry closet fronts do not face into the pantry")
+
+    living_id = next(floor["id"] for floor in plan["floors"] if floor["name"] == "Living floor")
+    living_walls = [wall for wall in structural_walls if wall["floorId"] == living_id]
+    if any(wall.get("color") != "#ffffff" or wall.get("opacity") != 1.0 for wall in living_walls):
+        raise ValueError("Living-floor architectural walls must be solid white")
+    bedroom_doors = [opening for opening in plan["openings"] if opening.get("name") in {"Bedroom 1 door", "Bedroom 2 door"}]
+    if len(bedroom_doors) != 2 or any(opening.get("color") != "#f3ead7" for opening in bedroom_doors):
+        raise ValueError("Living-floor bedroom doors are incomplete or use the wrong finish")
 
     landscape_kinds = {element.get("elementKind") for element in plan["elements"]}
     missing_landscape = {"grass", "pool", "ninja-set"} - landscape_kinds
@@ -1134,6 +1432,7 @@ def build_plan(
         rooms.append({
             "id": f"{floor_id}-slab",
             "type": "space",
+            "structuralSlab": True,
             "floorId": floor_id,
             "name": f"{sheet.label} slab",
             "x": slab_x,
@@ -1142,7 +1441,7 @@ def build_plan(
             "h": slab_h,
             "color": "#d9dee5",
             "wallColor": "#ffffff",
-            "opacity": 0.72,
+            "opacity": 0.94,
         })
         centerlines = wall_centerlines(collect_wall_segments(modelspace, sheet))
         floor_walls = [
