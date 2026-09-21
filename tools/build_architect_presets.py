@@ -373,10 +373,7 @@ ALT4_WINDOW_HINTS = {
         (17.57, 14.64, 0.70, "Basement window 3"),
     ),
     "ground": (
-        (19.610, 8.390, 2.45, "North picture window", 0),
         (18.210, 8.963, 0.65, "Salon entrance corner full-height window", 90),
-        (24.330, 9.113, 0.95, "Salon east upper full-height window", 90),
-        (24.330, 11.088, 2.60, "East full-height window", 90),
         (24.330, 13.063, 0.95, "East window", 90),
         (11.510, 9.713, 3.85, "Window above kitchen work surface", 0),
         (14.885, 9.713, 0.80, "Guest toilet privacy window", 0),
@@ -1044,18 +1041,21 @@ def add_alt4_opening(plan: dict, design: Design, floor_key: str, name: str, kind
 
 def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
     ground_id = f"{design.key}-ground"
-    living_windows = {
+    false_windows = {
         "North picture window",
+        "Salon east upper full-height window",
         "East full-height window",
-        "East window",
     }
+    plan["openings"] = [
+        opening for opening in plan["openings"]
+        if not (opening.get("floorId") == ground_id and opening.get("name") in false_windows)
+    ]
     for opening in plan["openings"]:
-        if opening.get("floorId") == ground_id and opening.get("name") in living_windows:
-            if opening["name"] != "North picture window":
-                opening["x"] = -3.105
+        if opening.get("floorId") == ground_id and opening.get("name") == "East window":
+            opening["x"] = -3.105
 
-    # Use complete host walls. Free windows cut their own openings in 3D, so
-    # importing fragmented CAD sill/lintel lines only creates stray wall slabs.
+    # Replace fragmented sill/lintel traces with the actual CAD wall runs while
+    # preserving the open exterior corner between the sofa and TV wall.
     def is_living_exterior_fragment(wall: dict) -> bool:
         if wall.get("floorId") != ground_id or wall.get("context"):
             return False
@@ -1069,20 +1069,31 @@ def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
     plan["walls"] = [wall for wall in plan["walls"] if not is_living_exterior_fragment(wall)]
     plan["walls"].extend((
         {
-            "id": f"{ground_id}-living-north-exterior-wall",
-            "type": "wall", "floorId": ground_id, "name": "Living room north exterior wall",
-            "x": -3.23, "y": 9.277, "w": 7.20, "h": 0.25, "height": 2.79,
+            "id": f"{ground_id}-salon-wall-behind-sofa",
+            "type": "wall", "floorId": ground_id, "name": "Salon wall behind sofa",
+            "x": 0.295, "y": 9.277, "w": 2.725, "h": 0.25, "height": 2.79,
             "rotation": 0, "color": "#ffffff", "opacity": 0.95,
             "groupId": f"{ground_id}-structure",
         },
         {
-            "id": f"{ground_id}-living-east-exterior-wall",
-            "type": "wall", "floorId": ground_id, "name": "Living room east exterior wall",
-            "x": -6.105, "y": 6.477, "w": 6.00, "h": 0.25, "height": 2.79,
+            "id": f"{ground_id}-salon-east-tv-wall",
+            "type": "wall", "floorId": ground_id, "name": "Salon east TV wall",
+            "x": -4.505, "y": 6.577, "w": 2.80, "h": 0.25, "height": 2.79,
+            "rotation": 270, "color": "#ffffff", "opacity": 0.95,
+            "groupId": f"{ground_id}-structure",
+        },
+        {
+            "id": f"{ground_id}-salon-east-lower-wall",
+            "type": "wall", "floorId": ground_id, "name": "Salon east lower exterior wall",
+            "x": -3.405, "y": 3.827, "w": 0.60, "h": 0.25, "height": 2.79,
             "rotation": 270, "color": "#ffffff", "opacity": 0.95,
             "groupId": f"{ground_id}-structure",
         },
     ))
+
+    for element in plan["elements"]:
+        if element.get("floorId") == ground_id and element.get("name") == "Corner sofa 1":
+            element["rotation"] = 180
 
     add_alt4_element(
         plan, design, "ground", "Living room rug", "rug",
@@ -1353,7 +1364,6 @@ def validate_alt4_plan(plan: dict) -> None:
         "Guest toilet privacy window",
         "Kitchen movable window to outdoor dining",
         "Salon entrance corner full-height window",
-        "Salon east upper full-height window",
         "Salon south full-height window",
         "Master bedroom bed",
         "Master bedroom waterfall artwork",
@@ -1384,6 +1394,25 @@ def validate_alt4_plan(plan: dict) -> None:
     missing_names = required_names - present_names
     if missing_names:
         raise ValueError(f"Missing Alt 4 guest-WC items: {sorted(missing_names)}")
+
+    false_salon_windows = {
+        "North picture window",
+        "Salon east upper full-height window",
+        "East full-height window",
+    }
+    present_false_windows = false_salon_windows & {opening.get("name") for opening in plan["openings"]}
+    if present_false_windows:
+        raise ValueError(f"False salon windows remain: {sorted(present_false_windows)}")
+    required_salon_walls = {
+        "Salon wall behind sofa",
+        "Salon east TV wall",
+        "Salon east lower exterior wall",
+    }
+    missing_salon_walls = required_salon_walls - {wall.get("name") for wall in structural_walls}
+    if missing_salon_walls:
+        raise ValueError(f"Missing salon wall segments: {sorted(missing_salon_walls)}")
+    if by_name.get("Corner sofa 1", {}).get("rotation") != 180:
+        raise ValueError("Corner sofa must face the salon after its 180-degree correction")
 
     ground_floor_id = next(floor["id"] for floor in plan["floors"] if floor["id"].endswith("-ground"))
     outdoor_tables = [

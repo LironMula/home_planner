@@ -1124,7 +1124,7 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-host-2",
+      "id": "architect-alt-4-sheet-1-ground-window-host-1",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
       "name": "Salon entrance corner full-height window wall",
@@ -1139,7 +1139,7 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-host-8",
+      "id": "architect-alt-4-sheet-1-ground-window-host-5",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
       "name": "Ground window 5 wall",
@@ -1154,7 +1154,7 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-host-9",
+      "id": "architect-alt-4-sheet-1-ground-window-host-6",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
       "name": "Salon south full-height window wall",
@@ -1169,7 +1169,7 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-host-10",
+      "id": "architect-alt-4-sheet-1-ground-window-host-7",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
       "name": "South-west window wall",
@@ -2279,13 +2279,13 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-living-north-exterior-wall",
+      "id": "architect-alt-4-sheet-1-ground-salon-wall-behind-sofa",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
-      "name": "Living room north exterior wall",
-      "x": -3.23,
+      "name": "Salon wall behind sofa",
+      "x": 0.295,
       "y": 9.277,
-      "w": 7.2,
+      "w": 2.725,
       "h": 0.25,
       "height": 2.79,
       "rotation": 0,
@@ -2294,13 +2294,28 @@
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-living-east-exterior-wall",
+      "id": "architect-alt-4-sheet-1-ground-salon-east-tv-wall",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-1-ground",
-      "name": "Living room east exterior wall",
-      "x": -6.105,
-      "y": 6.477,
-      "w": 6.0,
+      "name": "Salon east TV wall",
+      "x": -4.505,
+      "y": 6.577,
+      "w": 2.8,
+      "h": 0.25,
+      "height": 2.79,
+      "rotation": 270,
+      "color": "#ffffff",
+      "opacity": 0.95,
+      "groupId": "architect-alt-4-sheet-1-ground-structure"
+    },
+    {
+      "id": "architect-alt-4-sheet-1-ground-salon-east-lower-wall",
+      "type": "wall",
+      "floorId": "architect-alt-4-sheet-1-ground",
+      "name": "Salon east lower exterior wall",
+      "x": -3.405,
+      "y": 3.827,
+      "w": 0.6,
       "h": 0.25,
       "height": 2.79,
       "rotation": 270,
@@ -2592,24 +2607,6 @@
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
       "wallId": null,
-      "name": "North picture window",
-      "side": "free",
-      "t": 0.5,
-      "x": 1.62,
-      "y": 9.4,
-      "rotation": 180.0,
-      "width": 2.45,
-      "height": 2.35,
-      "sill": 0.15,
-      "color": "#45a9d8",
-      "opacity": 0.62
-    },
-    {
-      "id": "architect-alt-4-sheet-1-ground-window-2",
-      "type": "window",
-      "floorId": "architect-alt-4-sheet-1-ground",
-      "roomId": null,
-      "wallId": null,
       "name": "Salon entrance corner full-height window",
       "side": "free",
       "t": 0.5,
@@ -2623,43 +2620,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-3",
-      "type": "window",
-      "floorId": "architect-alt-4-sheet-1-ground",
-      "roomId": null,
-      "wallId": null,
-      "name": "Salon east upper full-height window",
-      "side": "free",
-      "t": 0.5,
-      "x": -3.1,
-      "y": 8.677,
-      "rotation": 270.0,
-      "width": 0.95,
-      "height": 2.35,
-      "sill": 0.15,
-      "color": "#45a9d8",
-      "opacity": 0.62
-    },
-    {
-      "id": "architect-alt-4-sheet-1-ground-window-4",
-      "type": "window",
-      "floorId": "architect-alt-4-sheet-1-ground",
-      "roomId": null,
-      "wallId": null,
-      "name": "East full-height window",
-      "side": "free",
-      "t": 0.5,
-      "x": -3.105,
-      "y": 6.702,
-      "rotation": 270.0,
-      "width": 2.6,
-      "height": 2.35,
-      "sill": 0.15,
-      "color": "#45a9d8",
-      "opacity": 0.62
-    },
-    {
-      "id": "architect-alt-4-sheet-1-ground-window-5",
+      "id": "architect-alt-4-sheet-1-ground-window-2",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -2677,7 +2638,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-6",
+      "id": "architect-alt-4-sheet-1-ground-window-3",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -2695,7 +2656,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-7",
+      "id": "architect-alt-4-sheet-1-ground-window-4",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -2713,7 +2674,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-8",
+      "id": "architect-alt-4-sheet-1-ground-window-5",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -2731,7 +2692,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-9",
+      "id": "architect-alt-4-sheet-1-ground-window-6",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -2749,7 +2710,7 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-window-10",
+      "id": "architect-alt-4-sheet-1-ground-window-7",
       "type": "window",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
@@ -3781,7 +3742,7 @@
       "h": 2.7,
       "elevation": 0,
       "height": 0.82,
-      "rotation": 0.0,
+      "rotation": 180,
       "color": "#b7846f",
       "opacity": 0.9
     },

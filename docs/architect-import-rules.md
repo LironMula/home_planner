@@ -31,7 +31,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Pantry storage uses the two complete 4.15 m opposing cabinet runs. Orient both fronts toward the pantry and render one visible handle per door panel.
 - Keep the two source sofas and coffee table as separate living-room objects, remove duplicate manual sofas, and place a rug beneath the group.
 - Keep one rectangular table and six chairs outside the kitchen; omit the extra round lounge table and its three chairs.
-- Recover living-room exterior edges as continuous host walls and let free windows cut the wall. Preserve matching upper-floor window continuations where the elevation shows them.
+- Preserve the Alt-4 salon perimeter as separate CAD segments: a solid wall behind the corner sofa, a completely open exterior span after the sofa, and the solid east TV wall. Do not reinterpret those cyan wall lines as windows; rotate the corner sofa 180 degrees to face into the salon.
 - Keep separate window records for each yellow opening on the living floor; do not merge adjacent bedroom windows across the wall between their rooms.
 - The master bed is 2.00 x 2.10 m with its head at the neighbor wall. Put botanical wallpaper behind it, the waterfall artwork on the opposing wall, open wardrobe banks inside the walk-in closet, cream doors at both entries, and a sliding window opening toward the porch.
 - Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
