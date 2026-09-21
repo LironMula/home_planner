@@ -822,10 +822,10 @@ def alt4_roofs(design: Design) -> list[dict]:
             "type": "roof",
             "floorId": f"{design.key}-living",
             "name": "Lower wing flat roof",
-            "x": 7.20,
-            "y": 8.02,
-            "w": 7.35,
-            "h": 9.50,
+            "x": 7.44,
+            "y": 8.29,
+            "w": 6.91,
+            "h": 9.00,
             "z": 2.76,
             "angle": 0,
             "tilt": "north",
@@ -839,12 +839,12 @@ def alt4_roofs(design: Design) -> list[dict]:
             "name": "Round tiled roof",
             "shape": "barrel",
             "axis": "z",
-            "x": 14.15,
-            "y": 8.02,
-            "w": 10.45,
-            "h": 9.55,
+            "x": 14.35,
+            "y": 8.29,
+            "w": 9.99,
+            "h": 9.00,
             "z": 2.02,
-            "rise": 2.05,
+            "rise": 2.00,
             "angle": 0,
             "tilt": "north",
             "color": "#ad5636",
@@ -1435,6 +1435,24 @@ def validate_alt4_plan(plan: dict) -> None:
     slabs = [room for room in plan["rooms"] if str(room.get("id", "")).endswith("-slab")]
     if not slabs or any(not slab.get("structuralSlab") for slab in slabs):
         raise ValueError("Architectural floor slabs must be marked as structural")
+
+    living_slab = next(slab for slab in slabs if slab["floorId"].endswith("-living"))
+    flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
+    barrel_roof = next(roof for roof in plan["roofs"] if roof.get("shape") == "barrel")
+    tolerance = 0.01
+    roof_edges = (
+        abs(barrel_roof["x"] - living_slab["x"]),
+        abs(barrel_roof["x"] + barrel_roof["w"] - flat_roof["x"]),
+        abs(flat_roof["x"] + flat_roof["w"] - living_slab["x"] - living_slab["w"]),
+        abs(barrel_roof["y"] - living_slab["y"]),
+        abs(flat_roof["y"] - living_slab["y"]),
+        abs(barrel_roof["h"] - living_slab["h"]),
+        abs(flat_roof["h"] - living_slab["h"]),
+    )
+    if any(offset > tolerance for offset in roof_edges):
+        raise ValueError("Alt 4 roof sections must partition the covered room footprint without overhang")
+    if abs(float(barrel_roof.get("rise", 0)) - 2.0) > tolerance:
+        raise ValueError("Alt 4 barrel roof must rise exactly 2 m from base to crown")
 
     exterior_wall = next(
         (wall for wall in structural_walls if wall.get("name") == "Kitchen and guest toilet exterior wall"),
