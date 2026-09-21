@@ -4425,6 +4425,11 @@
         moveCameraByWheel(event);
         updateCamera();
       }, { passive: false });
+      threeCanvas.addEventListener("dblclick", event => {
+        event.preventDefault();
+        three.drag = null;
+        setCameraHorizon();
+      });
     }
 
     function resetCamera() {
