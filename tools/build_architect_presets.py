@@ -922,10 +922,11 @@ def repair_alt4_ground_kitchen_wall(plan: dict, design: Design) -> None:
 
 
 def repair_alt4_kitchen_dining_window(plan: dict, design: Design) -> None:
-    """Restore the wall and sliding serving window beside outdoor dining."""
+    """Restore the wall and floor-level sliding glass door to outdoor dining."""
     ground_id = f"{design.key}-ground"
     wall_name = "Kitchen to outdoor dining window wall"
-    window_name = "Kitchen movable window to outdoor dining"
+    legacy_window_name = "Kitchen movable window to outdoor dining"
+    door_name = "Kitchen sliding glass door to outdoor dining"
     wall_center_x = 12.495
     wall_bottom = 4.152
     wall_top = 6.552
@@ -934,7 +935,10 @@ def repair_alt4_kitchen_dining_window(plan: dict, design: Design) -> None:
     wall_center_y = (wall_bottom + wall_top) / 2
 
     plan["walls"] = [wall for wall in plan["walls"] if wall.get("name") != wall_name]
-    plan["openings"] = [opening for opening in plan["openings"] if opening.get("name") != window_name]
+    plan["openings"] = [
+        opening for opening in plan["openings"]
+        if opening.get("name") not in {legacy_window_name, door_name}
+    ]
     plan["walls"].append({
         "id": f"{ground_id}-kitchen-outdoor-dining-window-wall",
         "type": "wall",
@@ -951,10 +955,10 @@ def repair_alt4_kitchen_dining_window(plan: dict, design: Design) -> None:
         "groupId": f"{ground_id}-structure",
     })
     add_alt4_opening(
-        plan, design, "ground", window_name, "window",
-        x=wall_center_x, y=wall_center_y, width=2.10, height=1.70,
-        sill=0.95, rotation=270, color="#45a9d8", opacity=0.62,
-        openingStyle="sliding",
+        plan, design, "ground", door_name, "door",
+        x=wall_center_x, y=wall_center_y, width=2.10, height=2.35,
+        sill=0, rotation=270, color="#45a9d8", opacity=0.62,
+        openingStyle="sliding", glass=True,
     )
 
 
@@ -1503,7 +1507,7 @@ def validate_alt4_plan(plan: dict) -> None:
         "Guest toilet sink",
         "Guest toilet sink mirror",
         "Guest toilet privacy window",
-        "Kitchen movable window to outdoor dining",
+        "Kitchen sliding glass door to outdoor dining",
         "Salon entrance corner full-height window",
         "Salon south full-height window",
         "Master bedroom bed",
@@ -1622,18 +1626,25 @@ def validate_alt4_plan(plan: dict) -> None:
         (wall for wall in structural_walls if wall.get("name") == "Kitchen to outdoor dining window wall"),
         None,
     )
-    dining_window = next(
+    dining_door = next(
         opening for opening in plan["openings"]
-        if opening.get("name") == "Kitchen movable window to outdoor dining"
+        if opening.get("name") == "Kitchen sliding glass door to outdoor dining"
     )
     if not dining_wall:
         raise ValueError("Missing kitchen to outdoor dining window wall")
     distance = project_to_segment(
-        (dining_window["x"], dining_window["y"]),
+        (dining_door["x"], dining_door["y"]),
         *planner_wall_segment(dining_wall),
     )[0]
-    if distance > 0.14 or dining_window.get("openingStyle") != "sliding":
-        raise ValueError("Kitchen movable window is detached or not sliding")
+    if (
+        distance > 0.14
+        or dining_door.get("type") != "door"
+        or dining_door.get("openingStyle") != "sliding"
+        or not dining_door.get("glass")
+        or abs(float(dining_door.get("sill", -1))) > 0.001
+        or float(dining_door.get("height", 0)) < 2.2
+    ):
+        raise ValueError("Kitchen sliding glass door must be floor-level, glazed, attached, and sliding")
 
     if by_name["Kitchen work surface"].get("rotation") != 180:
         raise ValueError("Kitchen work surface cabinet fronts do not face inward")

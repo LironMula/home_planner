@@ -25,9 +25,10 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Render every selected story as two separate surfaces: its own colored or finished floor above and an opaque white ceiling below. Both surfaces belong to that story, follow the 3D floor selector, and hide together with the Floor control.
 - Store house walls as solid `#ffffff`; keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so white walls and ceilings remain visually white under scene lighting.
 - Store Alt-4 stair treads and landings as solid white, using the same architectural-white 3D material and a restrained gray outline for 2D plan legibility.
+- In the Alt-4 CAD source, identify staircases from the complete yellow tread/landing cluster. The outgoing triangle marks the upper end, so ascent runs toward its point. Preserve that direction through the house transform and align the upper endpoint with the next floor's stairwell opening; do not place the stair from a generic preset rectangle alone.
 - Fit adjoining roof sections exactly to the structural room footprint beneath them, with no perimeter overhang, gap, or overlap. The Alt-4 barrel roof rises exactly 2.00 m from its base edges to its crown.
 - Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
-- Reconstruct the 2.40 m wall span between the kitchen and outdoor dining area with a centered 2.10 m sliding window at counter height.
+- Reconstruct the 2.40 m wall span between the kitchen and outdoor dining area with a centered 2.10 m floor-level sliding glass door. Treat a full-height glazed opening intended for circulation as a door with zero sill, not as a counter-height window.
 - Kitchen base-cabinet handles must face the room. In the final Alt-4 site orientation, use 180 degrees for the long run and 270 degrees for the perpendicular return after swapping its width/depth.
 - Treat exploded green furniture linework as semantic objects: distinguish beds, X-marked closets, and desk-plus-chair symbols instead of assigning every rectangle to a generic table.
 - In paired bedrooms, rebuild both sets of bed, closet, study desk, chair, and doorway. A study desk includes a monitor and books; internal doors use the light-cream finish.
@@ -56,6 +57,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Check every window center against its intended wall and verify its 3D cutout.
 - For rotated host walls, project the window, snap target, wall cutout, and rendered pane through the same wall-local transform; never position the pane from the wall's unrotated bounding box. If more than one nearby wall fragment qualifies, render against the host whose projected center is closest to the saved opening center.
 - Check door centers against wall gaps and verify swing direction after rotation.
+- Check each stair's source footprint, lower endpoint, outgoing-triangle upper endpoint, and destination-floor landing after rotation. Adjacent-floor stair cores must register without lateral drift.
 - Check counters touch walls, sinks overlap counters, and sanitary fixtures remain inside their rooms.
 - Check every repeated cabinet run for complete length, inward-facing fronts, panel divisions, and visible handles.
 - Compare imported furniture symbols as a room set so duplicate sofas, missing desks, and incomplete wardrobes are caught together.

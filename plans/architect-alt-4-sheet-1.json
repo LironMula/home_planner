@@ -3018,24 +3018,25 @@
       "opacity": 0.62
     },
     {
-      "id": "architect-alt-4-sheet-1-ground-kitchen-movable-window-to-outdoor-dining",
-      "type": "window",
+      "id": "architect-alt-4-sheet-1-ground-kitchen-sliding-glass-door-to-outdoor-dining",
+      "type": "door",
       "floorId": "architect-alt-4-sheet-1-ground",
       "roomId": null,
       "wallId": null,
-      "name": "Kitchen movable window to outdoor dining",
+      "name": "Kitchen sliding glass door to outdoor dining",
       "side": "free",
       "t": 0.5,
       "x": 12.495,
       "y": 5.352,
       "rotation": 270,
       "width": 2.1,
-      "height": 1.7,
-      "sill": 0.95,
+      "height": 2.35,
+      "sill": 0,
       "swing": 0,
       "color": "#45a9d8",
       "opacity": 0.62,
-      "openingStyle": "sliding"
+      "openingStyle": "sliding",
+      "glass": true
     },
     {
       "id": "architect-alt-4-sheet-1-living-bedroom-1-door",

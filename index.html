@@ -1693,6 +1693,7 @@
       renderer: null,
       root: null,
       mirrors: [],
+      doors: [],
       reflectionAvatar: null,
       floorTextures: {},
       artworkTexture: null,
@@ -3346,10 +3347,28 @@
       } else {
         ctx.strokeStyle = active ? (opening.glass ? "#137da7" : "#a45210") : colorWithAlpha(itemColor(opening), itemOpacity(opening));
         ctx.lineWidth = active ? 5 : 4;
-        ctx.beginPath();
-        ctx.moveTo(-len / 2, 0);
-        ctx.lineTo(len / 2, 0);
-        ctx.stroke();
+        const sliding = opening.openingStyle === "sliding";
+        if (sliding) {
+          ctx.beginPath();
+          ctx.moveTo(-len / 2, -3);
+          ctx.lineTo(0, -3);
+          ctx.moveTo(0, 3);
+          ctx.lineTo(len / 2, 3);
+          ctx.stroke();
+          ctx.strokeStyle = colorWithAlpha("#e9f8fe", 0.92);
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(-len / 2 + 4, -3);
+          ctx.lineTo(-4, -3);
+          ctx.moveTo(4, 3);
+          ctx.lineTo(len / 2 - 4, 3);
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(-len / 2, 0);
+          ctx.lineTo(len / 2, 0);
+          ctx.stroke();
+        }
         if (opening.glass) {
           ctx.strokeStyle = colorWithAlpha("#e9f8fe", 0.86);
           ctx.lineWidth = 1.5;
@@ -3357,6 +3376,10 @@
           ctx.moveTo(-len / 2 + 4, -3);
           ctx.lineTo(len / 2 - 4, -3);
           ctx.stroke();
+        }
+        if (sliding) {
+          ctx.restore();
+          return;
         }
         ctx.strokeStyle = colorWithAlpha(itemColor(opening), itemOpacity(opening) * 0.7);
         ctx.lineWidth = 2;
@@ -4922,13 +4945,16 @@
 
     function createReflectionAvatar() {
       const avatar = new THREE.Group();
-      const clothing = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.78 });
-      const skin = new THREE.MeshStandardMaterial({ color: 0xc98f68, roughness: 0.74 });
-      const trousers = new THREE.MeshStandardMaterial({ color: 0x172033, roughness: 0.84 });
-      const hair = new THREE.MeshStandardMaterial({ color: 0x2b211d, roughness: 0.88 });
+      const shirt = new THREE.MeshStandardMaterial({ color: 0xf8f7f2, roughness: 0.76 });
+      const cardigan = new THREE.MeshStandardMaterial({ color: 0x9fcbe1, roughness: 0.82 });
+      const skin = new THREE.MeshStandardMaterial({ color: 0xc98f72, roughness: 0.74 });
+      const trousers = new THREE.MeshStandardMaterial({ color: 0x344b66, roughness: 0.84 });
+      const hair = new THREE.MeshStandardMaterial({ color: 0x3b2922, roughness: 0.9 });
+      const hairHighlight = new THREE.MeshStandardMaterial({ color: 0x76503a, roughness: 0.88 });
       const eyeWhite = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.42 });
-      const pupil = new THREE.MeshStandardMaterial({ color: 0x18212f, roughness: 0.5 });
-      const mouth = new THREE.MeshStandardMaterial({ color: 0x8f3f45, roughness: 0.72 });
+      const pupil = new THREE.MeshStandardMaterial({ color: 0x3a2a22, roughness: 0.5 });
+      const mouth = new THREE.MeshStandardMaterial({ color: 0xa85c66, roughness: 0.72 });
+      const button = new THREE.MeshStandardMaterial({ color: 0xc9c5ba, roughness: 0.5 });
       const addPart = (geometry, material, x, y, z) => {
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(x, y, z);
@@ -4936,8 +4962,9 @@
         avatar.add(mesh);
         return mesh;
       };
-      addPart(new THREE.SphereGeometry(0.12, 18, 12), skin, 0, 1.58, 0);
-      addPart(new THREE.SphereGeometry(0.126, 20, 10, 0, Math.PI * 2, 0, Math.PI * 0.48), hair, 0, 1.595, -0.004);
+
+      // The reflected avatar is a compact likeness rather than a generic mannequin.
+      addPart(new THREE.SphereGeometry(0.122, 20, 14), skin, 0, 1.58, 0.012);
       addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, -0.12, 1.58, 0);
       addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, 0.12, 1.58, 0);
       [-0.043, 0.043].forEach(x => {
@@ -4946,10 +4973,38 @@
       });
       const nose = addPart(new THREE.ConeGeometry(0.016, 0.045, 12), skin, 0, 1.565, 0.13);
       nose.rotation.x = Math.PI / 2;
-      addPart(new THREE.BoxGeometry(0.058, 0.012, 0.012), mouth, 0, 1.525, 0.111);
-      addPart(new THREE.BoxGeometry(0.38, 0.62, 0.2), clothing, 0, 1.14, 0);
-      addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, -0.26, 1.12, 0);
-      addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, 0.26, 1.12, 0);
+      const smile = addPart(new THREE.TorusGeometry(0.032, 0.006, 8, 16, Math.PI), mouth, 0, 1.525, 0.12);
+      smile.rotation.z = Math.PI;
+
+      const curlGeometry = new THREE.SphereGeometry(0.045, 10, 8);
+      const curls = [
+        [-0.09, 1.69, -0.035], [-0.035, 1.715, -0.045], [0.025, 1.715, -0.045], [0.082, 1.69, -0.035],
+        [-0.13, 1.65, -0.025], [0.13, 1.65, -0.025], [-0.145, 1.59, -0.015], [0.145, 1.59, -0.015],
+        [-0.15, 1.525, -0.005], [0.15, 1.525, -0.005], [-0.145, 1.46, -0.01], [0.145, 1.46, -0.01],
+        [-0.13, 1.405, -0.015], [0.13, 1.405, -0.015], [-0.105, 1.35, -0.02], [0.105, 1.35, -0.02],
+        [-0.105, 1.665, 0.035], [0.105, 1.665, 0.035], [-0.14, 1.555, 0.035], [0.14, 1.555, 0.035],
+        [-0.132, 1.49, 0.03], [0.132, 1.49, 0.03], [-0.12, 1.43, 0.025], [0.12, 1.43, 0.025]
+      ];
+      curls.forEach(([x, y, z], index) => {
+        const curl = addPart(curlGeometry, index % 4 === 1 ? hairHighlight : hair, x, y, z);
+        const scale = 0.86 + (index % 3) * 0.09;
+        curl.scale.set(scale, 1.08, scale);
+      });
+
+      addPart(new THREE.BoxGeometry(0.34, 0.58, 0.18), shirt, 0, 1.14, 0);
+      const leftCollar = addPart(new THREE.BoxGeometry(0.1, 0.07, 0.025), shirt, -0.052, 1.405, 0.106);
+      const rightCollar = addPart(new THREE.BoxGeometry(0.1, 0.07, 0.025), shirt, 0.052, 1.405, 0.106);
+      leftCollar.rotation.z = -0.45;
+      rightCollar.rotation.z = 0.45;
+      addPart(new THREE.BoxGeometry(0.125, 0.57, 0.05), cardigan, -0.145, 1.14, 0.11);
+      addPart(new THREE.BoxGeometry(0.125, 0.57, 0.05), cardigan, 0.145, 1.14, 0.11);
+      addPart(new THREE.BoxGeometry(0.12, 0.58, 0.12), cardigan, -0.25, 1.12, 0);
+      addPart(new THREE.BoxGeometry(0.12, 0.58, 0.12), cardigan, 0.25, 1.12, 0);
+      [1.29, 1.19, 1.09, 0.99].forEach(y => {
+        addPart(new THREE.SphereGeometry(0.012, 10, 7), button, 0, y, 0.106);
+      });
+      addPart(new THREE.SphereGeometry(0.055, 12, 8), skin, -0.25, 0.79, 0);
+      addPart(new THREE.SphereGeometry(0.055, 12, 8), skin, 0.25, 0.79, 0);
       addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, -0.11, 0.43, 0);
       addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, 0.11, 0.43, 0);
       avatar.visible = false;
@@ -5219,6 +5274,7 @@
       three.camera.position.copy(three.orbit.position);
       three.camera.lookAt(target);
       updateCameraHeightControl();
+      updateDoorProximity();
       updateMirrorReflections();
       three.renderer.render(three.scene, three.camera);
       draw();
@@ -5228,6 +5284,7 @@
       if (!three.root) return;
       three.mirrors.forEach(mirror => mirror.renderTarget.dispose());
       three.mirrors = [];
+      three.doors = [];
       while (three.root.children.length) {
         const child = three.root.children.pop();
         child.traverse(obj => {
@@ -5304,6 +5361,13 @@
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
         const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
         if (viewVisible("boundary") && boundary && isGroundBaseline) addBoundary3D(boundary, floor);
+        if (!rooms.some(room => room.structuralSlab === true)) {
+          const inferredSlab = inferredStorySlab(floor, rooms, walls, boundary);
+          if (inferredSlab) addRoom3D(inferredSlab, floor, [], {
+            renderFloor: rooms.length === 0,
+            renderCeiling: true
+          });
+        }
         rooms
           .filter(room => room.type !== "space" || room.structuralSlab || viewVisible("spaces"))
           .forEach(room => addRoom3D(room, floor, roomOpeningLists.get(room.id) || []));
@@ -5323,25 +5387,72 @@
       updateCamera();
     }
 
-    function addRoom3D(room, floor, openings) {
+    function inferredStorySlab(floor, rooms, walls, boundary) {
+      let points = [];
+      const enclosedRooms = rooms.filter(room => room.type !== "space");
+      if (enclosedRooms.length) {
+        enclosedRooms.forEach(room => {
+          points.push(
+            { x: room.x, y: room.y },
+            { x: room.x + room.w, y: room.y + room.h }
+          );
+        });
+      } else {
+        walls.filter(wall => !wall.context).forEach(wall => {
+          points.push(...rectHandlePoints(wall, wall));
+        });
+      }
+      if (!points.length && boundary) {
+        points = [
+          { x: boundary.x, y: boundary.y },
+          { x: boundary.x + boundary.w, y: boundary.y + boundary.h }
+        ];
+      }
+      if (!points.length) return null;
+      const xs = points.map(point => Number(point.x)).filter(Number.isFinite);
+      const ys = points.map(point => Number(point.y)).filter(Number.isFinite);
+      if (!xs.length || !ys.length) return null;
+      const minX = Math.min(...xs);
+      const minY = Math.min(...ys);
+      const maxX = Math.max(...xs);
+      const maxY = Math.max(...ys);
+      if (maxX - minX < 0.5 || maxY - minY < 0.5) return null;
+      return {
+        id: `inferred-story-slab-${floor.id}`,
+        type: "space",
+        structuralSlab: true,
+        floorId: floor.id,
+        name: `${floor.name} inferred slab`,
+        x: minX,
+        y: minY,
+        w: maxX - minX,
+        h: maxY - minY,
+        color: floor.color,
+        opacity: 1
+      };
+    }
+
+    function addRoom3D(room, floor, openings, surfaceOptions = {}) {
       const yBase = floor.elevation;
       const isSpace = room.type === "space";
       const isStructuralSlab = room.structuralSlab === true;
       if (viewVisible("floor")) {
         const floorThickness = 0.08;
         const floorHoles = stairHolesForSlab(room, floor, true);
-        addSlabPieces3D(
-          room,
-          yBase + floorThickness / 2,
-          floorThickness,
-          colorToHex(isStructuralSlab ? floor.color : itemColor(room)),
-          opacityForView(isStructuralSlab ? 1 : itemOpacity(room), "floor"),
-          floorHoles,
-          true,
-          floor.finish,
-          "floor"
-        );
-        if (isStructuralSlab) {
+        if (surfaceOptions.renderFloor !== false) {
+          addSlabPieces3D(
+            room,
+            yBase + floorThickness / 2,
+            floorThickness,
+            colorToHex(isStructuralSlab ? floor.color : itemColor(room)),
+            opacityForView(isStructuralSlab ? 1 : itemOpacity(room), "floor"),
+            floorHoles,
+            true,
+            floor.finish,
+            "floor"
+          );
+        }
+        if (isStructuralSlab && surfaceOptions.renderCeiling !== false) {
           const ceilingThickness = 0.06;
           const upperSlabHoles = stairHolesForSlab(room, floor, false);
           addSlabPieces3D(
@@ -5800,6 +5911,134 @@
       three.root.add(mesh);
     }
 
+    function addDoorLeaf3D(parent, opening, floor, width, height, depth, color, opacity, centerY) {
+      const entranceDoor = /^(front door|main entrance)/i.test(opening.name || "");
+      const hingeSide = entranceDoor ? 1 : (Number(opening.hingeSide) === 1 ? 1 : -1);
+      const hinge = new THREE.Group();
+      hinge.position.x = hingeSide * width / 2;
+      parent.add(hinge);
+
+      const leafCenter = new THREE.Group();
+      leafCenter.position.x = -hingeSide * width / 2;
+      hinge.add(leafCenter);
+      const mesh = makeBox(width, height, depth, color, opacity);
+      mesh.position.set(0, centerY, 0);
+      leafCenter.add(mesh);
+      if (entranceDoor) addEntranceDoorHandles3D(leafCenter, opening, floor, depth, opacity);
+
+      three.doors.push({
+        hinge,
+        parent,
+        opening,
+        floorElevation: Number(floor.elevation) || 0,
+        width,
+        height
+      });
+    }
+
+    function addSlidingGlassDoor3D(parent, opening, floor, width, height, depth, color, opacity, centerY) {
+      const frame = Math.max(0.035, Math.min(0.065, width * 0.025));
+      const panelWidth = width / 2;
+      const glassOpacity = Math.min(0.58, Math.max(0.24, opacity * 0.72));
+      const frameColor = 0xd7e7eb;
+      const fixedX = -width / 4;
+      const closedX = width / 4;
+
+      const addFramePiece = (w, h, d, x, y, z = 0) => {
+        const piece = makeBox(w, h, d, frameColor, Math.min(1, opacity + 0.18));
+        piece.position.set(x, y, z);
+        parent.add(piece);
+      };
+      addFramePiece(width, frame, depth * 1.45, 0, floor.elevation + frame / 2);
+      addFramePiece(width, frame, depth * 1.45, 0, floor.elevation + height - frame / 2);
+      addFramePiece(frame, height, depth * 1.45, -width / 2 + frame / 2, centerY);
+      addFramePiece(frame, height, depth * 1.45, width / 2 - frame / 2, centerY);
+
+      const fixedPanel = new THREE.Group();
+      fixedPanel.position.x = fixedX;
+      parent.add(fixedPanel);
+      const fixedGlass = makeBox(panelWidth - frame, height - frame * 2, depth * 0.38, color, glassOpacity);
+      fixedGlass.position.y = centerY;
+      fixedPanel.add(fixedGlass);
+      const fixedMullion = makeBox(frame, height - frame * 2, depth * 1.1, frameColor, Math.min(1, opacity + 0.18));
+      fixedMullion.position.set(panelWidth / 2 - frame / 2, centerY, 0);
+      fixedPanel.add(fixedMullion);
+
+      const movingPanel = new THREE.Group();
+      movingPanel.position.set(closedX, 0, depth * 0.24);
+      parent.add(movingPanel);
+      const movingGlass = makeBox(panelWidth - frame, height - frame * 2, depth * 0.38, color, glassOpacity);
+      movingGlass.position.y = centerY;
+      movingPanel.add(movingGlass);
+      const movingMullion = makeBox(frame, height - frame * 2, depth * 1.1, frameColor, Math.min(1, opacity + 0.18));
+      movingMullion.position.set(-panelWidth / 2 + frame / 2, centerY, 0);
+      movingPanel.add(movingMullion);
+      const handle = makeBox(frame * 0.45, Math.min(0.42, height * 0.2), depth * 0.7, 0x65757b, 0.95);
+      handle.position.set(-panelWidth / 2 + frame * 1.8, floor.elevation + Math.min(1.05, height * 0.48), -depth * 0.55);
+      movingPanel.add(handle);
+
+      three.doors.push({
+        mode: "sliding",
+        panel: movingPanel,
+        closedX,
+        openX: fixedX,
+        parent,
+        opening,
+        floorElevation: Number(floor.elevation) || 0,
+        width,
+        height
+      });
+    }
+
+    function addDoor3D(parent, opening, floor, width, height, depth, color, opacity, centerY) {
+      if (opening.openingStyle === "sliding") {
+        addSlidingGlassDoor3D(parent, opening, floor, width, height, depth, color, opacity, centerY);
+        return true;
+      }
+      addDoorLeaf3D(parent, opening, floor, width, height, depth, color, opacity, centerY);
+      return false;
+    }
+
+    function cameraDistanceToDoor(door) {
+      const center = new THREE.Vector3();
+      const direction = new THREE.Vector3(1, 0, 0);
+      door.parent.getWorldPosition(center);
+      direction.applyQuaternion(door.parent.getWorldQuaternion(new THREE.Quaternion())).normalize();
+      const half = door.width / 2;
+      const ax = center.x - direction.x * half;
+      const az = center.z - direction.z * half;
+      const bx = center.x + direction.x * half;
+      const bz = center.z + direction.z * half;
+      const dx = bx - ax;
+      const dz = bz - az;
+      const lengthSquared = dx * dx + dz * dz;
+      const camera = three.orbit.position;
+      const t = lengthSquared
+        ? clamp(((camera.x - ax) * dx + (camera.z - az) * dz) / lengthSquared, 0, 1)
+        : 0;
+      return Math.hypot(camera.x - (ax + dx * t), camera.z - (az + dz * t));
+    }
+
+    function updateDoorProximity() {
+      if (!three.orbit.position) return;
+      three.scene.updateMatrixWorld(true);
+      three.doors.forEach(door => {
+        const cameraY = three.orbit.position.y;
+        const sameStory = cameraY >= door.floorElevation - 0.25
+          && cameraY <= door.floorElevation + Math.max(door.height + 0.45, 2.55);
+        const shouldOpen = sameStory && cameraDistanceToDoor(door) <= 0.5 + 0.001;
+        if (door.mode === "sliding") {
+          door.panel.position.x = shouldOpen ? door.openX : door.closedX;
+          door.panel.userData.proximityOpen = shouldOpen;
+          return;
+        }
+        const swingDirection = Number(door.opening.swing || 0) === 180 ? 1 : -1;
+        door.hinge.rotation.y = shouldOpen ? swingDirection * Math.PI / 2 : 0;
+        door.hinge.userData.proximityOpen = shouldOpen;
+      });
+      three.scene.updateMatrixWorld(true);
+    }
+
     function addOpening3D(opening, floor) {
       const pos = openingPosition(opening);
       const color = colorToHex(itemColor(opening));
@@ -5814,10 +6053,9 @@
         group.position.set(pos.x, 0, pos.y);
         group.rotation.y = -(pos.angle || 0);
         three.root.add(group);
-        const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
-        mesh.position.set(0, y, 0);
-        group.add(mesh);
         if (opening.type === "door") {
+          const sliding = addDoor3D(group, opening, floor, opening.width, opening.height, depth, color, openingOpacity, y);
+          if (sliding) return;
           const marker = new THREE.Mesh(
             new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
             new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
@@ -5826,6 +6064,10 @@
           marker.rotation.x = Math.PI / 2;
           if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
           group.add(marker);
+        } else {
+          const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
+          mesh.position.set(0, y, 0);
+          group.add(mesh);
         }
         return;
       }
@@ -5834,13 +6076,9 @@
         group.position.set(pos.x, 0, pos.y);
         group.rotation.y = -(Number(opening.rotation) || 0) * Math.PI / 180;
         three.root.add(group);
-        const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
-        mesh.position.set(0, y, 0);
-        group.add(mesh);
         if (opening.type === "door") {
-          if (/^(front door|main entrance)/i.test(opening.name || "")) {
-            addEntranceDoorHandles3D(group, opening, floor, depth, openingOpacity);
-          }
+          const sliding = addDoor3D(group, opening, floor, opening.width, opening.height, depth, color, openingOpacity, y);
+          if (sliding) return;
           const marker = new THREE.Mesh(
             new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
             new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
@@ -5849,20 +6087,24 @@
           marker.rotation.x = Math.PI / 2;
           if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
           group.add(marker);
+        } else {
+          const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
+          mesh.position.set(0, y, 0);
+          group.add(mesh);
         }
         return;
       }
-      const mesh = horizontal
-        ? makeBox(opening.width, opening.height, depth, color, openingOpacity)
-        : makeBox(depth, opening.height, opening.width, color, openingOpacity);
-      mesh.position.set(pos.x, y, pos.y);
-      if (opening.side === "top") mesh.position.z -= thick / 2;
-      if (opening.side === "bottom") mesh.position.z += thick / 2;
-      if (opening.side === "left") mesh.position.x -= thick / 2;
-      if (opening.side === "right") mesh.position.x += thick / 2;
-      three.root.add(mesh);
-
       if (opening.type === "door") {
+        const group = new THREE.Group();
+        group.position.set(pos.x, 0, pos.y);
+        if (opening.side === "top") group.position.z -= thick / 2;
+        if (opening.side === "bottom") group.position.z += thick / 2;
+        if (opening.side === "left") group.position.x -= thick / 2;
+        if (opening.side === "right") group.position.x += thick / 2;
+        group.rotation.y = -(pos.angle || 0);
+        three.root.add(group);
+        const sliding = addDoor3D(group, opening, floor, opening.width, opening.height, depth, color, openingOpacity, y);
+        if (sliding) return;
         const marker = new THREE.Mesh(
           new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
           new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
@@ -5875,6 +6117,16 @@
         if (opening.side === "wall-v") marker.rotation.z = Math.PI / 2;
         if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
         three.root.add(marker);
+      } else {
+        const mesh = horizontal
+          ? makeBox(opening.width, opening.height, depth, color, openingOpacity)
+          : makeBox(depth, opening.height, opening.width, color, openingOpacity);
+        mesh.position.set(pos.x, y, pos.y);
+        if (opening.side === "top") mesh.position.z -= thick / 2;
+        if (opening.side === "bottom") mesh.position.z += thick / 2;
+        if (opening.side === "left") mesh.position.x -= thick / 2;
+        if (opening.side === "right") mesh.position.x += thick / 2;
+        three.root.add(mesh);
       }
     }
 

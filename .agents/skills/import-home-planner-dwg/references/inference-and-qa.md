@@ -64,10 +64,12 @@ Treat exploded symbols as connected or proximal clusters, not independent rectan
 
 - A door uses a wall gap plus leaf and/or swing arc. Multiple arcs around one gap are alternatives or annotation noise, not necessarily multiple doors.
 - A window uses a framed wall gap; yellow frame pairs were reliable in Alt-4. Reconstruct the wall above and below the opening instead of deleting the full wall segment.
+- A full-height glazed opening with zero sill and exterior circulation on both sides is a sliding glass door, even when the drawing or user calls it a movable window. Model it as a door so the wall cutout reaches the floor; use the frame overlap to infer the sliding panels rather than adding a swing arc.
 - An X-marked green rectangle is commonly a closet in this project. An empty green rectangle is commonly a bed. A long rectangle with a smaller offset rectangle commonly represents a study desk and chair.
 - A basin plus cabinet footprint is one sink-with-storage assembly. The mirror aligns to the same wall and faces inward.
 - A bath is an elongated rim/basin symbol. A toilet has a bowl/cistern cluster. Washer/dryer symbols should be grouped with their open cabinet and upper storage when enclosed together.
 - Repeated cabinet rectangles form one run; recover the full run and orient all handles toward the room.
+- A staircase is a directional cluster, not just its bounding rectangle. Where the drawing uses the verified convention, collect the yellow tread and landing linework into one footprint; the outgoing triangle points to the upper end of the flight. Infer ascent from the opposite end toward that triangle. Do not use page orientation, a nearby arrow, or the longer side of the bounding box as a substitute for this marker.
 - Cyan linework is not automatically glass or a window. Check whether it continues the wall system, frames an opening, or belongs to annotation.
 
 When a source symbol is absent or too exploded to recover reliably, add one semantic object only after room geometry and repeated examples make its role clear.
@@ -112,6 +114,18 @@ For each room, verify:
 - windows are not accidentally hidden by tall furniture
 
 Rotated footprints must be tested after rotation, not by their unrotated JSON width and height.
+
+## Stair Reconstruction
+
+Decode and validate stairs before applying the whole-house/site transform:
+
+1. Cluster the yellow parallel tread lines, perimeter, landing edges, and direction marker. Exclude yellow room dimensions, door arcs, and unrelated annotation by continuity and containment within the stair footprint.
+2. Treat the point of the outgoing triangle as the upper endpoint. Set the run direction from the lower endpoint toward that point, then transform both the footprint and direction together.
+3. Derive the footprint from the outer stair/landing edges rather than from tread extents alone. Preserve intermediate landings and turns instead of collapsing a U- or L-shaped stair into one straight rectangle.
+4. On the source floor, verify the lower endpoint and first tread. On the destination floor, verify that the upper endpoint meets the stairwell opening or landing without a lateral offset.
+5. Compare the same stair core across adjacent sheets using walls and slab openings as registration anchors. A mismatch at the destination is a transform or direction failure, not permission to move only the rendered stair.
+
+Record the detected lower point, upper triangle point, run/turn shape, footprint, source floor, and destination floor. Add generator checks for endpoint registration and transformed direction whenever a preset contains stairs.
 
 ## Visual QA Matrix
 

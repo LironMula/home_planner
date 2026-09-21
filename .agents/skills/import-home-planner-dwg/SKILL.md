@@ -20,7 +20,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 2. Establish one coordinate contract before extracting objects: source units, sheet crop, Y direction, floor registration, north, site translation, and whole-house rotation. Apply the same transform to centers, rotations, roof directions, and opening hosts. Keep site context outside house-only transforms.
 3. Reconstruct walls and room boundaries first. Recover missing wall spans from collinearity, thickness, endpoints, dimensions, and neighboring floors. Then place openings, fixed fixtures, furniture, finishes, roofs, and site objects in that order.
 4. Build a floor-scoped room inventory. Identify each object by `(floorId, room, role)`; never resolve generic names such as `Sink 1` globally. Use stable semantic names for deliberate corrections.
-5. Infer symbols as clusters. Combine enclosure, dimensions, nearby fixtures, wall contact, door access, repeated symbols, and room function. Color or layer is supporting evidence, not proof.
+5. Infer symbols as clusters. Combine enclosure, dimensions, nearby fixtures, wall contact, door access, repeated symbols, and room function. Color or layer is supporting evidence, not proof. Decode stair direction from the complete run: in drawings using this convention, yellow tread geometry defines the staircase and its outgoing triangle marks the upper end.
 6. Convert user annotations such as “left of the door,” “after the sink,” or numbered arrows into explicit geometric constraints and generator validations.
 7. Preserve intentional overlap only: sink in counter, mirror on wall, appliance in cabinet. Flag furniture intersections, fixtures crossing walls, detached openings, inaccessible doors, and faces or handles pointing outside the room.
 8. Regenerate every sibling preset derived from the same source and add validations for the newly learned invariant. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
@@ -28,6 +28,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 ## Required QA Gates
 
 - Compare every floor independently against the source and compare all floors together for registration.
+- Verify each stair footprint, run direction, upper end, and landing against the source. The upper end must register with the destination-floor opening or landing after the shared floor transform.
 - Review each room as a complete checklist from its entrance, not object by object.
 - Verify every door/window against its wall gap and its 3D cutout. Rotated walls, snapping, panes, and cutouts must share one wall-local transform; choose the closest valid host when several fragments qualify.
 - Check active/front faces: cabinet handles, desks, toilets, sinks, doors, and appliances must face into the intended room.
