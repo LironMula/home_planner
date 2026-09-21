@@ -1172,6 +1172,14 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
     )
 
 
+def normalize_alt4_architectural_walls(plan: dict) -> None:
+    """Keep house walls truly white instead of blending with the dark scene."""
+    for wall in plan.get("walls", []):
+        if wall.get("type") == "wall" and not wall.get("context"):
+            wall["color"] = "#ffffff"
+            wall["opacity"] = 1.0
+
+
 def close_alt4_main_entrance(plan: dict, design: Design) -> None:
     ground_id = f"{design.key}-ground"
     doors = sorted(
@@ -1233,6 +1241,7 @@ def transform_alt4_to_saved_site(
     orient_alt4_kitchen_cabinets(plan, design)
     repair_alt4_ground_living_room(plan, design)
     repair_alt4_living_floor(plan, design)
+    normalize_alt4_architectural_walls(plan)
     close_alt4_main_entrance(plan, design)
 
     floor_bounds = {
@@ -1472,10 +1481,8 @@ def validate_alt4_plan(plan: dict) -> None:
     if pantry_north["rotation"] != 0 or pantry_south["rotation"] != 180:
         raise ValueError("Pantry closet fronts do not face into the pantry")
 
-    living_id = next(floor["id"] for floor in plan["floors"] if floor["name"] == "Living floor")
-    living_walls = [wall for wall in structural_walls if wall["floorId"] == living_id]
-    if any(wall.get("color") != "#ffffff" or wall.get("opacity") != 1.0 for wall in living_walls):
-        raise ValueError("Living-floor architectural walls must be solid white")
+    if any(wall.get("color") != "#ffffff" or wall.get("opacity") != 1.0 for wall in structural_walls):
+        raise ValueError("Architectural walls must be solid white")
     bedroom_doors = [opening for opening in plan["openings"] if opening.get("name") in {"Bedroom 1 door", "Bedroom 2 door"}]
     if len(bedroom_doors) != 2 or any(opening.get("color") != "#f3ead7" for opening in bedroom_doors):
         raise ValueError("Living-floor bedroom doors are incomplete or use the wrong finish")

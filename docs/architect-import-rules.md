@@ -21,8 +21,9 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Add missing semantic objects, such as the guest-WC door, when the CAD symbol is exploded and cannot be collected reliably.
 - Fit paired entrance leaves to the adjacent wall posts so they meet at the center; use dark wood for the main entrance and light cream for internal doors.
 - Raise the integrated kitchen sink so its basin rim is flush with the 0.92 m work surface and its tap remains exposed.
-- Use light-gray granite on the entrance floor and parquet on the living floor. Render an opaque ceiling only while the camera is inside that floor.
-- Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Outside the house, keep only the ground baseline; while the camera is inside a floor, render that floor and its opaque ceiling.
+- Use light-gray granite on the entrance floor and parquet on the living floor. Preserve those finishes on the upper face of each floor layer.
+- Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Render every selected story as two separate surfaces: its own colored or finished floor above and an opaque white ceiling below. Both surfaces belong to that story, follow the 3D floor selector, and hide together with the Floor control.
+- Store house walls as solid `#ffffff`; keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so white walls and ceilings remain visually white under scene lighting.
 - Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
 - Reconstruct the 2.40 m wall span between the kitchen and outdoor dining area with a centered 2.10 m sliding window at counter height.
 - Kitchen base-cabinet handles must face the room. In the final Alt-4 site orientation, use 180 degrees for the long run and 270 degrees for the perpendicular return after swapping its width/depth.

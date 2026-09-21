@@ -5288,27 +5288,36 @@
 
     function addRoom3D(room, floor, openings) {
       const yBase = floor.elevation;
-      const wallH = state.wallHeight;
       const isSpace = room.type === "space";
       const isStructuralSlab = room.structuralSlab === true;
-      const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
-      const cameraInsideFloor = cameraIsInsideFloor(floor);
-
-      if (viewVisible("floor") && (!isStructuralSlab || isGroundBaseline || cameraInsideFloor || state.viewFloor === floor.id)) {
+      if (viewVisible("floor")) {
+        const floorThickness = 0.08;
         const floorHoles = stairHolesForSlab(room, floor, true);
         addSlabPieces3D(
           room,
-          yBase,
-          0.08,
-          colorToHex(itemColor(room)),
-          opacityForView(itemOpacity(room), "floor"),
+          yBase + floorThickness / 2,
+          floorThickness,
+          colorToHex(isStructuralSlab ? floor.color : itemColor(room)),
+          opacityForView(isStructuralSlab ? 1 : itemOpacity(room), "floor"),
           floorHoles,
           true,
-          floor.finish
+          floor.finish,
+          "floor"
         );
-        if ((!isSpace || isStructuralSlab) && cameraInsideFloor) {
+        if (isStructuralSlab) {
+          const ceilingThickness = 0.06;
           const upperSlabHoles = stairHolesForSlab(room, floor, false);
-          addSlabPieces3D(room, yBase + wallH, 0.06, 0xf3f4f6, opacityForView(0.97, "floor"), upperSlabHoles, false);
+          addSlabPieces3D(
+            room,
+            storyCeilingElevation(floor) - ceilingThickness / 2,
+            ceilingThickness,
+            0xffffff,
+            opacityForView(1, "floor"),
+            upperSlabHoles,
+            false,
+            null,
+            "ceiling"
+          );
         }
       }
 
@@ -5339,7 +5348,7 @@
         .filter(hole => hole.w > 0.05 && hole.h > 0.05);
     }
 
-    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null) {
+    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null, surfaceRole = null) {
       let pieces = [{ x: room.x, y: room.y, w: room.w, h: room.h }];
       holes.forEach(hole => {
         pieces = pieces.flatMap(piece => subtractRect(piece, hole));
@@ -5347,9 +5356,12 @@
       pieces.forEach(piece => {
         if (piece.w <= 0.04 || piece.h <= 0.04) return;
         const mesh = makeBox(piece.w, thickness, piece.h, color, opacity);
+        if (surfaceRole === "ceiling") applyArchitecturalWhiteMaterial(mesh);
         applyFloorFinish(mesh, finish, piece.w, piece.h);
         mesh.position.set(piece.x + piece.w / 2, y, piece.y + piece.h / 2);
         mesh.receiveShadow = receiveShadow;
+        mesh.userData.storySurface = surfaceRole;
+        mesh.userData.floorId = room.floorId;
         three.root.add(mesh);
       });
     }
@@ -5571,7 +5583,10 @@
     }
 
     function applyGlassWallMaterial(mesh, wall) {
-      if (wall.type !== "glass-wall") return;
+      if (wall.type !== "glass-wall") {
+        if (String(itemColor(wall)).toLowerCase() === "#ffffff") applyArchitecturalWhiteMaterial(mesh);
+        return;
+      }
       mesh.material.roughness = 0.12;
       mesh.material.metalness = 0.04;
       mesh.material.side = THREE.DoubleSide;
@@ -5742,6 +5757,7 @@
         mesh = makeBox(thickness, height, len, color, clamp(opacity, 0, 0.96));
         mesh.position.set(side.x, y, side.z + from + len / 2);
       }
+      if (color === 0xffffff) applyArchitecturalWhiteMaterial(mesh);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       three.root.add(mesh);
@@ -5805,11 +5821,12 @@
       }
     }
 
-    function cameraIsInsideFloor(floor) {
-      if (!three.orbit.position) return false;
-      const height = Number(floor.height) || state.wallHeight;
-      return three.orbit.position.y > floor.elevation + 0.08
-        && three.orbit.position.y < floor.elevation + height - 0.05;
+    function storyCeilingElevation(floor) {
+      const currentElevation = Number(floor.elevation) || 0;
+      const nextFloor = state.floors
+        .filter(candidate => (Number(candidate.elevation) || 0) > currentElevation + 0.05)
+        .sort((a, b) => (Number(a.elevation) || 0) - (Number(b.elevation) || 0))[0];
+      return nextFloor ? Number(nextFloor.elevation) : currentElevation + state.wallHeight;
     }
 
     function addEntranceDoorHandles3D(group, opening, floor, depth, opacity) {
@@ -6776,6 +6793,19 @@
       });
       const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
       return mesh;
+    }
+
+    function applyArchitecturalWhiteMaterial(mesh) {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach(material => {
+        material.color.set(0xffffff);
+        if (material.emissive) {
+          material.emissive.set(0xffffff);
+          material.emissiveIntensity = 0.35;
+        }
+        material.roughness = 0.72;
+        material.needsUpdate = true;
+      });
     }
 
     function colorToHex(color) {
