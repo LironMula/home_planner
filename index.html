@@ -5007,9 +5007,11 @@
         const roomOpeningLists = new Map();
         rooms.forEach(room => {
           const roomOpenings = roomOpeningsFor3D(room, openings, wallCutouts.filter(opening => !opening.roomId && !opening.wallId));
-          roomOpenings.forEach(opening => {
-            if (opening.sourceId && !opening.gapOnly) renderedAsHosted.add(opening.sourceId);
-          });
+          if (room.type !== "space") {
+            roomOpenings.forEach(opening => {
+              if (opening.sourceId && !opening.gapOnly) renderedAsHosted.add(opening.sourceId);
+            });
+          }
           roomOpeningLists.set(room.id, roomOpenings);
         });
         const wallOpeningVisuals = [];
@@ -5017,9 +5019,10 @@
         walls.forEach(wall => {
           const gaps = customWallOpeningGaps(wall, wallCutouts);
           gaps.forEach(gap => {
-            if (!Number(wall.rotation) && gap.opening.sourceId && !gap.opening.gapOnly && !renderedAsHosted.has(gap.opening.sourceId)) {
+            if (gap.opening.sourceId && !gap.opening.gapOnly && !renderedAsHosted.has(gap.opening.sourceId)) {
               renderedAsHosted.add(gap.opening.sourceId);
-              wallOpeningVisuals.push(gap.opening);
+              const sourceOpening = openings.find(opening => opening.id === gap.opening.sourceId);
+              wallOpeningVisuals.push(Number(wall.rotation) ? sourceOpening || gap.opening : gap.opening);
             }
           });
           wallGapLists.set(wall.id, gaps);

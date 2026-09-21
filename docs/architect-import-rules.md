@@ -11,6 +11,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 ## Openings And Fixtures
 
 - Anchor windows and doors to CAD wall centerlines or explicit wall gaps, not nearby annotation geometry.
+- For Alt-4 windows, use the center and orientation of each yellow CAD frame pair. Do not snap its center along the wall to the nearest surviving wall fragment, because that fragment usually ends at the window gap.
 - Reconstruct a host-wall span behind every CAD window gap; the 3D cutout then preserves the wall above and below instead of dropping the complete edge.
 - Alt-4 kitchen window: 3.85 m opening centered at `(11.51, 9.71)` before site placement.
 - Alt-4 guest WC exterior: add a 0.80 m privacy window with a 1.75 m sill in the recovered exterior wall.
@@ -31,6 +32,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Keep the two source sofas and coffee table as separate living-room objects, remove duplicate manual sofas, and place a rug beneath the group.
 - Keep one rectangular table and six chairs outside the kitchen; omit the extra round lounge table and its three chairs.
 - Recover living-room exterior edges as continuous host walls and let free windows cut the wall. Preserve matching upper-floor window continuations where the elevation shows them.
+- Keep separate window records for each yellow opening on the living floor; do not merge adjacent bedroom windows across the wall between their rooms.
 - The master bed is 2.00 x 2.10 m with its head at the neighbor wall. Put botanical wallpaper behind it, the waterfall artwork on the opposing wall, open wardrobe banks inside the walk-in closet, cream doors at both entries, and a sliding window opening toward the porch.
 - Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
 

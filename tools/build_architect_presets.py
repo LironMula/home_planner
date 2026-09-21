@@ -373,23 +373,32 @@ ALT4_WINDOW_HINTS = {
         (17.57, 14.64, 0.70, "Basement window 3"),
     ),
     "ground": (
-        (19.61, 8.39, 2.45, "North picture window"),
-        (24.23, 11.09, 2.60, "East full-height window"),
-        (24.33, 13.54, 0.95, "East window"),
-        (11.51, 9.71, 3.85, "Window above kitchen work surface"),
-        (14.89, 9.71, 0.80, "Guest toilet privacy window"),
-        (11.11, 14.69, 1.23, "Ground window 5"),
-        (8.71, 16.44, 0.60, "South-west window"),
+        (19.610, 8.390, 2.45, "North picture window", 0),
+        (18.210, 8.963, 0.65, "Salon entrance corner full-height window", 90),
+        (24.330, 9.113, 0.95, "Salon east upper full-height window", 90),
+        (24.330, 11.088, 2.60, "East full-height window", 90),
+        (24.330, 13.063, 0.95, "East window", 90),
+        (11.510, 9.713, 3.85, "Window above kitchen work surface", 0),
+        (14.885, 9.713, 0.80, "Guest toilet privacy window", 0),
+        (11.112, 14.690, 1.23, "Ground window 5", 0),
+        (19.235, 15.813, 2.55, "Salon south full-height window", 90),
+        (8.710, 16.138, 0.60, "South-west window", 90),
     ),
     "living": (
-        (17.48, 8.41, 2.70, "Living north window"),
-        (24.33, 9.34, 1.05, "Living east window 1"),
-        (24.33, 12.86, 1.00, "Living east window 2"),
-        (11.18, 9.71, 1.00, "Living window 3"),
-        (14.18, 10.29, 0.90, "Living window 4"),
-        (8.68, 10.69, 0.80, "Living west window"),
-        (7.56, 16.19, 0.80, "Living south-west window"),
-        (20.98, 17.19, 0.70, "Living south window"),
+        (16.435, 8.413, 0.90, "Living north window 1", 0),
+        (17.935, 8.413, 0.90, "Living north window 2", 0),
+        (24.330, 8.813, 1.05, "Living east window 1", 90),
+        (20.160, 8.938, 0.80, "Living upper east window", 90),
+        (14.110, 9.038, 0.90, "Living upper hall window", 90),
+        (13.185, 9.713, 0.80, "Living north return window", 0),
+        (11.185, 9.713, 1.00, "Living window 3", 0),
+        (8.685, 10.288, 0.80, "Living west window", 90),
+        (14.180, 10.288, 0.90, "Living window 4", 90),
+        (8.135, 10.988, 0.90, "Living west return window", 0),
+        (24.330, 13.358, 1.00, "Living east window 2", 90),
+        (20.985, 15.538, 1.60, "Living lower west window", 90),
+        (7.560, 16.588, 0.80, "Living south-west window", 90),
+        (21.435, 17.190, 0.70, "Living south window", 0),
     ),
     "floor2": (
         (15.88, 11.93, 0.60, "Floor 2 window"),
@@ -423,11 +432,16 @@ def nearest_wall(point, centerlines, maximum_distance: float = 0.9):
 
 def collect_alt4_windows(design: Design, sheet: Sheet, centerlines) -> list[dict]:
     windows = []
-    for index, (x, y, width, name) in enumerate(ALT4_WINDOW_HINTS.get(sheet.key, ()), start=1):
+    for index, hint in enumerate(ALT4_WINDOW_HINTS.get(sheet.key, ()), start=1):
+        x, y, width, name, *rotation_hint = hint
         privacy_window = "privacy" in name.lower()
-        snapped = None if privacy_window else nearest_wall((x, y), centerlines)
-        position = snapped[1] if snapped else (x, y)
-        rotation = snapped[6] if snapped else 0
+        if rotation_hint:
+            position = (x, y)
+            rotation = rotation_hint[0]
+        else:
+            snapped = None if privacy_window else nearest_wall((x, y), centerlines)
+            position = snapped[1] if snapped else (x, y)
+            rotation = snapped[6] if snapped else 0
         full_height = "full-height" in name.lower() or "picture" in name.lower()
         windows.append({
             "id": f"{design.key}-{sheet.key}-window-{index}",
@@ -1338,6 +1352,9 @@ def validate_alt4_plan(plan: dict) -> None:
         "Guest toilet sink mirror",
         "Guest toilet privacy window",
         "Kitchen movable window to outdoor dining",
+        "Salon entrance corner full-height window",
+        "Salon east upper full-height window",
+        "Salon south full-height window",
         "Master bedroom bed",
         "Master bedroom waterfall artwork",
         "Guest bathroom botanical wallpaper",
@@ -1350,6 +1367,13 @@ def validate_alt4_plan(plan: dict) -> None:
         "Bedroom 2 closet",
         "Bedroom 1 study desk",
         "Bedroom 2 study desk",
+        "Living north window 1",
+        "Living north window 2",
+        "Living upper east window",
+        "Living upper hall window",
+        "Living north return window",
+        "Living west return window",
+        "Living lower west window",
         "Master bedroom door",
         "Master walk-in closet door",
         "Master walk-in closet long bank",
