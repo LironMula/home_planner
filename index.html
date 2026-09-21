@@ -1063,6 +1063,7 @@
                 <option value="sofa">Sofa</option>
                 <option value="table">Table</option>
                 <option value="round-table">Round table</option>
+                <option value="kitchen-work-surface">Kitchen work surface</option>
                 <option value="kitchen-island">Kitchen island</option>
                 <option value="chair">Chair</option>
                 <option value="car">Car</option>
@@ -1305,6 +1306,7 @@
       sofa: { label: "Sofa", color: "#b7846f", w: 2.0, h: 0.9, length: 0.85 },
       table: { label: "Table", color: "#b08968", w: 1.4, h: 0.9, length: 0.75 },
       "round-table": { label: "Round table", color: "#b08968", w: 1.2, h: 1.2, length: 0.75 },
+      "kitchen-work-surface": { label: "Kitchen work surface", color: "#d7d0c2", w: 2.4, h: 0.65, length: 0.92 },
       "kitchen-island": { label: "Kitchen island", color: "#d6c6ad", w: 2.7, h: 1.1, length: 0.92 },
       chair: { label: "Chair", color: "#8ab17d", w: 0.55, h: 0.55, length: 0.9 },
       car: { label: "Car", color: "#2563eb", w: 4.4, h: 1.9, length: 1.55 },
@@ -3001,7 +3003,21 @@
       ctx.strokeStyle = colorWithAlpha(color, Math.min(1, opacity + 0.05));
       ctx.lineWidth = 1;
       const rowStep = metersToPx(0.35);
-      if (roof.tilt === "north" || roof.tilt === "south") {
+      if (roof.shape === "barrel") {
+        const acrossX = roof.axis === "z";
+        const span = acrossX ? w : h;
+        for (let offset = rowStep; offset < span; offset += rowStep) {
+          ctx.beginPath();
+          if (acrossX) {
+            ctx.moveTo(p.x + offset, p.y);
+            ctx.lineTo(p.x + offset, p.y + h);
+          } else {
+            ctx.moveTo(p.x, p.y + offset);
+            ctx.lineTo(p.x + w, p.y + offset);
+          }
+          ctx.stroke();
+        }
+      } else if (roof.tilt === "north" || roof.tilt === "south") {
         for (let y = p.y + rowStep; y < p.y + h; y += rowStep) {
           ctx.beginPath();
           ctx.moveTo(p.x, y);
@@ -3023,7 +3039,8 @@
         ctx.fillStyle = textColorForItem(roof, 0.42);
         ctx.font = "800 12px Inter, system-ui, sans-serif";
         ctx.textBaseline = "top";
-        wrapCanvasText(`${roof.name} - ${round(roof.angle, 0)} deg`, p.x + 9, p.y + 9, Math.max(50, w - 18), 16);
+        const roofDetail = roof.shape === "barrel" ? `round roof - ${round(roof.rise || 0, 1)} m rise` : `${round(roof.angle, 0)} deg`;
+        wrapCanvasText(`${roof.name} - ${roofDetail}`, p.x + 9, p.y + 9, Math.max(50, w - 18), 16);
       }
 
       if (active) {
@@ -3046,7 +3063,13 @@
       ctx.lineWidth = 3;
       ctx.setLineDash([8, 6]);
       ctx.beginPath();
-      if (roof.tilt === "north") {
+      if (roof.shape === "barrel" && roof.axis === "z") {
+        ctx.moveTo(p.x + w / 2, p.y);
+        ctx.lineTo(p.x + w / 2, p.y + h);
+      } else if (roof.shape === "barrel") {
+        ctx.moveTo(p.x, p.y + h / 2);
+        ctx.lineTo(p.x + w, p.y + h / 2);
+      } else if (roof.tilt === "north") {
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x + w, p.y);
       } else if (roof.tilt === "south") {
@@ -3320,7 +3343,9 @@
 
     function centerPlan() {
       const rect = canvas.getBoundingClientRect();
-      const items = floorItems().filter(item => item.type !== "door" && item.type !== "window" && item.type !== "ruler");
+      const visibleItems = floorItems().filter(item => item.type !== "door" && item.type !== "window" && item.type !== "ruler");
+      const focusedItems = visibleItems.filter(item => !item.context);
+      const items = focusedItems.length ? focusedItems : visibleItems;
       if (!items.length) {
         state.offset = { x: rect.width * 0.18, y: rect.height * 0.18 };
       } else {
@@ -3979,7 +4004,7 @@
         row.className = `room-row ${isSelected(roof) ? "active" : ""}`;
         row.innerHTML = `
           <span class="room-name">${roof.name}</span>
-          <span class="room-meta">${round(roof.w, 1)} x ${round(roof.h, 1)} m - ${round(roof.angle, 0)} deg ${roof.tilt}</span>
+          <span class="room-meta">${round(roof.w, 1)} x ${round(roof.h, 1)} m - ${roof.shape === "barrel" ? `round, ${round(roof.rise || 0, 1)} m rise` : `${round(roof.angle, 0)} deg ${roof.tilt}`}</span>
         `;
         row.addEventListener("click", () => setSelected(roof.id));
         els.roofList.appendChild(row);
@@ -4591,7 +4616,8 @@
           wallGapLists.set(wall.id, gaps);
         });
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
-        if (viewVisible("boundary") && boundary) addBoundary3D(boundary, floor);
+        const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
+        if (viewVisible("boundary") && boundary && isGroundBaseline) addBoundary3D(boundary, floor);
         rooms
           .filter(room => room.type !== "space" || viewVisible("spaces"))
           .forEach(room => addRoom3D(room, floor, roomOpeningLists.get(room.id) || []));
@@ -5381,6 +5407,26 @@
         return;
       }
 
+      if (kind === "kitchen-work-surface") {
+        const topH = Math.max(0.045, h * 0.07);
+        const baseH = Math.max(0.25, h - topH);
+        const counterColor = 0xf5f2eb;
+        const toeKickH = Math.min(0.1, baseH * 0.14);
+        addElementBox(group, 0, baseH, 0, w, topH, d, counterColor, Math.min(1, opacity + 0.08), { roughness: 0.32 });
+        addElementBox(group, 0, toeKickH, d * 0.03, w * 0.96, baseH - toeKickH, d * 0.9, color, opacity, { roughness: 0.72 });
+        addElementBox(group, 0, 0, d * 0.08, w * 0.92, toeKickH, d * 0.76, 0x5f6670, opacity * 0.75);
+        const doors = Math.max(1, Math.round(w / 0.62));
+        for (let index = 1; index < doors; index += 1) {
+          const x = (index / doors - 0.5) * w * 0.94;
+          addElementBox(group, x, toeKickH + 0.02, -d * 0.455, 0.018, baseH - toeKickH - 0.06, 0.018, accent, 0.35, { castShadow: false });
+        }
+        for (let index = 0; index < doors; index += 1) {
+          const x = ((index + 0.5) / doors - 0.5) * w * 0.94;
+          addElementBox(group, x, baseH * 0.66, -d * 0.47, Math.min(0.16, w / doors * 0.32), 0.022, 0.022, metal, 0.9, { metalness: 0.34, castShadow: false });
+        }
+        return;
+      }
+
       if (kind === "kitchen-island") {
         const knee = Math.min(0.35, Math.min(w, d) * 0.32);
         const topH = Math.max(0.06, h * 0.08);
@@ -5586,9 +5632,53 @@
       return progressStart + travel;
     }
 
+    function addBarrelRoof3D(roof, floor, color, opacity) {
+      const segments = 32;
+      const acrossX = roof.axis === "z";
+      const vertices = [];
+      const indices = [];
+      for (let index = 0; index <= segments; index += 1) {
+        const t = index / segments;
+        if (acrossX) {
+          const x = roof.x + roof.w * t;
+          const y = roofHeightAt(roof, floor, roof.w * t, 0);
+          vertices.push(x, y, roof.y, x, y, roof.y + roof.h);
+        } else {
+          const z = roof.y + roof.h * t;
+          const y = roofHeightAt(roof, floor, 0, roof.h * t);
+          vertices.push(roof.x, y, z, roof.x + roof.w, y, z);
+        }
+        if (index < segments) {
+          const base = index * 2;
+          indices.push(base, base + 1, base + 3, base, base + 3, base + 2);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      const material = new THREE.MeshStandardMaterial({
+        color,
+        transparent: opacity < 1,
+        opacity,
+        roughness: 0.84,
+        metalness: 0.02,
+        side: THREE.DoubleSide
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      three.root.add(mesh);
+      addRoofTiles3D(roof, floor, color, opacity);
+    }
+
     function addRoof3D(roof, floor) {
       const color = colorToHex(itemColor(roof));
       const opacity = opacityForView(itemOpacity(roof), "roof");
+      if (roof.shape === "barrel") {
+        addBarrelRoof3D(roof, floor, color, opacity);
+        return;
+      }
       const vertices = [
         roof.x, roofHeightAt(roof, floor, 0, 0), roof.y,
         roof.x + roof.w, roofHeightAt(roof, floor, roof.w, 0), roof.y,
@@ -5616,6 +5706,12 @@
 
     function roofHeightAt(roof, floor, localX, localZ) {
       const base = floor.elevation + (roof.z ?? state.wallHeight + 0.16);
+      if (roof.shape === "barrel") {
+        const span = Math.max(0.1, roof.axis === "z" ? roof.w : roof.h);
+        const across = roof.axis === "z" ? localX : localZ;
+        const normalized = clamp(across / span, 0, 1) * 2 - 1;
+        return base + Math.max(0.1, Number(roof.rise) || span * 0.28) * Math.sqrt(Math.max(0, 1 - normalized * normalized));
+      }
       const angle = clamp(Number(roof.angle) || 0, 0, 70) * Math.PI / 180;
       const span = (roof.tilt === "east" || roof.tilt === "west") ? roof.w : roof.h;
       const rise = Math.tan(angle) * Math.max(0.1, span);
@@ -5637,7 +5733,34 @@
         three.root.add(line);
       };
 
-      if (roof.tilt === "north" || roof.tilt === "south") {
+      if (roof.shape === "barrel") {
+        const acrossX = roof.axis === "z";
+        const acrossSpan = acrossX ? roof.w : roof.h;
+        const axisSpan = acrossX ? roof.h : roof.w;
+        for (let across = rowStep; across < acrossSpan; across += rowStep) {
+          if (acrossX) {
+            addLine([
+              new THREE.Vector3(roof.x + across, roofHeightAt(roof, floor, across, 0) + lift, roof.y),
+              new THREE.Vector3(roof.x + across, roofHeightAt(roof, floor, across, roof.h) + lift, roof.y + roof.h)
+            ]);
+          } else {
+            addLine([
+              new THREE.Vector3(roof.x, roofHeightAt(roof, floor, 0, across) + lift, roof.y + across),
+              new THREE.Vector3(roof.x + roof.w, roofHeightAt(roof, floor, roof.w, across) + lift, roof.y + across)
+            ]);
+          }
+        }
+        for (let axis = seamStep; axis < axisSpan; axis += seamStep) {
+          const points = [];
+          for (let index = 0; index <= 20; index += 1) {
+            const across = acrossSpan * index / 20;
+            points.push(acrossX
+              ? new THREE.Vector3(roof.x + across, roofHeightAt(roof, floor, across, axis) + lift, roof.y + axis)
+              : new THREE.Vector3(roof.x + axis, roofHeightAt(roof, floor, axis, across) + lift, roof.y + across));
+          }
+          addLine(points);
+        }
+      } else if (roof.tilt === "north" || roof.tilt === "south") {
         for (let z = rowStep; z < roof.h; z += rowStep) {
           addLine([
             new THREE.Vector3(roof.x, roofHeightAt(roof, floor, 0, z) + lift, roof.y + z),

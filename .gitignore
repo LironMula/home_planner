@@ -1,2 +1,4 @@
 pdf_renders/
 source_pdfs/
+__pycache__/
+*.pyc
