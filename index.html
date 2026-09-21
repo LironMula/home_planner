@@ -5992,6 +5992,87 @@
       return three.artworkTexture;
     }
 
+    function masterBedroomWallpaperTexture() {
+      if (three.masterWallpaperTexture) return three.masterWallpaperTexture;
+      const canvas = document.createElement("canvas");
+      canvas.width = 1200;
+      canvas.height = 800;
+      const context = canvas.getContext("2d");
+      const wash = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+      wash.addColorStop(0, "#f2e8df");
+      wash.addColorStop(0.48, "#e7d6cb");
+      wash.addColorStop(1, "#d8c3bb");
+      context.fillStyle = wash;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      const drawLeaf = (x, y, scale, angle, color) => {
+        context.save();
+        context.translate(x, y);
+        context.rotate(angle);
+        context.scale(scale, scale);
+        context.fillStyle = color;
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.bezierCurveTo(54, -52, 116, -42, 142, 0);
+        context.bezierCurveTo(92, 36, 40, 42, 0, 0);
+        context.fill();
+        context.strokeStyle = "rgba(72, 91, 68, 0.45)";
+        context.lineWidth = 4;
+        context.beginPath();
+        context.moveTo(8, 0);
+        context.lineTo(124, 0);
+        context.stroke();
+        context.restore();
+      };
+      [
+        [70, 105, 0.72, 0.45, "rgba(102, 126, 91, 0.72)"],
+        [185, 220, 0.58, -0.55, "rgba(132, 149, 112, 0.65)"],
+        [1030, 120, 0.74, 2.65, "rgba(82, 115, 84, 0.70)"],
+        [1110, 310, 0.62, 3.62, "rgba(145, 157, 111, 0.68)"],
+        [120, 650, 0.64, -0.48, "rgba(87, 122, 91, 0.66)"],
+        [1000, 690, 0.72, 3.45, "rgba(111, 137, 94, 0.70)"],
+        [360, 95, 0.44, 1.05, "rgba(158, 169, 126, 0.55)"],
+        [790, 735, 0.46, 4.25, "rgba(92, 126, 91, 0.52)"]
+      ].forEach(args => drawLeaf(...args));
+
+      const drawEmbrace = (mirror, color) => {
+        context.save();
+        if (mirror) {
+          context.translate(canvas.width, 0);
+          context.scale(-1, 1);
+        }
+        context.strokeStyle = color;
+        context.lineCap = "round";
+        context.lineJoin = "round";
+        context.lineWidth = 54;
+        context.beginPath();
+        context.moveTo(-30, 510);
+        context.bezierCurveTo(170, 470, 280, 310, 455, 365);
+        context.bezierCurveTo(505, 381, 530, 410, 568, 430);
+        context.stroke();
+        context.lineWidth = 17;
+        [-2, -1, 0, 1].forEach((finger, index) => {
+          context.beginPath();
+          context.moveTo(510, 390 + index * 13);
+          context.quadraticCurveTo(557, 380 + index * 16, 605 + finger * 4, 414 + index * 5);
+          context.stroke();
+        });
+        context.restore();
+      };
+      drawEmbrace(false, "rgba(174, 111, 98, 0.62)");
+      drawEmbrace(true, "rgba(135, 88, 91, 0.56)");
+
+      context.strokeStyle = "rgba(255, 248, 240, 0.42)";
+      context.lineWidth = 9;
+      context.beginPath();
+      context.arc(600, 425, 155, Math.PI * 0.18, Math.PI * 0.82);
+      context.stroke();
+
+      three.masterWallpaperTexture = new THREE.CanvasTexture(canvas);
+      three.masterWallpaperTexture.encoding = THREE.sRGBEncoding;
+      return three.masterWallpaperTexture;
+    }
+
     function drawElementShape(group, kind, dims, color, opacity) {
       const accent = 0x263445;
       const pale = 0xe8edf2;
@@ -6088,6 +6169,23 @@
       if (kind === "wallpaper") {
         const panelDepth = Math.max(0.025, d);
         addElementBox(group, 0, 0, 0, w, h, panelDepth, color, opacity, { roughness: 0.9, castShadow: false });
+        if (dims.type1 === "embracing-leaves") {
+          const surface = new THREE.Mesh(
+            new THREE.PlaneGeometry(w * 0.985, h * 0.985),
+            new THREE.MeshBasicMaterial({
+              map: masterBedroomWallpaperTexture(),
+              color: 0xffffff,
+              transparent: opacity < 1,
+              opacity,
+              side: THREE.FrontSide
+            })
+          );
+          surface.position.set(0, h / 2, -panelDepth / 2 - 0.006);
+          surface.rotation.y = Math.PI;
+          surface.castShadow = false;
+          group.add(surface);
+          return;
+        }
         const ink = 0x78906f;
         const flower = 0xc9a878;
         const columns = Math.max(3, Math.round(w / 0.42));
@@ -6580,6 +6678,14 @@
 
       if (kind === "sink") {
         addElementBox(group, 0, 0, 0, w, h * 0.72, d, 0xa66f45, opacity);
+        if (dims.type1 === "drawer-vanity") {
+          const drawerFace = 0xb9855d;
+          for (let index = 0; index < 3; index += 1) {
+            const drawerY = h * (0.08 + index * 0.205);
+            addElementBox(group, 0, drawerY, -d * 0.505, w * 0.92, h * 0.18, 0.025, drawerFace, opacity, { castShadow: false });
+            addElementBox(group, 0, drawerY + h * 0.105, -d * 0.535, w * 0.22, 0.025, 0.025, metal, 0.96, { metalness: 0.42, castShadow: false });
+          }
+        }
         addElementBox(group, 0, h * 0.74, 0, w * 0.72, h * 0.08, d * 0.58, pale, 0.95);
         addElementBox(group, 0, h * 0.82, 0, w * 0.52, h * 0.04, d * 0.38, water, 0.58);
         addElementCylinder(group, 0, h * 0.84, -d * 0.25, Math.min(w, d) * 0.035, h * 0.18, metal, 0.92, { metalness: 0.35 });
@@ -6628,6 +6734,17 @@
         addElementBox(group, 0, 0, 0, w, h * 0.08, d, pale, 0.9);
         addElementBox(group, -w * 0.48, h * 0.08, 0, w * 0.035, h * 0.88, d, glass, 0.36, { doubleSide: true, castShadow: false });
         addElementBox(group, 0, h * 0.08, -d * 0.48, w, h * 0.88, d * 0.035, glass, 0.36, { doubleSide: true, castShadow: false });
+        if (dims.type1 === "dual-rain") {
+          [-0.24, 0.24].forEach(xFactor => {
+            const x = w * xFactor;
+            const pipeRadius = Math.max(0.018, Math.min(w, d) * 0.025);
+            addElementCylinder(group, x, h * 0.22, -d * 0.39, pipeRadius, h * 0.63, metal, 0.94, { segments: 14, metalness: 0.42 });
+            addElementBox(group, x, h * 0.875, -d * 0.29, Math.min(0.30, w * 0.22), 0.035, Math.min(0.30, d * 0.34), metal, 0.94, { metalness: 0.42 });
+            addElementCylinder(group, x, h * 0.43, -d * 0.505, Math.min(w, d) * 0.065, 0.045, metal, 0.96, { rotateX: Math.PI / 2, segments: 24, metalness: 0.48 });
+            addElementBox(group, x, h * 0.46, -d * 0.535, Math.min(0.16, w * 0.1), 0.025, 0.045, accent, 0.88, { castShadow: false });
+          });
+          return;
+        }
         addElementCylinder(group, w * 0.28, h * 0.18, -d * 0.38, Math.min(w, d) * 0.025, h * 0.62, metal, 0.9, { metalness: 0.35 });
         addElementSphere(group, w * 0.28, h * 0.86, -d * 0.3, Math.min(w, d) * 0.07, metal, 0.9, { metalness: 0.35 });
         return;

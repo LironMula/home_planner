@@ -1111,6 +1111,46 @@ def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
 
 def repair_alt4_living_floor(plan: dict, design: Design) -> None:
     living_id = f"{design.key}-living"
+    # This short vertical trace is the front edge of an exploded wardrobe,
+    # not a room-height partition. Leaving it as a wall blocks the walk-in's
+    # dimensioned 0.90 m aisle.
+    plan["walls"] = [
+        wall for wall in plan["walls"]
+        if not (
+            wall.get("floorId") == living_id
+            and wall.get("name") in {"CAD wall 18", "CAD wall 30"}
+        )
+    ]
+    plan["walls"].append({
+        "id": f"{living_id}-master-walk-in-entrance-wall",
+        "type": "wall",
+        "floorId": living_id,
+        "name": "Master walk-in closet entrance wall",
+        "x": 6.20,
+        "y": 3.94,
+        "w": 2.59,
+        "h": 0.12,
+        "height": 2.75,
+        "rotation": 0,
+        "color": "#ffffff",
+        "opacity": 1.0,
+        "groupId": f"{living_id}-structure",
+    })
+    plan["walls"].append({
+        "id": f"{living_id}-master-bedroom-artwork-wall",
+        "type": "wall",
+        "floorId": living_id,
+        "name": "Master bedroom waterfall artwork wall",
+        "x": 12.495,
+        "y": 4.63,
+        "w": 2.35,
+        "h": 0.20,
+        "height": 2.75,
+        "rotation": 270,
+        "color": "#ffffff",
+        "opacity": 1.0,
+        "groupId": f"{living_id}-structure",
+    })
     for wall in plan["walls"]:
         if wall.get("floorId") == living_id and not wall.get("context"):
             wall["color"] = "#ffffff"
@@ -1128,13 +1168,18 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         ("Bedroom 2 door", 3.575, 5.102, 0.85, 180, 180),
         ("Living bathroom door", 8.20, 5.102, 0.80, 180, 0),
         ("Master bedroom door", 8.85, 4.575, 1.00, 270, 0),
-        ("Master walk-in closet door", 9.20, 3.652, 1.00, 0, 180),
+        ("Master walk-in closet door", 7.15, 3.995, 1.00, 0, 180),
     ):
         add_alt4_opening(
             plan, design, "living", name, "door",
             x=x, y=y, width=width, height=2.10, rotation=rotation,
             swing=swing, color=cream, opacity=0.94,
         )
+    add_alt4_opening(
+        plan, design, "living", "Master bathroom translucent door", "door",
+        x=11.33, y=5.995, width=0.78, height=2.10, rotation=0,
+        swing=180, color="#ffffff", opacity=0.50, openingStyle="translucent",
+    )
 
     living_by_name = {
         element.get("name"): element
@@ -1181,28 +1226,70 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         x=7.10, y=7.15, w=1.24, h=0.70, height=2.50,
         rotation=0, color="#a9825f", opacity=0.97,
     )
-    by_name = {element.get("name"): element for element in plan["elements"]}
-    master_bed = by_name.get("Master bedroom bed")
+    master_bed = living_by_name.get("Master bedroom bed")
     if master_bed:
-        master_bed.update({"x": 10.10, "y": 0.85, "w": 2.0, "h": 2.10, "rotation": 0})
-    artwork = by_name.get("Master bedroom waterfall artwork")
+        master_bed.update({"x": 10.10, "y": 0.85, "w": 2.0, "h": 2.10, "rotation": 270})
+    artwork = living_by_name.get("Master bedroom waterfall artwork")
     if artwork:
-        artwork.update({"x": 9.75, "y": 3.58, "w": 2.70, "h": 0.06, "rotation": 0, "elevation": 1.20})
+        # The bed faces east after the saved-site rotation. Keep the wide
+        # waterfall print on the solid wall band beyond the porch window.
+        artwork.update({"x": 12.40, "y": 4.69, "w": 2.20, "h": 0.06, "rotation": 270, "elevation": 1.20})
 
     add_alt4_element(
         plan, design, "living", "Master bedroom neighbor-wall wallpaper", "wallpaper",
         x=9.15, y=0.68, w=4.00, h=0.035, elevation=0.04, height=2.65,
-        rotation=180, color="#e8dfcf", opacity=0.98,
+        rotation=180, color="#eadfd5", opacity=0.98, type1="embracing-leaves",
     )
     add_alt4_element(
-        plan, design, "living", "Master walk-in closet long bank", "open-closet",
-        x=6.925, y=2.025, w=3.25, h=0.60, height=2.30,
+        plan, design, "living", "Master walk-in closet west bank", "open-closet",
+        x=4.85, y=2.10, w=3.25, h=0.45, height=2.68,
         rotation=90, color="#9b7653", opacity=0.96,
     )
     add_alt4_element(
-        plan, design, "living", "Master walk-in closet short bank", "open-closet",
-        x=8.90, y=3.18, w=1.55, h=0.55, height=2.30,
-        rotation=180, color="#9b7653", opacity=0.96,
+        plan, design, "living", "Master walk-in closet east bank", "open-closet",
+        x=6.275, y=2.025, w=3.25, h=0.60, height=2.68,
+        rotation=270, color="#9b7653", opacity=0.96,
+    )
+
+    # The master bathroom is the 2.90 x 1.85 m enclosure at the north-east
+    # corner after the whole-house rotation. The shower occupies the full
+    # west bay; the vanity follows it along the south wall, and the toilet is
+    # immediately east of the entrance facing back toward the shower.
+    master_sink = living_by_name.get("Sink 2")
+    if master_sink:
+        master_sink.update({
+            "name": "Master bathroom drawer vanity",
+            "x": 10.70,
+            "y": 7.42,
+            "w": 1.10,
+            "h": 0.50,
+            "rotation": 0,
+            "type1": "drawer-vanity",
+        })
+    master_mirror = living_by_name.get("Sink 2 mirror")
+    if master_mirror:
+        master_mirror.update({
+            "name": "Master bathroom vanity mirror",
+            "x": 10.70,
+            "y": 7.86,
+            "w": 1.10,
+            "h": 0.08,
+            "rotation": 0,
+        })
+    add_alt4_element(
+        plan, design, "living", "Master bathroom dual shower", "shower",
+        x=9.165, y=6.55, w=1.75, h=0.88, height=2.35,
+        rotation=90, color="#9bd5e5", opacity=0.92, type1="dual-rain",
+    )
+    add_alt4_element(
+        plan, design, "living", "Master bathroom movable glass partition", "sliding-window-opening",
+        x=9.635, y=6.95, w=1.75, h=0.08, elevation=0.08, height=2.12,
+        rotation=90, color="#9bdff0", opacity=0.52, type1="shower-partition",
+    )
+    add_alt4_element(
+        plan, design, "living", "Master bathroom toilet", "toilet",
+        x=11.62, y=6.11, w=0.62, h=0.78, height=0.75,
+        rotation=90, color="#ffffff", opacity=0.98,
     )
 
     plan["openings"] = [
@@ -1446,9 +1533,16 @@ def validate_alt4_plan(plan: dict) -> None:
         "Living lower west window",
         "Master bedroom door",
         "Master walk-in closet door",
-        "Master walk-in closet long bank",
+        "Master walk-in closet west bank",
+        "Master walk-in closet east bank",
         "Master bedroom sliding window to porch",
         "Master bedroom neighbor-wall wallpaper",
+        "Master bathroom translucent door",
+        "Master bathroom dual shower",
+        "Master bathroom movable glass partition",
+        "Master bathroom drawer vanity",
+        "Master bathroom vanity mirror",
+        "Master bathroom toilet",
     }
     present_names = {item.get("name") for item in [*plan["openings"], *plan["elements"]]}
     missing_names = required_names - present_names
@@ -1471,6 +1565,8 @@ def validate_alt4_plan(plan: dict) -> None:
     missing_salon_walls = required_salon_walls - {wall.get("name") for wall in structural_walls}
     if missing_salon_walls:
         raise ValueError(f"Missing salon wall segments: {sorted(missing_salon_walls)}")
+    if "Master bedroom waterfall artwork wall" not in {wall.get("name") for wall in structural_walls}:
+        raise ValueError("Missing solid master-bedroom wall behind the waterfall artwork")
     if by_name.get("Corner sofa 1", {}).get("rotation") != 180:
         raise ValueError("Corner sofa must face the salon after its 180-degree correction")
 
@@ -1571,6 +1667,47 @@ def validate_alt4_plan(plan: dict) -> None:
         raise ValueError("Living bathroom toilet must follow the sink")
     if living_laundry["y"] <= living_bath["y"] + living_bath["h"]:
         raise ValueError("Living bathroom laundry closet must follow the bath")
+
+    master_bed = by_name["Master bedroom bed"]
+    master_art = by_name["Master bedroom waterfall artwork"]
+    master_wallpaper = by_name["Master bedroom neighbor-wall wallpaper"]
+    if master_bed.get("rotation") != 270:
+        raise ValueError("Master bed head must face the walk-in closet and its foot must face outside")
+    if master_art.get("rotation") != 270 or master_art["x"] + master_art["w"] / 2 <= master_bed["x"] + master_bed["w"] / 2:
+        raise ValueError("Master bedroom waterfall artwork must remain on the wall facing the bed")
+    if master_wallpaper.get("type1") != "embracing-leaves":
+        raise ValueError("Master bedroom wallpaper must use the detailed embracing-leaves treatment")
+
+    west_closet = by_name["Master walk-in closet west bank"]
+    east_closet = by_name["Master walk-in closet east bank"]
+    closet_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master walk-in closet door")
+    west_center = west_closet["x"] + west_closet["w"] / 2
+    east_center = east_closet["x"] + east_closet["w"] / 2
+    aisle_width = east_center - west_center - west_closet["h"] / 2 - east_closet["h"] / 2
+    if west_closet["w"] < 3.24 or east_closet["w"] < 3.24:
+        raise ValueError("Master walk-in closet must contain two full 3.25 m banks")
+    if west_closet.get("rotation") != 90 or east_closet.get("rotation") != 270:
+        raise ValueError("Master walk-in closet banks must face each other")
+    if min(west_closet["height"], east_closet["height"]) < 2.65 or abs(aisle_width - 0.90) > 0.03:
+        raise ValueError("Master walk-in closet must be ceiling-height with a 0.90 m aisle")
+    if not west_center < closet_door["x"] < east_center or closet_door.get("color") != "#f3ead7":
+        raise ValueError("Master walk-in closet door must open into the aisle and use the cream finish")
+
+    master_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bathroom translucent door")
+    master_shower = by_name["Master bathroom dual shower"]
+    master_partition = by_name["Master bathroom movable glass partition"]
+    master_vanity = by_name["Master bathroom drawer vanity"]
+    master_toilet = by_name["Master bathroom toilet"]
+    if master_door.get("color") != "#ffffff" or abs(float(master_door.get("opacity", 0)) - 0.50) > 0.01:
+        raise ValueError("Master bathroom door must be 50-percent translucent white")
+    if master_shower.get("type1") != "dual-rain" or master_shower["x"] + master_shower["w"] / 2 >= master_door["x"]:
+        raise ValueError("Master bathroom dual shower must occupy the bay immediately left of the door")
+    if master_partition.get("type1") != "shower-partition" or master_partition.get("rotation") != 90:
+        raise ValueError("Master bathroom shower requires a movable glass water partition")
+    if master_vanity.get("type1") != "drawer-vanity" or master_vanity["x"] <= master_shower["x"]:
+        raise ValueError("Master bathroom drawer vanity must follow the shower along the right side")
+    if master_toilet["x"] + master_toilet["w"] / 2 <= master_door["x"] or master_toilet.get("rotation") != 90:
+        raise ValueError("Master bathroom toilet must be after the door and face the shower")
 
     landscape_kinds = {element.get("elementKind") for element in plan["elements"]}
     missing_landscape = {"grass", "pool", "ninja-set"} - landscape_kinds

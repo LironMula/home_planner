@@ -1,0 +1,4 @@
+interface:
+  display_name: "Home Planner DWG Import"
+  short_description: "Infer and validate architectural DWG layouts"
+  default_prompt: "Use $import-home-planner-dwg to import this architectural DWG into the Home Planner with room-by-room validation."
