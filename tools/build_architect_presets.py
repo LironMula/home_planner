@@ -377,6 +377,7 @@ ALT4_WINDOW_HINTS = {
         (24.23, 11.09, 2.60, "East full-height window"),
         (24.33, 13.54, 0.95, "East window"),
         (11.51, 9.71, 3.85, "Window above kitchen work surface"),
+        (14.89, 9.71, 0.80, "Guest toilet privacy window"),
         (11.11, 14.69, 1.23, "Ground window 5"),
         (8.71, 16.44, 0.60, "South-west window"),
     ),
@@ -423,7 +424,8 @@ def nearest_wall(point, centerlines, maximum_distance: float = 0.9):
 def collect_alt4_windows(design: Design, sheet: Sheet, centerlines) -> list[dict]:
     windows = []
     for index, (x, y, width, name) in enumerate(ALT4_WINDOW_HINTS.get(sheet.key, ()), start=1):
-        snapped = nearest_wall((x, y), centerlines)
+        privacy_window = "privacy" in name.lower()
+        snapped = None if privacy_window else nearest_wall((x, y), centerlines)
         position = snapped[1] if snapped else (x, y)
         rotation = snapped[6] if snapped else 0
         full_height = "full-height" in name.lower() or "picture" in name.lower()
@@ -440,12 +442,37 @@ def collect_alt4_windows(design: Design, sheet: Sheet, centerlines) -> list[dict
             "y": round_number(position[1]),
             "rotation": round_number(rotation, 2),
             "width": width,
-            "height": 2.35 if full_height else 1.2,
-            "sill": 0.15 if full_height else 0.9,
+            "height": 2.35 if full_height else 0.65 if privacy_window else 1.2,
+            "sill": 0.15 if full_height else 1.75 if privacy_window else 0.9,
             "color": "#45a9d8",
             "opacity": 0.62,
         })
     return windows
+
+
+def alt4_window_host_walls(design: Design, sheet: Sheet, windows: list[dict]) -> list[dict]:
+    """Restore wall spans omitted by CAD window gaps so 3D can cut each opening."""
+    walls = []
+    for index, window in enumerate(windows, start=1):
+        thickness = 0.20
+        width = float(window["width"])
+        host_width = 1.10 if "privacy" in window["name"].lower() else width
+        walls.append({
+            "id": f"{design.key}-{sheet.key}-window-host-{index}",
+            "type": "wall",
+            "floorId": f"{design.key}-{sheet.key}",
+            "name": f"{window['name']} wall",
+            "x": round_number(float(window["x"]) - host_width / 2),
+            "y": round_number(float(window["y"]) - thickness / 2),
+            "w": round_number(host_width),
+            "h": thickness,
+            "height": {"basement": 2.23, "ground": 2.79, "living": 2.75, "floor2": 2.05}.get(sheet.key, 2.8),
+            "rotation": window["rotation"],
+            "color": "#ffffff",
+            "opacity": 0.95,
+            "groupId": f"{design.key}-{sheet.key}-structure",
+        })
+    return walls
 
 
 def collect_alt4_doors(modelspace, design: Design, sheet: Sheet, centerlines) -> list[dict]:
@@ -506,8 +533,8 @@ def collect_alt4_doors(modelspace, design: Design, sheet: Sheet, centerlines) ->
             "height": 2.1,
             "sill": 0,
             "swing": 0,
-            "color": "#c87a35",
-            "opacity": 0.82,
+            "color": "#4a2c1b" if exterior else "#f3ead7",
+            "opacity": 0.96 if exterior else 0.9,
         })
     return doors
 
@@ -564,7 +591,7 @@ def collect_alt4_block_elements(modelspace, design: Design, sheet: Sheet) -> lis
             "y": round_number(center[1] - depth / 2),
             "w": round_number(width),
             "h": round_number(depth),
-            "elevation": 0,
+            "elevation": 0.18 if block_name == "BLMLT" else 0,
             "height": height,
             "rotation": round_number((-float(entity.dxf.get("rotation", 0))) % 360, 2),
             "color": color,
@@ -587,6 +614,8 @@ ALT4_MANUAL_ELEMENTS = {
         ("sink", "Guest toilet sink", 14.48, 11.25, 0.65, 0.40, 0.85, "#70b7c8"),
     ),
     "living": (
+        ("bed", "Master bedroom bed", 8.20, 13.75, 3.25, 3.25, 0.75, "#94a3b8"),
+        ("wall-art", "Master bedroom waterfall artwork", 8.50, 17.12, 2.70, 0.08, 1.22, "#ffffff"),
         ("bed", "Bedroom bed 1", 14.27, 8.58, 1.20, 2.00, 0.75, "#94a3b8"),
         ("bed", "Bedroom bed 2", 18.78, 8.59, 1.20, 2.00, 0.75, "#94a3b8"),
         ("closet", "Living floor wardrobe", 8.90, 13.84, 2.58, 0.60, 2.10, "#8b6145"),
@@ -627,8 +656,8 @@ def alt4_manual_openings(design: Design, sheet: Sheet) -> list[dict]:
             "height": height,
             "sill": sill,
             "swing": 0,
-            "color": "#c87a35" if kind == "door" else "#45a9d8",
-            "opacity": 0.82 if kind == "door" else 0.62,
+            "color": "#f3ead7" if kind == "door" else "#45a9d8",
+            "opacity": 0.9 if kind == "door" else 0.62,
         })
     return openings
 
@@ -636,6 +665,7 @@ def alt4_manual_openings(design: Design, sheet: Sheet) -> list[dict]:
 def alt4_manual_elements(design: Design, sheet: Sheet) -> list[dict]:
     elements = []
     for index, (kind, name, x, y, width, depth, height, color) in enumerate(ALT4_MANUAL_ELEMENTS.get(sheet.key, ()), start=1):
+        elevation = 1.25 if kind == "wall-art" else 0
         elements.append({
             "id": f"{design.key}-{sheet.key}-furniture-{index}",
             "type": "element",
@@ -646,13 +676,59 @@ def alt4_manual_elements(design: Design, sheet: Sheet) -> list[dict]:
             "y": y,
             "w": width,
             "h": depth,
-            "elevation": 0,
+            "elevation": elevation,
             "height": height,
             "rotation": 0,
             "color": color,
             "opacity": 0.9,
         })
     return elements
+
+
+def alt4_sink_mirrors(design: Design, sheet: Sheet, centerlines, elements: list[dict]) -> list[dict]:
+    mirrors = []
+    sinks = [
+        element for element in elements
+        if element.get("elementKind") == "sink" and not element.get("name", "").lower().startswith("kitchen sink")
+    ]
+    for index, sink in enumerate(sinks, start=1):
+        sink_center = (sink["x"] + sink["w"] / 2, sink["y"] + sink["h"] / 2)
+        snapped = nearest_wall(sink_center, centerlines, 1.2)
+        if not snapped:
+            continue
+        _, projected, _, _, _, _, wall_angle, _ = snapped
+        toward_sink = (sink_center[0] - projected[0], sink_center[1] - projected[1])
+        distance = math.hypot(*toward_sink)
+        if distance > 1e-6:
+            room_normal = (toward_sink[0] / distance, toward_sink[1] / distance)
+        else:
+            radians = math.radians(wall_angle)
+            room_normal = (math.sin(radians), -math.cos(radians))
+        front_normal = (
+            math.sin(math.radians(wall_angle)),
+            -math.cos(math.radians(wall_angle)),
+        )
+        rotation = wall_angle if front_normal[0] * room_normal[0] + front_normal[1] * room_normal[1] >= 0 else wall_angle + 180
+        center = (projected[0] + room_normal[0] * 0.07, projected[1] + room_normal[1] * 0.07)
+        width = max(0.55, min(1.2, sink["w"] * 1.05))
+        depth = 0.08
+        mirrors.append({
+            "id": f"{design.key}-{sheet.key}-sink-mirror-{index}",
+            "type": "element",
+            "floorId": f"{design.key}-{sheet.key}",
+            "name": f"{sink['name']} mirror",
+            "elementKind": "mirror",
+            "x": round_number(center[0] - width / 2),
+            "y": round_number(center[1] - depth / 2),
+            "w": round_number(width),
+            "h": depth,
+            "elevation": 1.05,
+            "height": 0.8,
+            "rotation": round_number(rotation % 360, 2),
+            "color": "#b9d5df",
+            "opacity": 0.94,
+        })
+    return mirrors
 
 
 def base_site_elements(design: Design, ground_floor_id: str) -> list[dict]:
@@ -795,6 +871,47 @@ def rotate_alt4_house_180(plan: dict) -> None:
                 }.get(item["tilt"], item["tilt"])
 
 
+def close_alt4_main_entrance(plan: dict, design: Design) -> None:
+    ground_id = f"{design.key}-ground"
+    doors = sorted(
+        (
+            opening for opening in plan.get("openings", [])
+            if opening.get("floorId") == ground_id
+            and str(opening.get("name", "")).startswith("Front door")
+        ),
+        key=lambda opening: float(opening["x"]),
+    )
+    if len(doors) != 2:
+        return
+    center = sum(float(door["x"]) for door in doors) / 2
+    nearby_walls = [
+        wall for wall in plan.get("walls", [])
+        if wall.get("floorId") == ground_id
+        and abs(float(wall.get("y", 0)) + float(wall.get("h", 0)) / 2 - float(doors[0]["y"])) < 0.3
+        and abs(float(wall.get("rotation", 0)) % 180) < 2
+    ]
+    left_edges = [
+        float(wall["x"]) + float(wall["w"])
+        for wall in nearby_walls
+        if float(wall["x"]) + float(wall["w"]) <= center
+    ]
+    right_edges = [
+        float(wall["x"])
+        for wall in nearby_walls
+        if float(wall["x"]) >= center
+    ]
+    outer_left = max(left_edges, default=min(float(door["x"]) - float(door["width"]) / 2 for door in doors))
+    outer_right = min(right_edges, default=max(float(door["x"]) + float(door["width"]) / 2 for door in doors))
+    if not 1.2 <= outer_right - outer_left <= 3.0:
+        return
+    leaf_width = (outer_right - outer_left) / 2
+    for index, door in enumerate(doors):
+        door["x"] = round_number(outer_left + leaf_width * (index + 0.5))
+        door["width"] = round_number(leaf_width)
+        door["color"] = "#4a2c1b"
+        door["opacity"] = 0.96
+
+
 def transform_alt4_to_saved_site(
     plan: dict,
     design: Design,
@@ -810,6 +927,7 @@ def transform_alt4_to_saved_site(
                 item["y"] = round_number(item["y"] + dy)
 
     rotate_alt4_house_180(plan)
+    close_alt4_main_entrance(plan, design)
 
     floor_bounds = {
         "basement": (-3.7, 0.1, 16.9, 9.8),
@@ -951,7 +1069,15 @@ def validate_alt4_plan(plan: dict) -> None:
     ):
         raise ValueError("Kitchen sink does not overlap a kitchen work surface")
 
-    required_names = {"Guest toilet door", "Guest toilet", "Guest toilet sink"}
+    required_names = {
+        "Guest toilet door",
+        "Guest toilet",
+        "Guest toilet sink",
+        "Guest toilet sink mirror",
+        "Guest toilet privacy window",
+        "Master bedroom bed",
+        "Master bedroom waterfall artwork",
+    }
     present_names = {item.get("name") for item in [*plan["openings"], *plan["elements"]]}
     missing_names = required_names - present_names
     if missing_names:
@@ -983,12 +1109,15 @@ def build_plan(
 
     for sheet in design.sheets:
         floor_id = f"{design.key}-{sheet.key}"
-        floors.append({
+        floor = {
             "id": floor_id,
             "name": sheet.label,
             "elevation": floor_elevations[sheet.key],
             "color": floor_colors[sheet.key],
-        })
+        }
+        if design.key.startswith("architect-alt-4"):
+            floor["finish"] = "light-gray-granite" if sheet.key == "ground" else "parquet" if sheet.key == "living" else None
+        floors.append(floor)
         boundaries.append({
             "id": f"{floor_id}-boundary",
             "type": "boundary",
@@ -1027,11 +1156,16 @@ def build_plan(
 
         if design.key.startswith("architect-alt-4"):
             floor_openings = collect_alt4_doors(modelspace, design, sheet, centerlines)
-            floor_openings.extend(collect_alt4_windows(design, sheet, centerlines))
+            floor_windows = collect_alt4_windows(design, sheet, centerlines)
+            floor_openings.extend(floor_windows)
             floor_openings.extend(alt4_manual_openings(design, sheet))
+            floor_walls.extend(alt4_window_host_walls(design, sheet, floor_windows))
+            walls.extend(floor_walls[len(centerlines):])
             openings.extend(floor_openings)
-            elements.extend(collect_alt4_block_elements(modelspace, design, sheet))
-            elements.extend(alt4_manual_elements(design, sheet))
+            floor_elements = collect_alt4_block_elements(modelspace, design, sheet)
+            floor_elements.extend(alt4_manual_elements(design, sheet))
+            elements.extend(floor_elements)
+            elements.extend(alt4_sink_mirrors(design, sheet, centerlines, floor_elements))
         else:
             floor_openings = collect_doors(modelspace, design, sheet)
             floor_openings.extend(collect_windows(modelspace, design, sheet))

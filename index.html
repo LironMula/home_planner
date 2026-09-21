@@ -642,6 +642,11 @@
       color: #edf6f8;
       background: #182333;
       border-color: rgba(255, 255, 255, 0.11);
+      gap: 6px;
+      padding-inline: 8px;
+      position: relative;
+      z-index: 30;
+      overflow: visible;
     }
 
     .viewbar .section-title {
@@ -657,8 +662,18 @@
       border-color: rgba(255, 255, 255, 0.16);
     }
 
+    .viewbar .ghost-btn {
+      padding-inline: 9px;
+      white-space: nowrap;
+    }
+
+    .viewbar .toolbar-group {
+      gap: 6px;
+    }
+
     .viewbar select {
-      min-width: 150px;
+      width: 125px;
+      min-width: 110px;
     }
 
     .camera-height-control {
@@ -672,14 +687,98 @@
     }
 
     .camera-height-control input {
-      width: 78px;
+      width: 58px;
       min-height: 36px;
       padding: 7px 8px;
       text-align: right;
     }
 
+    .camera-mode-control {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .camera-mode-btn {
+      width: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      display: inline-grid;
+      place-items: center;
+    }
+
+    .camera-icon {
+      position: relative;
+      width: 19px;
+      height: 13px;
+      border: 2px solid currentColor;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    .camera-icon::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: -5px;
+      width: 7px;
+      height: 4px;
+      border: 2px solid currentColor;
+      border-bottom: 0;
+      border-radius: 2px 2px 0 0;
+      box-sizing: border-box;
+    }
+
+    .camera-icon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 5px;
+      height: 5px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-sizing: border-box;
+    }
+
+    .camera-mode-menu {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 7px);
+      right: 0;
+      width: 210px;
+      padding: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 7px;
+      background: #182333;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+    }
+
+    .camera-mode-menu[hidden] {
+      display: none;
+    }
+
+    .camera-mode-option {
+      width: 100%;
+      padding: 9px 10px;
+      border: 0;
+      border-radius: 5px;
+      color: #dbe6f2;
+      background: transparent;
+      text-align: left;
+      font-weight: 750;
+    }
+
+    .camera-mode-option:hover,
+    .camera-mode-option.active {
+      color: #ffffff;
+      background: #2b4059;
+    }
+
     .viewstage {
       position: relative;
+      z-index: 1;
       min-height: 0;
       overflow: hidden;
     }
@@ -1055,6 +1154,8 @@
                 <option value="closet">Closet</option>
                 <option value="refrigerator">Refrigerator</option>
                 <option value="sliding-window-opening">Sliding window opening</option>
+                <option value="mirror">Mirror</option>
+                <option value="wall-art">Wall art</option>
                 <option value="sink">Sink</option>
                 <option value="oven">Oven</option>
                 <option value="toilet">Toilet</option>
@@ -1166,6 +1267,15 @@
           <select id="viewFloorSelect" title="Choose floor to inspect"></select>
         </div>
         <div class="toolbar-group">
+          <div class="camera-mode-control">
+            <button class="ghost-btn camera-mode-btn" id="cameraModeBtn" type="button" title="Camera mode" aria-label="Choose camera mode" aria-haspopup="menu" aria-expanded="false">
+              <span class="camera-icon" aria-hidden="true"></span>
+            </button>
+            <div class="camera-mode-menu" id="cameraModeMenu" role="menu" hidden>
+              <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="human">Human field of view</button>
+              <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="fixed">Fixed scale</button>
+            </div>
+          </div>
           <label class="camera-height-control" for="cameraHeightInput">
             <span>Height</span>
             <input id="cameraHeightInput" type="number" step="0.1" min="0" max="120" />
@@ -1246,6 +1356,7 @@
       selectedId: null,
       selectedIds: [],
       splitRatio: 0.58,
+      cameraMode: "human",
       controlAutoHide: false,
       controlCollapsed: false,
       controlExpandedWidth: 210,
@@ -1298,6 +1409,8 @@
       closet: { label: "Closet", color: "#6b7280", w: 1.2, h: 0.6, length: 2.1 },
       refrigerator: { label: "Refrigerator", color: "#d8dee8", w: 0.75, h: 0.75, length: 2.0 },
       "sliding-window-opening": { label: "Sliding window opening", color: "#45a9d8", w: 1.8, h: 0.16, length: 1.2, defaultElevation: 0.9 },
+      mirror: { label: "Mirror", color: "#b9d5df", w: 0.8, h: 0.08, length: 0.9, defaultElevation: 1.05, maxHeight: 3 },
+      "wall-art": { label: "Wall art", color: "#ffffff", w: 2.7, h: 0.08, length: 1.22, defaultElevation: 1.25, maxHeight: 3 },
       sink: { label: "Sink", color: "#70b7c8", w: 0.7, h: 0.55, length: 0.85 },
       oven: { label: "Oven", color: "#3f4856", w: 0.7, h: 0.65, length: 0.9 },
       toilet: { label: "Toilet", color: "#e8edf2", w: 0.65, h: 0.8, length: 0.75 },
@@ -1345,6 +1458,10 @@
       camera: null,
       renderer: null,
       root: null,
+      mirrors: [],
+      reflectionAvatar: null,
+      floorTextures: {},
+      artworkTexture: null,
       drag: null,
       orbit: { yaw: 2.39, pitch: -0.62, position: null },
       wheelSteps: [],
@@ -1418,6 +1535,8 @@
       sampleBtn: document.getElementById("sampleBtn"),
       resetCameraBtn: document.getElementById("resetCameraBtn"),
       horizonCameraBtn: document.getElementById("horizonCameraBtn"),
+      cameraModeBtn: document.getElementById("cameraModeBtn"),
+      cameraModeMenu: document.getElementById("cameraModeMenu"),
       cameraHeightInput: document.getElementById("cameraHeightInput"),
       viewFloorSelect: document.getElementById("viewFloorSelect"),
       viewToggles: document.getElementById("viewToggles"),
@@ -1436,6 +1555,7 @@
     const id = prefix => `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
     const round = (value, places = 1) => Number(value.toFixed(places));
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+    const humanHorizontalFov = 100;
     const storageKey = "home-floor-planner-v1";
     const githubPlanConfig = {
       owner: "LironMula",
@@ -1712,8 +1832,7 @@
       if (three.renderer) {
         const tr = threeCanvas.getBoundingClientRect();
         three.renderer.setSize(tr.width, tr.height, false);
-        three.camera.aspect = tr.width / Math.max(1, tr.height);
-        three.camera.updateProjectionMatrix();
+        applyCameraProjection(tr);
       }
 
       draw();
@@ -2707,6 +2826,15 @@
         ctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
+      } else if (element.elementKind === "mirror") {
+        ctx.fillRect(-w / 2, -h / 2, w, h);
+        ctx.strokeRect(-w / 2, -h / 2, w, h);
+        ctx.strokeStyle = colorWithAlpha("#ffffff", 0.9);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.34, 0);
+        ctx.lineTo(w * 0.34, 0);
+        ctx.stroke();
       } else {
         ctx.fillRect(-w / 2, -h / 2, w, h);
         ctx.strokeRect(-w / 2, -h / 2, w, h);
@@ -2717,6 +2845,11 @@
       if (element.elementKind === "pool" || element.elementKind === "round-table") {
         ctx.beginPath();
         ctx.ellipse(0, 0, w * 0.36, h * 0.32, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (element.elementKind === "mirror") {
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.42, -h * 0.18);
+        ctx.lineTo(-w * 0.2, -h * 0.18);
         ctx.stroke();
       } else {
         ctx.beginPath();
@@ -3426,6 +3559,7 @@
         wallHeight: state.wallHeight,
         camera: cameraSnapshot(),
         splitRatio: state.splitRatio,
+        cameraMode: state.cameraMode,
         activeFloorId: state.activeFloorId,
         viewFloor: state.viewFloor,
         view: normalizeViewState(state.view),
@@ -3784,6 +3918,7 @@
       state.scale = saved.scale || state.scale;
       state.wallHeight = saved.wallHeight || state.wallHeight;
       state.splitRatio = clamp(saved.splitRatio || state.splitRatio || 0.58, 0.16, 0.84);
+      state.cameraMode = saved.cameraMode === "fixed" ? "fixed" : "human";
       state.activeFloorId = saved.activeFloorId || saved.floors[0]?.id || state.activeFloorId;
       state.viewFloor = saved.viewFloor || "all";
       state.view = normalizeViewState({ ...state.view, ...(saved.view || {}) });
@@ -3800,6 +3935,7 @@
       if (saved.offset) state.offset = { ...saved.offset };
       els.scaleInput.value = state.scale;
       els.wallInput.value = state.wallHeight;
+      updateCameraModeControl();
       setSelection(saved.selectedIds || [], saved.selectedId || null);
       renderAll();
       if (options.center !== false) centerPlan();
@@ -4391,6 +4527,8 @@
 
       three.root = new THREE.Group();
       three.scene.add(three.root);
+      three.reflectionAvatar = createReflectionAvatar();
+      three.scene.add(three.reflectionAvatar);
       three.isReady = true;
       attach3DControls();
       if (three.pendingCamera) {
@@ -4402,6 +4540,83 @@
       initCameraMarkerWatcher();
       resizeCanvases();
       render3D();
+    }
+
+    function humanVerticalFov(horizontalFov, aspect) {
+      const horizontalRadians = horizontalFov * Math.PI / 180;
+      return 2 * Math.atan(Math.tan(horizontalRadians / 2) / Math.max(0.01, aspect)) * 180 / Math.PI;
+    }
+
+    function fixedCameraBaselineAspect(viewRect) {
+      if (window.innerWidth <= 1180 || !els.app || !els.sidebar) {
+        return viewRect.width / Math.max(1, viewRect.height);
+      }
+      const appWidth = els.app.getBoundingClientRect().width;
+      const sidebarWidth = state.controlAutoHide && state.controlCollapsed
+        ? 42
+        : clamp(state.controlExpandedWidth || els.sidebar.getBoundingClientRect().width || 210, 180, 230);
+      const resizerWidth = els.splitResizer?.getBoundingClientRect().width || 8;
+      const halfSplitWidth = Math.max(320, (appWidth - sidebarWidth - resizerWidth) * 0.5);
+      return halfSplitWidth / Math.max(1, viewRect.height);
+    }
+
+    function applyCameraProjection(viewRect = threeCanvas.getBoundingClientRect()) {
+      if (!three.camera) return;
+      const aspect = viewRect.width / Math.max(1, viewRect.height);
+      const projectionAspect = state.cameraMode === "fixed"
+        ? fixedCameraBaselineAspect(viewRect)
+        : aspect;
+      three.camera.aspect = aspect;
+      three.camera.fov = humanVerticalFov(humanHorizontalFov, projectionAspect);
+      three.camera.updateProjectionMatrix();
+    }
+
+    function closeCameraModeMenu() {
+      if (!els.cameraModeMenu || !els.cameraModeBtn) return;
+      els.cameraModeMenu.hidden = true;
+      els.cameraModeBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function updateCameraModeControl() {
+      if (!els.cameraModeMenu || !els.cameraModeBtn) return;
+      const label = state.cameraMode === "fixed" ? "Fixed scale" : "Human field of view";
+      els.cameraModeBtn.title = `Camera mode: ${label}`;
+      els.cameraModeBtn.setAttribute("aria-label", `Camera mode: ${label}`);
+      els.cameraModeMenu.querySelectorAll("[data-camera-mode]").forEach(option => {
+        const active = option.dataset.cameraMode === state.cameraMode;
+        option.classList.toggle("active", active);
+        option.setAttribute("aria-checked", String(active));
+      });
+    }
+
+    function setCameraMode(mode) {
+      state.cameraMode = mode === "fixed" ? "fixed" : "human";
+      updateCameraModeControl();
+      closeCameraModeMenu();
+      applyCameraProjection();
+      updateCamera();
+    }
+
+    function createReflectionAvatar() {
+      const avatar = new THREE.Group();
+      const clothing = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.78 });
+      const skin = new THREE.MeshStandardMaterial({ color: 0xc98f68, roughness: 0.74 });
+      const trousers = new THREE.MeshStandardMaterial({ color: 0x172033, roughness: 0.84 });
+      const addPart = (geometry, material, x, y, z) => {
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(x, y, z);
+        mesh.castShadow = false;
+        avatar.add(mesh);
+        return mesh;
+      };
+      addPart(new THREE.SphereGeometry(0.12, 18, 12), skin, 0, 1.58, 0);
+      addPart(new THREE.BoxGeometry(0.38, 0.62, 0.2), clothing, 0, 1.14, 0);
+      addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, -0.26, 1.12, 0);
+      addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, 0.26, 1.12, 0);
+      addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, -0.11, 0.43, 0);
+      addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, 0.11, 0.43, 0);
+      avatar.visible = false;
+      return avatar;
     }
 
     function attach3DControls() {
@@ -4504,6 +4719,7 @@
     function moveCameraByKey(key) {
       if (!three.orbit.position) return false;
       const moveStep = 0.35;
+      const verticalStep = 0.25;
       const turnStep = 0.08;
       if (key === "w") three.orbit.position.addScaledVector(cameraForwardVector(), moveStep);
       else if (key === "s") three.orbit.position.addScaledVector(cameraForwardVector(), -moveStep);
@@ -4511,6 +4727,8 @@
       else if (key === "d") three.orbit.yaw -= turnStep;
       else if (key === "q") three.orbit.pitch = clamp(three.orbit.pitch + turnStep, -1.35, 1.35);
       else if (key === "e") three.orbit.pitch = clamp(three.orbit.pitch - turnStep, -1.35, 1.35);
+      else if (key === "z") three.orbit.position.y = clamp(three.orbit.position.y - verticalStep, 0, 120);
+      else if (key === "c") three.orbit.position.y = clamp(three.orbit.position.y + verticalStep, 0, 120);
       else return false;
       updateCamera();
       return true;
@@ -4557,22 +4775,127 @@
       }, 2000);
     }
 
+    function updateMirrorReflections() {
+      if (!three.mirrors.length || !three.reflectionAvatar || !three.orbit.position) return;
+      const avatar = three.reflectionAvatar;
+      avatar.position.set(
+        three.orbit.position.x,
+        three.orbit.position.y - 1.62,
+        three.orbit.position.z
+      );
+      avatar.rotation.y = -three.orbit.yaw;
+      avatar.visible = true;
+      const currentTarget = three.renderer.getRenderTarget();
+      const xrEnabled = three.renderer.xr.enabled;
+      const shadowAutoUpdate = three.renderer.shadowMap.autoUpdate;
+      three.renderer.xr.enabled = false;
+      three.renderer.shadowMap.autoUpdate = false;
+      three.mirrors.forEach(mirror => { mirror.surface.visible = false; });
+      try {
+        three.scene.updateMatrixWorld(true);
+        three.camera.updateMatrixWorld(true);
+        three.mirrors.forEach(renderPlanarMirror);
+      } finally {
+        three.renderer.setRenderTarget(currentTarget);
+        three.renderer.xr.enabled = xrEnabled;
+        three.renderer.shadowMap.autoUpdate = shadowAutoUpdate;
+        avatar.visible = false;
+        three.mirrors.forEach(mirror => { mirror.surface.visible = true; });
+      }
+    }
+
+    function renderPlanarMirror(mirror) {
+      const mirrorPosition = new THREE.Vector3().setFromMatrixPosition(mirror.surface.matrixWorld);
+      const cameraPosition = new THREE.Vector3().setFromMatrixPosition(three.camera.matrixWorld);
+      const rotationMatrix = new THREE.Matrix4().extractRotation(mirror.surface.matrixWorld);
+      const normal = new THREE.Vector3(0, 0, 1).applyMatrix4(rotationMatrix);
+      const view = new THREE.Vector3().subVectors(mirrorPosition, cameraPosition);
+      if (view.dot(normal) > 0) return;
+
+      view.reflect(normal).negate().add(mirrorPosition);
+      const cameraRotation = new THREE.Matrix4().extractRotation(three.camera.matrixWorld);
+      const lookAtPosition = new THREE.Vector3(0, 0, -1)
+        .applyMatrix4(cameraRotation)
+        .add(cameraPosition);
+      const target = new THREE.Vector3()
+        .subVectors(mirrorPosition, lookAtPosition)
+        .reflect(normal)
+        .negate()
+        .add(mirrorPosition);
+
+      const virtualCamera = mirror.camera;
+      virtualCamera.position.copy(view);
+      virtualCamera.up.set(0, 1, 0).applyMatrix4(cameraRotation).reflect(normal);
+      virtualCamera.lookAt(target);
+      virtualCamera.near = three.camera.near;
+      virtualCamera.far = three.camera.far;
+      virtualCamera.projectionMatrix.copy(three.camera.projectionMatrix);
+      virtualCamera.updateMatrixWorld(true);
+      virtualCamera.matrixWorldInverse.copy(virtualCamera.matrixWorld).invert();
+
+      mirror.textureMatrix.set(
+        0.5, 0, 0, 0.5,
+        0, 0.5, 0, 0.5,
+        0, 0, 0.5, 0.5,
+        0, 0, 0, 1
+      );
+      mirror.textureMatrix
+        .multiply(virtualCamera.projectionMatrix)
+        .multiply(virtualCamera.matrixWorldInverse);
+
+      const clipPlane = new THREE.Plane()
+        .setFromNormalAndCoplanarPoint(normal, mirrorPosition)
+        .applyMatrix4(virtualCamera.matrixWorldInverse);
+      const projection = virtualCamera.projectionMatrix;
+      const elements = projection.elements;
+      const q = new THREE.Vector4(
+        (Math.sign(clipPlane.normal.x) + elements[8]) / elements[0],
+        (Math.sign(clipPlane.normal.y) + elements[9]) / elements[5],
+        -1,
+        (1 + elements[10]) / elements[14]
+      );
+      const clip = new THREE.Vector4(
+        clipPlane.normal.x,
+        clipPlane.normal.y,
+        clipPlane.normal.z,
+        clipPlane.constant
+      ).multiplyScalar(2 / new THREE.Vector4(
+        clipPlane.normal.x,
+        clipPlane.normal.y,
+        clipPlane.normal.z,
+        clipPlane.constant
+      ).dot(q));
+      elements[2] = clip.x;
+      elements[6] = clip.y;
+      elements[10] = clip.z + 1 - 0.001;
+      elements[14] = clip.w;
+
+      three.renderer.setRenderTarget(mirror.renderTarget);
+      three.renderer.state.buffers.depth.setMask(true);
+      three.renderer.clear();
+      three.renderer.render(three.scene, virtualCamera);
+    }
+
     function updateCamera() {
       if (!three.camera || !three.orbit.position) return;
       const target = three.orbit.position.clone().add(cameraForwardVector());
       three.camera.position.copy(three.orbit.position);
       three.camera.lookAt(target);
       updateCameraHeightControl();
+      updateMirrorReflections();
       three.renderer.render(three.scene, three.camera);
       draw();
     }
 
     function clear3D() {
       if (!three.root) return;
+      three.mirrors.forEach(mirror => mirror.renderTarget.dispose());
+      three.mirrors = [];
       while (three.root.children.length) {
         const child = three.root.children.pop();
         child.traverse(obj => {
           if (obj.geometry) obj.geometry.dispose();
+          (obj.userData.disposableTextures || []).forEach(texture => texture.dispose());
           if (obj.material) {
             if (Array.isArray(obj.material)) obj.material.forEach(mat => mat.dispose());
             else obj.material.dispose();
@@ -4649,10 +4972,19 @@
 
       if (viewVisible("floor")) {
         const floorHoles = stairHolesForSlab(room, floor, true);
-        addSlabPieces3D(room, yBase, 0.08, colorToHex(itemColor(room)), opacityForView(itemOpacity(room), "floor"), floorHoles, true);
-        if (!isSpace) {
+        addSlabPieces3D(
+          room,
+          yBase,
+          0.08,
+          colorToHex(itemColor(room)),
+          opacityForView(itemOpacity(room), "floor"),
+          floorHoles,
+          true,
+          floor.finish
+        );
+        if (!isSpace && cameraIsInsideFloor(floor)) {
           const upperSlabHoles = stairHolesForSlab(room, floor, false);
-          addSlabPieces3D(room, yBase + wallH, 0.06, 0xdfe7ef, opacityForView(0.28, "floor"), upperSlabHoles, false);
+          addSlabPieces3D(room, yBase + wallH, 0.06, 0xf3f4f6, opacityForView(0.97, "floor"), upperSlabHoles, false);
         }
       }
 
@@ -4683,7 +5015,7 @@
         .filter(hole => hole.w > 0.05 && hole.h > 0.05);
     }
 
-    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true) {
+    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null) {
       let pieces = [{ x: room.x, y: room.y, w: room.w, h: room.h }];
       holes.forEach(hole => {
         pieces = pieces.flatMap(piece => subtractRect(piece, hole));
@@ -4691,10 +5023,83 @@
       pieces.forEach(piece => {
         if (piece.w <= 0.04 || piece.h <= 0.04) return;
         const mesh = makeBox(piece.w, thickness, piece.h, color, opacity);
+        applyFloorFinish(mesh, finish, piece.w, piece.h);
         mesh.position.set(piece.x + piece.w / 2, y, piece.y + piece.h / 2);
         mesh.receiveShadow = receiveShadow;
         three.root.add(mesh);
       });
+    }
+
+    function floorTexture(finish) {
+      if (!finish) return null;
+      if (three.floorTextures[finish]) return three.floorTextures[finish];
+      const textureCanvas = document.createElement("canvas");
+      textureCanvas.width = 256;
+      textureCanvas.height = 256;
+      const textureContext = textureCanvas.getContext("2d");
+      if (finish === "parquet") {
+        textureContext.fillStyle = "#9b6a3f";
+        textureContext.fillRect(0, 0, 256, 256);
+        const plankHeight = 32;
+        for (let row = 0; row < 8; row += 1) {
+          const offset = row % 2 ? -64 : 0;
+          for (let x = offset; x < 256; x += 128) {
+            const lightness = 39 + ((row * 17 + x) % 9);
+            textureContext.fillStyle = `hsl(28 42% ${lightness}%)`;
+            textureContext.fillRect(x + 1, row * plankHeight + 1, 126, plankHeight - 2);
+            textureContext.strokeStyle = "rgba(67, 39, 22, 0.26)";
+            textureContext.strokeRect(x + 1, row * plankHeight + 1, 126, plankHeight - 2);
+            textureContext.strokeStyle = "rgba(255, 235, 205, 0.12)";
+            textureContext.beginPath();
+            textureContext.moveTo(x + 10, row * plankHeight + 10);
+            textureContext.bezierCurveTo(x + 42, row * plankHeight + 6, x + 84, row * plankHeight + 15, x + 118, row * plankHeight + 9);
+            textureContext.stroke();
+          }
+        }
+      } else {
+        textureContext.fillStyle = "#d8d6d1";
+        textureContext.fillRect(0, 0, 256, 256);
+        let seed = 9173;
+        for (let index = 0; index < 720; index += 1) {
+          seed = (seed * 16807) % 2147483647;
+          const x = seed % 256;
+          seed = (seed * 16807) % 2147483647;
+          const y = seed % 256;
+          const shade = 125 + (seed % 90);
+          textureContext.fillStyle = `rgba(${shade}, ${shade}, ${shade}, 0.18)`;
+          textureContext.fillRect(x, y, index % 7 === 0 ? 2 : 1, 1);
+        }
+        textureContext.strokeStyle = "rgba(110, 113, 116, 0.16)";
+        textureContext.lineWidth = 1.2;
+        textureContext.beginPath();
+        textureContext.moveTo(-10, 72);
+        textureContext.bezierCurveTo(65, 45, 145, 110, 270, 82);
+        textureContext.moveTo(30, 210);
+        textureContext.bezierCurveTo(98, 172, 158, 230, 260, 196);
+        textureContext.stroke();
+      }
+      const texture = new THREE.CanvasTexture(textureCanvas);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.encoding = THREE.sRGBEncoding;
+      three.floorTextures[finish] = texture;
+      return texture;
+    }
+
+    function applyFloorFinish(mesh, finish, width, depth) {
+      const source = floorTexture(finish);
+      if (!source) return;
+      const texture = source.clone();
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      const unit = finish === "parquet" ? 1.2 : 1.8;
+      texture.repeat.set(Math.max(1, width / unit), Math.max(1, depth / unit));
+      texture.needsUpdate = true;
+      mesh.material.map = texture;
+      mesh.material.color.set(0xffffff);
+      mesh.material.roughness = finish === "parquet" ? 0.58 : 0.42;
+      mesh.material.needsUpdate = true;
+      mesh.userData.disposableTextures = [texture];
     }
 
     function subtractRect(rect, cut) {
@@ -5036,6 +5441,9 @@
         mesh.position.set(0, y, 0);
         group.add(mesh);
         if (opening.type === "door") {
+          if (/^(front door|main entrance)/i.test(opening.name || "")) {
+            addEntranceDoorHandles3D(group, opening, floor, depth, openingOpacity);
+          }
           const marker = new THREE.Mesh(
             new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
             new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
@@ -5071,6 +5479,39 @@
         if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
         three.root.add(marker);
       }
+    }
+
+    function cameraIsInsideFloor(floor) {
+      if (!three.orbit.position) return false;
+      const height = Number(floor.height) || state.wallHeight;
+      return three.orbit.position.y > floor.elevation + 0.08
+        && three.orbit.position.y < floor.elevation + height - 0.05;
+    }
+
+    function addEntranceDoorHandles3D(group, opening, floor, depth, opacity) {
+      const handleColor = 0xb9a16b;
+      const latchX = -(Number(opening.width) || 0.9) * 0.34;
+      const handleY = floor.elevation + Math.min(1.05, opening.height * 0.52);
+      [-1, 1].forEach(side => {
+        const spindle = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.032, 0.032, depth * 1.55, 14),
+          new THREE.MeshStandardMaterial({
+            color: handleColor,
+            roughness: 0.34,
+            metalness: 0.58,
+            transparent: opacity < 1,
+            opacity
+          })
+        );
+        spindle.position.set(latchX, handleY, side * depth * 0.18);
+        spindle.rotation.x = Math.PI / 2;
+        spindle.castShadow = true;
+        group.add(spindle);
+
+        const lever = makeBox(0.17, 0.035, 0.035, handleColor, opacity);
+        lever.position.set(latchX + 0.065, handleY, side * depth * 0.88);
+        group.add(lever);
+      });
     }
 
     function addElement3D(element, floor) {
@@ -5139,6 +5580,20 @@
       return mesh;
     }
 
+    function masterBedroomArtworkTexture() {
+      if (three.artworkTexture) return three.artworkTexture;
+      const loader = new THREE.TextureLoader();
+      three.artworkTexture = loader.load(
+        "assets/master-bedroom-waterfall.png",
+        texture => {
+          texture.encoding = THREE.sRGBEncoding;
+          if (three.isReady) updateCamera();
+        }
+      );
+      three.artworkTexture.encoding = THREE.sRGBEncoding;
+      return three.artworkTexture;
+    }
+
     function drawElementShape(group, kind, dims, color, opacity) {
       const accent = 0x263445;
       const pale = 0xe8edf2;
@@ -5149,6 +5604,88 @@
       const w = dims.w;
       const d = dims.d;
       const h = dims.h;
+
+      if (kind === "mirror") {
+        const frame = Math.max(0.025, Math.min(w, h) * 0.045);
+        const frameDepth = Math.max(0.04, d);
+        const renderTarget = new THREE.WebGLRenderTarget(512, 512, {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBAFormat,
+          depthBuffer: true
+        });
+        const textureMatrix = new THREE.Matrix4();
+        const mirrorMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            tDiffuse: { value: renderTarget.texture },
+            textureMatrix: { value: textureMatrix },
+            tint: { value: new THREE.Color(color) },
+            mirrorOpacity: { value: opacity }
+          },
+          vertexShader: [
+            "uniform mat4 textureMatrix;",
+            "varying vec4 vMirrorCoord;",
+            "void main() {",
+            "  vec4 worldPosition = modelMatrix * vec4(position, 1.0);",
+            "  vMirrorCoord = textureMatrix * worldPosition;",
+            "  gl_Position = projectionMatrix * viewMatrix * worldPosition;",
+            "}"
+          ].join("\n"),
+          fragmentShader: [
+            "uniform sampler2D tDiffuse;",
+            "uniform vec3 tint;",
+            "uniform float mirrorOpacity;",
+            "varying vec4 vMirrorCoord;",
+            "void main() {",
+            "  vec4 reflected = texture2DProj(tDiffuse, vMirrorCoord);",
+            "  vec3 color = mix(reflected.rgb, tint, 0.05);",
+            "  gl_FragColor = vec4(color, mirrorOpacity);",
+            "}"
+          ].join("\n"),
+          transparent: opacity < 1,
+          side: THREE.FrontSide
+        });
+        const surface = new THREE.Mesh(
+          new THREE.PlaneGeometry(Math.max(0.1, w - frame * 2.4), Math.max(0.1, h - frame * 2.4)),
+          mirrorMaterial
+        );
+        surface.position.set(0, h / 2, -frameDepth / 2 - 0.006);
+        surface.rotation.y = Math.PI;
+        surface.castShadow = false;
+        group.add(surface);
+
+        addElementBox(group, 0, 0, 0, w, frame, frameDepth, 0x334155, Math.min(1, opacity + 0.06));
+        addElementBox(group, 0, h - frame, 0, w, frame, frameDepth, 0x334155, Math.min(1, opacity + 0.06));
+        addElementBox(group, -w / 2 + frame / 2, frame, 0, frame, h - frame * 2, frameDepth, 0x334155, Math.min(1, opacity + 0.06));
+        addElementBox(group, w / 2 - frame / 2, frame, 0, frame, h - frame * 2, frameDepth, 0x334155, Math.min(1, opacity + 0.06));
+        addElementBox(group, 0, frame, frameDepth * 0.3, w - frame * 2, h - frame * 2, Math.max(0.018, frameDepth * 0.18), 0x64748b, 0.82, { castShadow: false });
+
+        const mirrorCamera = new THREE.PerspectiveCamera();
+        three.mirrors.push({ surface, camera: mirrorCamera, renderTarget, textureMatrix });
+        return;
+      }
+
+      if (kind === "wall-art") {
+        const frame = Math.max(0.035, Math.min(w, h) * 0.045);
+        const frameDepth = Math.max(0.05, d);
+        addElementBox(group, 0, 0, 0, w, frame, frameDepth, wood, opacity);
+        addElementBox(group, 0, h - frame, 0, w, frame, frameDepth, wood, opacity);
+        addElementBox(group, -w / 2 + frame / 2, frame, 0, frame, h - frame * 2, frameDepth, wood, opacity);
+        addElementBox(group, w / 2 - frame / 2, frame, 0, frame, h - frame * 2, frameDepth, wood, opacity);
+        const artwork = new THREE.Mesh(
+          new THREE.PlaneGeometry(Math.max(0.1, w - frame * 2.4), Math.max(0.1, h - frame * 2.4)),
+          new THREE.MeshBasicMaterial({
+            map: masterBedroomArtworkTexture(),
+            color: 0xffffff,
+            side: THREE.FrontSide
+          })
+        );
+        artwork.position.set(0, h / 2, -frameDepth / 2 - 0.006);
+        artwork.rotation.y = Math.PI;
+        artwork.castShadow = false;
+        group.add(artwork);
+        return;
+      }
 
       if (kind === "grass") {
         addElementBox(group, 0, 0, 0, w, Math.max(0.025, h), d, color, opacity, { roughness: 0.92, castShadow: false });
@@ -5526,7 +6063,7 @@
       }
 
       if (kind === "sink") {
-        addElementBox(group, 0, 0, 0, w, h * 0.72, d, color, opacity);
+        addElementBox(group, 0, 0, 0, w, h * 0.72, d, 0xa66f45, opacity);
         addElementBox(group, 0, h * 0.74, 0, w * 0.72, h * 0.08, d * 0.58, pale, 0.95);
         addElementBox(group, 0, h * 0.82, 0, w * 0.52, h * 0.04, d * 0.38, water, 0.58);
         addElementCylinder(group, 0, h * 0.84, -d * 0.25, Math.min(w, d) * 0.035, h * 0.18, metal, 0.92, { metalness: 0.35 });
@@ -6315,6 +6852,19 @@
     els.sampleBtn.addEventListener("click", loadSample);
     els.horizonCameraBtn.addEventListener("click", setCameraHorizon);
     els.resetCameraBtn.addEventListener("click", resetCamera);
+    els.cameraModeBtn.addEventListener("click", event => {
+      event.stopPropagation();
+      const opening = els.cameraModeMenu.hidden;
+      els.cameraModeMenu.hidden = !opening;
+      els.cameraModeBtn.setAttribute("aria-expanded", String(opening));
+    });
+    els.cameraModeMenu.addEventListener("click", event => {
+      const option = event.target.closest("[data-camera-mode]");
+      if (option) setCameraMode(option.dataset.cameraMode);
+    });
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".camera-mode-control")) closeCameraModeMenu();
+    });
     els.cameraHeightInput.addEventListener("change", applyCameraHeightInput);
     els.cameraHeightInput.addEventListener("keydown", event => {
       if (event.key === "Enter") applyCameraHeightInput();
@@ -6356,7 +6906,7 @@
     attachControlAutoHide();
     window.addEventListener("keydown", event => {
       const active = document.activeElement;
-      if (["w", "a", "s", "d", "q", "e"].includes(event.key.toLowerCase())) {
+      if (!event.ctrlKey && !event.metaKey && ["w", "a", "s", "d", "q", "e", "z", "c"].includes(event.key.toLowerCase())) {
         if (active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName)) return;
         if (moveCameraByKey(event.key.toLowerCase())) event.preventDefault();
         return;
@@ -6382,11 +6932,13 @@
         deleteSelected();
       }
       if (event.key === "Escape") {
+        closeCameraModeMenu();
         setTool("select");
         state.drag = null;
       }
     });
 
+    updateCameraModeControl();
     if (!loadSavedPlan()) loadSample(false);
     init3D();
   </script>
