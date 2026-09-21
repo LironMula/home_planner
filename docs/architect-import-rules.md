@@ -48,6 +48,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 ## QA
 
 - Check every window center against its intended wall and verify its 3D cutout.
+- For rotated host walls, project the window, snap target, wall cutout, and rendered pane through the same wall-local transform; never position the pane from the wall's unrotated bounding box. If more than one nearby wall fragment qualifies, render against the host whose projected center is closest to the saved opening center.
 - Check door centers against wall gaps and verify swing direction after rotation.
 - Check counters touch walls, sinks overlap counters, and sanitary fixtures remain inside their rooms.
 - Check every repeated cabinet run for complete length, inward-facing fronts, panel divisions, and visible handles.

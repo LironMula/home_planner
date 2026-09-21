@@ -2501,8 +2501,15 @@
         const horizontal = wall.w >= wall.h;
         const length = horizontal ? wall.w : wall.h;
         const thickness = horizontal ? wall.h : wall.w;
-        const along = horizontal ? point.x - wall.x : point.y - wall.y;
-        const across = horizontal ? point.y - (wall.y + wall.h / 2) : point.x - (wall.x + wall.w / 2);
+        const rotation = (Number(wall.rotation) || 0) * Math.PI / 180;
+        const cx = wall.x + wall.w / 2;
+        const cy = wall.y + wall.h / 2;
+        const dx = point.x - cx;
+        const dy = point.y - cy;
+        const localX = dx * Math.cos(rotation) + dy * Math.sin(rotation);
+        const localY = -dx * Math.sin(rotation) + dy * Math.cos(rotation);
+        const along = horizontal ? localX + wall.w / 2 : localY + wall.h / 2;
+        const across = horizontal ? localY : localX;
         const insideAlong = along >= 0 && along <= length;
         const dist = Math.abs(across);
         if (!insideAlong || dist > Math.max(edgeSnapMeters, thickness / 2 + 0.12)) return;
@@ -2533,9 +2540,18 @@
           };
         }
         const horizontal = wall.w >= wall.h;
-        return horizontal
-          ? { x: wall.x + wall.w * opening.t, y: wall.y + wall.h / 2, angle: 0, room: null, wall }
-          : { x: wall.x + wall.w / 2, y: wall.y + wall.h * opening.t, angle: Math.PI / 2, room: null, wall };
+        const rotation = (Number(wall.rotation) || 0) * Math.PI / 180;
+        const cx = wall.x + wall.w / 2;
+        const cy = wall.y + wall.h / 2;
+        const localX = horizontal ? -wall.w / 2 + wall.w * opening.t : 0;
+        const localY = horizontal ? 0 : -wall.h / 2 + wall.h * opening.t;
+        return {
+          x: cx + localX * Math.cos(rotation) - localY * Math.sin(rotation),
+          y: cy + localX * Math.sin(rotation) + localY * Math.cos(rotation),
+          angle: rotation + (horizontal ? 0 : Math.PI / 2),
+          room: null,
+          wall
+        };
       }
       if (!room) {
         return {
@@ -5253,17 +5269,35 @@
           roomOpeningLists.set(room.id, roomOpenings);
         });
         const wallOpeningVisuals = [];
+        const wallOpeningCandidates = new Map();
         const wallGapLists = new Map();
         walls.forEach(wall => {
           const gaps = customWallOpeningGaps(wall, wallCutouts);
           gaps.forEach(gap => {
-            if (gap.opening.sourceId && !gap.opening.gapOnly && !renderedAsHosted.has(gap.opening.sourceId)) {
-              renderedAsHosted.add(gap.opening.sourceId);
-              const sourceOpening = openings.find(opening => opening.id === gap.opening.sourceId);
-              wallOpeningVisuals.push(Number(wall.rotation) ? sourceOpening || gap.opening : gap.opening);
-            }
+            if (!gap.opening.sourceId || gap.opening.gapOnly) return;
+            const candidates = wallOpeningCandidates.get(gap.opening.sourceId) || [];
+            candidates.push(gap.opening);
+            wallOpeningCandidates.set(gap.opening.sourceId, candidates);
           });
           wallGapLists.set(wall.id, gaps);
+        });
+        wallOpeningCandidates.forEach((candidates, sourceId) => {
+          if (renderedAsHosted.has(sourceId)) return;
+          const sourceOpening = openings.find(opening => opening.id === sourceId);
+          if (!sourceOpening) return;
+          const sourcePosition = openingPosition(sourceOpening);
+          const bestHost = candidates
+            .map(opening => {
+              const position = openingPosition(opening);
+              return {
+                opening,
+                distance: Math.hypot(position.x - sourcePosition.x, position.y - sourcePosition.y)
+              };
+            })
+            .sort((a, b) => a.distance - b.distance)[0];
+          if (!bestHost) return;
+          renderedAsHosted.add(sourceId);
+          wallOpeningVisuals.push(bestHost.opening);
         });
         const roofs = state.roofs.filter(roof => roof.floorId === floor.id);
         const isGroundBaseline = Math.abs(Number(floor.elevation) || 0) < 0.001;
@@ -5773,6 +5807,26 @@
       const horizontal = opening.side === "top" || opening.side === "bottom" || opening.side === "wall-h";
       const thick = pos.wall ? (horizontal ? pos.wall.h : pos.wall.w) : 0.18;
       const depth = 0.08;
+      if (pos.wall) {
+        const group = new THREE.Group();
+        group.position.set(pos.x, 0, pos.y);
+        group.rotation.y = -(pos.angle || 0);
+        three.root.add(group);
+        const mesh = makeBox(opening.width, opening.height, depth, color, openingOpacity);
+        mesh.position.set(0, y, 0);
+        group.add(mesh);
+        if (opening.type === "door") {
+          const marker = new THREE.Mesh(
+            new THREE.TorusGeometry(opening.width * 0.5, 0.018, 8, 28, Math.PI / 2),
+            new THREE.MeshBasicMaterial({ color, transparent: openingOpacity < 1, opacity: openingOpacity })
+          );
+          marker.position.set(0, floor.elevation + 0.035, 0);
+          marker.rotation.x = Math.PI / 2;
+          if (Number(opening.swing || 0) === 180) marker.rotation.z += Math.PI;
+          group.add(marker);
+        }
+        return;
+      }
       if (pos.free) {
         const group = new THREE.Group();
         group.position.set(pos.x, 0, pos.y);
