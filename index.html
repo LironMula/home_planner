@@ -4669,6 +4669,10 @@
       const clothing = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.78 });
       const skin = new THREE.MeshStandardMaterial({ color: 0xc98f68, roughness: 0.74 });
       const trousers = new THREE.MeshStandardMaterial({ color: 0x172033, roughness: 0.84 });
+      const hair = new THREE.MeshStandardMaterial({ color: 0x2b211d, roughness: 0.88 });
+      const eyeWhite = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.42 });
+      const pupil = new THREE.MeshStandardMaterial({ color: 0x18212f, roughness: 0.5 });
+      const mouth = new THREE.MeshStandardMaterial({ color: 0x8f3f45, roughness: 0.72 });
       const addPart = (geometry, material, x, y, z) => {
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(x, y, z);
@@ -4677,6 +4681,16 @@
         return mesh;
       };
       addPart(new THREE.SphereGeometry(0.12, 18, 12), skin, 0, 1.58, 0);
+      addPart(new THREE.SphereGeometry(0.126, 20, 10, 0, Math.PI * 2, 0, Math.PI * 0.48), hair, 0, 1.595, -0.004);
+      addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, -0.12, 1.58, 0);
+      addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, 0.12, 1.58, 0);
+      [-0.043, 0.043].forEach(x => {
+        addPart(new THREE.SphereGeometry(0.019, 12, 8), eyeWhite, x, 1.605, 0.108);
+        addPart(new THREE.SphereGeometry(0.009, 10, 7), pupil, x, 1.605, 0.124);
+      });
+      const nose = addPart(new THREE.ConeGeometry(0.016, 0.045, 12), skin, 0, 1.565, 0.13);
+      nose.rotation.x = Math.PI / 2;
+      addPart(new THREE.BoxGeometry(0.058, 0.012, 0.012), mouth, 0, 1.525, 0.111);
       addPart(new THREE.BoxGeometry(0.38, 0.62, 0.2), clothing, 0, 1.14, 0);
       addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, -0.26, 1.12, 0);
       addPart(new THREE.BoxGeometry(0.11, 0.58, 0.11), skin, 0.26, 1.12, 0);
@@ -4850,7 +4864,7 @@
         three.orbit.position.y - 1.62,
         three.orbit.position.z
       );
-      avatar.rotation.y = -three.orbit.yaw;
+      avatar.rotation.y = three.orbit.yaw;
       avatar.visible = true;
       const currentTarget = three.renderer.getRenderTarget();
       const xrEnabled = three.renderer.xr.enabled;
