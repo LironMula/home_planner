@@ -1126,7 +1126,7 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
     for name, x, y, width, rotation, swing in (
         ("Bedroom 1 door", 4.625, 5.102, 0.85, 180, 0),
         ("Bedroom 2 door", 3.575, 5.102, 0.85, 180, 180),
-        ("Master bathroom door", 8.20, 5.102, 0.80, 180, 0),
+        ("Living bathroom door", 8.20, 5.102, 0.80, 180, 0),
         ("Master bedroom door", 8.85, 4.575, 1.00, 270, 0),
         ("Master walk-in closet door", 9.20, 3.652, 1.00, 0, 180),
     ):
@@ -1136,6 +1136,51 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
             swing=swing, color=cream, opacity=0.94,
         )
 
+    living_by_name = {
+        element.get("name"): element
+        for element in plan["elements"]
+        if element.get("floorId") == living_id
+    }
+    living_bath = living_by_name.get("Bath 1")
+    if living_bath:
+        living_bath.update({
+            "name": "Living bathroom bath",
+            "x": 7.12,
+            "y": 5.20,
+            "w": 0.70,
+            "h": 1.70,
+            "rotation": 180,
+        })
+    living_sink = living_by_name.get("Sink 1")
+    if living_sink:
+        living_sink.update({
+            "name": "Living bathroom sink with storage",
+            "x": 7.91,
+            "y": 5.37,
+            "w": 0.62,
+            "h": 0.36,
+            "rotation": 90,
+        })
+    living_mirror = living_by_name.get("Sink 1 mirror")
+    if living_mirror:
+        living_mirror.update({
+            "name": "Living bathroom sink mirror",
+            "x": 8.03,
+            "y": 5.51,
+            "w": 0.63,
+            "h": 0.08,
+            "rotation": 270,
+        })
+    add_alt4_element(
+        plan, design, "living", "Living bathroom toilet", "toilet",
+        x=7.84, y=6.20, w=0.62, h=0.76, height=0.75,
+        rotation=90, color="#ffffff", opacity=0.98,
+    )
+    add_alt4_element(
+        plan, design, "living", "Living bathroom laundry closet", "laundry-closet",
+        x=7.10, y=7.15, w=1.24, h=0.70, height=2.50,
+        rotation=0, color="#a9825f", opacity=0.97,
+    )
     by_name = {element.get("name"): element for element in plan["elements"]}
     master_bed = by_name.get("Master bedroom bed")
     if master_bed:
@@ -1386,6 +1431,12 @@ def validate_alt4_plan(plan: dict) -> None:
         "Bedroom 2 closet",
         "Bedroom 1 study desk",
         "Bedroom 2 study desk",
+        "Living bathroom door",
+        "Living bathroom bath",
+        "Living bathroom sink with storage",
+        "Living bathroom sink mirror",
+        "Living bathroom laundry closet",
+        "Living bathroom toilet",
         "Living north window 1",
         "Living north window 2",
         "Living upper east window",
@@ -1506,6 +1557,20 @@ def validate_alt4_plan(plan: dict) -> None:
     bedroom_doors = [opening for opening in plan["openings"] if opening.get("name") in {"Bedroom 1 door", "Bedroom 2 door"}]
     if len(bedroom_doors) != 2 or any(opening.get("color") != "#f3ead7" for opening in bedroom_doors):
         raise ValueError("Living-floor bedroom doors are incomplete or use the wrong finish")
+
+    living_bathroom_door = next(opening for opening in plan["openings"] if opening.get("name") == "Living bathroom door")
+    living_bath = by_name["Living bathroom bath"]
+    living_sink = by_name["Living bathroom sink with storage"]
+    living_toilet = by_name["Living bathroom toilet"]
+    living_laundry = by_name["Living bathroom laundry closet"]
+    if living_bath["x"] + living_bath["w"] >= living_bathroom_door["x"]:
+        raise ValueError("Living bathroom bath must remain left of its door")
+    if living_sink["x"] + living_sink["w"] / 2 <= living_bathroom_door["x"]:
+        raise ValueError("Living bathroom sink must remain right of its door")
+    if living_toilet["y"] <= living_sink["y"] + living_sink["h"]:
+        raise ValueError("Living bathroom toilet must follow the sink")
+    if living_laundry["y"] <= living_bath["y"] + living_bath["h"]:
+        raise ValueError("Living bathroom laundry closet must follow the bath")
 
     landscape_kinds = {element.get("elementKind") for element in plan["elements"]}
     missing_landscape = {"grass", "pool", "ninja-set"} - landscape_kinds

@@ -37,6 +37,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Preserve the Alt-4 salon perimeter as separate CAD segments: a solid wall behind the corner sofa, a completely open exterior span after the sofa, and the solid east TV wall. Do not reinterpret those cyan wall lines as windows; rotate the corner sofa 180 degrees to face into the salon.
 - Keep separate window records for each yellow opening on the living floor; do not merge adjacent bedroom windows across the wall between their rooms.
 - The master bed is 2.00 x 2.10 m with its head at the neighbor wall. Put botanical wallpaper behind it, the waterfall artwork on the opposing wall, open wardrobe banks inside the walk-in closet, cream doors at both entries, and a sliding window opening toward the porch.
+- Alt-4 living-floor bathroom: keep the entrance at the south edge, bath immediately left of the door, wood-base sink and mirror immediately right, toilet farther along the sink wall, and an open washer/dryer closet with upper storage beyond the bath.
 - Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
 
 ## Site Context

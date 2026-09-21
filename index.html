@@ -1361,6 +1361,7 @@
                 <option value="car">Car</option>
                 <option value="bed">Bed</option>
                 <option value="open-closet">Open closet</option>
+                <option value="laundry-closet">Laundry closet</option>
                 <option value="electric-piano">Electric piano</option>
                 <option value="grass">Grass field</option>
                 <option value="tree">Tree</option>
@@ -1656,6 +1657,7 @@
       car: { label: "Car", color: "#2563eb", w: 4.4, h: 1.9, length: 1.55 },
       bed: { label: "Bed", color: "#94a3b8", w: 2.0, h: 2.1, length: 0.75 },
       "open-closet": { label: "Open closet", color: "#9b7653", w: 2.4, h: 0.6, length: 2.3 },
+      "laundry-closet": { label: "Laundry closet", color: "#a9825f", w: 1.3, h: 0.7, length: 2.5 },
       "electric-piano": { label: "Electric piano", color: "#111827", w: 1.45, h: 0.48, length: 0.95 },
       grass: { label: "Grass field", color: "#4f9d4e", w: 4, h: 3, length: 0.05 },
       tree: { label: "Tree", color: "#3f8f46", w: 1.4, h: 1.4, length: 3.2, maxHeight: 12 },
@@ -6512,6 +6514,39 @@
           }
           addElementBox(group, x, h * 0.52, -d * 0.08, w / bays * 0.55, h * 0.28, d * 0.34, index % 2 ? 0xd6b4a2 : 0x9cb2c8, 0.88);
         }
+        return;
+      }
+
+      if (kind === "laundry-closet") {
+        const frame = Math.max(0.035, Math.min(w, d) * 0.055);
+        const machineGap = Math.max(0.035, w * 0.035);
+        const machineW = Math.max(0.35, (w - frame * 3 - machineGap) / 2);
+        const machineH = Math.min(0.9, h * 0.36);
+        const machineD = d * 0.88;
+        const machineY = frame;
+        const machineZ = -d * 0.03;
+        const leftX = -(machineW + machineGap) / 2;
+        const rightX = (machineW + machineGap) / 2;
+
+        addElementBox(group, 0, 0, d * 0.46, w, h, frame, color, opacity);
+        addElementBox(group, -w * 0.5 + frame / 2, 0, 0, frame, h, d, color, opacity);
+        addElementBox(group, w * 0.5 - frame / 2, 0, 0, frame, h, d, color, opacity);
+        addElementBox(group, 0, h - frame, 0, w, frame, d, color, opacity);
+
+        [leftX, rightX].forEach((x, index) => {
+          addElementBox(group, x, machineY, machineZ, machineW, machineH, machineD, 0xf1f4f6, 0.98, { metalness: 0.08, roughness: 0.38 });
+          addElementBox(group, x, machineY + machineH * 0.82, -d * 0.49, machineW * 0.9, machineH * 0.14, frame, 0xd7dde2, 0.98);
+          addElementCylinder(group, x, machineY + machineH * 0.42, -d * 0.505, machineW * 0.27, frame * 0.8, index ? 0x56606c : 0x31404f, 0.92, { rotateX: Math.PI / 2, segments: 32, metalness: 0.12 });
+          addElementCylinder(group, x + machineW * 0.3, machineY + machineH * 0.87, -d * 0.52, frame * 0.58, frame * 0.55, 0x64748b, 0.98, { rotateX: Math.PI / 2, segments: 18, metalness: 0.42 });
+        });
+
+        const cabinetBase = Math.max(machineY + machineH + h * 0.08, h * 0.62);
+        const cabinetH = Math.max(0.35, h - cabinetBase - frame * 1.4);
+        addElementBox(group, 0, cabinetBase, d * 0.02, w - frame * 2.4, cabinetH, d * 0.84, 0xb58b63, opacity);
+        addElementBox(group, 0, cabinetBase + cabinetH * 0.08, -d * 0.415, frame * 0.55, cabinetH * 0.84, frame, 0x7b5a3d, 0.72, { castShadow: false });
+        [-0.08, 0.08].forEach(x => {
+          addElementBox(group, x, cabinetBase + cabinetH * 0.45, -d * 0.455, frame * 0.55, cabinetH * 0.24, frame, metal, 0.96, { metalness: 0.45 });
+        });
         return;
       }
 
