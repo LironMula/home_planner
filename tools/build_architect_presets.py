@@ -910,6 +910,43 @@ def repair_alt4_ground_kitchen_wall(plan: dict, design: Design) -> None:
     })
 
 
+def repair_alt4_kitchen_dining_window(plan: dict, design: Design) -> None:
+    """Restore the wall and sliding serving window beside outdoor dining."""
+    ground_id = f"{design.key}-ground"
+    wall_name = "Kitchen to outdoor dining window wall"
+    window_name = "Kitchen movable window to outdoor dining"
+    wall_center_x = 12.495
+    wall_bottom = 4.152
+    wall_top = 6.552
+    wall_length = wall_top - wall_bottom
+    wall_thickness = 0.28
+    wall_center_y = (wall_bottom + wall_top) / 2
+
+    plan["walls"] = [wall for wall in plan["walls"] if wall.get("name") != wall_name]
+    plan["openings"] = [opening for opening in plan["openings"] if opening.get("name") != window_name]
+    plan["walls"].append({
+        "id": f"{ground_id}-kitchen-outdoor-dining-window-wall",
+        "type": "wall",
+        "floorId": ground_id,
+        "name": wall_name,
+        "x": round_number(wall_center_x - wall_length / 2),
+        "y": round_number(wall_center_y - wall_thickness / 2),
+        "w": round_number(wall_length),
+        "h": wall_thickness,
+        "height": 2.79,
+        "rotation": 270,
+        "color": "#ffffff",
+        "opacity": 0.95,
+        "groupId": f"{ground_id}-structure",
+    })
+    add_alt4_opening(
+        plan, design, "ground", window_name, "window",
+        x=wall_center_x, y=wall_center_y, width=2.10, height=1.70,
+        sill=0.95, rotation=270, color="#45a9d8", opacity=0.62,
+        openingStyle="sliding",
+    )
+
+
 def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
     ground_id = f"{design.key}-ground"
     for element in plan.get("elements", []):
@@ -1167,6 +1204,7 @@ def transform_alt4_to_saved_site(
 
     rotate_alt4_house_180(plan)
     repair_alt4_ground_kitchen_wall(plan, design)
+    repair_alt4_kitchen_dining_window(plan, design)
     orient_alt4_kitchen_cabinets(plan, design)
     repair_alt4_ground_living_room(plan, design)
     repair_alt4_living_floor(plan, design)
@@ -1240,7 +1278,6 @@ def transform_alt4_to_saved_site(
     chair_specs = (
         (12.25, 3.65, 0), (13.45, 3.65, 0), (14.65, 3.65, 0),
         (12.25, 6.28, 180), (13.45, 6.28, 180), (14.65, 6.28, 180),
-        (12.25, 7.65, 35), (14.10, 7.45, 325), (13.10, 8.55, 180),
     )
     for index, (x, y, rotation) in enumerate(chair_specs, start=1):
         plan["elements"].append({
@@ -1259,24 +1296,6 @@ def transform_alt4_to_saved_site(
             "color": "#647f56",
             "opacity": 0.9,
         })
-    plan["elements"].append({
-        "id": f"{design.key}-garden-lounge-table",
-        "type": "element",
-        "floorId": ground_floor_id,
-        "name": "Garden lounge table",
-        "elementKind": "round-table",
-        "x": 13.05,
-        "y": 7.55,
-        "w": 0.75,
-        "h": 0.75,
-        "elevation": 0,
-        "height": 0.5,
-        "rotation": 0,
-        "color": "#8e765f",
-        "opacity": 0.9,
-    })
-
-
 def planner_wall_segment(wall: dict) -> tuple[tuple[float, float], tuple[float, float]]:
     angle = math.radians(float(wall.get("rotation", 0)))
     center_x = float(wall["x"]) + float(wall["w"]) / 2
@@ -1318,6 +1337,7 @@ def validate_alt4_plan(plan: dict) -> None:
         "Guest toilet sink",
         "Guest toilet sink mirror",
         "Guest toilet privacy window",
+        "Kitchen movable window to outdoor dining",
         "Master bedroom bed",
         "Master bedroom waterfall artwork",
         "Guest bathroom botanical wallpaper",
@@ -1341,6 +1361,15 @@ def validate_alt4_plan(plan: dict) -> None:
     if missing_names:
         raise ValueError(f"Missing Alt 4 guest-WC items: {sorted(missing_names)}")
 
+    ground_floor_id = next(floor["id"] for floor in plan["floors"] if floor["id"].endswith("-ground"))
+    outdoor_tables = [
+        element for element in plan["elements"]
+        if element.get("floorId") == ground_floor_id
+        and element.get("name") in {"Garden dining table", "Garden lounge table"}
+    ]
+    if len(outdoor_tables) != 1 or outdoor_tables[0].get("name") != "Garden dining table":
+        raise ValueError("Outdoor kitchen dining area must contain exactly one table")
+
     slabs = [room for room in plan["rooms"] if str(room.get("id", "")).endswith("-slab")]
     if not slabs or any(not slab.get("structuralSlab") for slab in slabs):
         raise ValueError("Architectural floor slabs must be marked as structural")
@@ -1359,6 +1388,23 @@ def validate_alt4_plan(plan: dict) -> None:
         )[0]
         if distance > 0.14:
             raise ValueError(f"{opening_name} is detached from the recovered exterior wall")
+
+    dining_wall = next(
+        (wall for wall in structural_walls if wall.get("name") == "Kitchen to outdoor dining window wall"),
+        None,
+    )
+    dining_window = next(
+        opening for opening in plan["openings"]
+        if opening.get("name") == "Kitchen movable window to outdoor dining"
+    )
+    if not dining_wall:
+        raise ValueError("Missing kitchen to outdoor dining window wall")
+    distance = project_to_segment(
+        (dining_window["x"], dining_window["y"]),
+        *planner_wall_segment(dining_wall),
+    )[0]
+    if distance > 0.14 or dining_window.get("openingStyle") != "sliding":
+        raise ValueError("Kitchen movable window is detached or not sliding")
 
     if by_name["Kitchen work surface"].get("rotation") != 180:
         raise ValueError("Kitchen work surface cabinet fronts do not face inward")
