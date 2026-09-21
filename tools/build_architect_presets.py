@@ -968,21 +968,34 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
         if element.get("floorId") != ground_id:
             continue
         if element.get("name") == "Kitchen work surface":
-            # The imported site's final orientation puts the room-facing side
-            # opposite local -Z, so turn the cabinet fronts toward the kitchen.
-            element["rotation"] = 180
+            # The renderer places cabinet fronts on local -Z. In the final
+            # site orientation, rotation 0 points those fronts into the room.
+            element.update({
+                "rotation": 0,
+                "color": "#15171a",
+                "type1": "black-navy-gold",
+            })
         elif element.get("name") == "Kitchen work surface return":
             center_x = float(element["x"]) + float(element["w"]) / 2
             center_y = float(element["y"]) + float(element["h"]) / 2
             element["w"], element["h"] = element["h"], element["w"]
             element["x"] = round_number(center_x - float(element["w"]) / 2)
             element["y"] = round_number(center_y - float(element["h"]) / 2)
-            element["rotation"] = 270
+            element.update({
+                "rotation": 270,
+                "color": "#15171a",
+                "type1": "black-navy-gold",
+            })
+        elif element.get("name") == "Kitchen sink 1":
+            # Keep the tap on the wall side so its spout faces the kitchen.
+            element["rotation"] = 180
+        elif element.get("name") == "Kitchen island":
+            element["type1"] = "dark-wood-top"
         elif element.get("name") == "Kitchen storage":
             element.update({
                 "name": "Pantry north closets",
                 "x": 8.08,
-                "y": 3.15,
+                "y": 2.442,
                 "w": 4.15,
                 "h": 0.60,
                 "rotation": 0,
@@ -991,7 +1004,7 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
             element.update({
                 "name": "Pantry south closets",
                 "x": 8.08,
-                "y": 0.59,
+                "y": 0.772,
                 "w": 4.15,
                 "h": 0.60,
                 "rotation": 180,
@@ -1057,6 +1070,11 @@ def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
     for opening in plan["openings"]:
         if opening.get("floorId") == ground_id and opening.get("name") == "East window":
             opening["x"] = -3.105
+        if opening.get("floorId") == ground_id and opening.get("name") in {
+            "Salon entrance corner full-height window",
+            "Salon south full-height window",
+        }:
+            opening["openingStyle"] = "sliding"
 
     # Replace fragmented sill/lintel traces with the actual CAD wall runs while
     # preserving the open exterior corner between the sofa and TV wall.
@@ -1098,6 +1116,16 @@ def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
     for element in plan["elements"]:
         if element.get("floorId") == ground_id and element.get("name") == "Corner sofa 1":
             element["rotation"] = 180
+
+    plan["elements"] = [
+        element for element in plan["elements"]
+        if not (element.get("floorId") == ground_id and element.get("name") == "Salon exterior-wall television")
+    ]
+    add_alt4_element(
+        plan, design, "ground", "Salon exterior-wall television", "television",
+        x=-3.815, y=6.662, w=1.75, h=0.08, elevation=0.95, height=1.02,
+        rotation=90, color="#111827", opacity=1.0, type1="wall-mounted",
+    )
 
     add_alt4_element(
         plan, design, "ground", "Living room rug", "rug",
@@ -1510,6 +1538,7 @@ def validate_alt4_plan(plan: dict) -> None:
         "Kitchen sliding glass door to outdoor dining",
         "Salon entrance corner full-height window",
         "Salon south full-height window",
+        "Salon exterior-wall television",
         "Master bedroom bed",
         "Master bedroom waterfall artwork",
         "Guest bathroom botanical wallpaper",
@@ -1573,6 +1602,22 @@ def validate_alt4_plan(plan: dict) -> None:
         raise ValueError("Missing solid master-bedroom wall behind the waterfall artwork")
     if by_name.get("Corner sofa 1", {}).get("rotation") != 180:
         raise ValueError("Corner sofa must face the salon after its 180-degree correction")
+    salon_openings = {
+        opening.get("name"): opening for opening in plan["openings"]
+        if opening.get("name") in {
+            "Salon entrance corner full-height window",
+            "Salon south full-height window",
+        }
+    }
+    if len(salon_openings) != 2 or any(
+        opening.get("openingStyle") != "sliding" for opening in salon_openings.values()
+    ):
+        raise ValueError("Both salon glazed openings must be movable sliding windows")
+    salon_tv = by_name.get("Salon exterior-wall television", {})
+    if salon_tv.get("elementKind") != "television" or salon_tv.get("rotation") != 90:
+        raise ValueError("Salon television must be wall-mounted on the east exterior wall and face inward")
+    if abs((float(salon_tv.get("x", 0)) + float(salon_tv.get("w", 0)) / 2) - (-2.94)) > 0.03:
+        raise ValueError("Salon television is detached from the east exterior wall")
 
     ground_floor_id = next(floor["id"] for floor in plan["floors"] if floor["id"].endswith("-ground"))
     outdoor_tables = [
@@ -1588,6 +1633,13 @@ def validate_alt4_plan(plan: dict) -> None:
         raise ValueError("Architectural floor slabs must be marked as structural")
     if any(stair.get("color") != "#ffffff" or stair.get("opacity") != 1.0 for stair in plan["stairs"]):
         raise ValueError("Alt 4 staircases must be solid white")
+    if len(plan["stairs"]) != 3 or any(
+        stair.get("shape") != "turned"
+        or stair.get("turn") != "right"
+        or abs(float(stair.get("landing", 0)) - 1.05) > 0.01
+        for stair in plan["stairs"]
+    ):
+        raise ValueError("Alt 4 staircases must preserve their 90-degree podest geometry")
 
     living_slab = next(slab for slab in slabs if slab["floorId"].endswith("-living"))
     flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
@@ -1646,11 +1698,18 @@ def validate_alt4_plan(plan: dict) -> None:
     ):
         raise ValueError("Kitchen sliding glass door must be floor-level, glazed, attached, and sliding")
 
-    if by_name["Kitchen work surface"].get("rotation") != 180:
+    if by_name["Kitchen work surface"].get("rotation") != 0:
         raise ValueError("Kitchen work surface cabinet fronts do not face inward")
+    if by_name["Kitchen sink 1"].get("rotation") != 180:
+        raise ValueError("Kitchen sink tap does not face inward")
     return_surface = by_name["Kitchen work surface return"]
     if return_surface.get("rotation") != 270 or return_surface["w"] <= return_surface["h"]:
         raise ValueError("Kitchen work surface return orientation is invalid")
+    for surface in (by_name["Kitchen work surface"], return_surface):
+        if surface.get("color") != "#15171a" or surface.get("type1") != "black-navy-gold":
+            raise ValueError("Kitchen work surface is missing its 80/10/10 black, navy, and gold finish")
+    if by_name["Kitchen island"].get("type1") != "dark-wood-top":
+        raise ValueError("Kitchen island is missing its dark-wood countertop")
 
     pantry_north = by_name["Pantry north closets"]
     pantry_south = by_name["Pantry south closets"]
@@ -1658,6 +1717,16 @@ def validate_alt4_plan(plan: dict) -> None:
         raise ValueError("Pantry closet banks do not cover the planned wall runs")
     if pantry_north["rotation"] != 0 or pantry_south["rotation"] != 180:
         raise ValueError("Pantry closet fronts do not face into the pantry")
+    pantry_inner_south = 0.772
+    pantry_inner_north = 3.042
+    if (
+        pantry_south["y"] < pantry_inner_south - 0.01
+        or pantry_north["y"] + pantry_north["h"] > pantry_inner_north + 0.01
+    ):
+        raise ValueError("Pantry closet bank extends outside the pantry wall faces")
+    pantry_aisle = pantry_north["y"] - (pantry_south["y"] + pantry_south["h"])
+    if pantry_aisle < 1.0:
+        raise ValueError("Pantry closet banks leave less than 1 m of clear aisle")
 
     if any(wall.get("color") != "#ffffff" or wall.get("opacity") != 1.0 for wall in structural_walls):
         raise ValueError("Architectural walls must be solid white")
@@ -1703,6 +1772,10 @@ def validate_alt4_plan(plan: dict) -> None:
         raise ValueError("Master walk-in closet must be ceiling-height with a 0.90 m aisle")
     if not west_center < closet_door["x"] < east_center or closet_door.get("color") != "#f3ead7":
         raise ValueError("Master walk-in closet door must open into the aisle and use the cream finish")
+    entrance_wall = next(wall for wall in plan["walls"] if wall.get("name") == "Master walk-in closet entrance wall")
+    closet_front_y = min(west_closet["y"] + west_closet["h"] / 2, east_closet["y"] + east_closet["h"] / 2)
+    if abs(closet_front_y - 2.325) > 0.03 or abs(entrance_wall["y"] - 3.94) > 0.03:
+        raise ValueError("Master walk-in closet banks must remain registered to the DWG entry wall")
 
     master_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bathroom translucent door")
     master_shower = by_name["Master bathroom dual shower"]
@@ -1826,7 +1899,7 @@ def build_plan(
                 "y": stair_y,
                 "w": stair_w,
                 "h": stair_h,
-                "shape": "uturn",
+                "shape": "turned" if design.key.startswith("architect-alt-4") else "uturn",
                 "turn": "right",
                 "landing": 1.05,
                 "rotation": 0,

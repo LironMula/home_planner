@@ -176,7 +176,7 @@
       "y": 0.84,
       "w": 2.45,
       "h": 3.25,
-      "shape": "uturn",
+      "shape": "turned",
       "turn": "right",
       "landing": 1.05,
       "rotation": 180.0,
@@ -194,7 +194,7 @@
       "y": 0.54,
       "w": 2.55,
       "h": 3.3,
-      "shape": "uturn",
+      "shape": "turned",
       "turn": "right",
       "landing": 1.05,
       "rotation": 180.0,
@@ -212,7 +212,7 @@
       "y": 0.99,
       "w": 2.35,
       "h": 3.25,
-      "shape": "uturn",
+      "shape": "turned",
       "turn": "right",
       "landing": 1.05,
       "rotation": 180.0,
@@ -2617,7 +2617,8 @@
       "height": 2.35,
       "sill": 0.15,
       "color": "#45a9d8",
-      "opacity": 0.62
+      "opacity": 0.62,
+      "openingStyle": "sliding"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-window-2",
@@ -2707,7 +2708,8 @@
       "height": 2.35,
       "sill": 0.15,
       "color": "#45a9d8",
-      "opacity": 0.62
+      "opacity": 0.62,
+      "openingStyle": "sliding"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-window-7",
@@ -3192,6 +3194,23 @@
       "opacity": 0.82
     },
     {
+      "id": "architect-alt-4-sheet-1-ground-salon-exterior-wall-television",
+      "type": "element",
+      "floorId": "architect-alt-4-sheet-1-ground",
+      "name": "Salon exterior-wall television",
+      "elementKind": "television",
+      "x": -3.815,
+      "y": 6.662,
+      "w": 1.75,
+      "h": 0.08,
+      "elevation": 0.95,
+      "height": 1.02,
+      "rotation": 90,
+      "color": "#111827",
+      "opacity": 1.0,
+      "type1": "wall-mounted"
+    },
+    {
       "id": "architect-alt-4-sheet-1-basement-bed-1",
       "type": "element",
       "floorId": "architect-alt-4-sheet-1-basement",
@@ -3395,7 +3414,7 @@
       "h": 0.49,
       "elevation": 0.18,
       "height": 0.9,
-      "rotation": 0.0,
+      "rotation": 180,
       "color": "#70b7c8",
       "opacity": 0.9
     },
@@ -3843,9 +3862,10 @@
       "h": 0.65,
       "elevation": 0,
       "height": 0.92,
-      "rotation": 180,
-      "color": "#d7d0c2",
-      "opacity": 0.9
+      "rotation": 0,
+      "color": "#15171a",
+      "opacity": 0.9,
+      "type1": "black-navy-gold"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-furniture-2",
@@ -3860,8 +3880,9 @@
       "elevation": 0,
       "height": 0.92,
       "rotation": 270,
-      "color": "#d7d0c2",
-      "opacity": 0.9
+      "color": "#15171a",
+      "opacity": 0.9,
+      "type1": "black-navy-gold"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-furniture-3",
@@ -3877,7 +3898,8 @@
       "height": 0.92,
       "rotation": 180.0,
       "color": "#d6c6ad",
-      "opacity": 0.9
+      "opacity": 0.9,
+      "type1": "dark-wood-top"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-furniture-4",
@@ -3886,7 +3908,7 @@
       "name": "Pantry north closets",
       "elementKind": "closet",
       "x": 8.08,
-      "y": 3.15,
+      "y": 2.442,
       "w": 4.15,
       "h": 0.6,
       "elevation": 0,
@@ -3902,7 +3924,7 @@
       "name": "Pantry south closets",
       "elementKind": "closet",
       "x": 8.08,
-      "y": 0.59,
+      "y": 0.772,
       "w": 4.15,
       "h": 0.6,
       "elevation": 0,

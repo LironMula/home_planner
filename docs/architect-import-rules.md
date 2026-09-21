@@ -26,25 +26,30 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Store house walls as solid `#ffffff`; keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so white walls and ceilings remain visually white under scene lighting.
 - Store Alt-4 stair treads and landings as solid white, using the same architectural-white 3D material and a restrained gray outline for 2D plan legibility.
 - In the Alt-4 CAD source, identify staircases from the complete yellow tread/landing cluster. The outgoing triangle marks the upper end, so ascent runs toward its point. Preserve that direction through the house transform and align the upper endpoint with the next floor's stairwell opening; do not place the stair from a generic preset rectangle alone.
+- Alt-4 staircases are L-shaped: model one 90-degree podest at the yellow landing, never a U-turn. Keep the right-turn orientation and the 1.05 m landing recorded in the source plan, then confirm the outgoing triangle remains at the upper endpoint after the whole-house transform.
 - Fit adjoining roof sections exactly to the structural room footprint beneath them, with no perimeter overhang, gap, or overlap. The Alt-4 barrel roof rises exactly 2.00 m from its base edges to its crown.
 - Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
 - Reconstruct the 2.40 m wall span between the kitchen and outdoor dining area with a centered 2.10 m floor-level sliding glass door. Treat a full-height glazed opening intended for circulation as a door with zero sill, not as a counter-height window.
-- Kitchen base-cabinet handles must face the room. In the final Alt-4 site orientation, use 180 degrees for the long run and 270 degrees for the perpendicular return after swapping its width/depth.
+- Kitchen base-cabinet handles and the sink tap must face the room. In the final Alt-4 site orientation, use 0 degrees for the long run, 180 degrees for the sink/tap, and 270 degrees for the perpendicular return after swapping its width/depth.
+- Finish both kitchen work-surface runs in exact width bands of 80% matte black, 10% dark navy, and 10% brushed gold, using the same distribution on the counter and room-facing cabinet fronts.
+- Use a dark-walnut wood countertop with visible board grain on the kitchen island; keep the island base and seating details unchanged.
 - Treat exploded green furniture linework as semantic objects: distinguish beds, X-marked closets, and desk-plus-chair symbols instead of assigning every rectangle to a generic table.
 - In paired bedrooms, rebuild both sets of bed, closet, study desk, chair, and doorway. A study desk includes a monitor and books; internal doors use the light-cream finish.
-- Pantry storage uses the two complete 4.15 m opposing cabinet runs. Orient both fronts toward the pantry and render one visible handle per door panel.
+- Pantry storage uses the two complete 4.15 m opposing cabinet runs. Keep both 0.60 m deep banks inside the pantry wall faces, with about 1.07 m of clear aisle between them; orient both fronts toward the pantry and render one visible handle per door panel.
 - Keep the two source sofas and coffee table as separate living-room objects, remove duplicate manual sofas, and place a rug beneath the group.
 - Keep one rectangular table and six chairs outside the kitchen; omit the extra round lounge table and its three chairs.
-- Preserve the Alt-4 salon perimeter as separate CAD segments: a solid wall behind the corner sofa, a completely open exterior span after the sofa, and the solid east TV wall. Do not reinterpret those cyan wall lines as windows; rotate the corner sofa 180 degrees to face into the salon.
+- Preserve the Alt-4 salon perimeter as separate CAD segments: a solid wall behind the corner sofa, a completely open exterior span after the sofa, and the solid east TV wall. Do not reinterpret those cyan wall lines as windows; rotate the corner sofa 180 degrees to face into the salon. Mount the television on the east wall facing inward, and model the two genuine full-height salon glazed openings as framed sliding windows.
 - Keep separate window records for each yellow opening on the living floor; do not merge adjacent bedroom windows across the wall between their rooms.
 - The master bed is 2.00 x 2.10 m with its head toward the walk-in closet and its feet toward the exterior. Put the wide waterfall artwork on the wall facing the bed, use a detailed warm wallpaper of leaves and abstract embracing hands on the neighbor wall, and retain the sliding window opening toward the porch.
 - Recover the solid exterior wall band beside the master-bedroom porch window before mounting the waterfall artwork; never leave wall art floating across an unreconstructed opening.
 - Reconstruct the master walk-in closet as two opposing 3.25 m ceiling-height open wardrobe banks, 0.45 m and 0.60 m deep, with a 0.90 m clear aisle. Center its light-cream door on that aisle rather than on the adjacent bedroom wall.
+- Register the master walk-in to its dedicated entrance wall, not to a nearby exploded wardrobe trace: both closet-bank fronts align at the same 2D datum and the centered door must lead directly into the 0.90 m aisle.
 - Do not promote the exploded front edge of either open wardrobe into a structural wall; a false 1.80 m wall trace through the Alt-4 walk-in aisle must be suppressed.
 - Reconstruct the walk-in entrance wall as a continuous host before cutting its centered 1.00 m door opening; do not attach the door to a short neighboring CAD fragment.
 - Alt-4 master bathroom: use the 2.90 x 1.85 m enclosure. Put the full-depth dual rain shower immediately left of the translucent-white entrance, close it with a movable glass splash partition, place the drawer vanity and mirror to its right along the lower wall, and put the toilet after the door facing back toward the shower.
 - Alt-4 living-floor bathroom: keep the entrance at the south edge, bath immediately left of the door, wood-base sink and mirror immediately right, toilet farther along the sink wall, and an open washer/dryer closet with upper storage beyond the bath.
 - Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
+- Render every structural ceiling underside with a dedicated pure-white, unshaded material; the separately modeled floor layer above keeps its floor-specific finish.
 
 ## Site Context
 
