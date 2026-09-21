@@ -3544,7 +3544,7 @@
       "h": 0.65,
       "elevation": 0,
       "height": 0.92,
-      "rotation": 0,
+      "rotation": 180,
       "color": "#d7d0c2",
       "opacity": 0.9
     },
@@ -3560,7 +3560,7 @@
       "h": 0.65,
       "elevation": 0,
       "height": 0.92,
-      "rotation": 90,
+      "rotation": 270,
       "color": "#d7d0c2",
       "opacity": 0.9
     },

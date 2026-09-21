@@ -23,7 +23,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Use light-gray granite on the entrance floor and parquet on the living floor. Render an opaque ceiling only while the camera is inside that floor.
 - Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Outside the house, keep only the ground baseline; while the camera is inside a floor, render that floor and its opaque ceiling.
 - Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
-- Kitchen base-cabinet handles must face the room. Rotate the long run inward and model perpendicular returns with swapped width/depth plus the corresponding quarter turn.
+- Kitchen base-cabinet handles must face the room. In the final Alt-4 site orientation, use 180 degrees for the long run and 270 degrees for the perpendicular return after swapping its width/depth.
 - Treat exploded green furniture linework as semantic objects: distinguish beds, X-marked closets, and desk-plus-chair symbols instead of assigning every rectangle to a generic table.
 - In paired bedrooms, rebuild both sets of bed, closet, study desk, chair, and doorway. A study desk includes a monitor and books; internal doors use the light-cream finish.
 - Pantry storage uses the two complete 4.15 m opposing cabinet runs. Orient both fronts toward the pantry and render one visible handle per door panel.

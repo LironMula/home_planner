@@ -916,16 +916,16 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
         if element.get("floorId") != ground_id:
             continue
         if element.get("name") == "Kitchen work surface":
-            # Cabinet fronts are drawn on local -Z; zero rotation faces them
-            # into the kitchen and away from the exterior wall.
-            element["rotation"] = 0
+            # The imported site's final orientation puts the room-facing side
+            # opposite local -Z, so turn the cabinet fronts toward the kitchen.
+            element["rotation"] = 180
         elif element.get("name") == "Kitchen work surface return":
             center_x = float(element["x"]) + float(element["w"]) / 2
             center_y = float(element["y"]) + float(element["h"]) / 2
             element["w"], element["h"] = element["h"], element["w"]
             element["x"] = round_number(center_x - float(element["w"]) / 2)
             element["y"] = round_number(center_y - float(element["h"]) / 2)
-            element["rotation"] = 90
+            element["rotation"] = 270
         elif element.get("name") == "Kitchen storage":
             element.update({
                 "name": "Pantry north closets",
@@ -1360,10 +1360,10 @@ def validate_alt4_plan(plan: dict) -> None:
         if distance > 0.14:
             raise ValueError(f"{opening_name} is detached from the recovered exterior wall")
 
-    if by_name["Kitchen work surface"].get("rotation") != 0:
+    if by_name["Kitchen work surface"].get("rotation") != 180:
         raise ValueError("Kitchen work surface cabinet fronts do not face inward")
     return_surface = by_name["Kitchen work surface return"]
-    if return_surface.get("rotation") != 90 or return_surface["w"] <= return_surface["h"]:
+    if return_surface.get("rotation") != 270 or return_surface["w"] <= return_surface["h"]:
         raise ValueError("Kitchen work surface return orientation is invalid")
 
     pantry_north = by_name["Pantry north closets"]
