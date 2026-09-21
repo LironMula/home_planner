@@ -24,6 +24,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Use light-gray granite on the entrance floor and parquet on the living floor. Preserve those finishes on the upper face of each floor layer.
 - Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Render every selected story as two separate surfaces: its own colored or finished floor above and an opaque white ceiling below. Both surfaces belong to that story, follow the 3D floor selector, and hide together with the Floor control.
 - Store house walls as solid `#ffffff`; keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so white walls and ceilings remain visually white under scene lighting.
+- Store Alt-4 stair treads and landings as solid white, using the same architectural-white 3D material and a restrained gray outline for 2D plan legibility.
 - Fit adjoining roof sections exactly to the structural room footprint beneath them, with no perimeter overhang, gap, or overlap. The Alt-4 barrel roof rises exactly 2.00 m from its base edges to its crown.
 - Recover the Alt-4 kitchen and guest-WC exterior edge as one continuous wall, then cut the kitchen window and high privacy window from that host wall.
 - Reconstruct the 2.40 m wall span between the kitchen and outdoor dining area with a centered 2.10 m sliding window at counter height.

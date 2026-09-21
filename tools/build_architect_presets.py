@@ -1435,6 +1435,8 @@ def validate_alt4_plan(plan: dict) -> None:
     slabs = [room for room in plan["rooms"] if str(room.get("id", "")).endswith("-slab")]
     if not slabs or any(not slab.get("structuralSlab") for slab in slabs):
         raise ValueError("Architectural floor slabs must be marked as structural")
+    if any(stair.get("color") != "#ffffff" or stair.get("opacity") != 1.0 for stair in plan["stairs"]):
+        raise ValueError("Alt 4 staircases must be solid white")
 
     living_slab = next(slab for slab in slabs if slab["floorId"].endswith("-living"))
     flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
@@ -1617,8 +1619,8 @@ def build_plan(
                 "rotation": 0,
                 "level": 0,
                 "height": 2.75 if design.key.startswith("architect-alt-4") else 2.8,
-                "color": "#6e62cf",
-                "opacity": 0.9,
+                "color": "#ffffff" if design.key.startswith("architect-alt-4") else "#6e62cf",
+                "opacity": 1.0 if design.key.startswith("architect-alt-4") else 0.9,
             })
 
     ground_id = f"{design.key}-ground"

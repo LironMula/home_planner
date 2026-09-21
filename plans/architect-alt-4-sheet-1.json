@@ -182,8 +182,8 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#6e62cf",
-      "opacity": 0.9
+      "color": "#ffffff",
+      "opacity": 1.0
     },
     {
       "id": "architect-alt-4-sheet-1-ground-stairs",
@@ -200,8 +200,8 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#6e62cf",
-      "opacity": 0.9
+      "color": "#ffffff",
+      "opacity": 1.0
     },
     {
       "id": "architect-alt-4-sheet-1-living-stairs",
@@ -218,8 +218,8 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#6e62cf",
-      "opacity": 0.9
+      "color": "#ffffff",
+      "opacity": 1.0
     }
   ],
   "walls": [

@@ -3146,12 +3146,13 @@
       const active = isSelected(stair);
       ctx.save();
       const color = itemColor(stair);
+      const stairLineColor = String(color).toLowerCase() === "#ffffff" ? "#94a3b8" : color;
       const rotation = (Number(stair.rotation) || 0) * Math.PI / 180;
       ctx.translate(p.x + w / 2, p.y + h / 2);
       ctx.rotate(rotation);
       ctx.translate(-w / 2, -h / 2);
       ctx.fillStyle = colorWithAlpha(color, itemOpacity(stair) * 0.28);
-      ctx.strokeStyle = active ? "#5548bb" : color;
+      ctx.strokeStyle = active ? "#5548bb" : stairLineColor;
       ctx.lineWidth = active ? 4 : 2;
 
       const runs = stairPlanRuns(stair);
@@ -3162,7 +3163,7 @@
         ctx.strokeRect(rx, ry, metersToPx(run.w), metersToPx(run.h));
       });
 
-      ctx.strokeStyle = color;
+      ctx.strokeStyle = stairLineColor;
       ctx.lineWidth = 1.5;
       runs.forEach(run => drawStairSteps({ ...run, parentX: stair.x, parentY: stair.y }));
 
@@ -6566,6 +6567,7 @@
         const baseLevel = floor.elevation + (stair.level ?? 0);
         const landingHeight = baseLevel + (progress / Math.max(0.1, totalTravel)) * stairHeight;
         const platform = makeBox(landing.w, 0.1, landing.h, color, opacity);
+        if (color === 0xffffff) applyArchitecturalWhiteMaterial(platform);
         platform.position.set(landing.x + landing.w / 2 - center.x, landingHeight, landing.y + landing.h / 2 - center.z);
         platform.castShadow = true;
         platform.receiveShadow = true;
@@ -6588,6 +6590,7 @@
         const slab = run.dir === "x"
           ? makeBox(stepTravel * 0.9, 0.08, run.h, color, opacity)
           : makeBox(run.w, 0.08, stepTravel * 0.9, color, opacity);
+        if (color === 0xffffff) applyArchitecturalWhiteMaterial(slab);
         slab.position.set(
           (run.dir === "x" ? run.x + stepTravel * stepIndex + stepTravel / 2 : run.x + run.w / 2) - center.x,
           baseLevel + heightAtStep,
