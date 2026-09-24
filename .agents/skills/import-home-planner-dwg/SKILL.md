@@ -17,13 +17,23 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 ## Workflow
 
 1. Inspect the DXF structurally with `ezdxf`: sheets, extents, layers, blocks, text, dimensions, linework, and repeated symbol geometry. Render focused layer and floor crops when semantics remain unclear.
-2. Establish one coordinate contract before extracting objects: source units, sheet crop, Y direction, floor registration, north, site translation, and whole-house rotation. Apply the same transform to centers, rotations, roof directions, and opening hosts. Keep site context outside house-only transforms.
-3. Reconstruct walls and room boundaries first. Recover missing wall spans from collinearity, thickness, endpoints, dimensions, and neighboring floors. Then place openings, fixed fixtures, furniture, finishes, roofs, and site objects in that order.
+2. Establish one coordinate contract before extracting objects: source units, sheet crop, Y direction, floor registration, north, site translation, and whole-house rotation. Apply the same transform to centers, rotations, roof directions, and opening hosts. Keep site context outside house-only transforms. Record whether every manual correction is in source coordinates or final planner coordinates; never apply a final-coordinate repair before the shared transform or a source-coordinate repair after it.
+3. Reconstruct walls and room boundaries first. Recover missing wall spans from collinearity, thickness, endpoints, dimensions, and neighboring floors. Treat exploded linework as evidence, not architecture: a new structural wall requires two supported endpoints and a room-boundary role. It must not be added merely to host a door, join furniture edges, or make a partial drawing look closed. Then place openings, fixed fixtures, furniture, finishes, roofs, and site objects in that order.
 4. Build a floor-scoped room inventory. Identify each object by `(floorId, room, role)`; never resolve generic names such as `Sink 1` globally. Use stable semantic names for deliberate corrections.
 5. Infer symbols as clusters. Combine enclosure, dimensions, nearby fixtures, wall contact, door access, repeated symbols, and room function. Color or layer is supporting evidence, not proof. Decode stair direction from the complete run: in drawings using this convention, yellow tread geometry defines the staircase and its outgoing triangle marks the upper end.
-6. Convert user annotations such as “left of the door,” “after the sink,” or numbered arrows into explicit geometric constraints and generator validations.
-7. Preserve intentional overlap only: sink in counter, mirror on wall, appliance in cabinet. Flag furniture intersections, fixtures crossing walls, detached openings, inaccessible doors, and faces or handles pointing outside the room.
-8. Regenerate every sibling preset derived from the same source and add validations for the newly learned invariant. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
+6. Convert user annotations such as “left of the door,” “after the sink,” or numbered arrows into explicit geometric constraints and generator validations. For every room, trace the path from its entry through its circulation space before accepting its doors, closets, or fixtures.
+7. Preserve intentional overlap only: sink in counter, mirror on wall, appliance in cabinet. Flag furniture intersections, fixtures crossing walls, detached openings, inaccessible doors, and faces or handles pointing outside the room. Check rotated footprints in world coordinates rather than their unrotated JSON boxes.
+8. Reconcile dimensions locally, room by room. Use the written clear span between finished wall faces as the authoritative measurement; do not try to fix a 285 cm room by rescaling a complete floor. Compare at least one horizontal and one vertical dimension for each room cluster before placing furniture.
+9. Regenerate every sibling preset derived from the same source and add validations for the newly learned invariant. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
+
+## Structural Decision Rules
+
+- Build a wall graph before adding semantic repairs. A wall is structural only when it continues a paired-face boundary, reaches verified wall/end points, or is required by a dimensioned room enclosure.
+- Do not use a door swing arc as a wall locator. First identify the wall gap and its two jambs; then infer the leaf, hinge, and swing from the same opening cluster.
+- A door must be attached to a real host wall and its swing must preserve the room's circulation path. A nearby wall fragment is not a valid host when its extension would cut a closet aisle, room, or passage.
+- Keep an explicit `source`/`final` coordinate phase on helper names or comments. Manual final-layout repairs must run after the house transform; source repairs must run before it. Never mix these phases in one coordinate literal.
+- For walk-in closets, prove the whole assembly at once: entry opening, both banks, their inward-facing fronts, written bank depths, and clear aisle. Do not convert wardrobe fronts into partitions or add a second door/divider unless the source has a separate dimensioned wall and gap.
+- When a source DWG cannot be inspected structurally, obtain a DXF conversion or use a rendered source crop with readable dimensions. Mark ambiguous clusters and ask one focused question instead of inventing architecture from a screenshot.
 
 ## Required QA Gates
 
@@ -31,6 +41,9 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 - Verify each stair footprint, run direction, upper end, and landing against the source. The upper end must register with the destination-floor opening or landing after the shared floor transform.
 - Review each room as a complete checklist from its entrance, not object by object.
 - Verify every door/window against its wall gap and its 3D cutout. Rotated walls, snapping, panes, and cutouts must share one wall-local transform; choose the closest valid host when several fragments qualify.
+- For every newly reconstructed wall, verify its endpoints meet the structural graph, it does not cross a room's usable circulation path, and it is not derived solely from furniture, a door arc, or annotation.
+- Compare each room's written dimensions against the generated clear spans after every global transform. Use multiple asymmetric anchors per floor so a mirrored or shifted room cannot pass based on a matching slab alone.
+- Review a suite or bathroom as an ordered route from the entrance. Confirm that each door is necessary, each closet or fixture stays in its source enclosure, and no duplicate entry wall or door has been inferred.
 - Check active/front faces: cabinet handles, desks, toilets, sinks, doors, and appliances must face into the intended room.
 - Run generator validation, JavaScript syntax checks, and `git diff --check`.
 - Use browser screenshots at desktop size: focused 2D room crop, human-height 3D view from the entrance, exterior views where openings matter, and all-floor section view for floors/ceilings/roofs.

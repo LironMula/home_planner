@@ -32,6 +32,15 @@ Test the contract with at least three asymmetric anchors: front entrance, stair 
 
 Transforms apply to object centers and orientation together. After rotating the house, re-evaluate directional properties such as roof tilt and object fronts. Do not rotate copied roads, fences, trees, pools, or neighboring buildings with the house.
 
+### Coordinate-Phase Discipline
+
+Keep source extraction and final-site repairs separate. A coordinate literal is valid in one phase only:
+
+- **Source phase:** before Y inversion, site translation, and house rotation have all completed.
+- **Final phase:** after the complete house transform, in the coordinate system rendered by the planner.
+
+Name helper functions and comments by phase, such as `repair_source_*` and `repair_final_*`. Do not append a final-coordinate wall before the transform or use a source-coordinate measurement after it. A mixed phase can make a correct local measurement appear mirrored, offset, or attached to the wrong room.
+
 ## Room-First Reconstruction
 
 For each floor, make a room inventory before generating objects:
@@ -45,6 +54,8 @@ For each floor, make a room inventory before generating objects:
 - finishes and decorations
 
 Then describe each room from its entrance clockwise. This catches the common failure where all objects exist but occupy the wrong sides.
+
+For a room cluster that includes a closet, bathroom, or stair core, trace an actual walkable route through the drawing. Each transition must have a source-supported wall gap and door where appropriate. Do not accept a repair that creates a new divider or an extra door simply because it makes a local crop look more regular.
 
 Represent instructions as constraints, for example:
 
@@ -73,6 +84,19 @@ Treat exploded symbols as connected or proximal clusters, not independent rectan
 - Cyan linework is not automatically glass or a window. Check whether it continues the wall system, frames an opening, or belongs to annotation.
 
 When a source symbol is absent or too exploded to recover reliably, add one semantic object only after room geometry and repeated examples make its role clear.
+
+## Structural Wall Proof
+
+Before creating a wall that is not a direct paired-face extraction, write down its proof:
+
+1. The two wall endpoints and the existing wall graph nodes they meet.
+2. The written dimension, repeated boundary, or cross-sheet alignment that requires it.
+3. The rooms it separates and the circulation route it preserves.
+4. Any openings hosted by it, with their jambs and clear width.
+
+Reject the proposed wall when its only evidence is a wardrobe front, furniture edge, door swing arc, hatch line, dimension line, or a desire to give a loose opening a host. Reconstruct a continuous host only when the enclosing wall is already established; never create a free-standing divider as a host-of-last-resort.
+
+For a walk-in closet, validate the assembly as one object: entry host, entry opening, two opposing banks, bank depths, front directions, and aisle width. A closet drawn with exploded furniture can look like several short walls. The furniture remains furniture unless it also has the endpoint and enclosure proof above.
 
 ## Identity And Scope
 
@@ -114,6 +138,15 @@ For each room, verify:
 - windows are not accidentally hidden by tall furniture
 
 Rotated footprints must be tested after rotation, not by their unrotated JSON width and height.
+
+## Dimension Reconciliation
+
+Keep a per-room dimension ledger containing the source clear width, clear depth, generated clear width, generated clear depth, and the source references used. Measure between finished wall faces or jambs, not from centerlines, furniture bounds, or annotations.
+
+- Calibrate the floor transform with three asymmetric anchors before using any local dimension as a correction.
+- Correct the smallest affected room cluster. A mismatch in one 285 cm bedroom does not authorize a whole-floor scale change.
+- After a transform or a wall repair, repeat the ledger check for neighboring rooms sharing the altered walls.
+- Treat a repeated mismatch across multiple rooms as a transform, wall-thickness, or wall-local-frame defect and fix that shared rule first.
 
 ## Stair Reconstruction
 

@@ -1190,21 +1190,6 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         "opacity": 1.0,
         "groupId": f"{living_id}-structure",
     })
-    plan["walls"].append({
-        "id": f"{living_id}-master-suite-entry-wall",
-        "type": "wall",
-        "floorId": living_id,
-        "name": "Master suite entry wall",
-        "x": 7.75,
-        "y": 4.515,
-        "w": 2.20,
-        "h": 0.12,
-        "height": 2.75,
-        "rotation": 270,
-        "color": "#fefdfa",
-        "opacity": 1.0,
-        "groupId": f"{living_id}-structure",
-    })
     for wall in plan["walls"]:
         if wall.get("floorId") == living_id and not wall.get("context"):
             wall["color"] = "#fefdfa"
@@ -1221,7 +1206,6 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         ("Bedroom 1 door", 4.625, 5.102, 0.85, 180, 0),
         ("Bedroom 2 door", 3.575, 5.102, 0.85, 180, 180),
         ("Living bathroom door", 8.20, 5.102, 0.80, 180, 0),
-        ("Master bedroom door", 8.85, 4.575, 1.00, 270, 180),
         ("Master walk-in closet door", 7.15, 3.995, 1.00, 0, 180),
     ):
         add_alt4_opening(
@@ -1229,8 +1213,6 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
             x=x, y=y, width=width, height=2.10, rotation=rotation,
             swing=swing, color=cream, opacity=0.94,
         )
-    master_suite_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bedroom door")
-    master_suite_door["hingeSide"] = 1
     add_alt4_opening(
         plan, design, "living", "Master bathroom translucent door", "door",
         x=11.33, y=5.995, width=0.78, height=2.10, rotation=0,
@@ -1592,7 +1574,6 @@ def validate_alt4_plan(plan: dict) -> None:
         "Living north return window",
         "Living west return window",
         "Living lower west window",
-        "Master bedroom door",
         "Master walk-in closet door",
         "Master walk-in closet west bank",
         "Master walk-in closet east bank",
@@ -1716,15 +1697,6 @@ def validate_alt4_plan(plan: dict) -> None:
     if abs(float(child_room_wall.get("w", 0)) - 2.85) > tolerance:
         raise ValueError("Living-floor child room wall must preserve the DWG 285 cm span")
 
-    suite_entry_wall = next(wall for wall in plan["walls"] if wall.get("name") == "Master suite entry wall")
-    suite_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bedroom door")
-    if (
-        abs((suite_entry_wall["x"] + suite_entry_wall["w"] / 2) - suite_door["x"]) > tolerance
-        or abs((suite_entry_wall["y"] + suite_entry_wall["h"] / 2) - suite_door["y"]) > tolerance
-        or suite_door.get("swing") != 180
-        or suite_door.get("hingeSide") != 1
-    ):
-        raise ValueError("Master suite door must be a left-hinged opening in the suite entry wall")
     if abs(float(barrel_roof.get("rise", 0)) - 2.0) > tolerance:
         raise ValueError("Alt 4 barrel roof must rise exactly 2 m from base to crown")
 
@@ -1845,6 +1817,10 @@ def validate_alt4_plan(plan: dict) -> None:
     closet_front_y = min(west_closet["y"] + west_closet["h"] / 2, east_closet["y"] + east_closet["h"] / 2)
     if abs(closet_front_y - 2.325) > 0.03 or abs(entrance_wall["y"] - 3.94) > 0.03:
         raise ValueError("Master walk-in closet banks must remain registered to the DWG entry wall")
+    if any(wall.get("name") == "Master suite entry wall" for wall in plan["walls"]):
+        raise ValueError("Do not invent a free-standing master-suite divider from wardrobe linework")
+    if any(opening.get("name") == "Master bedroom door" for opening in plan["openings"]):
+        raise ValueError("The master suite uses the centered walk-in entry, not a second free-standing door")
 
     master_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bathroom translucent door")
     master_shower = by_name["Master bathroom dual shower"]

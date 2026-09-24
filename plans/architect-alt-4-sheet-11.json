@@ -2327,21 +2327,6 @@
       "groupId": "architect-alt-4-sheet-11-living-structure"
     },
     {
-      "id": "architect-alt-4-sheet-11-living-master-suite-entry-wall",
-      "type": "wall",
-      "floorId": "architect-alt-4-sheet-11-living",
-      "name": "Master suite entry wall",
-      "x": 7.75,
-      "y": 4.515,
-      "w": 2.2,
-      "h": 0.12,
-      "height": 2.75,
-      "rotation": 270,
-      "color": "#fefdfa",
-      "opacity": 1.0,
-      "groupId": "architect-alt-4-sheet-11-living-structure"
-    },
-    {
       "id": "architect-alt-4-sheet-11-living-master-bedroom-artwork-wall",
       "type": "wall",
       "floorId": "architect-alt-4-sheet-11-living",
@@ -3128,26 +3113,6 @@
       "height": 2.1,
       "sill": 0,
       "swing": 0,
-      "color": "#f3ead7",
-      "opacity": 0.94
-    },
-    {
-      "id": "architect-alt-4-sheet-11-living-master-bedroom-door",
-      "type": "door",
-      "floorId": "architect-alt-4-sheet-11-living",
-      "roomId": null,
-      "wallId": null,
-      "name": "Master bedroom door",
-      "side": "free",
-      "t": 0.5,
-      "x": 8.85,
-      "y": 4.575,
-      "rotation": 270,
-      "width": 1.0,
-      "height": 2.1,
-      "sill": 0,
-      "swing": 180,
-      "hingeSide": 1,
       "color": "#f3ead7",
       "opacity": 0.94
     },
