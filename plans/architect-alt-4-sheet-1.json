@@ -5066,6 +5066,22 @@
       "color": "#9c8269",
       "opacity": 0.9,
       "type1": "kitchen-tall-storage"
+    },
+    {
+      "id": "architect-alt-4-sheet-1-ground-kitchen-oven",
+      "type": "element",
+      "floorId": "architect-alt-4-sheet-1-ground",
+      "name": "Kitchen oven",
+      "elementKind": "oven",
+      "x": 7.1,
+      "y": 5.5,
+      "w": 0.6,
+      "h": 0.65,
+      "elevation": 0,
+      "height": 2.1,
+      "rotation": 90,
+      "color": "#2c2e30",
+      "opacity": 0.86
     }
   ],
   "rulers": [],

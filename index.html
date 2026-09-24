@@ -5484,7 +5484,7 @@
       const isStructuralSlab = room.structuralSlab === true;
       if (viewVisible("floor")) {
         const floorThickness = 0.08;
-        const floorHoles = stairHolesForSlab(room, floor, true);
+        const floorHoles = stairHolesForSlab(room, floor, "below");
         if (surfaceOptions.renderFloor !== false) {
           addSlabPieces3D(
             room,
@@ -5500,7 +5500,7 @@
         }
         if (isStructuralSlab && surfaceOptions.renderCeiling !== false) {
           const ceilingThickness = 0.06;
-          const upperSlabHoles = stairHolesForSlab(room, floor, false);
+          const upperSlabHoles = stairHolesForSlab(room, floor, "current");
           addSlabPieces3D(
             room,
             storyCeilingElevation(floor) - ceilingThickness / 2,
@@ -5528,11 +5528,13 @@
       }
     }
 
-    function stairHolesForSlab(room, floor, includeFloorBelow) {
+    function stairHolesForSlab(room, floor, stairSource) {
       const floorIndex = state.floors.findIndex(entry => entry.id === floor.id);
-      const belowFloorId = includeFloorBelow && floorIndex > 0 ? state.floors[floorIndex - 1].id : null;
+      const belowFloorId = floorIndex > 0 ? state.floors[floorIndex - 1].id : null;
+      const openingFloorId = stairSource === "below" ? belowFloorId : floor.id;
+      if (!openingFloorId) return [];
       return state.stairs
-        .filter(stair => stair.floorId === floor.id || (belowFloorId && stair.floorId === belowFloorId))
+        .filter(stair => stair.floorId === openingFloorId)
         // Cut only the flights and landing, not the unused corner of a turned stair's bounds.
         .flatMap(stair => {
           const footprint = stairPlanRuns(stair).map(({ x, y, w, h }) => ({ x, y, w, h }));

@@ -1034,6 +1034,29 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
         plan["elements"].append(refrigerator)
     refrigerator.update(refrigerator_values)
 
+    oven = next((element for element in plan["elements"] if element.get("name") == "Kitchen oven"), None)
+    oven_values = {
+        "elementKind": "oven",
+        "x": 7.10,
+        "y": 5.50,
+        "w": 0.60,
+        "h": 0.65,
+        "elevation": 0,
+        "height": 2.10,
+        "rotation": 90,
+        "color": "#2c2e30",
+        "opacity": 0.86,
+    }
+    if oven is None:
+        oven = {
+            "id": f"{ground_id}-kitchen-oven",
+            "type": "element",
+            "floorId": ground_id,
+            "name": "Kitchen oven",
+        }
+        plan["elements"].append(oven)
+    oven.update(oven_values)
+
     # The saved planner layout divides the pantry return into two tall-storage
     # bays around the refrigerator. Keep them as semantic, repeatable parts of
     # the pantry assembly rather than UI-created copies with random ids.
@@ -1819,6 +1842,7 @@ def validate_alt4_plan(plan: dict) -> None:
     pantry_north = by_name["Pantry north closets"]
     pantry_south = by_name["Pantry south closets"]
     pantry_refrigerator = by_name["Kitchen pantry refrigerator"]
+    kitchen_oven = by_name["Kitchen oven"]
     pantry_returns = [by_name["Pantry west tall closet"], by_name["Pantry east tall closet"]]
     if pantry_north["w"] < 3.2 or pantry_south["w"] < 4 or any(closet["w"] < 1.2 for closet in pantry_returns):
         raise ValueError("Pantry closet banks do not cover the planned wall runs")
@@ -1845,6 +1869,14 @@ def validate_alt4_plan(plan: dict) -> None:
         or any(closet.get("type1") != "kitchen-tall-storage" for closet in pantry_returns)
     ):
         raise ValueError("Kitchen pantry storage must retain its built-in refrigerator bay")
+    if (
+        kitchen_oven.get("elementKind") != "oven"
+        or abs(kitchen_oven["x"] - 7.10) > 0.01
+        or abs(kitchen_oven["y"] - 5.50) > 0.01
+        or kitchen_oven.get("rotation") != 90
+        or abs(kitchen_oven.get("height", 0) - 2.10) > 0.01
+    ):
+        raise ValueError("Kitchen oven must retain the saved placement and orientation")
 
     if any(wall.get("color") != "#fefdfa" or wall.get("opacity") != 1.0 for wall in structural_walls):
         raise ValueError("Architectural walls must preserve the white-and-cream finish")
