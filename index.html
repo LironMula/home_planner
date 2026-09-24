@@ -5004,7 +5004,8 @@
       };
 
       // The reflected avatar is a compact likeness rather than a generic mannequin.
-      addPart(new THREE.SphereGeometry(0.122, 20, 14), skin, 0, 1.58, 0.012);
+      const head = addPart(new THREE.SphereGeometry(0.122, 20, 14), skin, 0, 1.58, 0.012);
+      head.scale.set(0.90, 1.16, 0.92);
       addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, -0.12, 1.58, 0);
       addPart(new THREE.SphereGeometry(0.025, 12, 8), skin, 0.12, 1.58, 0);
       [-0.043, 0.043].forEach(x => {
@@ -6971,6 +6972,25 @@
       }
 
       if (kind === "closet") {
+        if (dims.type1 === "kitchen-tall-storage") {
+          const frame = Math.max(0.035, Math.min(w, d) * 0.06);
+          const fridgeW = Math.min(1.10, w * 0.34);
+          const sideW = (w - fridgeW - frame * 3) / 2;
+          const fridgeLeft = -fridgeW / 2;
+          const fridgeRight = fridgeW / 2;
+          addElementBox(group, 0, 0, d * 0.46, w, h, frame, color, opacity);
+          [-1, 1].forEach(side => {
+            const x = side * (fridgeW / 2 + frame + sideW / 2);
+            addElementBox(group, x, 0, 0, sideW, h, d, color, opacity);
+            addElementBox(group, x, h * 0.5, -d * 0.515, sideW * 0.92, frame, 0.03, 0x7b5a3d, 0.72);
+            addElementBox(group, x, h * 0.25, -d * 0.535, 0.045, h * 0.25, 0.045, metal, 0.96, { metalness: 0.45 });
+            addElementBox(group, x, h * 0.75, -d * 0.535, 0.045, h * 0.25, 0.045, metal, 0.96, { metalness: 0.45 });
+          });
+          [fridgeLeft - frame / 2, fridgeRight + frame / 2].forEach(x => {
+            addElementBox(group, x, 0, -d * 0.51, frame, h, 0.03, 0x374151, 0.85);
+          });
+          return;
+        }
         addElementBox(group, 0, 0, 0, w, h, d, color, opacity);
         const doorCount = Math.max(1, Math.round(w / 0.68));
         for (let index = 1; index < doorCount; index += 1) {

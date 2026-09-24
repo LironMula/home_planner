@@ -79,7 +79,7 @@ Treat exploded symbols as connected or proximal clusters, not independent rectan
 - An X-marked green rectangle is commonly a closet in this project. An empty green rectangle is commonly a bed. A long rectangle with a smaller offset rectangle commonly represents a study desk and chair.
 - A basin plus cabinet footprint is one sink-with-storage assembly. The mirror aligns to the same wall and faces inward.
 - A bath is an elongated rim/basin symbol. A toilet has a bowl/cistern cluster. Washer/dryer symbols should be grouped with their open cabinet and upper storage when enclosed together.
-- Repeated cabinet rectangles form one run; recover the full run and orient all handles toward the room.
+- Repeated cabinet rectangles form one run; recover the full run and orient all handles toward the room. Inspect the bays before normalizing: a different-width, double-door, appliance-marked, or explicitly dimensioned bay may be an integrated refrigerator, oven, washer, or pantry tower. Preserve the run plus each such bay as an anchored semantic component.
 - A staircase is a directional cluster, not just its bounding rectangle. Where the drawing uses the verified convention, collect the yellow tread and landing linework into one footprint; the outgoing triangle points to the upper end of the flight. Infer ascent from the opposite end toward that triangle. Do not use page orientation, a nearby arrow, or the longer side of the bounding box as a substitute for this marker.
 - Cyan linework is not automatically glass or a window. Check whether it continues the wall system, frames an opening, or belongs to annotation.
 
@@ -156,7 +156,7 @@ Decode and validate stairs before applying the whole-house/site transform:
 2. Treat the point of the outgoing triangle as the upper endpoint. Set the run direction from the lower endpoint toward that point, then transform both the footprint and direction together.
 3. Derive the footprint from the outer stair/landing edges rather than from tread extents alone. Preserve intermediate landings and turns instead of collapsing a U- or L-shaped stair into one straight rectangle.
 4. On the source floor, verify the lower endpoint and first tread. On the destination floor, verify that the upper endpoint meets the stairwell opening or landing without a lateral offset.
-5. Compare the same stair core across adjacent sheets using walls and slab openings as registration anchors. Compare the complete flight bounding footprints as well: they should overlap substantially in both axes around the shared core, rather than only meet at an edge or corner. A mismatch at the destination is a transform or direction failure, not permission to move only the rendered stair.
+5. Compare the same stair core across adjacent sheets using walls and slab openings as registration anchors. For a straight flight, its footprint should register with the matching opening. For an L-shaped flight, compare its marked landing and outgoing-triangle endpoint instead of requiring the whole rectangles to overlap: successive flights can use different legs of the same core. A mismatch at the destination is a transform or direction failure, not permission to move only the rendered stair.
 
 Record the detected lower point, upper triangle point, run/turn shape, footprint, source floor, and destination floor. Add generator checks for endpoint registration and transformed direction whenever a preset contains stairs.
 

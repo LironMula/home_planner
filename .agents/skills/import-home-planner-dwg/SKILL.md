@@ -33,18 +33,20 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 - A door must be attached to a real host wall and its swing must preserve the room's circulation path. A nearby wall fragment is not a valid host when its extension would cut a closet aisle, room, or passage.
 - Keep an explicit `source`/`final` coordinate phase on helper names or comments. Manual final-layout repairs must run after the house transform; source repairs must run before it. Never mix these phases in one coordinate literal.
 - For walk-in closets, prove the whole assembly at once: entry opening, both banks, their inward-facing fronts, written bank depths, and clear aisle. Do not convert wardrobe fronts into partitions or add a second door/divider unless the source has a separate dimensioned wall and gap.
+- Preserve heterogeneous built-in runs as assemblies. When a dimensioned cabinet run contains a refrigerator, oven, washer, or other recognizable bay, retain both the complete enclosing run and an anchored semantic component for that bay. A generic closet normalization must not erase appliance identity, bay layout, height, or room ownership.
 - When a source DWG cannot be inspected structurally, obtain a DXF conversion or use a rendered source crop with readable dimensions. Mark ambiguous clusters and ask one focused question instead of inventing architecture from a screenshot.
 
 ## Required QA Gates
 
 - Compare every floor independently against the source and compare all floors together for registration.
-- Verify each stair footprint, run direction, upper end, and landing against the source. The upper end must register with the destination-floor opening or landing after the shared floor transform. Compare adjacent-flight bounding footprints: their shared core overlap must be substantial in both axes, not merely touch at a corner.
+- Verify each stair footprint, run direction, upper end, and landing against the source. The upper end must register with the destination-floor opening or landing after the shared floor transform. For L-shaped stairs, compare the marked landing and outgoing-triangle endpoint, not the full bounding rectangles: adjacent flights can occupy different legs of the same core.
 - Review each room as a complete checklist from its entrance, not object by object.
 - Verify every door/window against its wall gap and its 3D cutout. Rotated walls, snapping, panes, and cutouts must share one wall-local transform; choose the closest valid host when several fragments qualify.
 - For every newly reconstructed wall, verify its endpoints meet the structural graph, it does not cross a room's usable circulation path, and it is not derived solely from furniture, a door arc, or annotation.
 - Compare each room's written dimensions against the generated clear spans after every global transform. Use multiple asymmetric anchors per floor so a mirrored or shifted room cannot pass based on a matching slab alone.
 - Review a suite or bathroom as an ordered route from the entrance. Confirm that each door is necessary, each closet or fixture stays in its source enclosure, and no duplicate entry wall or door has been inferred.
 - Check active/front faces: cabinet handles, desks, toilets, sinks, doors, and appliances must face into the intended room.
+- Review every kitchen/pantry cabinet run for its full source length, depth, height, panel layout, and integrated appliances; do not accept a generic cabinet surrogate when the source shows a refrigerator or other distinct bay.
 - Run generator validation, JavaScript syntax checks, and `git diff --check`.
 - Use browser screenshots at desktop size: focused 2D room crop, human-height 3D view from the entrance, exterior views where openings matter, and all-floor section view for floors/ceilings/roofs.
 - Do not publish merely because generation succeeded. Finish visual QA and follow the repository’s publication authorization rules.
