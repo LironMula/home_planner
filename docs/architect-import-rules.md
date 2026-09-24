@@ -23,8 +23,8 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Raise the integrated kitchen sink so its basin rim is flush with the 0.92 m work surface and its tap remains exposed.
 - Use light-gray granite on the entrance floor and parquet on the living floor. Preserve those finishes on the upper face of each floor layer.
 - Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Render every selected story as two separate surfaces: its own colored or finished floor above and an opaque white ceiling below. Both surfaces belong to that story, follow the 3D floor selector, and hide together with the Floor control.
-- Store house walls as solid `#ffffff`; keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so white walls and ceilings remain visually white under scene lighting.
-- Store Alt-4 stair treads and landings as solid white, using the same architectural-white 3D material and a restrained gray outline for 2D plan legibility.
+- Store house walls as `#fefdfa` (90% white, 10% cream); keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so wall faces remain bright under scene lighting, and render a 2 cm gray edge on every structural wall for readable boundaries.
+- Store Alt-4 stair treads and landings as solid dark wood (`#3d2418`), using a restrained gray outline for 2D plan legibility.
 - In the Alt-4 CAD source, identify staircases from the complete yellow tread/landing cluster. The outgoing triangle marks the upper end, so ascent runs toward its point. Preserve that direction through the house transform and align the upper endpoint with the next floor's stairwell opening; do not place the stair from a generic preset rectangle alone.
 - Alt-4 staircases are L-shaped: model one 90-degree podest at the yellow landing, never a U-turn. Keep the right-turn orientation and the 1.05 m landing recorded in the source plan, then confirm the outgoing triangle remains at the upper endpoint after the whole-house transform.
 - Fit adjoining roof sections exactly to the structural room footprint beneath them, with no perimeter overhang, gap, or overlap. The Alt-4 barrel roof rises exactly 2.00 m from its base edges to its crown.
@@ -48,7 +48,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Reconstruct the walk-in entrance wall as a continuous host before cutting its centered 1.00 m door opening; do not attach the door to a short neighboring CAD fragment.
 - Alt-4 master bathroom: use the 2.90 x 1.85 m enclosure. Put the full-depth dual rain shower immediately left of the translucent-white entrance, close it with a movable glass splash partition, place the drawer vanity and mirror to its right along the lower wall, and put the toilet after the door facing back toward the shower.
 - Alt-4 living-floor bathroom: keep the entrance at the south edge, bath immediately left of the door, wood-base sink and mirror immediately right, toilet farther along the sink wall, and an open washer/dryer closet with upper storage beyond the bath.
-- Decorative wall finishes are thin, wall-aligned elements and must not replace or suppress the structural wall behind them.
+- Decorative wall finishes are 1 cm deep, wall-aligned mounted elements: their back face must touch the wall plane, and they must not replace or suppress the structural wall behind them.
 - Render every structural ceiling underside with a dedicated pure-white, unshaded material; the separately modeled floor layer above keeps its floor-specific finish.
 
 ## Site Context
@@ -62,6 +62,8 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Check every window center against its intended wall and verify its 3D cutout.
 - For rotated host walls, project the window, snap target, wall cutout, and rendered pane through the same wall-local transform; never position the pane from the wall's unrotated bounding box. If more than one nearby wall fragment qualifies, render against the host whose projected center is closest to the saved opening center.
 - Check door centers against wall gaps and verify swing direction after rotation.
+- For the guest bathroom, preserve the left-opening entrance door and mount the sink's back directly to the bathroom wall. For a private suite, create a continuous entry host wall, cut the bedroom door into it, and ensure it separates living circulation from the closet and shower rooms.
+- Preserve stated local room dimensions exactly instead of applying an overall scale correction. In Alt-4, both living-floor child rooms use the 285 cm DWG span.
 - Check each stair's source footprint, lower endpoint, outgoing-triangle upper endpoint, and destination-floor landing after rotation. Adjacent-floor stair cores must register without lateral drift.
 - Check counters touch walls, sinks overlap counters, and sanitary fixtures remain inside their rooms.
 - Check every repeated cabinet run for complete length, inward-facing fronts, panel divisions, and visible handles.

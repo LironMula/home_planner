@@ -1641,7 +1641,7 @@
       mirror: { label: "Mirror", color: "#b9d5df", w: 0.8, h: 0.08, length: 0.9, defaultElevation: 1.05, maxHeight: 3 },
       "wall-art": { label: "Wall art", color: "#ffffff", w: 2.7, h: 0.08, length: 1.22, defaultElevation: 1.25, maxHeight: 3 },
       television: { label: "Television", color: "#111827", w: 1.75, h: 0.08, length: 1.02, defaultElevation: 0.95, maxHeight: 3 },
-      wallpaper: { label: "Decorative wallpaper", color: "#e8dfcf", w: 2.8, h: 0.04, length: 2.65, defaultElevation: 0.04, maxHeight: 4 },
+      wallpaper: { label: "Decorative wallpaper", color: "#e8dfcf", w: 2.8, h: 0.01, length: 2.65, defaultElevation: 0.04, maxHeight: 4 },
       sink: { label: "Sink", color: "#70b7c8", w: 0.7, h: 0.55, length: 0.85 },
       oven: { label: "Oven", color: "#3f4856", w: 0.7, h: 0.65, length: 0.9 },
       toilet: { label: "Toilet", color: "#e8edf2", w: 0.65, h: 0.8, length: 0.75 },
@@ -3309,9 +3309,12 @@
         ctx.translate(p.x + w / 2, p.y + h / 2);
         ctx.rotate(rotation);
       }
-      ctx.fillStyle = colorWithAlpha(itemColor(wall), itemOpacity(wall));
-      ctx.strokeStyle = active ? "#0f766e" : (isGlass ? "#137da7" : "#263445");
-      ctx.lineWidth = active ? 4 : 2;
+      const structuralFinish = !isGlass && ["#ffffff", "#fefdfa"].includes(String(itemColor(wall)).toLowerCase())
+        ? "#fefdfa"
+        : itemColor(wall);
+      ctx.fillStyle = colorWithAlpha(structuralFinish, itemOpacity(wall));
+      ctx.strokeStyle = active ? "#0f766e" : (isGlass ? "#137da7" : "#7d858c");
+      ctx.lineWidth = active ? 4 : Math.max(2, metersToPx(0.02));
       if (isGlass) ctx.setLineDash([7, 5]);
       ctx.fillRect(rotation ? -w / 2 : p.x, rotation ? -h / 2 : p.y, w, h);
       ctx.strokeRect(rotation ? -w / 2 : p.x, rotation ? -h / 2 : p.y, w, h);
@@ -5769,7 +5772,7 @@
 
     function applyGlassWallMaterial(mesh, wall) {
       if (wall.type !== "glass-wall") {
-        if (String(itemColor(wall)).toLowerCase() === "#ffffff") applyArchitecturalWhiteMaterial(mesh);
+        if (["#ffffff", "#fefdfa"].includes(String(itemColor(wall)).toLowerCase())) applyArchitecturalWallMaterial(mesh);
         return;
       }
       mesh.material.roughness = 0.12;
@@ -5942,7 +5945,7 @@
         mesh = makeBox(thickness, height, len, color, clamp(opacity, 0, 0.96));
         mesh.position.set(side.x, y, side.z + from + len / 2);
       }
-      if (color === 0xffffff) applyArchitecturalWhiteMaterial(mesh);
+      if (color === 0xffffff || color === 0xfefdfa) applyArchitecturalWallMaterial(mesh);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       three.root.add(mesh);
@@ -6508,8 +6511,9 @@
       }
 
       if (kind === "wallpaper") {
-        const panelDepth = Math.max(0.025, d);
-        addElementBox(group, 0, 0, 0, w, h, panelDepth, color, opacity, { roughness: 0.9, castShadow: false });
+        const panelDepth = Math.max(0.01, d);
+        // The saved position is the wall plane: the 1 cm panel projects into the room.
+        addElementBox(group, 0, 0, -panelDepth / 2, w, h, panelDepth, color, opacity, { roughness: 0.9, castShadow: false });
         if (dims.type1 === "embracing-leaves") {
           const surface = new THREE.Mesh(
             new THREE.PlaneGeometry(w * 0.985, h * 0.985),
@@ -6521,7 +6525,7 @@
               side: THREE.FrontSide
             })
           );
-          surface.position.set(0, h / 2, -panelDepth / 2 - 0.006);
+          surface.position.set(0, h / 2, -panelDepth - 0.006);
           surface.rotation.y = Math.PI;
           surface.castShadow = false;
           group.add(surface);
@@ -6533,12 +6537,12 @@
         for (let index = 0; index < columns; index += 1) {
           const x = ((index + 0.5) / columns - 0.5) * w;
           const stemHeight = h * (0.36 + (index % 3) * 0.13);
-          addElementBox(group, x, h * 0.12, -panelDepth * 0.54, 0.018, stemHeight, 0.012, ink, opacity * 0.72, { castShadow: false });
+          addElementBox(group, x, h * 0.12, -panelDepth * 1.04, 0.018, stemHeight, 0.012, ink, opacity * 0.72, { castShadow: false });
           [-1, 1].forEach(side => {
-            const leaf = addElementBox(group, x + side * 0.06, h * (0.24 + (index % 2) * 0.12), -panelDepth * 0.56, 0.11, 0.045, 0.014, ink, opacity * 0.7, { castShadow: false });
+            const leaf = addElementBox(group, x + side * 0.06, h * (0.24 + (index % 2) * 0.12), -panelDepth * 1.06, 0.11, 0.045, 0.014, ink, opacity * 0.7, { castShadow: false });
             leaf.rotation.z = side * 0.5;
           });
-          addElementSphere(group, x, h * (0.56 + (index % 3) * 0.11), -panelDepth * 0.58, 0.055, flower, opacity * 0.76, { widthSegments: 12, heightSegments: 8, castShadow: false });
+          addElementSphere(group, x, h * (0.56 + (index % 3) * 0.11), -panelDepth * 1.08, 0.055, flower, opacity * 0.76, { widthSegments: 12, heightSegments: 8, castShadow: false });
         }
         return;
       }
@@ -7155,7 +7159,8 @@
         const baseLevel = floor.elevation + (stair.level ?? 0);
         const landingHeight = baseLevel + (progress / Math.max(0.1, totalTravel)) * stairHeight;
         const platform = makeBox(landing.w, 0.1, landing.h, color, opacity);
-        if (color === 0xffffff) applyArchitecturalWhiteMaterial(platform);
+        if (stair.type1 === "dark-wood") applyDarkWoodMaterial(platform);
+        else if (color === 0xffffff) applyArchitecturalWhiteMaterial(platform);
         platform.position.set(landing.x + landing.w / 2 - center.x, landingHeight, landing.y + landing.h / 2 - center.z);
         platform.castShadow = true;
         platform.receiveShadow = true;
@@ -7178,7 +7183,8 @@
         const slab = run.dir === "x"
           ? makeBox(stepTravel * 0.9, 0.08, run.h, color, opacity)
           : makeBox(run.w, 0.08, stepTravel * 0.9, color, opacity);
-        if (color === 0xffffff) applyArchitecturalWhiteMaterial(slab);
+        if (stair.type1 === "dark-wood") applyDarkWoodMaterial(slab);
+        else if (color === 0xffffff) applyArchitecturalWhiteMaterial(slab);
         slab.position.set(
           (run.dir === "x" ? run.x + stepTravel * stepIndex + stepTravel / 2 : run.x + run.w / 2) - center.x,
           baseLevel + heightAtStep,
@@ -7395,6 +7401,36 @@
           material.emissiveIntensity = 0.35;
         }
         material.roughness = 0.72;
+        material.needsUpdate = true;
+      });
+    }
+
+    function applyArchitecturalWallMaterial(mesh) {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach(material => {
+        // A 90/10 white/cream blend keeps the architecture bright but avoids a stark pure-white wash.
+        material.color.set(0xfefdfa);
+        if (material.emissive) {
+          material.emissive.set(0xfefdfa);
+          material.emissiveIntensity = 0.28;
+        }
+        material.roughness = 0.72;
+        material.needsUpdate = true;
+      });
+      const edges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(mesh.geometry),
+        new THREE.LineBasicMaterial({ color: 0x7d858c, transparent: true, opacity: 0.96, linewidth: 2 })
+      );
+      edges.userData.wallEdgeWidth = 0.02;
+      mesh.add(edges);
+    }
+
+    function applyDarkWoodMaterial(mesh) {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach(material => {
+        material.color.set(0x3d2418);
+        material.roughness = 0.68;
+        material.metalness = 0.02;
         material.needsUpdate = true;
       });
     }

@@ -231,7 +231,7 @@ def wall_item(design: Design, sheet: Sheet, index: int, start, end, thickness: f
         "h": round_number(thickness),
         "height": 2.8,
         "rotation": round_number(rotation, 2),
-        "color": "#ffffff",
+        "color": "#fefdfa",
         "opacity": 0.95,
         "groupId": f"{design.key}-{sheet.key}-structure",
     }
@@ -820,13 +820,13 @@ def alt4_roofs(design: Design) -> list[dict]:
         {
             "id": f"{design.key}-living-flat-roof",
             "type": "roof",
-            "floorId": f"{design.key}-living",
+            "floorId": f"{design.key}-floor2",
             "name": "Lower wing flat roof",
             "x": 7.44,
             "y": 8.29,
             "w": 6.91,
             "h": 9.00,
-            "z": 2.76,
+            "z": -0.03,
             "angle": 0,
             "tilt": "north",
             "color": "#91857d",
@@ -915,7 +915,7 @@ def repair_alt4_ground_kitchen_wall(plan: dict, design: Design) -> None:
         "h": 0.25,
         "height": 2.79,
         "rotation": 0,
-        "color": "#ffffff",
+        "color": "#fefdfa",
         "opacity": 0.95,
         "groupId": f"{ground_id}-structure",
     })
@@ -1136,9 +1136,16 @@ def repair_alt4_ground_living_room(plan: dict, design: Design) -> None:
     plan["elements"].insert(0, rug)
     add_alt4_element(
         plan, design, "ground", "Guest bathroom botanical wallpaper", "wallpaper",
-        x=5.945, y=6.985, w=1.65, h=0.035, elevation=0.04, height=2.65,
+        x=5.945, y=6.985, w=1.65, h=0.01, elevation=0.04, height=2.65,
         rotation=270, color="#eee6d8", opacity=0.98,
     )
+    for opening in plan["openings"]:
+        if opening.get("floorId") == ground_id and opening.get("name") == "Guest toilet door":
+            opening.update({"swing": 180, "hingeSide": 1})
+    for element in plan["elements"]:
+        if element.get("floorId") == ground_id and element.get("name") == "Guest toilet sink":
+            # The vanity back sits on the recovered bathroom wall's inner face.
+            element["y"] = 6.012
 
 
 def repair_alt4_living_floor(plan: dict, design: Design) -> None:
@@ -1183,9 +1190,24 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         "opacity": 1.0,
         "groupId": f"{living_id}-structure",
     })
+    plan["walls"].append({
+        "id": f"{living_id}-master-suite-entry-wall",
+        "type": "wall",
+        "floorId": living_id,
+        "name": "Master suite entry wall",
+        "x": 7.75,
+        "y": 4.515,
+        "w": 2.20,
+        "h": 0.12,
+        "height": 2.75,
+        "rotation": 270,
+        "color": "#fefdfa",
+        "opacity": 1.0,
+        "groupId": f"{living_id}-structure",
+    })
     for wall in plan["walls"]:
         if wall.get("floorId") == living_id and not wall.get("context"):
-            wall["color"] = "#ffffff"
+            wall["color"] = "#fefdfa"
             wall["opacity"] = 1.0
 
     # The source has several overlapping swing arcs. Replace those detections
@@ -1199,7 +1221,7 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
         ("Bedroom 1 door", 4.625, 5.102, 0.85, 180, 0),
         ("Bedroom 2 door", 3.575, 5.102, 0.85, 180, 180),
         ("Living bathroom door", 8.20, 5.102, 0.80, 180, 0),
-        ("Master bedroom door", 8.85, 4.575, 1.00, 270, 0),
+        ("Master bedroom door", 8.85, 4.575, 1.00, 270, 180),
         ("Master walk-in closet door", 7.15, 3.995, 1.00, 0, 180),
     ):
         add_alt4_opening(
@@ -1207,6 +1229,8 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
             x=x, y=y, width=width, height=2.10, rotation=rotation,
             swing=swing, color=cream, opacity=0.94,
         )
+    master_suite_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bedroom door")
+    master_suite_door["hingeSide"] = 1
     add_alt4_opening(
         plan, design, "living", "Master bathroom translucent door", "door",
         x=11.33, y=5.995, width=0.78, height=2.10, rotation=0,
@@ -1269,9 +1293,13 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
 
     add_alt4_element(
         plan, design, "living", "Master bedroom neighbor-wall wallpaper", "wallpaper",
-        x=9.15, y=0.68, w=4.00, h=0.035, elevation=0.04, height=2.65,
+        x=9.15, y=0.68, w=4.00, h=0.01, elevation=0.04, height=2.65,
         rotation=180, color="#eadfd5", opacity=0.98, type1="embracing-leaves",
     )
+    for wall in plan["walls"]:
+        if wall.get("floorId") == living_id and wall.get("name") == "CAD wall 11":
+            # The child-room clear span is dimensioned 285 cm in the source.
+            wall["w"] = 2.85
     add_alt4_element(
         plan, design, "living", "Master walk-in closet west bank", "open-closet",
         x=4.85, y=2.10, w=3.25, h=0.45, height=2.68,
@@ -1337,10 +1365,10 @@ def repair_alt4_living_floor(plan: dict, design: Design) -> None:
 
 
 def normalize_alt4_architectural_walls(plan: dict) -> None:
-    """Keep house walls truly white instead of blending with the dark scene."""
+    """Apply the 90-percent-white, 10-percent-cream architectural finish."""
     for wall in plan.get("walls", []):
         if wall.get("type") == "wall" and not wall.get("context"):
-            wall["color"] = "#ffffff"
+            wall["color"] = "#fefdfa"
             wall["opacity"] = 1.0
 
 
@@ -1631,8 +1659,13 @@ def validate_alt4_plan(plan: dict) -> None:
     slabs = [room for room in plan["rooms"] if str(room.get("id", "")).endswith("-slab")]
     if not slabs or any(not slab.get("structuralSlab") for slab in slabs):
         raise ValueError("Architectural floor slabs must be marked as structural")
-    if any(stair.get("color") != "#ffffff" or stair.get("opacity") != 1.0 for stair in plan["stairs"]):
-        raise ValueError("Alt 4 staircases must be solid white")
+    if any(
+        stair.get("color") != "#3d2418"
+        or stair.get("opacity") != 1.0
+        or stair.get("type1") != "dark-wood"
+        for stair in plan["stairs"]
+    ):
+        raise ValueError("Alt 4 staircases must use the specified solid dark-wood finish")
     if len(plan["stairs"]) != 3 or any(
         stair.get("shape") != "turned"
         or stair.get("turn") != "right"
@@ -1645,6 +1678,9 @@ def validate_alt4_plan(plan: dict) -> None:
     flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
     barrel_roof = next(roof for roof in plan["roofs"] if roof.get("shape") == "barrel")
     tolerance = 0.01
+    floor2_id = next(floor["id"] for floor in plan["floors"] if floor["id"].endswith("-floor2"))
+    if flat_roof.get("floorId") != floor2_id or abs(float(flat_roof.get("z", 0)) + 0.03) > tolerance:
+        raise ValueError("Lower wing roof must be owned by floor 2 at the living-ceiling elevation")
     roof_edges = (
         abs(barrel_roof["x"] - living_slab["x"]),
         abs(barrel_roof["x"] + barrel_roof["w"] - flat_roof["x"]),
@@ -1656,6 +1692,33 @@ def validate_alt4_plan(plan: dict) -> None:
     )
     if any(offset > tolerance for offset in roof_edges):
         raise ValueError("Alt 4 roof sections must partition the covered room footprint without overhang")
+
+    if any(wall.get("color") != "#fefdfa" for wall in structural_walls):
+        raise ValueError("Alt 4 structural walls must use the 90% white / 10% cream finish")
+
+    guest_door = next(opening for opening in plan["openings"] if opening.get("name") == "Guest toilet door")
+    guest_sink = next(element for element in plan["elements"] if element.get("name") == "Guest toilet sink")
+    if guest_door.get("swing") != 180 or guest_door.get("hingeSide") != 1:
+        raise ValueError("Guest toilet door must open left from its host opening")
+    if abs(float(guest_sink.get("y", 0)) - 6.012) > tolerance:
+        raise ValueError("Guest toilet sink must be mounted against its wall")
+
+    child_room_wall = next(
+        wall for wall in plan["walls"]
+        if wall.get("floorId", "").endswith("-living") and wall.get("name") == "CAD wall 11"
+    )
+    if abs(float(child_room_wall.get("w", 0)) - 2.85) > tolerance:
+        raise ValueError("Living-floor child room wall must preserve the DWG 285 cm span")
+
+    suite_entry_wall = next(wall for wall in plan["walls"] if wall.get("name") == "Master suite entry wall")
+    suite_door = next(opening for opening in plan["openings"] if opening.get("name") == "Master bedroom door")
+    if (
+        abs((suite_entry_wall["x"] + suite_entry_wall["w"] / 2) - suite_door["x"]) > tolerance
+        or abs((suite_entry_wall["y"] + suite_entry_wall["h"] / 2) - suite_door["y"]) > tolerance
+        or suite_door.get("swing") != 180
+        or suite_door.get("hingeSide") != 1
+    ):
+        raise ValueError("Master suite door must be a left-hinged opening in the suite entry wall")
     if abs(float(barrel_roof.get("rise", 0)) - 2.0) > tolerance:
         raise ValueError("Alt 4 barrel roof must rise exactly 2 m from base to crown")
 
@@ -1728,8 +1791,8 @@ def validate_alt4_plan(plan: dict) -> None:
     if pantry_aisle < 1.0:
         raise ValueError("Pantry closet banks leave less than 1 m of clear aisle")
 
-    if any(wall.get("color") != "#ffffff" or wall.get("opacity") != 1.0 for wall in structural_walls):
-        raise ValueError("Architectural walls must be solid white")
+    if any(wall.get("color") != "#fefdfa" or wall.get("opacity") != 1.0 for wall in structural_walls):
+        raise ValueError("Architectural walls must preserve the white-and-cream finish")
     bedroom_doors = [opening for opening in plan["openings"] if opening.get("name") in {"Bedroom 1 door", "Bedroom 2 door"}]
     if len(bedroom_doors) != 2 or any(opening.get("color") != "#f3ead7" for opening in bedroom_doors):
         raise ValueError("Living-floor bedroom doors are incomplete or use the wrong finish")
@@ -1905,8 +1968,9 @@ def build_plan(
                 "rotation": 0,
                 "level": 0,
                 "height": 2.75 if design.key.startswith("architect-alt-4") else 2.8,
-                "color": "#ffffff" if design.key.startswith("architect-alt-4") else "#6e62cf",
+                "color": "#3d2418" if design.key.startswith("architect-alt-4") else "#6e62cf",
                 "opacity": 1.0 if design.key.startswith("architect-alt-4") else 0.9,
+                "type1": "dark-wood" if design.key.startswith("architect-alt-4") else None,
             })
 
     ground_id = f"{design.key}-ground"

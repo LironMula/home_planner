@@ -182,8 +182,9 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#ffffff",
-      "opacity": 1.0
+      "color": "#3d2418",
+      "opacity": 1.0,
+      "type1": "dark-wood"
     },
     {
       "id": "architect-alt-4-sheet-1-ground-stairs",
@@ -200,8 +201,9 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#ffffff",
-      "opacity": 1.0
+      "color": "#3d2418",
+      "opacity": 1.0,
+      "type1": "dark-wood"
     },
     {
       "id": "architect-alt-4-sheet-1-living-stairs",
@@ -218,8 +220,9 @@
       "rotation": 180.0,
       "level": 0,
       "height": 2.75,
-      "color": "#ffffff",
-      "opacity": 1.0
+      "color": "#3d2418",
+      "opacity": 1.0,
+      "type1": "dark-wood"
     }
   ],
   "walls": [
@@ -234,7 +237,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -249,7 +252,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -264,7 +267,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -279,7 +282,7 @@
       "h": 0.25,
       "height": 2.23,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -294,7 +297,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -309,7 +312,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -324,7 +327,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -339,7 +342,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -354,7 +357,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -369,7 +372,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -384,7 +387,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -399,7 +402,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -414,7 +417,7 @@
       "h": 0.28,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -429,7 +432,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -444,7 +447,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -459,7 +462,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -474,7 +477,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -489,7 +492,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -504,7 +507,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -519,7 +522,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -534,7 +537,7 @@
       "h": 0.25,
       "height": 2.23,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -549,7 +552,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -564,7 +567,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -579,7 +582,7 @@
       "h": 0.25,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -594,7 +597,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -609,7 +612,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -624,7 +627,7 @@
       "h": 0.25,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -639,7 +642,7 @@
       "h": 0.15,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -654,7 +657,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -669,7 +672,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -684,7 +687,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -699,7 +702,7 @@
       "h": 0.14,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -714,7 +717,7 @@
       "h": 0.12,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -729,7 +732,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -744,7 +747,7 @@
       "h": 0.25,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -759,7 +762,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -774,7 +777,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -789,7 +792,7 @@
       "h": 0.2,
       "height": 2.23,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-basement-structure"
     },
@@ -804,7 +807,7 @@
       "h": 0.14,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -819,7 +822,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -834,7 +837,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -849,7 +852,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -864,7 +867,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -879,7 +882,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -894,7 +897,7 @@
       "h": 0.15,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -909,7 +912,7 @@
       "h": 0.14,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -924,7 +927,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -939,7 +942,7 @@
       "h": 0.28,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -954,7 +957,7 @@
       "h": 0.28,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -969,7 +972,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -984,7 +987,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -999,7 +1002,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1014,7 +1017,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1029,7 +1032,7 @@
       "h": 0.15,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1044,7 +1047,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1059,7 +1062,7 @@
       "h": 0.14,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1074,7 +1077,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1089,7 +1092,7 @@
       "h": 0.12,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1104,7 +1107,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1119,7 +1122,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1134,7 +1137,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1149,7 +1152,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1164,7 +1167,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1179,7 +1182,7 @@
       "h": 0.2,
       "height": 2.79,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -1194,7 +1197,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1209,7 +1212,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1224,7 +1227,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1239,7 +1242,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1254,7 +1257,7 @@
       "h": 0.14,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1269,7 +1272,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1284,7 +1287,7 @@
       "h": 0.14,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1299,7 +1302,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1314,7 +1317,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1329,7 +1332,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1340,11 +1343,11 @@
       "name": "CAD wall 11",
       "x": 5.645,
       "y": 6.492,
-      "w": 2.8,
+      "w": 2.85,
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1359,7 +1362,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1374,7 +1377,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1389,7 +1392,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1404,7 +1407,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1419,7 +1422,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1434,7 +1437,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1449,7 +1452,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1464,7 +1467,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1479,7 +1482,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1494,7 +1497,7 @@
       "h": 0.14,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1509,7 +1512,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1524,7 +1527,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1539,7 +1542,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1554,7 +1557,7 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1569,7 +1572,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1584,7 +1587,7 @@
       "h": 0.14,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1599,7 +1602,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1614,7 +1617,7 @@
       "h": 0.25,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1629,7 +1632,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1644,7 +1647,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1659,7 +1662,7 @@
       "h": 0.28,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1674,7 +1677,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1689,7 +1692,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1704,7 +1707,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1719,7 +1722,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1734,7 +1737,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1749,7 +1752,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1764,7 +1767,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1779,7 +1782,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1794,7 +1797,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1809,7 +1812,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1824,7 +1827,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1839,7 +1842,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1854,7 +1857,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1869,7 +1872,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -1884,7 +1887,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 0.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1899,7 +1902,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1914,7 +1917,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1929,7 +1932,7 @@
       "h": 0.12,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1944,7 +1947,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1959,7 +1962,7 @@
       "h": 0.25,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1974,7 +1977,7 @@
       "h": 0.12,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -1989,7 +1992,7 @@
       "h": 0.12,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2004,7 +2007,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2019,7 +2022,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2034,7 +2037,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2049,7 +2052,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2064,7 +2067,7 @@
       "h": 0.25,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2079,7 +2082,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2094,7 +2097,7 @@
       "h": 0.12,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2109,7 +2112,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2124,7 +2127,7 @@
       "h": 0.25,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2139,7 +2142,7 @@
       "h": 0.25,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2154,7 +2157,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2169,7 +2172,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2184,7 +2187,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2199,7 +2202,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 180.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2214,7 +2217,7 @@
       "h": 0.2,
       "height": 2.05,
       "rotation": 270.0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-floor2-structure"
     },
@@ -2229,7 +2232,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -2244,7 +2247,7 @@
       "h": 0.28,
       "height": 2.79,
       "rotation": 270,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -2259,7 +2262,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -2274,7 +2277,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 270,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -2289,7 +2292,7 @@
       "h": 0.25,
       "height": 2.79,
       "rotation": 270,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-ground-structure"
     },
@@ -2304,7 +2307,22 @@
       "h": 0.12,
       "height": 2.75,
       "rotation": 0,
-      "color": "#ffffff",
+      "color": "#fefdfa",
+      "opacity": 1.0,
+      "groupId": "architect-alt-4-sheet-1-living-structure"
+    },
+    {
+      "id": "architect-alt-4-sheet-1-living-master-suite-entry-wall",
+      "type": "wall",
+      "floorId": "architect-alt-4-sheet-1-living",
+      "name": "Master suite entry wall",
+      "x": 7.75,
+      "y": 4.515,
+      "w": 2.2,
+      "h": 0.12,
+      "height": 2.75,
+      "rotation": 270,
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -2319,7 +2337,7 @@
       "h": 0.2,
       "height": 2.75,
       "rotation": 270,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 1.0,
       "groupId": "architect-alt-4-sheet-1-living-structure"
     },
@@ -2744,7 +2762,8 @@
       "width": 0.75,
       "height": 2.1,
       "sill": 0.0,
-      "swing": 0,
+      "swing": 180,
+      "hingeSide": 1,
       "color": "#f3ead7",
       "opacity": 0.9
     },
@@ -3112,7 +3131,8 @@
       "width": 1.0,
       "height": 2.1,
       "sill": 0,
-      "swing": 0,
+      "swing": 180,
+      "hingeSide": 1,
       "color": "#f3ead7",
       "opacity": 0.94
     },
@@ -3151,7 +3171,7 @@
       "height": 2.1,
       "sill": 0,
       "swing": 180,
-      "color": "#ffffff",
+      "color": "#fefdfa",
       "opacity": 0.5,
       "openingStyle": "translucent"
     },
@@ -3988,7 +4008,7 @@
       "name": "Guest toilet sink",
       "elementKind": "sink",
       "x": 6.1,
-      "y": 6.14,
+      "y": 6.012,
       "w": 0.65,
       "h": 0.4,
       "elevation": 0,
@@ -4423,7 +4443,7 @@
       "x": 5.945,
       "y": 6.985,
       "w": 1.65,
-      "h": 0.035,
+      "h": 0.01,
       "elevation": 0.04,
       "height": 2.65,
       "rotation": 270,
@@ -4471,7 +4491,7 @@
       "x": 9.15,
       "y": 0.68,
       "w": 4.0,
-      "h": 0.035,
+      "h": 0.01,
       "elevation": 0.04,
       "height": 2.65,
       "rotation": 180,
@@ -5037,13 +5057,13 @@
     {
       "id": "architect-alt-4-sheet-1-living-flat-roof",
       "type": "roof",
-      "floorId": "architect-alt-4-sheet-1-living",
+      "floorId": "architect-alt-4-sheet-1-floor2",
       "name": "Lower wing flat roof",
       "x": 6.88,
       "y": 0.5,
       "w": 6.91,
       "h": 9.0,
-      "z": 2.76,
+      "z": -0.03,
       "angle": 0,
       "tilt": "south",
       "color": "#91857d",
