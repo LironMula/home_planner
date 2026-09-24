@@ -196,7 +196,7 @@
       "w": 2.55,
       "h": 3.3,
       "shape": "turned",
-      "turn": "right",
+      "turn": "left",
       "landing": 1.05,
       "rotation": 180.0,
       "level": 0,
