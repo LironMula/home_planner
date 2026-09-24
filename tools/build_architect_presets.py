@@ -994,10 +994,10 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
         elif element.get("name") == "Kitchen storage":
             element.update({
                 "name": "Pantry north closets",
-                "x": 8.08,
-                "y": 2.442,
-                "w": 4.15,
-                "h": 0.60,
+                "x": 8.30,
+                "y": 2.40,
+                "w": 3.20,
+                "h": 0.70,
                 "height": 2.50,
                 "rotation": 0,
                 "type1": "kitchen-tall-storage",
@@ -1011,25 +1011,68 @@ def orient_alt4_kitchen_cabinets(plan: dict, design: Design) -> None:
                 "h": 0.60,
                 "rotation": 180,
             })
-    if not any(element.get("name") == "Kitchen pantry refrigerator" for element in plan["elements"]):
-        # The center bay is a built-in refrigerator within the 4.15 m
-        # kitchen/pantry storage run, not a detached appliance.
-        plan["elements"].append({
+    refrigerator = next((element for element in plan["elements"] if element.get("name") == "Kitchen pantry refrigerator"), None)
+    refrigerator_values = {
+        "elementKind": "refrigerator",
+        "x": 9.60,
+        "y": 3.20,
+        "w": 1.10,
+        "h": 0.60,
+        "elevation": 0,
+        "height": 2.45,
+        "rotation": 180,
+        "color": "#d8dee8",
+        "opacity": 1.0,
+    }
+    if refrigerator is None:
+        refrigerator = {
             "id": f"{ground_id}-kitchen-pantry-refrigerator",
             "type": "element",
             "floorId": ground_id,
             "name": "Kitchen pantry refrigerator",
-            "elementKind": "refrigerator",
-            "x": 9.605,
-            "y": 2.442,
-            "w": 1.10,
-            "h": 0.60,
+        }
+        plan["elements"].append(refrigerator)
+    refrigerator.update(refrigerator_values)
+
+    # The saved planner layout divides the pantry return into two tall-storage
+    # bays around the refrigerator. Keep them as semantic, repeatable parts of
+    # the pantry assembly rather than UI-created copies with random ids.
+    for name, x in (("Pantry west tall closet", 8.30), ("Pantry east tall closet", 10.30)):
+        closet = next((element for element in plan["elements"] if element.get("name") == name), None)
+        closet_values = {
+            "elementKind": "closet",
+            "x": x,
+            "y": 3.20,
+            "w": 1.29,
+            "h": 0.58,
             "elevation": 0,
-            "height": 2.45,
-            "rotation": 0,
-            "color": "#d8dee8",
-            "opacity": 1.0,
-        })
+            "height": 2.50,
+            "rotation": 180,
+            "color": "#9c8269",
+            "opacity": 0.9,
+            "type1": "kitchen-tall-storage",
+        }
+        if closet is None:
+            closet = {
+                "id": f"{ground_id}-{name.lower().replace(' ', '-')}",
+                "type": "element",
+                "floorId": ground_id,
+                "name": name,
+            }
+            plan["elements"].append(closet)
+        closet.update(closet_values)
+
+
+def apply_alt4_saved_layout_updates(plan: dict, design: Design) -> None:
+    """Apply verified planner-coordinate edits after the shared DWG transform."""
+    stair_updates = {
+        "basement": {"x": 5.30, "y": 0.50, "w": 2.50, "h": 3.30, "turn": "right", "landing": 1.10, "rotation": -90, "height": 2.80},
+        "ground": {"x": 5.20, "y": 0.40, "w": 2.50, "h": 3.30, "turn": "right", "landing": 1.00, "rotation": -90, "height": 2.80},
+    }
+    for stair in plan["stairs"]:
+        floor_key = stair["floorId"].rsplit("-", 1)[-1]
+        if floor_key in stair_updates:
+            stair.update(stair_updates[floor_key])
 
 
 def add_alt4_element(plan: dict, design: Design, floor_key: str, name: str, kind: str, **values) -> None:
@@ -1434,6 +1477,7 @@ def transform_alt4_to_saved_site(
     repair_alt4_ground_kitchen_wall(plan, design)
     repair_alt4_kitchen_dining_window(plan, design)
     orient_alt4_kitchen_cabinets(plan, design)
+    apply_alt4_saved_layout_updates(plan, design)
     repair_alt4_ground_living_room(plan, design)
     repair_alt4_living_floor(plan, design)
     normalize_alt4_architectural_walls(plan)
@@ -1669,16 +1713,15 @@ def validate_alt4_plan(plan: dict) -> None:
         for stair in plan["stairs"]
     ):
         raise ValueError("Alt 4 staircases must use the specified solid dark-wood finish")
-    expected_stair_orientations = {
-        "basement": (180, "right"),
-        "ground": (180, "left"),
-        "living": (270, "right"),
+    expected_stair_specs = {
+        "basement": (5.30, 0.50, 2.50, 3.30, -90, "right", 1.10, 2.80),
+        "ground": (5.20, 0.40, 2.50, 3.30, -90, "right", 1.00, 2.80),
+        "living": (2.08, 0.99, 2.35, 3.25, 270, "right", 1.05, 2.75),
     }
     if len(plan["stairs"]) != 3 or any(
         stair.get("shape") != "turned"
-        or stair.get("turn") != expected_stair_orientations[stair["floorId"].rsplit("-", 1)[-1]][1]
-        or abs(float(stair.get("landing", 0)) - 1.05) > 0.01
-        or float(stair.get("rotation", 0)) != expected_stair_orientations[stair["floorId"].rsplit("-", 1)[-1]][0]
+        or tuple(float(stair.get(field, 0)) if field != "turn" else stair.get(field) for field in ("x", "y", "w", "h", "rotation", "turn", "landing", "height"))
+        != expected_stair_specs[stair["floorId"].rsplit("-", 1)[-1]]
         for stair in plan["stairs"]
     ):
         raise ValueError("Alt 4 staircases must preserve their source-specific 90-degree podest orientation and turn")
@@ -1776,15 +1819,17 @@ def validate_alt4_plan(plan: dict) -> None:
     pantry_north = by_name["Pantry north closets"]
     pantry_south = by_name["Pantry south closets"]
     pantry_refrigerator = by_name["Kitchen pantry refrigerator"]
-    if pantry_north["w"] < 4 or pantry_south["w"] < 4:
+    pantry_returns = [by_name["Pantry west tall closet"], by_name["Pantry east tall closet"]]
+    if pantry_north["w"] < 3.2 or pantry_south["w"] < 4 or any(closet["w"] < 1.2 for closet in pantry_returns):
         raise ValueError("Pantry closet banks do not cover the planned wall runs")
-    if pantry_north["rotation"] != 0 or pantry_south["rotation"] != 180:
+    if pantry_north["rotation"] != 0 or pantry_south["rotation"] != 180 or any(closet["rotation"] != 180 for closet in pantry_returns):
         raise ValueError("Pantry closet fronts do not face into the pantry")
     pantry_inner_south = 0.772
-    pantry_inner_north = 3.042
-    if (
-        pantry_south["y"] < pantry_inner_south - 0.01
-        or pantry_north["y"] + pantry_north["h"] > pantry_inner_north + 0.01
+    pantry_assembly = [pantry_north, pantry_south, pantry_refrigerator, *pantry_returns]
+    if any(
+        element["y"] < pantry_inner_south - 0.01
+        or element["y"] + element["h"] > 3.80 + 0.01
+        for element in pantry_assembly
     ):
         raise ValueError("Pantry closet bank extends outside the pantry wall faces")
     pantry_aisle = pantry_north["y"] - (pantry_south["y"] + pantry_south["h"])
@@ -1794,11 +1839,10 @@ def validate_alt4_plan(plan: dict) -> None:
         pantry_north.get("type1") != "kitchen-tall-storage"
         or pantry_north.get("height", 0) < 2.4
         or pantry_refrigerator.get("elementKind") != "refrigerator"
-        or pantry_refrigerator.get("rotation") != pantry_north.get("rotation")
-        or pantry_refrigerator["x"] < pantry_north["x"]
-        or pantry_refrigerator["x"] + pantry_refrigerator["w"] > pantry_north["x"] + pantry_north["w"]
-        or pantry_refrigerator["y"] < pantry_north["y"]
-        or pantry_refrigerator["y"] + pantry_refrigerator["h"] > pantry_north["y"] + pantry_north["h"]
+        or pantry_refrigerator.get("rotation") != 180
+        or abs(pantry_refrigerator["x"] - 9.60) > 0.01
+        or abs(pantry_refrigerator["y"] - 3.20) > 0.01
+        or any(closet.get("type1") != "kitchen-tall-storage" for closet in pantry_returns)
     ):
         raise ValueError("Kitchen pantry storage must retain its built-in refrigerator bay")
 

@@ -5533,11 +5533,19 @@
       const belowFloorId = includeFloorBelow && floorIndex > 0 ? state.floors[floorIndex - 1].id : null;
       return state.stairs
         .filter(stair => stair.floorId === floor.id || (belowFloorId && stair.floorId === belowFloorId))
-        .map(stair => ({
-          x: Math.max(room.x, stair.x),
-          y: Math.max(room.y, stair.y),
-          w: Math.min(room.x + room.w, stair.x + stair.w) - Math.max(room.x, stair.x),
-          h: Math.min(room.y + room.h, stair.y + stair.h) - Math.max(room.y, stair.y)
+        // Cut only the flights and landing, not the unused corner of a turned stair's bounds.
+        .flatMap(stair => {
+          const footprint = stairPlanRuns(stair).map(({ x, y, w, h }) => ({ x, y, w, h }));
+          if (stair.shape === "turned" || stair.shape === "uturn") {
+            footprint.push(stairLandingRect(stair));
+          }
+          return footprint;
+        })
+        .map(piece => ({
+          x: Math.max(room.x, piece.x),
+          y: Math.max(room.y, piece.y),
+          w: Math.min(room.x + room.w, piece.x + piece.w) - Math.max(room.x, piece.x),
+          h: Math.min(room.y + room.h, piece.y + piece.h) - Math.max(room.y, piece.y)
         }))
         .filter(hole => hole.w > 0.05 && hole.h > 0.05);
     }
