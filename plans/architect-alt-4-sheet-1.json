@@ -217,7 +217,7 @@
       "shape": "turned",
       "turn": "right",
       "landing": 1.05,
-      "rotation": 180.0,
+      "rotation": 270.0,
       "level": 0,
       "height": 2.75,
       "color": "#3d2418",

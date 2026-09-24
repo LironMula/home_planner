@@ -1666,13 +1666,15 @@ def validate_alt4_plan(plan: dict) -> None:
         for stair in plan["stairs"]
     ):
         raise ValueError("Alt 4 staircases must use the specified solid dark-wood finish")
+    expected_stair_rotations = {"basement": 180, "ground": 180, "living": 270}
     if len(plan["stairs"]) != 3 or any(
         stair.get("shape") != "turned"
         or stair.get("turn") != "right"
         or abs(float(stair.get("landing", 0)) - 1.05) > 0.01
+        or float(stair.get("rotation", 0)) != expected_stair_rotations[stair["floorId"].rsplit("-", 1)[-1]]
         for stair in plan["stairs"]
     ):
-        raise ValueError("Alt 4 staircases must preserve their 90-degree podest geometry")
+        raise ValueError("Alt 4 staircases must preserve their source-specific 90-degree podest orientation")
 
     living_slab = next(slab for slab in slabs if slab["floorId"].endswith("-living"))
     flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
@@ -1947,12 +1949,19 @@ def build_plan(
 
         top_key = "floor2" if design.key.startswith("architect-alt-4") else "upper"
         if sheet.key != top_key:
+            # The yellow tread clusters share an L shape but not a common
+            # compass orientation. The living-to-floor-2 flight turns 90
+            # degrees clockwise relative to the lower two flights.
             stair_specs = {
-                "basement": (17.15, 13.70, 2.45, 3.25),
-                "ground": (13.85, 13.95, 2.55, 3.30),
-                "living": (16.80, 13.55, 2.35, 3.25),
+                "basement": (17.15, 13.70, 2.45, 3.25, 0),
+                "ground": (13.85, 13.95, 2.55, 3.30, 0),
+                "living": (16.80, 13.55, 2.35, 3.25, 90),
             }
-            stair_x, stair_y, stair_w, stair_h = stair_specs.get(sheet.key, design.stair) if design.key.startswith("architect-alt-4") else design.stair
+            if design.key.startswith("architect-alt-4"):
+                stair_x, stair_y, stair_w, stair_h, stair_rotation = stair_specs.get(sheet.key, (*design.stair, 0))
+            else:
+                stair_x, stair_y, stair_w, stair_h = design.stair
+                stair_rotation = 0
             stairs.append({
                 "id": f"{floor_id}-stairs",
                 "type": "stair",
@@ -1965,7 +1974,7 @@ def build_plan(
                 "shape": "turned" if design.key.startswith("architect-alt-4") else "uturn",
                 "turn": "right",
                 "landing": 1.05,
-                "rotation": 0,
+                "rotation": stair_rotation,
                 "level": 0,
                 "height": 2.75 if design.key.startswith("architect-alt-4") else 2.8,
                 "color": "#3d2418" if design.key.startswith("architect-alt-4") else "#6e62cf",

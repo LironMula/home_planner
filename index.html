@@ -5030,23 +5030,28 @@
         curl.scale.set(scale, 1.08, scale);
       });
 
-      addPart(new THREE.BoxGeometry(0.34, 0.58, 0.18), shirt, 0, 1.14, 0);
+      // A gently tapered shirt and articulated limbs avoid the rigid block silhouette in reflections.
+      addPart(new THREE.CylinderGeometry(0.132, 0.175, 0.58, 16), shirt, 0, 1.14, 0);
       const leftCollar = addPart(new THREE.BoxGeometry(0.1, 0.07, 0.025), shirt, -0.052, 1.405, 0.106);
       const rightCollar = addPart(new THREE.BoxGeometry(0.1, 0.07, 0.025), shirt, 0.052, 1.405, 0.106);
       leftCollar.rotation.z = -0.45;
       rightCollar.rotation.z = 0.45;
-      // White short sleeves stop above the elbow, leaving the forearms visible.
-      addPart(new THREE.BoxGeometry(0.14, 0.24, 0.16), shirt, -0.23, 1.26, 0);
-      addPart(new THREE.BoxGeometry(0.14, 0.24, 0.16), shirt, 0.23, 1.26, 0);
-      addPart(new THREE.BoxGeometry(0.08, 0.27, 0.12), skin, -0.25, 0.97, 0);
-      addPart(new THREE.BoxGeometry(0.08, 0.27, 0.12), skin, 0.25, 0.97, 0);
+      // White short sleeves stop above the elbow, leaving slim, relaxed forearms visible.
+      const leftSleeve = addPart(new THREE.CylinderGeometry(0.058, 0.072, 0.23, 12), shirt, -0.205, 1.27, 0);
+      const rightSleeve = addPart(new THREE.CylinderGeometry(0.058, 0.072, 0.23, 12), shirt, 0.205, 1.27, 0);
+      leftSleeve.rotation.z = 0.12;
+      rightSleeve.rotation.z = -0.12;
+      const leftForearm = addPart(new THREE.CylinderGeometry(0.038, 0.045, 0.28, 12), skin, -0.235, 0.99, 0);
+      const rightForearm = addPart(new THREE.CylinderGeometry(0.038, 0.045, 0.28, 12), skin, 0.235, 0.99, 0);
+      leftForearm.rotation.z = 0.07;
+      rightForearm.rotation.z = -0.07;
       [1.29, 1.19, 1.09, 0.99].forEach(y => {
         addPart(new THREE.SphereGeometry(0.012, 10, 7), button, 0, y, 0.106);
       });
-      addPart(new THREE.SphereGeometry(0.055, 12, 8), skin, -0.25, 0.79, 0);
-      addPart(new THREE.SphereGeometry(0.055, 12, 8), skin, 0.25, 0.79, 0);
-      addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, -0.11, 0.43, 0);
-      addPart(new THREE.BoxGeometry(0.16, 0.78, 0.16), trousers, 0.11, 0.43, 0);
+      addPart(new THREE.SphereGeometry(0.046, 12, 8), skin, -0.245, 0.79, 0);
+      addPart(new THREE.SphereGeometry(0.046, 12, 8), skin, 0.245, 0.79, 0);
+      addPart(new THREE.CylinderGeometry(0.064, 0.074, 0.78, 12), trousers, -0.09, 0.43, 0);
+      addPart(new THREE.CylinderGeometry(0.064, 0.074, 0.78, 12), trousers, 0.09, 0.43, 0);
       avatar.visible = false;
       return avatar;
     }
