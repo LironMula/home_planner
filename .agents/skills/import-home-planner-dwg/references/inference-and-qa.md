@@ -156,7 +156,7 @@ Decode and validate stairs before applying the whole-house/site transform:
 2. Treat the point of the outgoing triangle as the upper endpoint. Set the run direction from the lower endpoint toward that point, then transform both the footprint and direction together.
 3. Derive the footprint from the outer stair/landing edges rather than from tread extents alone. Preserve intermediate landings and turns instead of collapsing a U- or L-shaped stair into one straight rectangle.
 4. On the source floor, verify the lower endpoint and first tread. On the destination floor, verify that the upper endpoint meets the stairwell opening or landing without a lateral offset.
-5. Compare the same stair core across adjacent sheets using walls and slab openings as registration anchors. A mismatch at the destination is a transform or direction failure, not permission to move only the rendered stair.
+5. Compare the same stair core across adjacent sheets using walls and slab openings as registration anchors. Compare the complete flight bounding footprints as well: they should overlap substantially in both axes around the shared core, rather than only meet at an edge or corner. A mismatch at the destination is a transform or direction failure, not permission to move only the rendered stair.
 
 Record the detected lower point, upper triangle point, run/turn shape, footprint, source floor, and destination floor. Add generator checks for endpoint registration and transformed direction whenever a preset contains stairs.
 

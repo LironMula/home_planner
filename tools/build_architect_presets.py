@@ -1660,6 +1660,14 @@ def validate_alt4_plan(plan: dict) -> None:
         for stair in plan["stairs"]
     ):
         raise ValueError("Alt 4 staircases must preserve their source-specific 90-degree podest orientation and turn")
+    stairs_by_floor = {stair["floorId"].rsplit("-", 1)[-1]: stair for stair in plan["stairs"]}
+    for lower_floor, upper_floor in (("basement", "ground"), ("ground", "living")):
+        lower = stairs_by_floor[lower_floor]
+        upper = stairs_by_floor[upper_floor]
+        overlap_x = min(lower["x"] + lower["w"], upper["x"] + upper["w"]) - max(lower["x"], upper["x"])
+        overlap_y = min(lower["y"] + lower["h"], upper["y"] + upper["h"]) - max(lower["y"], upper["y"])
+        if overlap_x < min(lower["w"], upper["w"]) * 0.75 or overlap_y < min(lower["h"], upper["h"]) * 0.75:
+            raise ValueError(f"{lower_floor}-to-{upper_floor} stairs must register to the same structural core")
 
     living_slab = next(slab for slab in slabs if slab["floorId"].endswith("-living"))
     flat_roof = next(roof for roof in plan["roofs"] if roof.get("name") == "Lower wing flat roof")
@@ -1934,7 +1942,11 @@ def build_plan(
             # left, while the living-to-floor-2 flight rotates clockwise.
             stair_specs = {
                 "basement": (17.15, 13.70, 2.45, 3.25, 0, "right"),
-                "ground": (13.85, 13.95, 2.55, 3.30, 0, "left"),
+                # Register the entrance-flight footprint to the same stair
+                # core as its basement and living-floor landings. The older
+                # value was a visually similar yellow tread cluster shifted
+                # 2.75 m sideways from the structural opening.
+                "ground": (16.60, 13.50, 2.55, 3.30, 0, "left"),
                 "living": (16.80, 13.55, 2.35, 3.25, 90, "right"),
             }
             if design.key.startswith("architect-alt-4"):

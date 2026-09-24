@@ -64,7 +64,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Check door centers against wall gaps and verify swing direction after rotation.
 - For the guest bathroom, preserve the left-opening entrance door and mount the sink's back directly to the bathroom wall. For a private suite, verify the full room sequence before adding a divider: the Alt-4 master suite enters through the walk-in's dedicated host wall, rather than through a second free-standing bedroom divider.
 - Preserve stated local room dimensions exactly instead of applying an overall scale correction. In Alt-4, both living-floor child rooms use the 285 cm DWG span.
-- Check each stair's source footprint, lower endpoint, outgoing-triangle upper endpoint, and destination-floor landing after rotation. Adjacent-floor stair cores must register without lateral drift.
+- Check each stair's source footprint, lower endpoint, outgoing-triangle upper endpoint, and destination-floor landing after rotation. Adjacent-floor stair cores must register without lateral drift: their whole footprint boxes must share at least 75% of the smaller flight in both axes. This catches an otherwise correctly shaped entrance stair shifted onto a nearby yellow tread cluster.
 - Check counters touch walls, sinks overlap counters, and sanitary fixtures remain inside their rooms.
 - Check every repeated cabinet run for complete length, inward-facing fronts, panel divisions, and visible handles.
 - Compare imported furniture symbols as a room set so duplicate sofas, missing desks, and incomplete wardrobes are caught together.
