@@ -424,23 +424,41 @@ const server = http.createServer((req, res) => {
     assert(Math.abs(wheelDirections.keyRaised[1]-.4)<1e-6,JSON.stringify(wheelDirections));
     assert.equal(wheelDirections.groundHeight,0);
     assert.equal(wheelDirections.yawAfter,wheelDirections.yawBefore);
-    const acceleratedWheel=await page.evaluate(() => {
-      three.orbit.position.set(4,1.5,6);
+    const acceleration=await page.evaluate(() => {
+      const wheelEvent={deltaX:0,deltaY:-120,deltaMode:0,shiftKey:false};
       three.wheelSteps=[];
+      const fastOneSecond=Array.from({length:10},(_,index)=>wheelStepForEvent(wheelEvent,'forward',index*100));
+      three.wheelSteps=[];
+      const fastThreeSeconds=Array.from({length:20},(_,index)=>wheelStepForEvent(wheelEvent,'forward',index*150));
+      const resetAfterPause=wheelStepForEvent(wheelEvent,'forward',6000);
+      three.orbit.position.set(4,1.5,6);
+      three.walkKeyHold=null;
       updateCamera();
       const heading=cameraWalkVector();
       const start=three.orbit.position.clone();
-      const distances=[];
-      for(let i=0;i<3;i++){
-        moveCameraByWheel({deltaX:0,deltaY:-120,deltaMode:0,shiftKey:false});
-        distances.push(three.orbit.position.clone().sub(start).dot(heading));
-      }
-      return {distances,height:three.orbit.position.y};
+      moveCameraByKey('w',false,100);
+      const initial=three.orbit.position.clone().sub(start).dot(heading);
+      moveCameraByKey('w',true,2099);
+      const beforeHold=three.orbit.position.clone().sub(start).dot(heading);
+      moveCameraByKey('w',true,2100);
+      const afterHold=three.orbit.position.clone().sub(start).dot(heading);
+      window.dispatchEvent(new KeyboardEvent('keyup',{key:'w'}));
+      moveCameraByKey('w',false,2200);
+      const afterRelease=three.orbit.position.clone().sub(start).dot(heading);
+      moveCameraByKey('s',false,2300);
+      const reverse=three.orbit.position.clone().sub(start).dot(heading);
+      three.walkKeyHold=null;
+      return {fastOneSecond,fastThreeSeconds,resetAfterPause,initial,beforeHold,afterHold,afterRelease,reverse,height:three.orbit.position.y};
     });
-    for(const [index,expected] of [.1,.2,1.2].entries()){
-      assert(Math.abs(acceleratedWheel.distances[index]-expected)<1e-6,JSON.stringify(acceleratedWheel));
+    assert(acceleration.fastOneSecond.slice(0,9).every(step=>step===.1),JSON.stringify(acceleration));
+    assert.equal(acceleration.fastOneSecond[9],1);
+    assert(acceleration.fastThreeSeconds.slice(0,19).every(step=>step===.1),JSON.stringify(acceleration));
+    assert.equal(acceleration.fastThreeSeconds[19],1);
+    assert.equal(acceleration.resetAfterPause,.1);
+    for(const [key,expected] of Object.entries({initial:.1,beforeHold:.2,afterHold:1.2,afterRelease:1.3,reverse:1.2})){
+      assert(Math.abs(acceleration[key]-expected)<1e-6,JSON.stringify(acceleration));
     }
-    assert.equal(acceleratedWheel.height,1.5);
+    assert.equal(acceleration.height,1.5);
     await page.evaluate(() => { three.orbit.position.y=1.5; three.orbit.pitch=.3; updateCamera(); });
     await page.locator('#horizonCameraBtn').click();
     const horizon=await page.evaluate(() => {

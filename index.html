@@ -1753,6 +1753,7 @@
       drag: null,
       orbit: { yaw: 2.39, pitch: -0.62, position: null },
       wheelSteps: [],
+      walkKeyHold: null,
       pendingCamera: null,
       cameraMarker: {
         colors: ["#808080", "#ffffff", "#f97316", "#2563eb", "#111827", "#808080"],
@@ -5272,11 +5273,11 @@
         : new THREE.Vector3(Math.sin(three.orbit.yaw), 0, Math.cos(three.orbit.yaw));
     }
 
-    function wheelStepForEvent(event, axis) {
-      const now = performance.now();
-      three.wheelSteps = three.wheelSteps.filter(step => now - step.time < 1000 && step.axis === axis);
+    function wheelStepForEvent(event, axis, now = performance.now()) {
+      three.wheelSteps = three.wheelSteps.filter(step => now - step.time <= 3000 && step.axis === axis);
       three.wheelSteps.push({ time: now, axis });
-      return three.wheelSteps.length >= 3 ? 1 : 0.1;
+      const recentSecond = three.wheelSteps.filter(step => now - step.time <= 1000).length;
+      return recentSecond >= 10 || three.wheelSteps.length >= 20 ? 1 : 0.1;
     }
 
     function moveCameraByWheel(event) {
@@ -5296,9 +5297,16 @@
       }
     }
 
-    function moveCameraByKey(key) {
+    function moveCameraByKey(key, repeat = false, now = performance.now()) {
       if (!three.orbit.position) return false;
-      const moveStep = 0.1;
+      let moveStep = 0.1;
+      if (key === "w" || key === "s") {
+        if (!repeat || !three.walkKeyHold || three.walkKeyHold.key !== key) {
+          three.walkKeyHold = { key, startedAt: now };
+        } else if (now - three.walkKeyHold.startedAt >= 2000) {
+          moveStep = 1;
+        }
+      }
       const turnStep = 0.08;
       if (key === "w") three.orbit.position.addScaledVector(cameraWalkVector(), moveStep);
       else if (key === "s") three.orbit.position.addScaledVector(cameraWalkVector(), -moveStep);
@@ -8349,7 +8357,7 @@
       const active = document.activeElement;
       if (!event.ctrlKey && !event.metaKey && ["w", "a", "s", "d", "q", "e", "z", "c"].includes(event.key.toLowerCase())) {
         if (active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName)) return;
-        if (moveCameraByKey(event.key.toLowerCase())) event.preventDefault();
+        if (moveCameraByKey(event.key.toLowerCase(), event.repeat)) event.preventDefault();
         return;
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
@@ -8384,6 +8392,10 @@
         state.drag = null;
       }
     });
+    window.addEventListener("keyup", event => {
+      if (three.walkKeyHold?.key === event.key.toLowerCase()) three.walkKeyHold = null;
+    });
+    window.addEventListener("blur", () => { three.walkKeyHold = null; });
 
     updateCameraModeControl();
     if (!loadSavedPlan()) loadSample(false);
