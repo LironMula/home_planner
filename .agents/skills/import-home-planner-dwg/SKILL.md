@@ -13,10 +13,11 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 - Write generated plans under `plans/`; do not hand-fix JSON without making the equivalent generator change.
 - Read `docs/architect-import-rules.md` when the source is Alt-4 or shares its drawing conventions.
 - Read [references/inference-and-qa.md](references/inference-and-qa.md) before interpreting a new drawing or diagnosing broad import errors.
+- For Alt-4 colors and finishes, read [references/alt4-materials.md](references/alt4-materials.md). The existing Alt-4 save is authoritative over older skill notes or importer defaults. Transfer appearance by floor and semantic role, not old geometry or CAD layer colors.
 
 ## Workflow
 
-1. Inspect the DXF structurally with `ezdxf`: sheets, extents, layers, blocks, text, dimensions, linework, and repeated symbol geometry. Render focused layer and floor crops when semantics remain unclear.
+1. Inspect the DWG layer table and a layer-preserving DXF structurally with `ezdxf`: sheets, extents, layers, blocks, text, dimensions, linework, and repeated symbol geometry. Verify that the conversion retains the original layer names and that the source files match. Read [references/layer-contract.md](references/layer-contract.md) for the user-specified Alt-4 layer mapping and the required layer-content checks. Render focused layer and floor crops when semantics remain unclear.
 2. Establish one coordinate contract before extracting objects: source units, sheet crop, Y direction, floor registration, north, site translation, and whole-house rotation. Apply the same transform to centers, rotations, roof directions, and opening hosts. Keep site context outside house-only transforms. Record whether every manual correction is in source coordinates or final planner coordinates; never apply a final-coordinate repair before the shared transform or a source-coordinate repair after it.
 3. Reconstruct walls and room boundaries first. Recover missing wall spans from collinearity, thickness, endpoints, dimensions, and neighboring floors. Treat exploded linework as evidence, not architecture: a new structural wall requires two supported endpoints and a room-boundary role. It must not be added merely to host a door, join furniture edges, or make a partial drawing look closed. Then place openings, fixed fixtures, furniture, finishes, roofs, and site objects in that order.
 4. Build a floor-scoped room inventory. Identify each object by `(floorId, room, role)`; never resolve generic names such as `Sink 1` globally. Use stable semantic names for deliberate corrections.
@@ -24,7 +25,8 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 6. Convert user annotations such as “left of the door,” “after the sink,” or numbered arrows into explicit geometric constraints and generator validations. For every room, trace the path from its entry through its circulation space before accepting its doors, closets, or fixtures.
 7. Preserve intentional overlap only: sink in counter, mirror on wall, appliance in cabinet. Flag furniture intersections, fixtures crossing walls, detached openings, inaccessible doors, and faces or handles pointing outside the room. Check rotated footprints in world coordinates rather than their unrotated JSON boxes.
 8. Reconcile dimensions locally, room by room. Use the written clear span between finished wall faces as the authoritative measurement; do not try to fix a 285 cm room by rescaling a complete floor. Compare at least one horizontal and one vertical dimension for each room cluster before placing furniture.
-9. Regenerate every sibling preset derived from the same source and add validations for the newly learned invariant. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
+9. Regenerate only the requested designs and versions and add validations for the newly learned invariant. For a requested fresh start, create a separately named save (such as `architect-alt-4-v2`) and register it in `plans/projects.json`; preserve earlier saves and other alternatives. Re-extract geometry from the verified layers. Earlier repairs and saved-plan coordinates are QA evidence, not defaults to copy into a fresh import. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
+10. Reconcile appearance separately from geometry. Inventory the authoritative save's `color`, `opacity`, `finish`, and `type1` values by floor, room, and role, including opening variants. Resolve conflicts in favor of that save and add missing material rules to the skill. Preserve finish selectors and renderer assets, not just base hex colors. Report unmatched roles rather than silently using a generic furniture palette.
 
 ## Structural Decision Rules
 
@@ -48,6 +50,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 - Check active/front faces: cabinet handles, desks, toilets, sinks, doors, and appliances must face into the intended room.
 - Review every kitchen/pantry cabinet run for its full source length, depth, height, panel layout, and integrated appliances; do not accept a generic cabinet surrogate when the source shows a refrigerator or other distinct bay.
 - Run generator validation, JavaScript syntax checks, and `git diff --check`.
+- Compare the new plan's material inventory against the authoritative save by semantic role. Check floor textures, pure-white ceiling undersides, wall tint, dark stair wood, kitchen band ratios, island top, glass opacity, and special bathroom/wardrobe finishes separately. A successful geometry check does not validate materials.
 - Use browser screenshots at desktop size: focused 2D room crop, human-height 3D view from the entrance, exterior views where openings matter, and all-floor section view for floors/ceilings/roofs.
 - Do not publish merely because generation succeeded. Finish visual QA and follow the repository’s publication authorization rules.
 

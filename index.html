@@ -5434,6 +5434,8 @@
     }
 
     function inferredStorySlab(floor, rooms, walls, boundary) {
+      // A site boundary is not evidence of an enclosed building story.
+      if (floor.exteriorOnly === true) return null;
       let points = [];
       const enclosedRooms = rooms.filter(room => room.type !== "space");
       if (enclosedRooms.length) {

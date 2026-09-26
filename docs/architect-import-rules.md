@@ -2,6 +2,12 @@
 
 Compact record for applying the Alt-4 corrections to later architect designs.
 
+For colors and finishes, the existing Alt-4 save is authoritative. Read
+`.agents/skills/import-home-planner-dwg/references/alt4-materials.md` for the
+verified role-specific palette, opacity, finish selectors, and renderer-owned
+materials. Resolve older color guidance in favor of the saved Alt-4; this does
+not authorize copying its geometry into a fresh DWG import.
+
 ## Transform
 
 - Convert CAD centimetres to planner metres and invert the CAD Y axis.
@@ -23,7 +29,7 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 - Raise the integrated kitchen sink so its basin rim is flush with the 0.92 m work surface and its tap remains exposed.
 - Use light-gray granite on the entrance floor and parquet on the living floor. Preserve those finishes on the upper face of each floor layer.
 - Mark imported architectural slabs as structural so the Spaces toggle and wall-overlap suppression cannot hide them. Render every selected story as two separate surfaces: its own colored or finished floor above and an opaque white ceiling below. Both surfaces belong to that story, follow the 3D floor selector, and hide together with the Floor control.
-- Store house walls as `#fefdfa` (90% white, 10% cream); keep translucency only for glass and site/context geometry. Add a small white emissive contribution in 3D so wall faces remain bright under scene lighting, and render a 2 cm gray edge on every structural wall for readable boundaries.
+- Store house walls as `#fefdfa` (90% white, 10% cream), opacity 1. Preserve the saved role-specific opacity for openings and furniture rather than making everything opaque. Add a small matching emissive contribution in 3D so wall faces remain bright under scene lighting, and render a 2 cm gray edge on every structural wall for readable boundaries. Verify the edge physically: the current line-width metadata alone does not guarantee a 2 cm mesh strip.
 - Store Alt-4 stair treads and landings as solid dark wood (`#3d2418`), using a restrained gray outline for 2D plan legibility.
 - In the Alt-4 CAD source, identify staircases from the complete yellow tread/landing cluster. The outgoing triangle marks the upper end, so ascent runs toward its point. Preserve that direction through the house transform and align the upper endpoint with the next floor's stairwell opening; do not place the stair from a generic preset rectangle alone.
 - Alt-4 staircases are L-shaped: model one 90-degree podest at the yellow landing, never a U-turn. Confirm the outgoing triangle remains at the upper endpoint after the whole-house transform. Do not apply one rotation or turn direction to every flight: basement-to-ground uses 180 degrees/right turn; ground-to-living uses 180 degrees/left turn; living-to-floor-2 uses 270 degrees/right turn.
@@ -53,6 +59,9 @@ Compact record for applying the Alt-4 corrections to later architect designs.
 
 ## Site Context
 
+- For the fresh Alt-4 v2 rebuild, reuse the existing Alt-4 exterior preserved in `plans/ruchama-18-20-external.json`. This separate save contains the site/context objects plus the outdoor dining assembly, not the house shell, indoor objects, stairs, roofs, or structural slabs. `tools/build_external_plan.py` extracts it without changing object geometry or colors. Keep it in its saved world frame and register newly extracted house geometry to that frame; do not apply the house-only rotation to the exterior again.
+- The standalone site's floor has `exteriorOnly: true` to prevent inferred house floors/ceilings from covering the garden. When combining its objects with a rebuilt house, retain the house's own floor record, not this exterior-only flag. A property boundary is not a building footprint.
+- The following older source references explain the exterior's provenance; do not reimport them over the authoritative existing Alt-4 exterior:
 - Copy fence, road, trees, neighboring buildings, and garden furniture from `house_3d_view_alt4_ron_limor_yahal`.
 - Copy grass regions, pool, and outdoor ninja set from `ruchama_20_v01_2026_05_30`.
 - Site objects remain on the ground floor and are never included in the house rotation.
