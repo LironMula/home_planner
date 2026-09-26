@@ -654,6 +654,21 @@
       background: #101721;
     }
 
+    .view-shell:fullscreen,
+    .view-shell.viewport-fullscreen {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .view-shell.viewport-fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+    }
+
     .viewbar {
       color: #edf6f8;
       background: #182333;
@@ -681,6 +696,15 @@
     .viewbar .ghost-btn {
       padding-inline: 7px;
       white-space: nowrap;
+    }
+
+    .viewbar .fullscreen-btn {
+      width: 34px;
+      min-width: 34px;
+      height: 34px;
+      padding: 0;
+      font-size: 23px;
+      line-height: 1;
     }
 
     .viewbar .toolbar-group {
@@ -1480,7 +1504,7 @@
 
     <div class="split-resizer" id="splitResizer" role="separator" aria-label="Resize 2D and 3D views" aria-orientation="vertical" tabindex="0"></div>
 
-    <section class="view-shell" aria-label="3D model view">
+    <section class="view-shell" id="viewShell" aria-label="3D model view">
       <div class="viewbar">
         <div class="toolbar-group">
           <div class="section-title">3D View</div>
@@ -1538,6 +1562,7 @@
           </label>
           <button class="ghost-btn" id="horizonCameraBtn" type="button" title="Look straight toward the horizon">Horizon</button>
           <button class="ghost-btn" id="resetCameraBtn" type="button" title="Reset 3D camera">Reset View</button>
+          <button class="ghost-btn fullscreen-btn" id="fullscreen3DBtn" type="button" title="Enter 3D fullscreen" aria-label="Enter 3D fullscreen" aria-pressed="false">&#x26F6;</button>
         </div>
       </div>
       <div class="viewstage">
@@ -1741,6 +1766,7 @@
 
     const els = {
       app: document.querySelector(".app"),
+      viewShell: document.getElementById("viewShell"),
       sidebar: document.querySelector(".sidebar"),
       controlAutoHideBtn: document.getElementById("controlAutoHideBtn"),
       splitResizer: document.getElementById("splitResizer"),
@@ -1797,6 +1823,7 @@
       fitBtn: document.getElementById("fitBtn"),
       sampleBtn: document.getElementById("sampleBtn"),
       resetCameraBtn: document.getElementById("resetCameraBtn"),
+      fullscreen3DBtn: document.getElementById("fullscreen3DBtn"),
       horizonCameraBtn: document.getElementById("horizonCameraBtn"),
       cameraModeBtn: document.getElementById("cameraModeBtn"),
       cameraModeMenu: document.getElementById("cameraModeMenu"),
@@ -4988,6 +5015,38 @@
       initCameraMarkerWatcher();
       resizeCanvases();
       render3D();
+    }
+
+    function sync3DFullscreen() {
+      const active = document.fullscreenElement === els.viewShell || els.viewShell.classList.contains("viewport-fullscreen");
+      const label = active ? "Exit 3D fullscreen" : "Enter 3D fullscreen";
+      els.fullscreen3DBtn.title = label;
+      els.fullscreen3DBtn.setAttribute("aria-label", label);
+      els.fullscreen3DBtn.setAttribute("aria-pressed", String(active));
+      els.fullscreen3DBtn.textContent = active ? "\u00d7" : "\u26f6";
+      requestAnimationFrame(() => requestAnimationFrame(resizeCanvases));
+    }
+
+    async function toggle3DFullscreen() {
+      if (document.fullscreenElement === els.viewShell) {
+        await document.exitFullscreen();
+        return;
+      }
+      if (els.viewShell.classList.contains("viewport-fullscreen")) {
+        els.viewShell.classList.remove("viewport-fullscreen");
+        sync3DFullscreen();
+        return;
+      }
+      if (els.viewShell.requestFullscreen) {
+        try {
+          await els.viewShell.requestFullscreen();
+          return;
+        } catch (error) {
+          // Embedded browsers can deny native fullscreen; keep the view usable.
+        }
+      }
+      els.viewShell.classList.add("viewport-fullscreen");
+      sync3DFullscreen();
     }
 
     function humanVerticalFov(horizontalFov, aspect) {
@@ -8186,6 +8245,8 @@
       state.viewFloor = els.viewFloorSelect.value;
       render3D();
     });
+    els.fullscreen3DBtn.addEventListener("click", toggle3DFullscreen);
+    document.addEventListener("fullscreenchange", sync3DFullscreen);
     els.viewToggles.addEventListener("click", event => {
       const btn = event.target.closest(".toggle-btn");
       if (!btn) return;
@@ -8226,6 +8287,11 @@
         deleteSelected();
       }
       if (event.key === "Escape") {
+        if (document.fullscreenElement === els.viewShell) document.exitFullscreen();
+        if (els.viewShell.classList.contains("viewport-fullscreen")) {
+          els.viewShell.classList.remove("viewport-fullscreen");
+          sync3DFullscreen();
+        }
         closeCameraModeMenu();
         closeViewHelp();
         setTool("select");

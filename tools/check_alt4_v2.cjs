@@ -103,6 +103,30 @@ const server = http.createServer((req, res) => {
     await page.keyboard.up('w');
     const afterMove=await page.evaluate(()=>three.orbit.position.toArray());
     assert(Math.hypot(...afterMove.map((v,i)=>v-beforeMove[i]))>.02,'Keyboard movement must change the camera');
+    const fullscreenButton=page.locator('#fullscreen3DBtn');
+    await fullscreenButton.click();
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='true');
+    await page.waitForFunction(() => three.renderer.domElement.width>=document.getElementById('threeCanvas').getBoundingClientRect().width);
+    const fullscreen=await page.evaluate(() => {
+      const view=document.getElementById('viewShell').getBoundingClientRect();
+      const canvas=document.getElementById('threeCanvas').getBoundingClientRect();
+      return {view:{x:view.x,y:view.y,width:view.width,height:view.height},
+        canvas:{width:canvas.width,height:canvas.height},
+        buffer:{width:three.renderer.domElement.width,height:three.renderer.domElement.height},
+        viewport:{width:innerWidth,height:innerHeight}};
+    });
+    assert(Math.abs(fullscreen.view.x)<2 && Math.abs(fullscreen.view.y)<2,JSON.stringify(fullscreen));
+    assert(Math.abs(fullscreen.view.width-fullscreen.viewport.width)<2,JSON.stringify(fullscreen));
+    assert(Math.abs(fullscreen.view.height-fullscreen.viewport.height)<2,JSON.stringify(fullscreen));
+    assert(fullscreen.canvas.width>fullscreen.viewport.width*.8,JSON.stringify(fullscreen));
+    assert(fullscreen.buffer.width>=fullscreen.canvas.width,JSON.stringify(fullscreen));
+    await page.screenshot({path:path.join(output,'browser-fullscreen.png')});
+    await fullscreenButton.click();
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='false');
+    await fullscreenButton.click();
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='true');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='false');
     await page.setViewportSize({width:390,height:844});
     await page.waitForTimeout(150);
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Mobile page must not overflow horizontally');
@@ -113,6 +137,22 @@ const server = http.createServer((req, res) => {
     });
     await page.locator('.view-shell').scrollIntoViewIfNeeded();
     await page.screenshot({path:path.join(output,'browser-mobile-view.png')});
+    await page.evaluate(() => { document.getElementById('viewShell').requestFullscreen=undefined; });
+    await fullscreenButton.click();
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='true');
+    const mobileFullscreen=await page.evaluate(() => {
+      const view=document.getElementById('viewShell').getBoundingClientRect();
+      const canvas=document.getElementById('threeCanvas').getBoundingClientRect();
+      return {view:{x:view.x,y:view.y,width:view.width,height:view.height},canvasHeight:canvas.height,
+        viewport:{width:innerWidth,height:innerHeight}};
+    });
+    assert(Math.abs(mobileFullscreen.view.x)<2 && Math.abs(mobileFullscreen.view.y)<2,JSON.stringify(mobileFullscreen));
+    assert(Math.abs(mobileFullscreen.view.width-mobileFullscreen.viewport.width)<2,JSON.stringify(mobileFullscreen));
+    assert(Math.abs(mobileFullscreen.view.height-mobileFullscreen.viewport.height)<2,JSON.stringify(mobileFullscreen));
+    assert(mobileFullscreen.canvasHeight>mobileFullscreen.viewport.height*.5,JSON.stringify(mobileFullscreen));
+    await page.screenshot({path:path.join(output,'browser-mobile-fullscreen.png')});
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='false');
     await page.screenshot({path:path.join(output,'browser-mobile.png'),fullPage:true});
     assert.equal(errors.length,0,errors.join('\n'));
     fs.writeFileSync(path.join(output,'browser-checks.json'),JSON.stringify({checks,isolation,errors},null,2));
