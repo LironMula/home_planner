@@ -328,22 +328,31 @@ const server = http.createServer((req, res) => {
       const raised=three.orbit.position.clone().sub(start);
       moveCameraByWheel({deltaX:120,deltaY:0,deltaMode:0,shiftKey:false});
       const lowered=three.orbit.position.clone().sub(start);
-      three.wheelSteps=[];
       moveCameraByWheel({deltaX:0,deltaY:-120,deltaMode:0,shiftKey:true});
       const shiftRaised=three.orbit.position.clone().sub(start);
+      moveCameraByWheel({deltaX:-120,deltaY:0,deltaMode:0,shiftKey:false});
+      const repeatedRaise=three.orbit.position.clone().sub(start);
+      moveCameraByKey('z');
+      const keyLowered=three.orbit.position.clone().sub(start);
+      moveCameraByKey('c');
+      const keyRaised=three.orbit.position.clone().sub(start);
       three.orbit.position.y=0;
       moveCameraByWheel({deltaX:120,deltaY:0,deltaMode:0,shiftKey:false});
       return {heading:heading.toArray(),forward:forward.toArray(),returned:returned.toArray(),
         raised:raised.toArray(),lowered:lowered.toArray(),shiftRaised:shiftRaised.toArray(),
+        repeatedRaise:repeatedRaise.toArray(),keyLowered:keyLowered.toArray(),keyRaised:keyRaised.toArray(),
         groundHeight:three.orbit.position.y,yawBefore:yaw,yawAfter:three.orbit.yaw};
     });
     assert(Math.abs(wheelDirections.forward[1])<1e-8,JSON.stringify(wheelDirections));
     assert(Math.abs(wheelDirections.forward[0]-wheelDirections.heading[0]*.25)<1e-6,JSON.stringify(wheelDirections));
     assert(Math.abs(wheelDirections.forward[2]-wheelDirections.heading[2]*.25)<1e-6,JSON.stringify(wheelDirections));
     assert(wheelDirections.returned.every(value=>Math.abs(value)<1e-6),JSON.stringify(wheelDirections));
-    assert(Math.abs(wheelDirections.raised[1]-.25)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.raised[1]-.2)<1e-6,JSON.stringify(wheelDirections));
     assert(wheelDirections.lowered.every(value=>Math.abs(value)<1e-6),JSON.stringify(wheelDirections));
-    assert(Math.abs(wheelDirections.shiftRaised[1]-.25)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.shiftRaised[1]-.2)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.repeatedRaise[1]-.4)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.keyLowered[1]-.2)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.keyRaised[1]-.4)<1e-6,JSON.stringify(wheelDirections));
     assert.equal(wheelDirections.groundHeight,0);
     assert.equal(wheelDirections.yawAfter,wheelDirections.yawBefore);
     await page.evaluate(() => { three.orbit.position.y=1.5; three.orbit.pitch=.3; updateCamera(); });

@@ -1850,6 +1850,7 @@
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const humanHorizontalFov = 100;
     const horizonViewPitch = -Math.PI / 12;
+    const cameraVerticalStep = 0.2;
     const storageKey = "home-floor-planner-v1";
     const githubPlanConfig = {
       owner: "LironMula",
@@ -5291,15 +5292,13 @@
         const step = wheelStepForEvent(event, "forward");
         three.orbit.position.addScaledVector(cameraWalkVector(), scrollY < 0 ? step : -step);
       } else if (Math.abs(scrollX) > 0) {
-        const step = wheelStepForEvent(event, "height");
-        three.orbit.position.y = clamp(three.orbit.position.y + (scrollX < 0 ? step : -step), 0, 120);
+        three.orbit.position.y = clamp(three.orbit.position.y + (scrollX < 0 ? cameraVerticalStep : -cameraVerticalStep), 0, 120);
       }
     }
 
     function moveCameraByKey(key) {
       if (!three.orbit.position) return false;
       const moveStep = 0.35;
-      const verticalStep = 0.25;
       const turnStep = 0.08;
       if (key === "w") three.orbit.position.addScaledVector(cameraWalkVector(), moveStep);
       else if (key === "s") three.orbit.position.addScaledVector(cameraWalkVector(), -moveStep);
@@ -5307,8 +5306,8 @@
       else if (key === "d") three.orbit.yaw -= turnStep;
       else if (key === "q") three.orbit.pitch = clamp(three.orbit.pitch + turnStep, -1.35, 1.35);
       else if (key === "e") three.orbit.pitch = clamp(three.orbit.pitch - turnStep, -1.35, 1.35);
-      else if (key === "z") three.orbit.position.y = clamp(three.orbit.position.y - verticalStep, 0, 120);
-      else if (key === "c") three.orbit.position.y = clamp(three.orbit.position.y + verticalStep, 0, 120);
+      else if (key === "z") three.orbit.position.y = clamp(three.orbit.position.y - cameraVerticalStep, 0, 120);
+      else if (key === "c") three.orbit.position.y = clamp(three.orbit.position.y + cameraVerticalStep, 0, 120);
       else return false;
       updateCamera();
       return true;
