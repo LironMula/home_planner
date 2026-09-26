@@ -9,7 +9,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 
 ## Project Context
 
-- Treat `tools/build_architect_presets.py` as the source of truth for repeatable imports.
+- Keep generator changes with their target version: `tools/build_architect_presets.py` maintains the earlier presets; `tools/build_alt4_v2.py` is the separate layer-driven Alt-4 v2 reconstruction. Check the v2 audit's publication status before treating its unfinished geometry as validated.
 - Write generated plans under `plans/`; do not hand-fix JSON without making the equivalent generator change.
 - Read `docs/architect-import-rules.md` when the source is Alt-4 or shares its drawing conventions.
 - Read [references/inference-and-qa.md](references/inference-and-qa.md) before interpreting a new drawing or diagnosing broad import errors.
@@ -27,6 +27,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 8. Reconcile dimensions locally, room by room. Use the written clear span between finished wall faces as the authoritative measurement; do not try to fix a 285 cm room by rescaling a complete floor. Compare at least one horizontal and one vertical dimension for each room cluster before placing furniture.
 9. Regenerate only the requested designs and versions and add validations for the newly learned invariant. For a requested fresh start, create a separately named save (such as `architect-alt-4-v2`) and register it in `plans/projects.json`; preserve earlier saves and other alternatives. Re-extract geometry from the verified layers. Earlier repairs and saved-plan coordinates are QA evidence, not defaults to copy into a fresh import. Avoid exact coordinates as a general rule unless they describe a verified source-specific correction.
 10. Reconcile appearance separately from geometry. Inventory the authoritative save's `color`, `opacity`, `finish`, and `type1` values by floor, room, and role, including opening variants. Resolve conflicts in favor of that save and add missing material rules to the skill. Preserve finish selectors and renderer assets, not just base hex colors. Report unmatched roles rather than silently using a generic furniture palette.
+11. Inspect sections and elevations before accepting vertical geometry. Locate their native CAD entities, register the section cuts to the plan, and distinguish finished-floor elevations, clear heights, slab/finish depths, local split levels, roof radii, and roof rise. A plan-only layer contract does not establish roof geometry. Read the section-specific findings in [references/layer-contract.md](references/layer-contract.md) for Alt-4.
 
 ## Structural Decision Rules
 

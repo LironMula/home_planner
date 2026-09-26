@@ -58,6 +58,7 @@
     .app {
       display: grid;
       grid-template-columns: minmax(180px, 230px) minmax(420px, 1.4fr) 8px minmax(360px, 1fr);
+      grid-template-rows: minmax(0, 1fr);
       height: 100vh;
       min-height: 640px;
     }
@@ -65,6 +66,7 @@
     .sidebar,
     .inspector {
       min-width: 0;
+      min-height: 0;
       background: var(--panel);
       border-right: 1px solid var(--line);
       display: flex;
@@ -427,7 +429,9 @@
 
     .main {
       min-width: 0;
+      min-height: 0;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: var(--toolbar-h) minmax(0, 1fr) 148px;
       background: var(--canvas);
     }
@@ -454,6 +458,15 @@
       align-items: center;
       gap: 8px;
       min-width: 0;
+    }
+
+    .topbar {
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+
+    .topbar .toolbar-group {
+      flex: 0 0 auto;
     }
 
     .primary-btn {
@@ -487,6 +500,7 @@
       position: relative;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
     }
 
     .split-resizer {
@@ -633,7 +647,9 @@
 
     .view-shell {
       min-width: 0;
+      min-height: 0;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: var(--toolbar-h) minmax(0, 1fr);
       background: #101721;
     }
@@ -967,6 +983,7 @@
       position: relative;
       z-index: 1;
       min-height: 0;
+      min-width: 0;
       overflow: hidden;
     }
 
@@ -1162,6 +1179,15 @@
 
       .main {
         grid-template-rows: auto 520px auto;
+      }
+
+      .topbar .toolbar-group {
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+      }
+
+      .view-shell {
+        grid-template-rows: auto minmax(520px, 1fr);
       }
 
       .topbar,
@@ -3030,7 +3056,18 @@
       ctx.strokeStyle = active ? roomWallColor(room) : (isSpace ? "#0f766e" : roomWallColor(room));
       ctx.lineWidth = active ? 4 : (isSpace ? 2 : 3);
       if (isSpace) ctx.setLineDash([9, 7]);
-      ctx.fillRect(p.x, p.y, w, h);
+      ctx.beginPath();
+      ctx.rect(p.x, p.y, w, h);
+      (room.floorHoles || []).forEach(hole => {
+        const x = Math.max(room.x, hole.x), y = Math.max(room.y, hole.y);
+        const width = Math.min(room.x + room.w, hole.x + hole.w) - x;
+        const height = Math.min(room.y + room.h, hole.y + hole.h) - y;
+        if (width > 0 && height > 0) {
+          const origin = toCanvas({x, y});
+          ctx.rect(origin.x, origin.y, metersToPx(width), metersToPx(height));
+        }
+      });
+      ctx.fill("evenodd");
       ctx.strokeRect(p.x, p.y, w, h);
       ctx.setLineDash([]);
 
@@ -3234,6 +3271,9 @@
     }
 
     function stairPlanRuns(stair) {
+      if (validCadStair(stair)) {
+        return stair.cadRuns.map(run => ({ ...stairCadRect(stair, run), dir: run.dir, reverse: run.reverse === true }));
+      }
       const landing = clamp(Number(stair.landing) || 1.2, 0.6, Math.max(0.6, Math.min(stair.w, stair.h)));
       if (stair.shape !== "turned" && stair.shape !== "uturn") {
         return [{ x: stair.x, y: stair.y, w: stair.w, h: stair.h, dir: "z" }];
@@ -3259,6 +3299,7 @@
     }
 
     function stairLandingRect(stair) {
+      if (validCadStair(stair)) return stairCadRect(stair, stair.cadLanding);
       const landing = clamp(Number(stair.landing) || 1.2, 0.6, Math.max(0.6, Math.min(stair.w, stair.h)));
       if (stair.shape === "uturn") {
         return {
@@ -3274,6 +3315,38 @@
         w: landing,
         h: landing
       };
+    }
+
+    function validCadStair(stair) {
+      if (stair.shape !== "turned" || !Array.isArray(stair.cadRuns) || stair.cadRuns.length !== 2 || !stair.cadLanding) return false;
+      return [...stair.cadRuns, stair.cadLanding].every(rect =>
+        [rect.x, rect.y, rect.w, rect.h].every(Number.isFinite) &&
+        rect.x >= 0 && rect.y >= 0 && rect.w > 0 && rect.h > 0 &&
+        rect.x + rect.w <= 1.0001 && rect.y + rect.h <= 1.0001
+      ) && stair.cadRuns.every(run => run.dir === "x" || run.dir === "z");
+    }
+
+    function stairCadRect(stair, rect) {
+      return { x: stair.x + rect.x * stair.w, y: stair.y + rect.y * stair.h, w: rect.w * stair.w, h: rect.h * stair.h };
+    }
+
+    function stairFootprintPieces(stair) {
+      const rects = stairPlanRuns(stair).map(({ x, y, w, h }) => ({ x, y, w, h }));
+      if (stair.shape === "turned" || stair.shape === "uturn") rects.push(stairLandingRect(stair));
+      const angle = (Number(stair.rotation) || 0) * Math.PI / 180;
+      const cos = Math.cos(angle), sin = Math.sin(angle);
+      const cx = stair.x + stair.w / 2, cy = stair.y + stair.h / 2;
+      return rects.map(rect => {
+        const polygon = slabRectPolygon(rect).map(point => ({
+          x: cx + (point.x - cx) * cos - (point.y - cy) * sin,
+          y: cy + (point.x - cx) * sin + (point.y - cy) * cos
+        }));
+        const xs = polygon.map(point => point.x), ys = polygon.map(point => point.y);
+        const result = { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) };
+        // Preserve the exact polygon for non-cardinal rotations, not its enlarged bounds.
+        if (Math.abs(sin * cos) > 1e-8) result.polygon = polygon;
+        return result;
+      });
     }
 
     function drawStairSteps(run) {
@@ -5486,7 +5559,7 @@
       const isStructuralSlab = room.structuralSlab === true;
       if (viewVisible("floor")) {
         const floorThickness = 0.08;
-        const floorHoles = stairHolesForSlab(room, floor, "below");
+        const floorHoles = [...stairHolesForSlab(room, floor, "below"), ...(room.floorHoles || [])];
         if (surfaceOptions.renderFloor !== false) {
           addSlabPieces3D(
             room,
@@ -5500,9 +5573,9 @@
             "floor"
           );
         }
-        if (isStructuralSlab && surfaceOptions.renderCeiling !== false) {
+        if (isStructuralSlab && room.ceiling !== false && surfaceOptions.renderCeiling !== false) {
           const ceilingThickness = 0.06;
-          const upperSlabHoles = stairHolesForSlab(room, floor, "current");
+          const upperSlabHoles = [...stairHolesForSlab(room, floor, "current"), ...(room.ceilingHoles || [])];
           addSlabPieces3D(
             room,
             storyCeilingElevation(floor) - ceilingThickness / 2,
@@ -5538,14 +5611,9 @@
       return state.stairs
         .filter(stair => stair.floorId === openingFloorId)
         // Cut only the flights and landing, not the unused corner of a turned stair's bounds.
-        .flatMap(stair => {
-          const footprint = stairPlanRuns(stair).map(({ x, y, w, h }) => ({ x, y, w, h }));
-          if (stair.shape === "turned" || stair.shape === "uturn") {
-            footprint.push(stairLandingRect(stair));
-          }
-          return footprint;
-        })
+        .flatMap(stairFootprintPieces)
         .map(piece => ({
+          ...(piece.polygon ? { polygon: piece.polygon } : {}),
           x: Math.max(room.x, piece.x),
           y: Math.max(room.y, piece.y),
           w: Math.min(room.x + room.w, piece.x + piece.w) - Math.max(room.x, piece.x),
@@ -5555,6 +5623,29 @@
     }
 
     function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null, surfaceRole = null) {
+      if (holes.some(hole => hole.polygon)) {
+        let polygons = [slabRectPolygon(room)];
+        holes.forEach(hole => {
+          polygons = polygons.flatMap(polygon => subtractConvexSlabHole(polygon, hole.polygon || slabRectPolygon(hole)));
+        });
+        polygons.forEach(polygon => {
+          const shape = new THREE.Shape(polygon.map(point => new THREE.Vector2(point.x, -point.y)));
+          const geometry = new THREE.ExtrudeGeometry(shape, { depth: thickness, bevelEnabled: false, steps: 1 });
+          geometry.rotateX(-Math.PI / 2);
+          const mesh = makeBox(1, 1, 1, color, opacity);
+          mesh.geometry.dispose();
+          mesh.geometry = geometry;
+          if (surfaceRole === "ceiling") applyCeilingWhiteMaterial(mesh);
+          // Extrusion UVs use world metres, keeping grain continuous across clipped pieces.
+          applyFloorFinish(mesh, finish, 1, 1);
+          mesh.position.y = y - thickness / 2;
+          mesh.receiveShadow = receiveShadow;
+          mesh.userData.storySurface = surfaceRole;
+          mesh.userData.floorId = room.floorId;
+          three.root.add(mesh);
+        });
+        return;
+      }
       let pieces = [{ x: room.x, y: room.y, w: room.w, h: room.h }];
       holes.forEach(hole => {
         pieces = pieces.flatMap(piece => subtractRect(piece, hole));
@@ -5570,6 +5661,48 @@
         mesh.userData.floorId = room.floorId;
         three.root.add(mesh);
       });
+    }
+
+    function slabRectPolygon(rect) {
+      return [{ x: rect.x, y: rect.y }, { x: rect.x + rect.w, y: rect.y },
+        { x: rect.x + rect.w, y: rect.y + rect.h }, { x: rect.x, y: rect.y + rect.h }];
+    }
+
+    function slabPolygonArea(polygon) {
+      return Math.abs(polygon.reduce((sum, a, index) => {
+        const b = polygon[(index + 1) % polygon.length];
+        return sum + a.x * b.y - b.x * a.y;
+      }, 0)) / 2;
+    }
+
+    function clipSlabHalfPlane(polygon, a, b, inside) {
+      const distance = point => (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x);
+      const result = [];
+      polygon.forEach((current, index) => {
+        const previous = polygon[(index + polygon.length - 1) % polygon.length];
+        const d0 = distance(previous), d1 = distance(current);
+        const keep0 = inside ? d0 >= 0 : d0 <= 0, keep1 = inside ? d1 >= 0 : d1 <= 0;
+        if (keep0 !== keep1) {
+          const t = d0 / (d0 - d1);
+          result.push({ x: previous.x + t * (current.x - previous.x), y: previous.y + t * (current.y - previous.y) });
+        }
+        if (keep1) result.push(current);
+      });
+      return result;
+    }
+
+    function subtractConvexSlabHole(polygon, hole) {
+      // Successive half-plane splits partition the remaining slab into disjoint
+      // convex pieces, including when a rotated opening touches the slab edge.
+      let inside = polygon;
+      const pieces = [];
+      for (let index = 0; index < hole.length && inside.length >= 3; index += 1) {
+        const a = hole[index], b = hole[(index + 1) % hole.length];
+        const outside = clipSlabHalfPlane(inside, a, b, false);
+        if (outside.length >= 3 && slabPolygonArea(outside) > 1e-8) pieces.push(outside);
+        inside = clipSlabHalfPlane(inside, a, b, true);
+      }
+      return pieces;
     }
 
     function floorTexture(finish) {
@@ -6273,6 +6406,7 @@
       const group = new THREE.Group();
       group.position.set(element.x + element.w / 2, floor.elevation + elevation, element.y + element.h / 2);
       group.rotation.y = -(Number(element.rotation) || 0) * Math.PI / 180;
+      if (element.mirrorX === true) group.scale.x = -1;
       three.root.add(group);
 
       const wallMounted = ["mirror", "wall-art", "wallpaper", "television"].includes(element.elementKind);
@@ -6280,7 +6414,12 @@
         w: Math.max(0.2, element.w),
         d: Math.max(wallMounted ? 0.025 : 0.2, element.h),
         h: Math.max(0.05, height),
-        type1: element.type1
+        type1: element.type1,
+        countertopMounted: element.countertopMounted === true,
+        drawersAtFront: element.drawersAtFront === true,
+        cabinetLayout: element.cabinetLayout,
+        applianceLayout: element.applianceLayout,
+        separateChair: element.separateChair === true
       };
       drawElementShape(group, element.elementKind || "closet", dims, color, opacity);
     }
@@ -6840,8 +6979,10 @@
         for (let index = 0; index < 5; index += 1) {
           addElementBox(group, -w * 0.38 + index * 0.045, deskH + h * 0.08, -d * 0.31, 0.035, h * (0.18 + (index % 2) * 0.05), 0.13, index % 2 ? 0xc2574a : 0x4f77a5, 0.92);
         }
-        addElementBox(group, 0, h * 0.35, d * 0.68, Math.min(0.5, w * 0.5), h * 0.09, Math.min(0.42, d * 0.7), 0x8ab17d, 0.9);
-        addElementBox(group, 0, h * 0.43, d * 0.83, Math.min(0.5, w * 0.5), h * 0.48, 0.09, 0x8ab17d, 0.9);
+        if (!dims.separateChair) {
+          addElementBox(group, 0, h * 0.35, d * 0.68, Math.min(0.5, w * 0.5), h * 0.09, Math.min(0.42, d * 0.7), 0x8ab17d, 0.9);
+          addElementBox(group, 0, h * 0.43, d * 0.83, Math.min(0.5, w * 0.5), h * 0.48, 0.09, 0x8ab17d, 0.9);
+        }
         return;
       }
 
@@ -6984,7 +7125,7 @@
       }
 
       if (kind === "closet") {
-        if (dims.type1 === "kitchen-tall-storage") {
+        if (dims.type1 === "kitchen-tall-storage" && dims.cabinetLayout !== "solid") {
           const frame = Math.max(0.035, Math.min(w, d) * 0.06);
           const fridgeW = Math.min(1.10, w * 0.34);
           const sideW = (w - fridgeW - frame * 3) / 2;
@@ -7040,11 +7181,11 @@
 
       if (kind === "laundry-closet") {
         const frame = Math.max(0.035, Math.min(w, d) * 0.055);
+        const stacked = dims.applianceLayout === "stacked";
         const machineGap = Math.max(0.035, w * 0.035);
-        const machineW = Math.max(0.35, (w - frame * 3 - machineGap) / 2);
+        const machineW = stacked ? Math.min(.65, w - frame * 2) : Math.max(0.35, (w - frame * 3 - machineGap) / 2);
         const machineH = Math.min(0.9, h * 0.36);
         const machineD = d * 0.88;
-        const machineY = frame;
         const machineZ = -d * 0.03;
         const leftX = -(machineW + machineGap) / 2;
         const rightX = (machineW + machineGap) / 2;
@@ -7054,14 +7195,16 @@
         addElementBox(group, w * 0.5 - frame / 2, 0, 0, frame, h, d, color, opacity);
         addElementBox(group, 0, h - frame, 0, w, frame, d, color, opacity);
 
-        [leftX, rightX].forEach((x, index) => {
+        [leftX, rightX].forEach((sideX, index) => {
+          const x = stacked ? 0 : sideX;
+          const machineY = frame + (stacked ? index * (machineH + frame) : 0);
           addElementBox(group, x, machineY, machineZ, machineW, machineH, machineD, 0xf1f4f6, 0.98, { metalness: 0.08, roughness: 0.38 });
           addElementBox(group, x, machineY + machineH * 0.82, -d * 0.49, machineW * 0.9, machineH * 0.14, frame, 0xd7dde2, 0.98);
           addElementCylinder(group, x, machineY + machineH * 0.42, -d * 0.505, machineW * 0.27, frame * 0.8, index ? 0x56606c : 0x31404f, 0.92, { rotateX: Math.PI / 2, segments: 32, metalness: 0.12 });
           addElementCylinder(group, x + machineW * 0.3, machineY + machineH * 0.87, -d * 0.52, frame * 0.58, frame * 0.55, 0x64748b, 0.98, { rotateX: Math.PI / 2, segments: 18, metalness: 0.42 });
         });
 
-        const cabinetBase = Math.max(machineY + machineH + h * 0.08, h * 0.62);
+        const cabinetBase = stacked ? frame * 3 + machineH * 2 : Math.max(frame + machineH + h * 0.08, h * 0.62);
         const cabinetH = Math.max(0.35, h - cabinetBase - frame * 1.4);
         addElementBox(group, 0, cabinetBase, d * 0.02, w - frame * 2.4, cabinetH, d * 0.84, 0xb58b63, opacity);
         addElementBox(group, 0, cabinetBase + cabinetH * 0.08, -d * 0.415, frame * 0.55, cabinetH * 0.84, frame, 0x7b5a3d, 0.72, { castShadow: false });
@@ -7100,13 +7243,21 @@
       }
 
       if (kind === "sink") {
+        if (dims.countertopMounted) {
+          addElementBox(group, 0, h, 0, w, .025, d, pale, .98);
+          addElementBox(group, 0, h + .026, 0, w * .8, .012, d * .72, water, .58);
+          addElementCylinder(group, 0, h + .025, -d * .35, .022, .23, metal, .96, { metalness: .45 });
+          addElementCylinder(group, 0, h + .245, -d * .12, .018, d * .42, metal, .96, { rotateX: Math.PI / 2, metalness: .45 });
+          return;
+        }
         addElementBox(group, 0, 0, 0, w, h * 0.72, d, 0xa66f45, opacity);
         if (dims.type1 === "drawer-vanity") {
           const drawerFace = 0xb9855d;
           for (let index = 0; index < 3; index += 1) {
             const drawerY = h * (0.08 + index * 0.205);
-            addElementBox(group, 0, drawerY, -d * 0.505, w * 0.92, h * 0.18, 0.025, drawerFace, opacity, { castShadow: false });
-            addElementBox(group, 0, drawerY + h * 0.105, -d * 0.535, w * 0.22, 0.025, 0.025, metal, 0.96, { metalness: 0.42, castShadow: false });
+            const front = dims.drawersAtFront ? 1 : -1;
+            addElementBox(group, 0, drawerY, front * d * 0.505, w * 0.92, h * 0.18, 0.025, drawerFace, opacity, { castShadow: false });
+            addElementBox(group, 0, drawerY + h * 0.105, front * d * 0.535, w * 0.22, 0.025, 0.025, metal, 0.96, { metalness: 0.42, castShadow: false });
           }
         }
         addElementBox(group, 0, h * 0.74, 0, w * 0.72, h * 0.08, d * 0.58, pale, 0.95);
@@ -7270,6 +7421,19 @@
       const mesh = new THREE.Mesh(geometry, material);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
+      mesh.userData.roofId = roof.id;
+      if (roof.circularProfile) {
+        const underside = geometry.clone();
+        const positions = underside.getAttribute("position");
+        for (let index = 0; index < positions.count; index += 1) {
+          positions.setY(index, circularRoofHeight(roof.circularProfile, positions.getX(index), "innerRadius"));
+        }
+        underside.computeVertexNormals();
+        const soffit = new THREE.Mesh(underside, new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide, toneMapped:false}));
+        soffit.userData.roofId = roof.id;
+        soffit.userData.roofUnderside = true;
+        three.root.add(soffit);
+      }
       three.root.add(mesh);
       addRoofTiles3D(roof, floor, color, opacity);
     }
@@ -7308,6 +7472,7 @@
     }
 
     function roofHeightAt(roof, floor, localX, localZ) {
+      if (roof.circularProfile) return circularRoofHeight(roof.circularProfile, roof.x + localX);
       const base = floor.elevation + (roof.z ?? state.wallHeight + 0.16);
       if (roof.shape === "barrel") {
         const span = Math.max(0.1, roof.axis === "z" ? roof.w : roof.h);
@@ -7322,6 +7487,12 @@
       if (roof.tilt === "east") return base + (localX / Math.max(0.1, roof.w)) * rise;
       if (roof.tilt === "west") return base + (1 - localX / Math.max(0.1, roof.w)) * rise;
       return base + (1 - localZ / Math.max(0.1, roof.h)) * rise;
+    }
+
+    function circularRoofHeight(profile, worldX, radiusField = "finishRadius") {
+      const radius = Number(profile[radiusField]);
+      const distance = worldX - Number(profile.centerX);
+      return Number(profile.centerElevation) + Math.sqrt(Math.max(0, radius * radius - distance * distance));
     }
 
     function addRoofTiles3D(roof, floor, color, opacity) {

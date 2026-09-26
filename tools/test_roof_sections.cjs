@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+const context={state:{wallHeight:2.79},clamp:(v,a,b)=>Math.min(b,Math.max(a,v))};
+vm.createContext(context);
+const start=html.indexOf('    function roofHeightAt(');
+const end=html.indexOf('    function addRoofTiles3D(',start);
+vm.runInContext(html.slice(start,end),context);
+const profile={centerX:2.2,centerElevation:3.14,outerRadius:5.86,innerRadius:5.66,finishRadius:5.91};
+const near=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`);
+near(context.circularRoofHeight(profile,2.2),9.05);
+near(context.circularRoofHeight(profile,2.2,'innerRadius'),8.8);
+near(context.circularRoofHeight(profile,.2),context.circularRoofHeight(profile,4.2));
+const roof={x:-1,y:3,w:4,h:5,shape:'barrel',axis:'z',circularProfile:profile};
+// Adjacent roof tiles use the same circle, not independent bbox-centered arches.
+near(context.roofHeightAt(roof,{elevation:5.58},4,0),context.roofHeightAt({...roof,x:3,w:1},{elevation:5.58},0,0));
+near(context.roofHeightAt(roof,{elevation:5.58},3.2,0),9.05);
+near(context.roofHeightAt({x:0,y:0,w:4,h:5,shape:'barrel',axis:'z',z:2,rise:2},{elevation:5},2,0),9);
+console.log('Circular roof crown, concentric soffit, common tile datum and legacy roof behavior passed.');
