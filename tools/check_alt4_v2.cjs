@@ -75,6 +75,16 @@ const server = http.createServer((req, res) => {
       render3D();
     });
     await page.screenshot({path:path.join(output,'browser-all-interior.png')});
+    await page.evaluate(() => {
+      state.viewFloor='all';
+      three.orbit.position.set(20,1.5,22);
+      three.orbit.yaw=3.92;
+      render3D();
+      setCameraHorizon();
+    });
+    await page.screenshot({path:path.join(output,'browser-horizon-1p5.png')});
+    await page.evaluate(() => { three.orbit.position.y=0; setCameraHorizon(); });
+    await page.screenshot({path:path.join(output,'browser-horizon-0.png')});
     const isolation = await page.evaluate(() => {
       const surfaces=[];three.root.traverse(mesh=>{if(mesh.userData.storySurface) surfaces.push(mesh);});
       const ray = new THREE.Raycaster();
@@ -103,6 +113,32 @@ const server = http.createServer((req, res) => {
     await page.keyboard.up('w');
     const afterMove=await page.evaluate(()=>three.orbit.position.toArray());
     assert(Math.hypot(...afterMove.map((v,i)=>v-beforeMove[i]))>.02,'Keyboard movement must change the camera');
+    await page.evaluate(() => { three.orbit.position.y=1.5; three.orbit.pitch=.3; updateCamera(); });
+    await page.locator('#horizonCameraBtn').click();
+    const horizon=await page.evaluate(() => {
+      const ray=new THREE.Raycaster();
+      ray.setFromCamera(new THREE.Vector2(0,0),three.camera);
+      const pitch=three.orbit.pitch;
+      const centerRayY=ray.ray.direction.y;
+      const initialHeight=three.orbit.position.y;
+      moveCameraByKey('w');
+      const keyHeight=three.orbit.position.y;
+      moveCameraByWheel({deltaX:0,deltaY:-120,deltaMode:0,shiftKey:false});
+      const wheelHeight=three.orbit.position.y;
+      three.orbit.position.y=0;
+      setCameraHorizon();
+      const groundHeight=three.orbit.position.y;
+      moveCameraByKey('w');
+      return {pitch,centerRayY,initialHeight,keyHeight,wheelHeight,groundHeight,
+        movedGroundHeight:three.orbit.position.y};
+    });
+    assert(Math.abs(horizon.pitch+Math.PI/12)<.0001,JSON.stringify(horizon));
+    assert(horizon.centerRayY<-.25,JSON.stringify(horizon));
+    assert.equal(horizon.initialHeight,1.5);
+    assert.equal(horizon.keyHeight,1.5);
+    assert.equal(horizon.wheelHeight,1.5);
+    assert.equal(horizon.groundHeight,0);
+    assert.equal(horizon.movedGroundHeight,0);
     const fullscreenButton=page.locator('#fullscreen3DBtn');
     await fullscreenButton.click();
     await page.waitForFunction(() => document.getElementById('fullscreen3DBtn').getAttribute('aria-pressed')==='true');
