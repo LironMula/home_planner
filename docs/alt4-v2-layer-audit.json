@@ -3985,6 +3985,21 @@
           "kind": "washing-machine"
         }
       ],
+      "userOverrides": [
+        {
+          "role": "Master walk-in closet banks",
+          "sourceDepthsM": [
+            0.45,
+            0.6
+          ],
+          "modeledDepthsM": [
+            0.5,
+            0.5
+          ],
+          "backingFacesFixed": true,
+          "clearAisleM": 0.95
+        }
+      ],
       "dimensions": [
         {
           "handle": "1211",
@@ -5176,13 +5191,28 @@
             13.2,
             8.768
           ]
+        },
+        {
+          "areaM2": 5.55,
+          "bounds": [
+            -3.0,
+            2.6,
+            -1.15,
+            5.6
+          ],
+          "label": "C8B",
+          "edgeHandles": [
+            "1CBB",
+            "1AEE",
+            "1CD5"
+          ]
         }
       ],
       "counts": {
-        "walls": 60,
+        "walls": 63,
         "openings": 17,
         "elements": 23,
-        "rooms": 5
+        "rooms": 6
       },
       "wallReconstructionDifferenceM2": 0.0,
       "modelVerifiedDimensionCount": 26,
@@ -6286,7 +6316,11 @@
       ],
       "planCenterX": 10.45,
       "ridgeLabelOffset": 0.0302,
-      "footprintStatus": "A17-enclosed bedroom, east kitchenette, connecting bridge and stair core"
+      "renderedCenterX": 9.95,
+      "renderedCenterAdjustmentM": -0.5,
+      "wallEdgeRiseM": 2.0788,
+      "overhangM": 0.1,
+      "footprintStatus": "One arc over A17-enclosed wall contour plus 10 cm drip edge; terrace open to sky"
     },
     "levels": {
       "basement": -2.75,
@@ -6759,11 +6793,14 @@
   "validation": {
     "status": "draft",
     "publicationReady": false,
+    "verified": [
+      "Living-to-top stair route from departure-floor AREA 1575, A14 treads and A13 upper-end marker",
+      "Single top-level arc over enclosed A17 walls with 10 cm overhang and uncovered light-gray terraces"
+    ],
     "pending": [
-      "Verify upper stair route from A13/A14 source geometry",
       "Full room-by-room source overlay review",
       "Final human-height browser QA",
-      "Integrate top-floor high/low zones and roof-clipped walls"
+      "Integrate top-floor high/low zones and verify roof-clipped walls against both sections"
     ]
   }
 }

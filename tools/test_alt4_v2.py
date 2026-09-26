@@ -35,6 +35,22 @@ class Alt4V2Tests(unittest.TestCase):
         stairs={s['floorId'].rsplit('-',1)[-1]:s['height'] for s in self.plan['stairs']}
         self.assertEqual(stairs,{'basement':2.75,'ground':3.14,'living':2.584})
 
+    def test_upper_stair_uses_shared_core_not_arrival_sheet(self):
+        stairs={s['floorId'].rsplit('-',1)[-1]:s for s in self.plan['stairs']}
+        lower,upper=stairs['ground'],stairs['living']
+        self.assertEqual(upper['sourceHandles'],['1575','1D50','1D53','1D58','1D60','1D56'])
+        self.assertEqual(upper['rotation'],180)
+        self.assertEqual([run['dir'] for run in upper['cadRuns']],['x','z'])
+        self.assertTrue(all(run['reverse'] for run in upper['cadRuns']))
+        # The source sheets differ slightly in flight lengths, but share the
+        # eastern stair-core edge and northern landing edge after registration.
+        shared_east=lower['x']+lower['w']/2+lower['h']/2
+        shared_north=lower['y']+lower['h']/2-lower['w']/2
+        self.assertAlmostEqual(upper['x']+upper['w'],shared_east,places=3)
+        self.assertAlmostEqual(upper['y'],shared_north,places=3)
+        self.assertAlmostEqual(upper['x']+upper['w']*(1-upper['cadRuns'][1]['x']),shared_east,places=3)
+        self.assertAlmostEqual(upper['w']*upper['cadRuns'][1]['w'],lower['landing'],places=3)
+
     def test_source_wall_reconstruction(self):
         for key,audit in self.audit['floors'].items():
             self.assertLessEqual(audit['wallReconstructionDifferenceM2'],.01,key)
@@ -50,6 +66,9 @@ class Alt4V2Tests(unittest.TestCase):
             for k in ('x','y','w','h','width','height','rotation'):
                 if k in o:
                     self.assertTrue(math.isfinite(o[k]),(o['id'],k))
+            for k in ('w','h','width','height'):
+                if k in o:
+                    self.assertGreater(o[k],0,(o['id'],k))
         for opening in self.plan['openings']:
             host=walls[opening['wallId']]
             self.assertEqual(host['floorId'],opening['floorId'])
@@ -89,14 +108,37 @@ class Alt4V2Tests(unittest.TestCase):
             if slab.get('outdoor'):
                 self.assertFalse(slab['ceiling'])
 
+    def test_master_bedroom_balcony_access(self):
+        balcony=next(r for r in self.plan['rooms'] if r['name']=='Master bedroom balcony')
+        access=next(o for o in self.plan['openings'] if o['name']=='Master bedroom balcony sliding glass door')
+        guards=[w for w in self.plan['walls'] if w['name']=='Master balcony guard']
+        self.assertTrue(balcony['outdoor'])
+        self.assertEqual((balcony['w'],balcony['h']),(1.85,3.0))
+        self.assertEqual((access['type'],access['openingStyle'],access['sill']),('door','sliding',0))
+        self.assertTrue(access['glass'])
+        self.assertAlmostEqual(access['height'],2.35)
+        self.assertAlmostEqual(access['width'],2.0,places=3)
+        self.assertAlmostEqual(access['x']+.125,balcony['x'],places=3)
+        self.assertLess(balcony['y'],access['y'])
+        self.assertGreater(balcony['y']+balcony['h'],access['y'])
+        self.assertEqual(len(guards),3)
+        self.assertTrue(all(w['type']=='glass-wall' and w['height']==1.05 for w in guards))
+
     def test_top_enclosure_covers_east_bay_and_bridge(self):
         from shapely.geometry import Point, box
         from shapely.ops import unary_union
         top=[r for r in self.plan['rooms'] if r['floorId'].endswith('-floor2') and not r.get('outdoor')]
+        terraces=[r for r in self.plan['rooms'] if r['floorId'].endswith('-floor2') and r.get('outdoor')]
         roof=[r for r in self.plan['roofs'] if r['floorId'].endswith('-floor2')]
         slabs=unary_union([box(r['x'],r['y'],r['x']+r['w'],r['y']+r['h']) for r in top])
-        cover=unary_union([box(r['x'],r['y'],r['x']+r['w'],r['y']+r['h']) for r in roof])
-        self.assertLess(slabs.symmetric_difference(cover).area,.01)
+        self.assertEqual(len(roof),1)
+        self.assertTrue(all(not r['ceiling'] for r in top+terraces))
+        self.assertTrue(all(r['surfaceColor']=='#d9dee5' for r in terraces))
+        cover=unary_union([box(r['x'],r['y'],r['x']+r['w'],r['y']+r['h']) for r in roof[0]['surfaceRects']])
+        self.assertLess(slabs.buffer(.1,join_style=2).symmetric_difference(cover).area,.01)
+        self.assertAlmostEqual(self.audit['sections']['roof']['overhangM'],.1)
+        self.assertAlmostEqual(self.audit['sections']['roof']['wallEdgeRiseM'],2.05,delta=.1)
+        self.assertAlmostEqual(roof[0]['circularProfile']['finishRadius'],5.91)
         tx=self.audit['siteRegistration']['xTranslation']
         ty=self.audit['siteRegistration']['yTranslation']
         for source_x,source_y in ((13.9,2.8),(12,5.1),(7,7.2)):
@@ -112,9 +154,30 @@ class Alt4V2Tests(unittest.TestCase):
         self.assertEqual((east['rotation']-west['rotation'])%360,180)
         self.assertAlmostEqual(west['w'],3.25)
         self.assertAlmostEqual(east['w'],3.25)
-        self.assertAlmostEqual(west['h'],.45)
-        self.assertAlmostEqual(east['h'],.6)
+        self.assertAlmostEqual(west['h'],.5)
+        self.assertAlmostEqual(east['h'],.5)
+        east_front=east['x']+east['w']/2+east['h']/2
+        west_front=west['x']+west['w']/2-west['h']/2
+        self.assertAlmostEqual(west_front-east_front,.95)
+        self.assertEqual(self.audit['floors']['living']['userOverrides'][0]['modeledDepthsM'],[.5,.5])
         self.assertEqual(self.element('Living bathroom laundry closet')['applianceLayout'],'stacked')
+
+    def test_master_shower_abuts_neighbor_bathroom_wall(self):
+        from shapely.affinity import rotate
+        from shapely.geometry import box
+        shower=self.element('Master bathroom dual shower')
+        partition=self.element('Master bathroom movable glass partition')
+        wall=next(w for w in self.plan['walls'] if w['floorId']==shower['floorId'] and
+                  w['name']=='Wall 1C7B' and w['h']>2)
+        footprint=rotate(box(shower['x'],shower['y'],shower['x']+shower['w'],shower['y']+shower['h']),
+                         shower['rotation'],origin='center')
+        glass=rotate(box(partition['x'],partition['y'],partition['x']+partition['w'],partition['y']+partition['h']),
+                     partition['rotation'],origin='center')
+        west,north,east,south=footprint.bounds
+        self.assertAlmostEqual(west,wall['x']+wall['w'],places=3)
+        self.assertAlmostEqual(east,glass.centroid.x,places=3)
+        self.assertAlmostEqual(south-north,1.85,places=3)
+        self.assertAlmostEqual(east-west,1.0,places=3)
 
     def test_publication_gate_is_honest(self):
         validation=self.audit['validation']

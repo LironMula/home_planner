@@ -37,6 +37,7 @@ to overwrite newer saved choices.
 | Ground/entrance floor | `#0f766e` | Not stored on floor | `light-gray-granite` |
 | Living floor | `#2563eb` | Not stored on floor | `parquet` |
 | Floor 2 | `#b45309` | Not stored on floor | `finish: null` |
+| Floor-2 outdoor terraces | `#d9dee5` | 1 in 3D | Flat light-gray surface, open to sky; never inherit the orange floor swatch |
 | Structural slab plan fill | `#d9dee5` | 0.94 | Not the rendered floor-finish color |
 | House walls | `#fefdfa` | 1 | Established 90% white / 10% cream appearance |
 | Stairs and landings | `#3d2418` | 1 | `type1: dark-wood` |

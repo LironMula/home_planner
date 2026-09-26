@@ -1523,7 +1523,7 @@
                   <ul class="gesture-list">
                     <li><strong>Drag</strong><span>Look around</span></li>
                     <li><strong>Wheel</strong><span>Move forward or back</span></li>
-                    <li><strong>Shift + wheel</strong><span>Turn left or right</span></li>
+                    <li><strong>Side scroll / Shift + wheel</strong><span>Move up or down</span></li>
                     <li><strong>Double-click</strong><span>Reset toward the horizon</span></li>
                   </ul>
                 </div>
@@ -5263,7 +5263,12 @@
     }
 
     function cameraWalkVector() {
-      return new THREE.Vector3(Math.sin(three.orbit.yaw), 0, Math.cos(three.orbit.yaw));
+      const direction = new THREE.Vector3();
+      three.camera.getWorldDirection(direction);
+      direction.y = 0;
+      return direction.lengthSq() > 1e-8
+        ? direction.normalize()
+        : new THREE.Vector3(Math.sin(three.orbit.yaw), 0, Math.cos(three.orbit.yaw));
     }
 
     function wheelStepForEvent(event, axis) {
@@ -5286,8 +5291,8 @@
         const step = wheelStepForEvent(event, "forward");
         three.orbit.position.addScaledVector(cameraWalkVector(), scrollY < 0 ? step : -step);
       } else if (Math.abs(scrollX) > 0) {
-        const turnAmount = clamp(Math.abs(scrollX) / 500, 0.04, 0.16);
-        three.orbit.yaw += scrollX < 0 ? turnAmount : -turnAmount;
+        const step = wheelStepForEvent(event, "height");
+        three.orbit.position.y = clamp(three.orbit.position.y + (scrollX < 0 ? step : -step), 0, 120);
       }
     }
 
@@ -5629,16 +5634,17 @@
             room,
             yBase + floorThickness / 2,
             floorThickness,
-            colorToHex(isStructuralSlab ? floor.color : itemColor(room)),
+            colorToHex(isStructuralSlab ? (room.surfaceColor || floor.color) : itemColor(room)),
             opacityForView(isStructuralSlab ? 1 : itemOpacity(room), "floor"),
             floorHoles,
             true,
             floor.finish,
-            "floor"
+            "floor",
+            Boolean(room.surfaceColor)
           );
         }
         if (isStructuralSlab && room.ceiling !== false && surfaceOptions.renderCeiling !== false) {
-          const ceilingThickness = 0.06;
+          const ceilingThickness = Math.max(0.06, storyCeilingElevation(floor) - yBase - state.wallHeight);
           const upperSlabHoles = [...stairHolesForSlab(room, floor, "current"), ...(room.ceilingHoles || [])];
           addSlabPieces3D(
             room,
@@ -5686,7 +5692,7 @@
         .filter(hole => hole.w > 0.05 && hole.h > 0.05);
     }
 
-    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null, surfaceRole = null) {
+    function addSlabPieces3D(room, y, thickness, color, opacity, holes = [], receiveShadow = true, finish = null, surfaceRole = null, flatColor = false) {
       if (holes.some(hole => hole.polygon)) {
         let polygons = [slabRectPolygon(room)];
         holes.forEach(hole => {
@@ -5697,6 +5703,10 @@
           const geometry = new THREE.ExtrudeGeometry(shape, { depth: thickness, bevelEnabled: false, steps: 1 });
           geometry.rotateX(-Math.PI / 2);
           const mesh = makeBox(1, 1, 1, color, opacity);
+          if (flatColor) {
+            mesh.material.dispose();
+            mesh.material = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+          }
           mesh.geometry.dispose();
           mesh.geometry = geometry;
           if (surfaceRole === "ceiling") applyCeilingWhiteMaterial(mesh);
@@ -5717,6 +5727,10 @@
       pieces.forEach(piece => {
         if (piece.w <= 0.04 || piece.h <= 0.04) return;
         const mesh = makeBox(piece.w, thickness, piece.h, color, opacity);
+        if (flatColor) {
+          mesh.material.dispose();
+          mesh.material = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+        }
         if (surfaceRole === "ceiling") applyCeilingWhiteMaterial(mesh);
         applyFloorFinish(mesh, finish, piece.w, piece.h);
         mesh.position.set(piece.x + piece.w / 2, y, piece.y + piece.h / 2);
@@ -5917,8 +5931,9 @@
         mesh.position.set(0, height / 2, 0);
         mesh.castShadow = wall.type !== "glass-wall";
         mesh.receiveShadow = true;
-        applyGlassWallMaterial(mesh, wall);
         group.add(mesh);
+        clipTopWallToRoof(mesh, floor);
+        applyGlassWallMaterial(mesh, wall);
         return;
       }
 
@@ -5947,8 +5962,9 @@
       mesh.position.set(wall.x + wall.w / 2, floor.elevation + height / 2, wall.y + wall.h / 2);
       mesh.castShadow = wall.type !== "glass-wall";
       mesh.receiveShadow = true;
-      applyGlassWallMaterial(mesh, wall);
       three.root.add(mesh);
+      clipTopWallToRoof(mesh, floor);
+      applyGlassWallMaterial(mesh, wall);
     }
 
     function addCustomWallPiece(wall, floor, from, to, height, thickness, color, opacity, horizontal, base = 0) {
@@ -5964,8 +5980,9 @@
       );
       mesh.castShadow = wall.type !== "glass-wall";
       mesh.receiveShadow = true;
-      applyGlassWallMaterial(mesh, wall);
       three.root.add(mesh);
+      clipTopWallToRoof(mesh, floor);
+      applyGlassWallMaterial(mesh, wall);
     }
 
     function addCustomWallPieceLocal(group, wall, from, to, height, thickness, color, opacity, horizontal, base = 0) {
@@ -5981,8 +5998,36 @@
       );
       mesh.castShadow = wall.type !== "glass-wall";
       mesh.receiveShadow = true;
-      applyGlassWallMaterial(mesh, wall);
       group.add(mesh);
+      clipTopWallToRoof(mesh, state.floors.find(floor => floor.id === wall.floorId));
+      applyGlassWallMaterial(mesh, wall);
+    }
+
+    function clipTopWallToRoof(mesh, floor) {
+      const roof = state.roofs.find(item => item.floorId === floor?.id &&
+        item.circularProfile && Array.isArray(item.surfaceRects));
+      if (!roof) return;
+      mesh.updateWorldMatrix(true, false);
+      const bounds = new THREE.Box3().setFromObject(mesh);
+      const center = bounds.getCenter(new THREE.Vector3());
+      const inside = (x, z) => roof.surfaceRects.some(rect =>
+        x >= rect.x - 0.001 && x <= rect.x + rect.w + 0.001 &&
+        z >= rect.y - 0.001 && z <= rect.y + rect.h + 0.001);
+      if (!inside(center.x, center.z) || bounds.min.x < roof.x - 0.001 ||
+        bounds.max.x > roof.x + roof.w + 0.001) return;
+      const { width, height, depth } = mesh.geometry.parameters;
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.BoxGeometry(width, height, depth, Math.max(1, Math.ceil(width / 0.12)), 1, 1);
+      const positions = mesh.geometry.getAttribute("position");
+      const point = new THREE.Vector3();
+      for (let index = 0; index < positions.count; index += 1) {
+        point.set(positions.getX(index), positions.getY(index), positions.getZ(index));
+        mesh.localToWorld(point);
+        const roofHeight = circularRoofHeight(roof.circularProfile, point.x, "innerRadius") - 0.02;
+        if (point.y > roofHeight) positions.setY(index,
+          Math.max(-height / 2, positions.getY(index) - (point.y - roofHeight)));
+      }
+      mesh.geometry.computeVertexNormals();
     }
 
     function applyGlassWallMaterial(mesh, wall) {
@@ -7310,8 +7355,10 @@
         if (dims.countertopMounted) {
           addElementBox(group, 0, h, 0, w, .025, d, pale, .98);
           addElementBox(group, 0, h + .026, 0, w * .8, .012, d * .72, water, .58);
-          addElementCylinder(group, 0, h + .025, -d * .35, .022, .23, metal, .96, { metalness: .45 });
-          addElementCylinder(group, 0, h + .245, -d * .12, .018, d * .42, metal, .96, { rotateX: Math.PI / 2, metalness: .45 });
+          const spoutLength = d * .42;
+          addElementCylinder(group, 0, h + .025, -d * .35, .022, .34, metal, .96, { metalness: .45 });
+          addElementCylinder(group, 0, h + .365 - spoutLength / 2, -d * .14, .018, spoutLength, metal, .96, { rotateX: Math.PI / 2, metalness: .45 });
+          addElementCylinder(group, 0, h + .305, d * .07, .016, .06, metal, .96, { metalness: .45 });
           return;
         }
         addElementBox(group, 0, 0, 0, w, h * 0.72, d, 0xa66f45, opacity);
@@ -7450,6 +7497,41 @@
     }
 
     function addBarrelRoof3D(roof, floor, color, opacity) {
+      if (Array.isArray(roof.surfaceRects) && roof.circularProfile) {
+        const makeSurface = radiusField => {
+          const vertices = [];
+          for (const rect of roof.surfaceRects) {
+            const count = Math.max(1, Math.ceil(rect.w / 0.12));
+            for (let index = 0; index < count; index += 1) {
+              const x1 = rect.x + rect.w * index / count;
+              const x2 = rect.x + rect.w * (index + 1) / count;
+              const h1 = circularRoofHeight(roof.circularProfile, x1, radiusField);
+              const h2 = circularRoofHeight(roof.circularProfile, x2, radiusField);
+              const z1 = rect.y, z2 = rect.y + rect.h;
+              vertices.push(x1,h1,z1, x1,h1,z2, x2,h2,z2,
+                x1,h1,z1, x2,h2,z2, x2,h2,z1);
+            }
+          }
+          const geometry = new THREE.BufferGeometry();
+          geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+          geometry.computeVertexNormals();
+          return geometry;
+        };
+        const material = new THREE.MeshStandardMaterial({ color, transparent: opacity < 1,
+          opacity, roughness: 0.84, metalness: 0.02, side: THREE.DoubleSide });
+        const mesh = new THREE.Mesh(makeSurface("finishRadius"), material);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.userData.roofId = roof.id;
+        three.root.add(mesh);
+        const soffit = new THREE.Mesh(makeSurface("innerRadius"), new THREE.MeshBasicMaterial({
+          color: 0xffffff, side: THREE.DoubleSide, toneMapped: false
+        }));
+        soffit.userData.roofId = roof.id;
+        soffit.userData.roofUnderside = true;
+        three.root.add(soffit);
+        return;
+      }
       const segments = 32;
       const acrossX = roof.axis === "z";
       const vertices = [];

@@ -137,7 +137,8 @@ class Importer:
         tiles = rects(geometry)
         for i, bounds in enumerate(tiles):
             self.item("rooms", f"{handle}-slab-{i}", name if len(tiles) == 1 else f"{name} {i + 1}", bounds,
-                      structuralSlab=True, ceiling=not outdoor, outdoor=outdoor, color="#d9dee5", opacity=.94,
+                      structuralSlab=True, ceiling=not outdoor and self.floor_key != "floor2", outdoor=outdoor,
+                      color="#d9dee5", opacity=.94,
                       sourceLayer="A14 AND NOT AREA" if outdoor else "AREA", sourceHandle=handle)
         assert abs(sum(box(*r).area for r in tiles) - geometry.area) < .01, "Slab tiling changed footprint area"
 
@@ -275,11 +276,20 @@ class Importer:
         return segment.intersection(boundary.buffer(thickness+.025)).length >= segment.length*.9
 
     def opening_roles(self):
+        master_balcony_openings = []
+        if self.floor_key == 'living':
+            balcony = self.source_bounds('1CBB', '1AEE', '1CD5')
         for opening in self.plan['openings']:
             if opening['floorId'] != self.floor_id:
                 continue
             x,y=opening['x'],opening['y']
-            if self.floor_key=='ground' and x<.2 and 2.9<y<5.4:
+            if self.floor_key=='living' and opening['type']=='window' and \
+                    abs(x-(balcony[2]+.125))<.05 and balcony[1]<y<balcony[3] and opening['width']>1.8:
+                opening.update(type='door',name='Master bedroom balcony sliding glass door',glass=True,
+                               openingStyle='sliding',height=2.35,sill=0,color='#45a9d8',opacity=.62,
+                               roleEvidence='A14 balcony edges 1CBB/1AEE/1CD5 and A17 facade gap')
+                master_balcony_openings.append(opening['id'])
+            elif self.floor_key=='ground' and x<.2 and 2.9<y<5.4:
                 opening.update(type='door',name='Kitchen exterior sliding glass door',glass=True,
                                openingStyle='sliding',height=2.35,sill=0,color='#45a9d8',opacity=.62,
                                roleEvidence='User-confirmed kitchen-to-outdoor-dining circulation')
@@ -289,6 +299,8 @@ class Importer:
             if opening['type']=='door' and not opening.get('glass') and opening['name']!='Entrance paired leaf':
                 opening['opacity']=.94 if self.floor_key=='living' else .9
         if self.floor_key=='living':
+            if len(master_balcony_openings) != 1:
+                raise ValueError(f'Expected one master balcony access opening, found {master_balcony_openings}')
             gap=next(g for g in self.floor_audit['openingGaps'] if abs(g['width']-.78)<.001 and
                      abs(g['endpoints'][0][1]-3.45)<.001)
             self.opening('master-bathroom-entry',*gap['endpoints'],'door','A17/user-confirmed',
@@ -537,18 +549,32 @@ class Importer:
                 ("Bedroom 2 closet", "closet", ["19F0", "19F1", "19F2"], 0),
                 ("Master bedroom study desk", "study-desk", ["18F2"], 0),
                 ("Master bedroom bed", "bed", ["1A3F"], 90),
-                ("Master walk-in closet east bank", "open-closet", ["1A38", "1A39", "1A3E"], 270),
             ): f(name, kind, handles, angle)
+            east_bank = self.source_bounds("1A38", "1A39", "1A3E")
+            f("Master walk-in closet east bank", "open-closet", ["1A38", "1A39", "1A3E"], 270,
+              (east_bank[2]-.5, east_bank[1], east_bank[2], east_bank[3]))
             bank = self.source_bounds("1A3C", "1A3D")
-            f("Master walk-in closet west bank", "open-closet", ["1A3C", "1A3D"], 90, bank)
+            f("Master walk-in closet west bank", "open-closet", ["1A3C", "1A3D"], 90,
+              (bank[0], bank[1], bank[0]+.5, bank[3]))
+            self.floor_audit.setdefault('userOverrides', []).append({
+                'role': 'Master walk-in closet banks',
+                'sourceDepthsM': [rounded(bank[2]-bank[0]), rounded(east_bank[2]-east_bank[0])],
+                'modeledDepthsM': [.5, .5], 'backingFacesFixed': True, 'clearAisleM': .95})
             divider = self.source_bounds("1A3B", "1A3C")
             self.item("walls", "master-wardrobe-divider", "Master wardrobe backing wall", divider,
                       height=self.height, color="#fefdfa", opacity=1, sourceLayer="A34/A24", sourceHandles=["1A3B", "1A3C"],
                       sourceRole="dimensioned-10cm-wardrobe-backing")
             shower_edge = self.source_bounds("1A35")
-            bath_wall = self.geom(self.doc.entitydb["1C7B"])[0].bounds[0]
+            shower_mid_y = (shower_edge[1] + shower_edge[3]) / 2
+            wall_section = self.geom(self.doc.entitydb["1C7B"])[0].intersection(
+                box(shower_edge[0], shower_mid_y-.005, shower_edge[0]+3, shower_mid_y+.005))
+            if wall_section.is_empty:
+                raise ValueError("Master shower has no adjacent bathroom wall")
+            bath_wall_face = wall_section.bounds[0]
+            if bath_wall_face <= shower_edge[0]:
+                raise ValueError("Master shower wall must be beyond its glass partition")
             f("Master bathroom dual shower", "shower", ["1A35", "1C7B"], 90,
-              (shower_edge[0], shower_edge[1], bath_wall, shower_edge[3]))
+              (shower_edge[0], shower_edge[1], bath_wall_face, shower_edge[3]))
             f("Master bathroom movable glass partition", "sliding-window-opening", ["1A35"], 90,
               (shower_edge[0]-.025, shower_edge[1], shower_edge[0]+.025, shower_edge[3]))
             top_face = self.source_bounds("1A35")[1]
@@ -603,6 +629,8 @@ class Importer:
         for collection in ("rooms", "walls", "stairs", "elements", "roofs"):
             for item in self.plan[collection]:
                 rotate_rect(item)
+                for rect in item.get("surfaceRects", []):
+                    rotate_rect(rect)
                 if "rotation" in item:
                     item["rotation"] = rounded((item["rotation"]+180) % 360)
                 if item.get('circularProfile'):
@@ -642,16 +670,27 @@ class Importer:
         if abs(center_x-ridge)>.05:
             raise ValueError('Section-to-plan roof ridge registration failed')
         profile={k:self.audit['sections']['roof'][k] for k in ('outerRadius','innerRadius','finishRadius','centerElevation')}
-        profile['centerX']=rounded(center_x)
+        roof_footprint=enclosure.buffer(.1, join_style=2)
+        wall_west,_,wall_east,_=enclosure.bounds
+        profile['centerX']=rounded((wall_west+wall_east)/2)
+        wall_half_span=(wall_east-wall_west)/2
+        wall_rise=profile['finishRadius']-math.sqrt(profile['finishRadius']**2-wall_half_span**2)
         donor=next(r for r in self.material_donor['roofs'] if r.get('shape')=='barrel')
-        for index,bounds in enumerate(rects(enclosure)):
-            self.item('roofs','section-roof-'+str(index),'Section-derived circular roof',bounds,
-                      type='roof',shape='barrel',axis='z',circularProfile=dict(profile),
-                      color=donor['color'],opacity=donor['opacity'],sourceLayer='A10/A13/A14/A17/A24',
-                      sourceHandles=['975','858','9BF','B6F','C5A','12F1','13FD','13F9','154C'])
+        roof=self.item('roofs','section-roof','Section-derived circular roof',roof_footprint.bounds,
+                       type='roof',shape='barrel',axis='z',circularProfile=profile,
+                       color=donor['color'],opacity=donor['opacity'],sourceLayer='A10/A13/A14/A17/A24',
+                       sourceHandles=['975','858','9BF','B6F','C5A','12F1','13FD','13F9','154C'])
+        roof['surfaceRects']=[{'x':x1,'y':y1,'w':rounded(x2-x1),'h':rounded(y2-y1)}
+                              for x1,y1,x2,y2 in rects(roof_footprint)]
+        if abs(sum(rect['w']*rect['h'] for rect in roof['surfaceRects'])-roof_footprint.area)>.01:
+            raise ValueError('Single roof surface does not cover its buffered wall contour')
         self.audit['sections']['roof']['planCenterX']=rounded(center_x)
         self.audit['sections']['roof']['ridgeLabelOffset']=rounded(abs(center_x-ridge))
-        self.audit['sections']['roof']['footprintStatus']='A17-enclosed bedroom, east kitchenette, connecting bridge and stair core'
+        self.audit['sections']['roof']['renderedCenterX']=profile['centerX']
+        self.audit['sections']['roof']['renderedCenterAdjustmentM']=rounded(profile['centerX']-center_x)
+        self.audit['sections']['roof']['wallEdgeRiseM']=rounded(wall_rise)
+        self.audit['sections']['roof']['overhangM']=.1
+        self.audit['sections']['roof']['footprintStatus']='One arc over A17-enclosed wall contour plus 10 cm drip edge; terrace open to sky'
 
     def geometry_checks(self):
         for key, audit in self.audit["floors"].items():
@@ -785,6 +824,9 @@ class Importer:
             self.plan["rooms"] = [r for r in self.plan["rooms"] if r["floorId"] != self.floor_id]
             self.slab(enclosure, "Top-floor enclosed slab", "D08-A17")
             self.slab(outdoor, "Roof terrace", "A14-labeled-terraces", True)
+            for terrace in self.plan['rooms']:
+                if terrace['floorId']==self.floor_id and terrace.get('outdoor'):
+                    terrace['surfaceColor']='#d9dee5'
             self.floor_audit["enclosureM2"] = rounded(enclosure.area)
             self.floor_audit["balconies"] = [{"areaM2": rounded(outdoor.area), "labels": ["1256", "D06", "12A3"]}]
             self.floor_audit["counts"] = {c:sum(v.get("floorId")==self.floor_id for v in self.plan[c]) for c in ("walls","openings","elements","rooms")}
@@ -801,6 +843,24 @@ class Importer:
         for i,p in enumerate(outdoor):
             self.slab(p, "Terrace" if key in ("ground","basement") else "Balcony", f"a14-balcony-{i}", True)
         self.floor_audit["balconies"] = [{"areaM2":rounded(p.area),"bounds":[rounded(v) for v in p.bounds]} for p in outdoor]
+        if key == 'living':
+            master_balcony = box(*self.source_bounds('1CBB', '1AEE', '1CD5'))
+            label = next(label for label in labels if label['handle'] == 'C8B')
+            if not master_balcony.contains(Point(label['position'])) or master_balcony.intersection(footprint).area > .001:
+                raise ValueError('Master balcony must contain its A49 label and lie outside AREA')
+            x1,y1,x2,y2 = master_balcony.bounds
+            self.slab(master_balcony, 'Master bedroom balcony', 'a14-master-bedroom-balcony', True)
+            for name, bounds, handle in (
+                ('outer', (x1,y1,x1+.05,y2), '1CBB'),
+                ('north', (x1,y1,x2,y1+.05), '1AEE'),
+                ('south', (x1,y2-.05,x2,y2), '1CD5'),
+            ):
+                self.item('walls', f'master-balcony-guard-{name}', 'Master balcony guard', bounds,
+                          type='glass-wall', height=1.05, color='#b9d8e8', opacity=.48,
+                          sourceLayer='A14', sourceHandle=handle, sourceRole='balcony-guard')
+            self.floor_audit['balconies'].append({'areaM2':rounded(master_balcony.area),
+                                                  'bounds':[rounded(v) for v in master_balcony.bounds],
+                                                  'label':'C8B', 'edgeHandles':['1CBB','1AEE','1CD5']})
         self.floor_audit["counts"] = {c:sum(v.get("floorId")==self.floor_id for v in self.plan[c]) for c in ("walls","openings","elements","rooms")}
 
     def stairs(self):
@@ -817,28 +877,34 @@ class Importer:
                 "shape":"turned","turn":"right","landing":rounded(width),"rotation":90,"level":0,
                 "height":2.75 if key=="basement" else 3.14,"color":"#3d2418","opacity":1,"type1":"dark-wood",
                 "sourceLayer":"AREA","sourceHandle":handle})
-        # Living outgoing flight uses A14 treads adjacent to AREA stair-core 1575.
-        # 1542/1543 on the upper sheet register its horizontal flight; 139E-13A4
-        # identify the vertical flight, with the landing joining their endpoints.
-        self.origin,_=self.source_floor["floor2"]
-        tread = self.doc.entitydb["1543"]
-        a,b=self.pt(tread.dxf.start),self.pt(tread.dxf.end)
-        top_y,bottom_y=sorted((a[1],b[1]))
-        left_x=self.pt(self.doc.entitydb["1542"].dxf.start)[0]
-        right_x=self.pt(self.doc.entitydb["139E"].dxf.end)[0]
-        if right_x < left_x:
-            right_x=self.pt(self.doc.entitydb["139E"].dxf.start)[0]
-        upper_y=min(self.pt(self.doc.entitydb["139E"].dxf.start)[1], self.pt(self.doc.entitydb["139E"].dxf.end)[1])
-        w,h=right_x-left_x,bottom_y-upper_y
+        # The outgoing floor's AREA core and A14 treads determine the route;
+        # arrival-floor tread graphics put the short run on the opposite side.
+        self.origin,_=self.source_floor["ground"]
+        ground_core=self.geom(self.doc.entitydb["2287"])[0].bounds
+        self.origin,_=self.source_floor["living"]
+        area=self.geom(self.doc.entitydb["1575"])[0]
+        left_x,top_y,right_x,bottom_y=area.bounds
+        horizontal=self.source_bounds("1D50")
+        vertical=self.source_bounds("1D58")
+        vertical_end=self.source_bounds("1D60")[3]
+        horizontal_top=self.source_bounds("1D53")[1]
+        w,h=right_x-left_x,bottom_y-top_y
+        run_x=horizontal[0]-left_x
+        run_y=horizontal_top-top_y
+        short_w=vertical[2]-left_x
+        short_h=vertical_end-top_y
+        if abs(left_x-ground_core[0])>.01 or abs(bottom_y-ground_core[3])>.01:
+            raise ValueError("Living outgoing stair no longer registers to the shared AREA core")
+        if abs(self.source_bounds("1D56")[1]-top_y)>.01:
+            raise ValueError("Living stair upper-end marker does not meet its outgoing run")
         self.plan["stairs"].append({"id":f"{KEY}-living-stair","type":"stair","floorId":f"{KEY}-living",
-            "name":"Living floor stairs", "x":rounded(left_x),"y":rounded(upper_y),"w":rounded(w),"h":rounded(h),
-            "shape":"turned","turn":"right","landing":.85,"rotation":0,"level":0,"height":2.584,
+            "name":"Living floor stairs", "x":rounded(left_x),"y":rounded(top_y),"w":rounded(w),"h":rounded(h),
+            "shape":"turned","turn":"right","landing":rounded(max(run_x, h-short_h)),"rotation":0,"level":0,"height":2.584,
             "color":"#3d2418","opacity":1,"type1":"dark-wood",
-            "cadRuns":[{"x":0,"y":rounded(h-.95),"w":rounded((w-.85)/w),"h":rounded(.95/h),"dir":"x"},
-                       {"x":rounded((w-.85)/w),"y":0,"w":rounded(.85/w),"h":rounded((h-.95)/h),"dir":"z","reverse":True}],
-            "cadLanding":{"x":rounded((w-.85)/w),"y":rounded((h-.95)/h),"w":rounded(.85/w),"h":rounded(.95/h)},
-            "sourceLayer":"AREA/A14","sourceHandles":["1575","1542","1543","139E"]})
-        self.plan["stairs"][-1]["cadRuns"][0]["y"] = rounded((h-.95)/h)
+            "cadRuns":[{"x":rounded(run_x/w),"y":rounded(run_y/h),"w":rounded((w-run_x)/w),"h":rounded((h-run_y)/h),"dir":"x","reverse":True},
+                       {"x":0,"y":0,"w":rounded(short_w/w),"h":rounded(short_h/h),"dir":"z","reverse":True}],
+            "cadLanding":{"x":0,"y":rounded(short_h/h),"w":rounded(run_x/w),"h":rounded((h-short_h)/h)},
+            "sourceLayer":"AREA/A13/A14","sourceHandles":["1575","1D50","1D53","1D58","1D60","1D56"]})
 
     def run(self):
         for spec in FLOORS:
@@ -852,8 +918,10 @@ class Importer:
         assert len(ids)==len(set(ids)), "Duplicate source ids"
         self.plan["importAudit"] = "docs/alt4-v2-layer-audit.json"
         self.audit["validation"] = {"status":"draft", "publicationReady":False,
-                                    "pending":["Verify upper stair route from A13/A14 source geometry", "Full room-by-room source overlay review", "Final human-height browser QA",
-                                               "Integrate top-floor high/low zones and roof-clipped walls"]}
+                                    "verified":["Living-to-top stair route from departure-floor AREA 1575, A14 treads and A13 upper-end marker",
+                                                "Single top-level arc over enclosed A17 walls with 10 cm overhang and uncovered light-gray terraces"],
+                                    "pending":["Full room-by-room source overlay review", "Final human-height browser QA",
+                                               "Integrate top-floor high/low zones and verify roof-clipped walls against both sections"]}
         return self.plan
 
 

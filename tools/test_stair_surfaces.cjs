@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
-const context = { clamp: (v, a, b) => Math.min(b, Math.max(a, v)), state: { floors: [{id:'lower'}, {id:'upper'}], stairs: [] } };
+const context = { clamp: (v, a, b) => Math.min(b, Math.max(a, v)), state: { wallHeight: 2.79, floors: [{id:'lower'}, {id:'upper'}], stairs: [] } };
 vm.createContext(context);
 for (const [start, end] of [
   ['stairPlanRuns', 'drawStairSteps'], ['stairHolesForSlab', 'addSlabPieces3D'], ['slabRectPolygon', 'floorTexture'],
@@ -56,11 +56,18 @@ close(context.subtractConvexSlabHole(square, cut).reduce((s,p)=>s+context.slabPo
 
 const surfaces = [];
 Object.assign(context, { viewVisible: v=>v==='floor', colorToHex:v=>v, opacityForView:v=>v,
-  storyCeilingElevation:()=>3, addSlabPieces3D:(...args)=>surfaces.push(args.at(-1)), itemColor:()=>0, itemOpacity:()=>1 });
+  storyCeilingElevation:()=>3, addSlabPieces3D:(...args)=>surfaces.push(args[8]), itemColor:()=>0, itemOpacity:()=>1 });
 context.state.stairs = [];
 context.addRoom3D({...room, type:'space', structuralSlab:true, ceiling:false}, {id:'lower',elevation:0}, []);
 assert.deepEqual(surfaces, ['floor']);
 surfaces.length = 0;
 context.addRoom3D({...room, type:'space', structuralSlab:true}, {id:'lower',elevation:0}, []);
 assert.deepEqual(surfaces, ['floor','ceiling']);
+const slabCalls = [];
+context.addSlabPieces3D = (...args) => slabCalls.push(args);
+context.storyCeilingElevation = () => 3.14;
+context.addRoom3D({...room, type:'space', structuralSlab:true}, {id:'lower',elevation:0}, []);
+const ceiling = slabCalls.find(args => args[8] === 'ceiling');
+close(ceiling[1], (2.79 + 3.14) / 2);
+close(ceiling[2], .35);
 console.log('Stair rotations, exact cutout areas, CAD runs, edge clipping, story ownership and outdoor ceilings passed.');

@@ -564,6 +564,23 @@
       "sourceHandle": "a14-balcony-0"
     },
     {
+      "id": "architect-alt-4-v2-living-a14-master-bedroom-balcony-slab-0",
+      "type": "space",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Master bedroom balcony",
+      "x": 13.8,
+      "y": 3.9,
+      "w": 1.85,
+      "h": 3.0,
+      "structuralSlab": true,
+      "ceiling": false,
+      "outdoor": true,
+      "color": "#d9dee5",
+      "opacity": 0.94,
+      "sourceLayer": "A14 AND NOT AREA",
+      "sourceHandle": "a14-master-bedroom-balcony"
+    },
+    {
       "id": "architect-alt-4-v2-floor2-D08-A17-slab-0",
       "type": "space",
       "floorId": "architect-alt-4-v2-floor2",
@@ -573,7 +590,7 @@
       "w": 4.35,
       "h": 9.0,
       "structuralSlab": true,
-      "ceiling": true,
+      "ceiling": false,
       "outdoor": false,
       "color": "#d9dee5",
       "opacity": 0.94,
@@ -590,7 +607,7 @@
       "w": 0.73,
       "h": 3.3,
       "structuralSlab": true,
-      "ceiling": true,
+      "ceiling": false,
       "outdoor": false,
       "color": "#d9dee5",
       "opacity": 0.94,
@@ -607,7 +624,7 @@
       "w": 1.22,
       "h": 5.2,
       "structuralSlab": true,
-      "ceiling": true,
+      "ceiling": false,
       "outdoor": false,
       "color": "#d9dee5",
       "opacity": 0.94,
@@ -624,7 +641,7 @@
       "w": 0.95,
       "h": 7.95,
       "structuralSlab": true,
-      "ceiling": true,
+      "ceiling": false,
       "outdoor": false,
       "color": "#d9dee5",
       "opacity": 0.94,
@@ -641,7 +658,7 @@
       "w": 1.75,
       "h": 2.95,
       "structuralSlab": true,
-      "ceiling": true,
+      "ceiling": false,
       "outdoor": false,
       "color": "#d9dee5",
       "opacity": 0.94,
@@ -663,7 +680,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-1",
@@ -680,7 +698,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-2",
@@ -697,7 +716,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-3",
@@ -714,7 +734,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-4",
@@ -731,7 +752,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-5",
@@ -748,7 +770,8 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "A14 AND NOT AREA",
-      "sourceHandle": "A14-labeled-terraces"
+      "sourceHandle": "A14-labeled-terraces",
+      "surfaceColor": "#d9dee5"
     }
   ],
   "stairs": [
@@ -799,13 +822,13 @@
       "type": "stair",
       "floorId": "architect-alt-4-v2-living",
       "name": "Living floor stairs",
-      "x": 3.05,
+      "x": 3.9,
       "y": 0.7,
-      "w": 3.95,
-      "h": 2.47,
+      "w": 4.25,
+      "h": 2.569,
       "shape": "turned",
       "turn": "right",
-      "landing": 0.85,
+      "landing": 1.169,
       "rotation": 180.0,
       "level": 0,
       "height": 2.584,
@@ -814,33 +837,36 @@
       "type1": "dark-wood",
       "cadRuns": [
         {
-          "x": 0,
-          "y": 0.6154,
-          "w": 0.7848,
-          "h": 0.3846,
-          "dir": "x"
+          "x": 0.2706,
+          "y": 0.6302,
+          "w": 0.7294,
+          "h": 0.3698,
+          "dir": "x",
+          "reverse": true
         },
         {
-          "x": 0.7848,
+          "x": 0,
           "y": 0,
-          "w": 0.2152,
-          "h": 0.6154,
+          "w": 0.2235,
+          "h": 0.545,
           "dir": "z",
           "reverse": true
         }
       ],
       "cadLanding": {
-        "x": 0.7848,
-        "y": 0.6154,
-        "w": 0.2152,
-        "h": 0.3846
+        "x": 0,
+        "y": 0.545,
+        "w": 0.2706,
+        "h": 0.455
       },
-      "sourceLayer": "AREA/A14",
+      "sourceLayer": "AREA/A13/A14",
       "sourceHandles": [
         "1575",
-        "1542",
-        "1543",
-        "139E"
+        "1D50",
+        "1D53",
+        "1D58",
+        "1D60",
+        "1D56"
       ]
     }
   ],
@@ -2998,6 +3024,54 @@
       "sourceRole": "dimensioned-10cm-wardrobe-backing"
     },
     {
+      "id": "architect-alt-4-v2-living-master-balcony-guard-outer",
+      "type": "glass-wall",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Master balcony guard",
+      "x": 15.6,
+      "y": 3.9,
+      "w": 0.05,
+      "h": 3.0,
+      "height": 1.05,
+      "color": "#b9d8e8",
+      "opacity": 0.48,
+      "sourceLayer": "A14",
+      "sourceHandle": "1CBB",
+      "sourceRole": "balcony-guard"
+    },
+    {
+      "id": "architect-alt-4-v2-living-master-balcony-guard-north",
+      "type": "glass-wall",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Master balcony guard",
+      "x": 13.8,
+      "y": 6.85,
+      "w": 1.85,
+      "h": 0.05,
+      "height": 1.05,
+      "color": "#b9d8e8",
+      "opacity": 0.48,
+      "sourceLayer": "A14",
+      "sourceHandle": "1AEE",
+      "sourceRole": "balcony-guard"
+    },
+    {
+      "id": "architect-alt-4-v2-living-master-balcony-guard-south",
+      "type": "glass-wall",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Master balcony guard",
+      "x": 13.8,
+      "y": 3.9,
+      "w": 1.85,
+      "h": 0.05,
+      "height": 1.05,
+      "color": "#b9d8e8",
+      "opacity": 0.48,
+      "sourceLayer": "A14",
+      "sourceHandle": "1CD5",
+      "sourceRole": "balcony-guard"
+    },
+    {
       "id": "architect-alt-4-v2-floor2-hatch-13F5-0",
       "type": "wall",
       "floorId": "architect-alt-4-v2-floor2",
@@ -4300,9 +4374,9 @@
     },
     {
       "id": "architect-alt-4-v2-living-perimeter-4-0",
-      "type": "window",
+      "type": "door",
       "floorId": "architect-alt-4-v2-living",
-      "name": "Window perimeter-4-0",
+      "name": "Master bedroom balcony sliding glass door",
       "roomId": null,
       "wallId": "architect-alt-4-v2-living-perimeter-4-0-host",
       "side": "wall-h",
@@ -4311,15 +4385,16 @@
       "y": 5.2,
       "rotation": 270.0,
       "width": 1.9998,
-      "height": 1.2,
-      "sill": 1,
+      "height": 2.35,
+      "sill": 0,
       "swing": 0,
       "color": "#45a9d8",
       "opacity": 0.62,
       "sourceLayer": "AREA/A17 perimeter",
       "sourceHandle": "perimeter-4-0",
+      "glass": true,
       "openingStyle": "sliding",
-      "roleEvidence": "User-confirmed salon/master movable glazing"
+      "roleEvidence": "A14 balcony edges 1CBB/1AEE/1CD5 and A17 facade gap"
     },
     {
       "id": "architect-alt-4-v2-living-perimeter-8-0",
@@ -5973,10 +6048,10 @@
       "type": "element",
       "floorId": "architect-alt-4-v2-living",
       "name": "Master walk-in closet east bank",
-      "x": 6.925,
-      "y": 2.025,
+      "x": 6.875,
+      "y": 2.075,
       "w": 3.25,
-      "h": 0.6,
+      "h": 0.5,
       "elementKind": "open-closet",
       "rotation": 90.0,
       "elevation": 0,
@@ -5996,10 +6071,10 @@
       "type": "element",
       "floorId": "architect-alt-4-v2-living",
       "name": "Master walk-in closet west bank",
-      "x": 8.35,
-      "y": 2.1,
+      "x": 8.325,
+      "y": 2.075,
       "w": 3.25,
-      "h": 0.45,
+      "h": 0.5,
       "elementKind": "open-closet",
       "rotation": 270.0,
       "elevation": 0,
@@ -6018,10 +6093,10 @@
       "type": "element",
       "floorId": "architect-alt-4-v2-living",
       "name": "Master bathroom dual shower",
-      "x": 9.825,
-      "y": 7.225,
+      "x": 9.125,
+      "y": 6.525,
       "w": 1.85,
-      "h": -0.4,
+      "h": 1.0,
       "elementKind": "shower",
       "rotation": 270.0,
       "elevation": 0,
@@ -6804,14 +6879,14 @@
   "rulers": [],
   "roofs": [
     {
-      "id": "architect-alt-4-v2-floor2-section-roof-0",
+      "id": "architect-alt-4-v2-floor2-section-roof",
       "type": "roof",
       "floorId": "architect-alt-4-v2-floor2",
       "name": "Section-derived circular roof",
-      "x": 1.1,
-      "y": 0.5,
-      "w": 4.35,
-      "h": 9.0,
+      "x": -1.9,
+      "y": 0.4,
+      "w": 9.2,
+      "h": 9.2,
       "shape": "barrel",
       "axis": "z",
       "circularProfile": {
@@ -6819,7 +6894,7 @@
         "innerRadius": 5.66,
         "finishRadius": 5.91,
         "centerElevation": 3.14,
-        "centerX": 2.2
+        "centerX": 2.7
       },
       "color": "#ad5636",
       "opacity": 0.9,
@@ -6834,138 +6909,38 @@
         "13FD",
         "13F9",
         "154C"
-      ]
-    },
-    {
-      "id": "architect-alt-4-v2-floor2-section-roof-1",
-      "type": "roof",
-      "floorId": "architect-alt-4-v2-floor2",
-      "name": "Section-derived circular roof",
-      "x": -1.8,
-      "y": 5.15,
-      "w": 0.73,
-      "h": 3.3,
-      "shape": "barrel",
-      "axis": "z",
-      "circularProfile": {
-        "outerRadius": 5.86,
-        "innerRadius": 5.66,
-        "finishRadius": 5.91,
-        "centerElevation": 3.14,
-        "centerX": 2.2
-      },
-      "color": "#ad5636",
-      "opacity": 0.9,
-      "sourceLayer": "A10/A13/A14/A17/A24",
-      "sourceHandles": [
-        "975",
-        "858",
-        "9BF",
-        "B6F",
-        "C5A",
-        "12F1",
-        "13FD",
-        "13F9",
-        "154C"
-      ]
-    },
-    {
-      "id": "architect-alt-4-v2-floor2-section-roof-2",
-      "type": "roof",
-      "floorId": "architect-alt-4-v2-floor2",
-      "name": "Section-derived circular roof",
-      "x": -1.07,
-      "y": 3.25,
-      "w": 1.22,
-      "h": 5.2,
-      "shape": "barrel",
-      "axis": "z",
-      "circularProfile": {
-        "outerRadius": 5.86,
-        "innerRadius": 5.66,
-        "finishRadius": 5.91,
-        "centerElevation": 3.14,
-        "centerX": 2.2
-      },
-      "color": "#ad5636",
-      "opacity": 0.9,
-      "sourceLayer": "A10/A13/A14/A17/A24",
-      "sourceHandles": [
-        "975",
-        "858",
-        "9BF",
-        "B6F",
-        "C5A",
-        "12F1",
-        "13FD",
-        "13F9",
-        "154C"
-      ]
-    },
-    {
-      "id": "architect-alt-4-v2-floor2-section-roof-3",
-      "type": "roof",
-      "floorId": "architect-alt-4-v2-floor2",
-      "name": "Section-derived circular roof",
-      "x": 0.15,
-      "y": 0.5,
-      "w": 0.95,
-      "h": 7.95,
-      "shape": "barrel",
-      "axis": "z",
-      "circularProfile": {
-        "outerRadius": 5.86,
-        "innerRadius": 5.66,
-        "finishRadius": 5.91,
-        "centerElevation": 3.14,
-        "centerX": 2.2
-      },
-      "color": "#ad5636",
-      "opacity": 0.9,
-      "sourceLayer": "A10/A13/A14/A17/A24",
-      "sourceHandles": [
-        "975",
-        "858",
-        "9BF",
-        "B6F",
-        "C5A",
-        "12F1",
-        "13FD",
-        "13F9",
-        "154C"
-      ]
-    },
-    {
-      "id": "architect-alt-4-v2-floor2-section-roof-4",
-      "type": "roof",
-      "floorId": "architect-alt-4-v2-floor2",
-      "name": "Section-derived circular roof",
-      "x": 5.45,
-      "y": 0.5,
-      "w": 1.75,
-      "h": 2.95,
-      "shape": "barrel",
-      "axis": "z",
-      "circularProfile": {
-        "outerRadius": 5.86,
-        "innerRadius": 5.66,
-        "finishRadius": 5.91,
-        "centerElevation": 3.14,
-        "centerX": 2.2
-      },
-      "color": "#ad5636",
-      "opacity": 0.9,
-      "sourceLayer": "A10/A13/A14/A17/A24",
-      "sourceHandles": [
-        "975",
-        "858",
-        "9BF",
-        "B6F",
-        "C5A",
-        "12F1",
-        "13FD",
-        "13F9",
-        "154C"
+      ],
+      "surfaceRects": [
+        {
+          "x": 1.0,
+          "y": 0.4,
+          "w": 4.55,
+          "h": 9.2
+        },
+        {
+          "x": -1.9,
+          "y": 5.05,
+          "w": 0.73,
+          "h": 3.5
+        },
+        {
+          "x": -1.17,
+          "y": 3.15,
+          "w": 1.22,
+          "h": 5.4
+        },
+        {
+          "x": 0.05,
+          "y": 0.4,
+          "w": 0.95,
+          "h": 8.15
+        },
+        {
+          "x": 5.55,
+          "y": 0.4,
+          "w": 1.75,
+          "h": 3.15
+        }
       ]
     }
   ],

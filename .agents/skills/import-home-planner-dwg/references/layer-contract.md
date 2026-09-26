@@ -12,9 +12,10 @@ User-provided mapping for the fresh Alt-4 import, 2026-09-26. Match names case-i
 | A12 | Doors, including leaves and swing geometry |
 | A14 | Window geometry |
 
-Source inspection also found stair direction triangles and additional window-frame lines on **A13**. Inspect this as a supplemental evidence layer; it does not replace the user's AREA/A17 floor and wall mapping. A14 contains projected stair graphics, so do not classify an internal tread-supported gap as a window. Confirm stair direction using the actual arrow-bearing layer and the arrival-floor sheet.
+Source inspection also found stair direction triangles and additional window-frame lines on **A13**. Inspect this as a supplemental evidence layer; it does not replace the user's AREA/A17 floor and wall mapping. A14 contains projected stair graphics, so do not classify an internal tread-supported gap as a window. Confirm stair direction using the actual arrow-bearing layer and compare against the arrival-floor sheet, but locate and shape the outgoing flight from the departure-floor AREA/A14 geometry. In Alt-4, upper-sheet A14 tread handles 1542/1543/139E depict a different side of the shared core than living-sheet AREA 1575 and treads 1D50/1D53/1D58/1D60; using those upper-sheet treads as the outgoing footprint mirrored the living-to-top stair.
 
 Identify balcony candidates from A14 geometry outside the AREA floor footprint (A14 AND NOT AREA). Check bounded platform edges, access from the interior, adjacency, and railings before classifying them. A14 also contains stair treads, people, cars, and other symbols in this drawing, so set subtraction generates candidates, not automatic balcony slabs. Preserve balcony slabs and railings as distinct from enclosed indoor rooms and roofs.
+Do not require balcony linework to polygonize into a closed cell: a three-sided A14 platform can remain open at its A17 facade gap. If an A49 balcony label falls inside it, close the platform only against the verified wall/jamb line, verify it stays outside AREA, and classify the access gap by sill and exterior circulation. Alt-4 living-floor master balcony uses A14 1CBB/1AEE/1CD5 and the adjacent 2.00 m A17 gap; that gap is a floor-level sliding glass door, not a 1 m-sill window.
 
 ## Verify Before Reconstruction
 
@@ -76,6 +77,16 @@ section-specific discovery, not permission to discard the user's wall-layer map.
   crown height does not independently prove a roof footprint, overhang, axis,
   or connection to the flat terrace. Verify all of them against both sections
   and the plan before generating roof surfaces and sloped wall tops.
+
+The user clarified the top level on 2026-09-26: its A14 terraces are flat light
+gray and open to sky, with no fourth-floor slab above them. Render one continuous
+round-roof arc over the A17-derived enclosed wall contour only, extended 10 cm
+for drip protection. Across that wall span the 591 cm finish radius gives about
+2.05 m rise from the wall-edge baseline. Do not tile the enclosing bounding box
+or create a flat top-story ceiling. The rendered ridge is centered on the
+enclosed contour to honor this rise; record its offset from the source ridge
+label rather than silently presenting the two as identical. Clip enclosed wall
+tops against the roof underside and leave terrace walls outside the roof alone.
 
 These section measurements are verified evidence; their integration into the
 v2 renderer remains a separate QA gate. Preserve unknown registration and
