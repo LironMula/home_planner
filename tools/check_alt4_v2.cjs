@@ -6,6 +6,25 @@ const { chromium } = require('playwright');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'pdf_renders/alt4-v2');
 const plan = JSON.parse(fs.readFileSync(path.join(root, 'plans/architect-alt-4-v2.json'), 'utf8'));
+const planItem = id => [...plan.elements, ...plan.openings].find(item => item.id === `architect-alt-4-v2-${id}`);
+assert(planItem('ground-assembly-guest-toilet-sink').height >= .9);
+assert(planItem('ground-assembly-salon-exterior-wall-television').elevation >= .85);
+for (const id of ['ground-window-gap-7', 'ground-window-gap-9', 'living-window-gap-13']) {
+  const opening = planItem(id);
+  assert.equal(opening.sill, 0, `${id} must reach the floor`);
+  assert(opening.height >= 2.5, `${id} must reach the ceiling`);
+}
+assert.equal(planItem('ground-window-gap-7').openingStyle, 'sliding');
+assert.equal(planItem('ground-window-gap-9').x, planItem('living-window-gap-13').x);
+assert.equal(planItem('ground-window-gap-9').y, planItem('living-window-gap-13').y);
+for (const id of [
+  'basement-basin-east-mirror', 'basement-basin-west-mirror', 'ground-guest-toilet-mirror',
+  'living-master-bathroom-mirror', 'living-bathroom-mirror', 'floor2-bathroom-mirror'
+]) {
+  const mirror = planItem(id);
+  assert.equal(mirror.elementKind, 'mirror');
+  assert(mirror.elevation >= 1, `${id} must mount above the basin`);
+}
 const server = http.createServer((req, res) => {
   const name = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   const file = path.resolve(root, '.' + (name === '/' ? '/index.html' : name));
@@ -68,6 +87,21 @@ const server = http.createServer((req, res) => {
         updateCamera();
       });
       await page.screenshot({path:path.join(output, `browser-${key}-cutaway.png`)});
+    }
+    for(const key of ['living','floor2']){
+      await page.evaluate(key=>{
+        const floor=state.floors.find(f=>f.id.endsWith('-'+key));
+        state.activeFloorId=floor.id;state.viewFloor=floor.id;els.viewFloorSelect.value=floor.id;
+        state.scale=110;
+        const rect=canvas.getBoundingClientRect();
+        state.offset={x:rect.width/2-5*state.scale,y:rect.height/2-2.2*state.scale};
+        three.orbit.position.set(5,floor.elevation+6,6);
+        three.orbit.yaw=Math.PI;three.orbit.pitch=-1;
+        renderAll();
+        three.root.traverse(mesh=>{if(mesh.userData.storySurface==='ceiling'||mesh.userData.roofId)mesh.visible=false;});
+        updateCamera();
+      },key);
+      await page.screenshot({path:path.join(output,`browser-${key}-vertical-core.png`)});
     }
     await page.evaluate(() => {
       state.activeFloorId='architect-alt-4-v2-living';
@@ -180,12 +214,30 @@ const server = http.createServer((req, res) => {
           blockedLivingFloor:blocked('architect-alt-4-v2-living','floor',x,z,state.floors.find(f=>f.id.endsWith('-living')).elevation+.04),
           blockedGroundCeiling:blocked('architect-alt-4-v2-ground','ceiling',x,z,storyCeilingElevation(state.floors.find(f=>f.id.endsWith('-ground')))-.03)});
       }
-      return {stairChecks,voidChecks};
+      const shaftChecks=[];
+      for(const floor of state.floors){
+        for(const role of ['floor','ceiling']){
+          if(role==='floor' && floor.id.endsWith('-basement') || role==='ceiling' && floor.id.endsWith('-floor2'))continue;
+          const height=role==='floor'?floor.elevation+.04:storyCeilingElevation(floor)-.03;
+          for(let xi=1;xi<=3;xi++)for(let zi=1;zi<=3;zi++){
+            shaftChecks.push({floor:floor.id,role,blocked:blocked(floor.id,role,5.9106+xi/4,1.6831+1.5*zi/4,height)});
+          }
+        }
+      }
+      const basement=state.floors.find(f=>f.id.endsWith('-basement'));
+      const top=state.floors.find(f=>f.id.endsWith('-floor2'));
+      return {stairChecks,voidChecks,shaftChecks,
+        shaftBaseSolid:blocked(basement.id,'floor',6.4106,2.4331,basement.elevation+.04),
+        cancelledStairFloorSolid:blocked(top.id,'floor',5.25,2.5,top.elevation+.04)};
     });
     assert(structuralOpenings.stairChecks.length>100);
     assert(structuralOpenings.voidChecks.length===81);
     for(const check of structuralOpenings.stairChecks)assert(!check.blockedFloor && !check.blockedCeiling,JSON.stringify(check));
     for(const check of structuralOpenings.voidChecks)assert(!check.blockedLivingFloor && !check.blockedGroundCeiling,JSON.stringify(check));
+    assert.equal(structuralOpenings.shaftChecks.length,54);
+    for(const check of structuralOpenings.shaftChecks)assert(!check.blocked,JSON.stringify(check));
+    assert(structuralOpenings.shaftBaseSolid,'Retain the basement floor under the future elevator');
+    assert(structuralOpenings.cancelledStairFloorSolid,'The red-X upper stair projection must not remove the top floor');
     console.log('Structural openings:',structuralOpenings.stairChecks.length,'stair points and',structuralOpenings.voidChecks.length,'void points clear');
     const rotatedOpening=await page.evaluate(() => {
       const stair=state.stairs.find(item=>item.floorId.endsWith('-living'));
@@ -235,6 +287,23 @@ const server = http.createServer((req, res) => {
       return group ? new THREE.Box3().setFromObject(group).max.y-sink.height : null;
     });
     assert(sinkClearance>.3,`Kitchen faucet clearance: ${sinkClearance}`);
+    const guestSinkTop=await page.evaluate(() => {
+      const sink=state.elements.find(item=>item.id.endsWith('ground-assembly-guest-toilet-sink'));
+      const group=three.root.children.find(item=>item.isGroup &&
+        Math.abs(item.position.x-(sink.x+sink.w/2))<1e-6 &&
+        Math.abs(item.position.z-(sink.y+sink.h/2))<1e-6);
+      return group ? new THREE.Box3().setFromObject(group).max.y : null;
+    });
+    assert(guestSinkTop>.8 && guestSinkTop<1.05,`Guest sink top: ${guestSinkTop}`);
+    await page.evaluate(() => {
+      state.viewFloor='all';
+      els.viewFloorSelect.value='all';
+      three.orbit.position.set(-.5,1.6,7.5);
+      three.orbit.yaw=-1.85;
+      three.orbit.pitch=-.26;
+      render3D();
+    });
+    await page.screenshot({path:path.join(output,'browser-living-room-glazing.png')});
     for (const check of checks) {
       assert(check.colors>20, JSON.stringify(check));
       assert(check.surfaces.some(s=>s.role==='floor'));

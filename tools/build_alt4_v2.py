@@ -21,7 +21,7 @@ from cad_text import decode_architect_text
 from alt4_sections import section_constraints
 
 KEY = "architect-alt-4-v2"
-LAYERS = ("AREA", "A17", "A34", "A24", "A49", "A16", "A12", "A14", "A13")
+LAYERS = ("AREA", "A17", "A34", "A24", "A49", "A16", "A12", "A14", "A13", "H")
 # Handles identify verified contours, not old planner coordinates. The top
 # room is a clear-area outline; its surrounding A14 platforms are separate.
 FLOORS = (
@@ -877,39 +877,78 @@ class Importer:
                 "shape":"turned","turn":"right","landing":rounded(width),"rotation":90,"level":0,
                 "height":2.75 if key=="basement" else 3.14,"color":"#3d2418","opacity":1,"type1":"dark-wood",
                 "sourceLayer":"AREA","sourceHandle":handle})
-        # The outgoing floor's AREA core and A14 treads determine the route;
-        # arrival-floor tread graphics put the short run on the opposite side.
-        self.origin,_=self.source_floor["ground"]
-        ground_core=self.geom(self.doc.entitydb["2287"])[0].bounds
+        # AREA 1575 shows the incoming lower stair. The outgoing stair is the
+        # adjacent A14 flight plus its H-layer return, confirmed on the top sheet.
         self.origin,_=self.source_floor["living"]
-        area=self.geom(self.doc.entitydb["1575"])[0]
-        left_x,top_y,right_x,bottom_y=area.bounds
-        horizontal=self.source_bounds("1D50")
-        vertical=self.source_bounds("1D58")
-        vertical_end=self.source_bounds("1D60")[3]
-        horizontal_top=self.source_bounds("1D53")[1]
+        left_x,top_y,first_right,_=self.source_bounds("1886")
+        landing_y=self.source_bounds("1899")[1]
+        return_x,return_y,right_x,_=self.source_bounds("188E")
+        bottom_y=self.source_bounds("1583")[3]
         w,h=right_x-left_x,bottom_y-top_y
-        run_x=horizontal[0]-left_x
-        run_y=horizontal_top-top_y
-        short_w=vertical[2]-left_x
-        short_h=vertical_end-top_y
-        if abs(left_x-ground_core[0])>.01 or abs(bottom_y-ground_core[3])>.01:
-            raise ValueError("Living outgoing stair no longer registers to the shared AREA core")
-        if abs(self.source_bounds("1D56")[1]-top_y)>.01:
-            raise ValueError("Living stair upper-end marker does not meet its outgoing run")
+        if abs(self.source_bounds("188C")[1]-landing_y)>.001:
+            raise ValueError("Upper stair runs must meet the same podest")
+        first=(left_x,top_y,first_right,landing_y)
+        second=(return_x,return_y,right_x,landing_y)
+        landing=(left_x,landing_y,right_x,bottom_y)
+        self.origin,_=self.source_floor["floor2"]
+        arrival=self.source_bounds("139A")
+        if any(abs(a-b)>.001 for a,b in zip(arrival,(return_x,return_y,right_x,return_y))):
+            raise ValueError("Outgoing return flight does not meet the top-floor arrival")
+        def local_rect(bounds):
+            x1,y1,x2,y2=bounds
+            return dict(x=round((x1-left_x)/w,8),y=round((y1-top_y)/h,8),
+                        w=round((x2-x1)/w,8),h=round((y2-y1)/h,8))
         self.plan["stairs"].append({"id":f"{KEY}-living-stair","type":"stair","floorId":f"{KEY}-living",
             "name":"Living floor stairs", "x":rounded(left_x),"y":rounded(top_y),"w":rounded(w),"h":rounded(h),
-            "shape":"turned","turn":"right","landing":rounded(max(run_x, h-short_h)),"rotation":0,"level":0,"height":2.584,
+            "shape":"uturn","turn":"right","landing":rounded(bottom_y-landing_y),"rotation":0,"level":0,"height":2.584,
             "color":"#3d2418","opacity":1,"type1":"dark-wood",
-            "cadRuns":[{"x":rounded(run_x/w),"y":rounded(run_y/h),"w":rounded((w-run_x)/w),"h":rounded((h-run_y)/h),"dir":"x","reverse":True},
-                       {"x":0,"y":0,"w":rounded(short_w/w),"h":rounded(short_h/h),"dir":"z","reverse":True}],
-            "cadLanding":{"x":0,"y":rounded(short_h/h),"w":rounded(run_x/w),"h":rounded((h-short_h)/h)},
-            "sourceLayer":"AREA/A13/A14","sourceHandles":["1575","1D50","1D53","1D58","1D60","1D56"]})
+            "cadRuns":[dict(**local_rect(first),dir="z",reverse=False),
+                       dict(**local_rect(second),dir="z",reverse=True)],
+            "cadLanding":local_rect(landing),
+            "sourceLayer":"A14/H/A13","sourceHandles":["1886","1899","188E","188C","1583","139A","132A","132B"]})
+        self.audit['verticalCore']={'coordinatePhase':'source metres before site rotation',
+            'upperStair':{'firstRun':first,'returnRun':second,'landing':landing,
+                          'arrivalMarkerHandles':['132A','132B'],
+                          'incomingLowerStairArea':'1575','cancelledTopProjectionHandles':['1251','1252']}}
+
+    def future_elevator(self):
+        contours={'basement':'11DF','ground':'22AD','living':'1D5D','floor2':'1546'}
+        if decode_architect_text(self.doc.entitydb['1D4E'].dxf.text)!='\u05de\u05e2\u05dc\u05d9\u05ea':
+            raise ValueError('Elevator label verification failed')
+        shaft=None
+        for key,handle in contours.items():
+            self.origin,_=self.source_floor[key]
+            entity=self.doc.entitydb[handle]
+            shape=self.geom(entity)[0]
+            x1,y1,x2,y2=shape.bounds
+            if (entity.dxf.layer.upper()!='H' or abs(shape.area-1.5)>.001 or
+                    abs(x2-x1-1)>.001 or abs(y2-y1-1.5)>.001):
+                raise ValueError('Elevator reservation must be the verified 1 x 1.5 m H contour')
+            if shaft is not None and shaft.symmetric_difference(shape).area>.001:
+                raise ValueError('Elevator reservations do not align between floors')
+            shaft=shape
+            hole={'x':rounded(x1),'y':rounded(y1),'w':rounded(x2-x1),'h':rounded(y2-y1),
+                  'name':'Future elevator','role':'future-elevator','sourceLayer':'H','sourceHandle':handle}
+            for room in self.plan['rooms']:
+                if room['floorId']!=f'{KEY}-{key}' or not room.get('structuralSlab') or room.get('outdoor'):
+                    continue
+                # The basement is the shaft base; the top remains under its roof.
+                if key!='basement':
+                    room.setdefault('floorHoles',[]).append(dict(hole))
+                if key!='floor2':
+                    room.setdefault('ceilingHoles',[]).append(dict(hole))
+        if not self.top_floor_enclosure().covers(shaft):
+            raise ValueError('Top-floor A17 enclosure must include the future elevator')
+        self.audit['verticalCore']['elevator']={'sourceLayer':'H','contours':contours,
+            'bounds':list(shaft.bounds),'width':1,'depth':1.5,'baseFloor':'basement','topFloor':'floor2',
+            'labelHandle':'1D4E','topEnclosureHandles':['1568','1564','1538'],
+            'topEnclosureContainsShaft':True}
 
     def run(self):
         for spec in FLOORS:
             self.build_floor(spec)
         self.stairs()
+        self.future_elevator()
         self.apply_materials()
         self.geometry_checks()
         self.section_roof()
@@ -918,7 +957,7 @@ class Importer:
         assert len(ids)==len(set(ids)), "Duplicate source ids"
         self.plan["importAudit"] = "docs/alt4-v2-layer-audit.json"
         self.audit["validation"] = {"status":"draft", "publicationReady":False,
-                                    "verified":["Living-to-top stair route from departure-floor AREA 1575, A14 treads and A13 upper-end marker",
+                                    "verified":["Separate living-to-top U stair from A14/H treads and the top-floor arrival marker; aligned H-layer elevator reservations",
                                                 "Single top-level arc over enclosed A17 walls with 10 cm overhang and uncovered light-gray terraces"],
                                     "pending":["Full room-by-room source overlay review", "Final human-height browser QA",
                                                "Integrate top-floor high/low zones and verify roof-clipped walls against both sections"]}
@@ -928,9 +967,37 @@ class Importer:
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source",type=Path)
+    parser.add_argument('--vertical-core-only',action='store_true',
+                        help='Refresh the upper stair and elevator openings while preserving saved design edits')
     args=parser.parse_args()
     importer=Importer(args.source)
     plan=importer.run()
+    if args.vertical_core_only:
+        saved=json.loads(Path(f'plans/{KEY}.json').read_text(encoding='utf-8'))
+        upper=next(stair for stair in plan['stairs'] if stair['floorId']==KEY+'-living')
+        saved['stairs']=[upper if stair['id']==upper['id'] else stair for stair in saved['stairs']]
+        for room in saved['rooms']:
+            if not room.get('structuralSlab') or room.get('outdoor'):
+                continue
+            for field in ('floorHoles','ceilingHoles'):
+                holes=next(([hole for hole in source.get(field,[]) if hole.get('role')=='future-elevator']
+                            for source in plan['rooms'] if source['floorId']==room['floorId'] and
+                            source.get('structuralSlab') and not source.get('outdoor')),[])
+                retained=[hole for hole in room.get(field,[]) if hole.get('role')!='future-elevator']
+                if holes or retained:
+                    room[field]=retained+holes
+                elif field in room:
+                    del room[field]
+        plan=saved
+        saved_audit=json.loads(Path('docs/alt4-v2-layer-audit.json').read_text(encoding='utf-8'))
+        saved_audit['verticalCore']=importer.audit['verticalCore']
+        saved_audit['layers']['H']=importer.audit['layers']['H']
+        verified=saved_audit['validation']['verified']
+        saved_audit['validation']['verified']=[value for value in verified if not value.startswith('Living-to-top stair route')]
+        fact=importer.audit['validation']['verified'][0]
+        if fact not in saved_audit['validation']['verified']:
+            saved_audit['validation']['verified'].append(fact)
+        importer.audit=saved_audit
     Path(f"plans/{KEY}.json").write_text(json.dumps(plan,indent=2)+"\n",encoding="utf-8")
     Path("docs/alt4-v2-layer-audit.json").write_text(json.dumps(importer.audit,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({key: data["counts"] for key,data in importer.audit["floors"].items()},indent=2))

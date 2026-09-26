@@ -124,7 +124,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "101E"
+      "sourceHandle": "101E",
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "11DF"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-basement-101E-slab-1",
@@ -141,7 +153,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "101E"
+      "sourceHandle": "101E",
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "11DF"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-basement-101E-slab-2",
@@ -158,7 +182,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "101E"
+      "sourceHandle": "101E",
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "11DF"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-basement-a14-balcony-0-slab-0",
@@ -251,6 +287,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
+        }
+      ],
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
         }
       ]
     },
@@ -277,6 +335,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
+        }
+      ],
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
         }
       ]
     },
@@ -303,6 +383,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
+        }
+      ],
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "22AD"
         }
       ]
     },
@@ -465,6 +567,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
+        }
+      ],
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
         }
       ]
     },
@@ -491,6 +615,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
+        }
+      ],
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
         }
       ]
     },
@@ -517,6 +663,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
+        }
+      ],
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
         }
       ]
     },
@@ -543,6 +711,28 @@
           "w": 3.8499999999999996,
           "h": 4.4,
           "sourceHandle": "164D"
+        },
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
+        }
+      ],
+      "ceilingHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1D5D"
         }
       ]
     },
@@ -595,7 +785,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "D08-A17"
+      "sourceHandle": "D08-A17",
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1546"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-floor2-D08-A17-slab-1",
@@ -612,7 +814,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "D08-A17"
+      "sourceHandle": "D08-A17",
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1546"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-floor2-D08-A17-slab-2",
@@ -629,7 +843,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "D08-A17"
+      "sourceHandle": "D08-A17",
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1546"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-floor2-D08-A17-slab-3",
@@ -646,7 +872,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "D08-A17"
+      "sourceHandle": "D08-A17",
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1546"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-floor2-D08-A17-slab-4",
@@ -663,7 +901,19 @@
       "color": "#d9dee5",
       "opacity": 0.94,
       "sourceLayer": "AREA",
-      "sourceHandle": "D08-A17"
+      "sourceHandle": "D08-A17",
+      "floorHoles": [
+        {
+          "x": 5.9106,
+          "y": 1.6831,
+          "w": 1.0,
+          "h": 1.5,
+          "name": "Future elevator",
+          "role": "future-elevator",
+          "sourceLayer": "H",
+          "sourceHandle": "1546"
+        }
+      ]
     },
     {
       "id": "architect-alt-4-v2-floor2-A14-labeled-terraces-slab-0",
@@ -822,13 +1072,13 @@
       "type": "stair",
       "floorId": "architect-alt-4-v2-living",
       "name": "Living floor stairs",
-      "x": 3.9,
+      "x": 2.1,
       "y": 0.7,
-      "w": 4.25,
-      "h": 2.569,
-      "shape": "turned",
+      "w": 1.8,
+      "h": 3.02,
+      "shape": "uturn",
       "turn": "right",
-      "landing": 1.169,
+      "landing": 0.85,
       "rotation": 180.0,
       "level": 0,
       "height": 2.584,
@@ -837,36 +1087,38 @@
       "type1": "dark-wood",
       "cadRuns": [
         {
-          "x": 0.2706,
-          "y": 0.6302,
-          "w": 0.7294,
-          "h": 0.3698,
-          "dir": "x",
-          "reverse": true
+          "x": 0.0,
+          "y": 0.0,
+          "w": 0.47222222,
+          "h": 0.71854305,
+          "dir": "z",
+          "reverse": false
         },
         {
-          "x": 0,
-          "y": 0,
-          "w": 0.2235,
-          "h": 0.545,
+          "x": 0.52777778,
+          "y": 0.36092715,
+          "w": 0.47222222,
+          "h": 0.35761589,
           "dir": "z",
           "reverse": true
         }
       ],
       "cadLanding": {
-        "x": 0,
-        "y": 0.545,
-        "w": 0.2706,
-        "h": 0.455
+        "x": 0.0,
+        "y": 0.71854305,
+        "w": 1.0,
+        "h": 0.28145695
       },
-      "sourceLayer": "AREA/A13/A14",
+      "sourceLayer": "A14/H/A13",
       "sourceHandles": [
-        "1575",
-        "1D50",
-        "1D53",
-        "1D58",
-        "1D60",
-        "1D56"
+        "1886",
+        "1899",
+        "188E",
+        "188C",
+        "1583",
+        "139A",
+        "132A",
+        "132B"
       ]
     }
   ],
@@ -2907,9 +3159,9 @@
       "type": "wall",
       "floorId": "architect-alt-4-v2-living",
       "name": "Window host window-gap-13",
-      "x": -3.425,
-      "y": 4.255,
-      "w": 1.0,
+      "x": -3.4,
+      "y": 4.55,
+      "w": 0.95,
       "h": 0.35,
       "rotation": 270.0,
       "height": 2.79,
@@ -3969,7 +4221,7 @@
       "id": "architect-alt-4-v2-ground-window-gap-7",
       "type": "window",
       "floorId": "architect-alt-4-v2-ground",
-      "name": "Window window-gap-7",
+      "name": "Backyard full-height sliding window",
       "roomId": null,
       "wallId": "architect-alt-4-v2-ground-window-gap-7-host",
       "side": "wall-h",
@@ -3978,8 +4230,8 @@
       "y": 9.3252,
       "rotation": 180.0068,
       "width": 2.95,
-      "height": 1.2,
-      "sill": 1,
+      "height": 2.79,
+      "sill": 0,
       "swing": 0,
       "color": "#45a9d8",
       "opacity": 0.62,
@@ -4015,7 +4267,7 @@
       "id": "architect-alt-4-v2-ground-window-gap-9",
       "type": "window",
       "floorId": "architect-alt-4-v2-ground",
-      "name": "Window window-gap-9",
+      "name": "Living room double-height side window lower",
       "roomId": null,
       "wallId": "architect-alt-4-v2-ground-window-gap-9-host",
       "side": "wall-h",
@@ -4024,8 +4276,8 @@
       "y": 4.725,
       "rotation": 270.0,
       "width": 0.95,
-      "height": 1.2,
-      "sill": 1,
+      "height": 2.79,
+      "sill": 0,
       "swing": 0,
       "color": "#45a9d8",
       "opacity": 0.62,
@@ -4334,17 +4586,17 @@
       "id": "architect-alt-4-v2-living-window-gap-13",
       "type": "window",
       "floorId": "architect-alt-4-v2-living",
-      "name": "Window window-gap-13",
+      "name": "Living room double-height side window upper",
       "roomId": null,
       "wallId": "architect-alt-4-v2-living-window-gap-13-host",
       "side": "wall-h",
       "t": 0.5,
       "x": -2.925,
-      "y": 4.43,
+      "y": 4.725,
       "rotation": 270.0,
-      "width": 1.0,
-      "height": 1.2,
-      "sill": 1,
+      "width": 0.95,
+      "height": 2.58,
+      "sill": 0,
       "swing": 0,
       "color": "#45a9d8",
       "opacity": 0.62,
@@ -5594,7 +5846,7 @@
       "h": 0.07,
       "elementKind": "television",
       "rotation": 270.0,
-      "elevation": 0,
+      "elevation": 0.9,
       "height": 1.02,
       "sourceLayer": "A34",
       "sourceHandles": [
@@ -5618,7 +5870,7 @@
       "elementKind": "sink",
       "rotation": 180.0,
       "elevation": 0,
-      "height": 0.85,
+      "height": 0.95,
       "sourceLayer": "A16",
       "sourceHandles": [
         "21C8"
@@ -6874,6 +7126,102 @@
       "color": "#647f56",
       "opacity": 0.9,
       "context": true
+    },
+    {
+      "id": "architect-alt-4-v2-basement-basin-east-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-basement",
+      "name": "Basement east basin mirror",
+      "elementKind": "mirror",
+      "x": -0.4772,
+      "y": 8.45,
+      "w": 0.6,
+      "h": 0.06,
+      "rotation": 270,
+      "elevation": 1.05,
+      "height": 0.8,
+      "color": "#b9d5df",
+      "opacity": 1
+    },
+    {
+      "id": "architect-alt-4-v2-basement-basin-west-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-basement",
+      "name": "Basement west basin mirror",
+      "elementKind": "mirror",
+      "x": 4.1699,
+      "y": 6.52,
+      "w": 0.6,
+      "h": 0.06,
+      "rotation": 270,
+      "elevation": 1.05,
+      "height": 0.8,
+      "color": "#b9d5df",
+      "opacity": 1
+    },
+    {
+      "id": "architect-alt-4-v2-ground-guest-toilet-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-ground",
+      "name": "Guest toilet mirror",
+      "elementKind": "mirror",
+      "x": 6.1069,
+      "y": 5.99,
+      "w": 0.5,
+      "h": 0.06,
+      "rotation": 180,
+      "elevation": 1.1,
+      "height": 0.85,
+      "color": "#b9d5df",
+      "opacity": 1
+    },
+    {
+      "id": "architect-alt-4-v2-living-master-bathroom-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Master bathroom mirror",
+      "elementKind": "mirror",
+      "x": 10.875,
+      "y": 8.02,
+      "w": 1.25,
+      "h": 0.06,
+      "rotation": 0,
+      "elevation": 1.05,
+      "height": 0.9,
+      "color": "#b9d5df",
+      "opacity": 1
+    },
+    {
+      "id": "architect-alt-4-v2-living-bathroom-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-living",
+      "name": "Living bathroom mirror",
+      "elementKind": "mirror",
+      "x": 6.775,
+      "y": 6.07,
+      "w": 0.6,
+      "h": 0.06,
+      "rotation": 90,
+      "elevation": 1.05,
+      "height": 0.85,
+      "color": "#b9d5df",
+      "opacity": 1
+    },
+    {
+      "id": "architect-alt-4-v2-floor2-bathroom-mirror",
+      "type": "element",
+      "floorId": "architect-alt-4-v2-floor2",
+      "name": "Floor 2 bathroom mirror",
+      "elementKind": "mirror",
+      "x": 1.76,
+      "y": 2.045,
+      "w": 0.6,
+      "h": 0.06,
+      "rotation": 270,
+      "elevation": 1.05,
+      "height": 0.8,
+      "color": "#b9d5df",
+      "opacity": 1
     }
   ],
   "rulers": [],

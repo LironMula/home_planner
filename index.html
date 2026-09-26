@@ -3347,7 +3347,7 @@
     }
 
     function validCadStair(stair) {
-      if (stair.shape !== "turned" || !Array.isArray(stair.cadRuns) || stair.cadRuns.length !== 2 || !stair.cadLanding) return false;
+      if (!["turned", "uturn"].includes(stair.shape) || !Array.isArray(stair.cadRuns) || stair.cadRuns.length !== 2 || !stair.cadLanding) return false;
       return [...stair.cadRuns, stair.cadLanding].every(rect =>
         [rect.x, rect.y, rect.w, rect.h].every(Number.isFinite) &&
         rect.x >= 0 && rect.y >= 0 && rect.w > 0 && rect.h > 0 &&

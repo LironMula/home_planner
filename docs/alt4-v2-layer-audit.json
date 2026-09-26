@@ -49,6 +49,13 @@
       "LWPOLYLINE": 30,
       "ARC": 6,
       "CIRCLE": 10
+    },
+    "H": {
+      "LINE": 234,
+      "ARC": 11,
+      "LWPOLYLINE": 6,
+      "CIRCLE": 4,
+      "INSERT": 1
     }
   },
   "floors": {
@@ -6794,13 +6801,71 @@
     "status": "draft",
     "publicationReady": false,
     "verified": [
-      "Living-to-top stair route from departure-floor AREA 1575, A14 treads and A13 upper-end marker",
-      "Single top-level arc over enclosed A17 walls with 10 cm overhang and uncovered light-gray terraces"
+      "Single top-level arc over enclosed A17 walls with 10 cm overhang and uncovered light-gray terraces",
+      "Separate living-to-top U stair from A14/H treads and the top-floor arrival marker; aligned H-layer elevator reservations"
     ],
     "pending": [
       "Full room-by-room source overlay review",
       "Final human-height browser QA",
       "Integrate top-floor high/low zones and verify roof-clipped walls against both sections"
     ]
+  },
+  "verticalCore": {
+    "coordinatePhase": "source metres before site rotation",
+    "upperStair": {
+      "firstRun": [
+        8.75,
+        5.78,
+        9.6,
+        7.95
+      ],
+      "returnRun": [
+        9.7,
+        6.87,
+        10.55,
+        7.95
+      ],
+      "landing": [
+        8.75,
+        7.95,
+        10.55,
+        8.8
+      ],
+      "arrivalMarkerHandles": [
+        "132A",
+        "132B"
+      ],
+      "incomingLowerStairArea": "1575",
+      "cancelledTopProjectionHandles": [
+        "1251",
+        "1252"
+      ]
+    },
+    "elevator": {
+      "sourceLayer": "H",
+      "contours": {
+        "basement": "11DF",
+        "ground": "22AD",
+        "living": "1D5D",
+        "floor2": "1546"
+      },
+      "bounds": [
+        5.7394,
+        6.3169,
+        6.7394,
+        7.8169
+      ],
+      "width": 1,
+      "depth": 1.5,
+      "baseFloor": "basement",
+      "topFloor": "floor2",
+      "labelHandle": "1D4E",
+      "topEnclosureHandles": [
+        "1568",
+        "1564",
+        "1538"
+      ],
+      "topEnclosureContainsShaft": true
+    }
   }
 }

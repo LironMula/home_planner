@@ -46,6 +46,14 @@ close(area(context.stairFootprintPieces(custom)), 6);
 close(context.stairPlanRuns(custom)[0].w, 3);
 assert(context.stairPlanRuns(custom)[1].reverse);
 assert(!context.validCadStair({...custom, cadLanding:{x:NaN,y:0,w:1,h:1}}));
+const plan = JSON.parse(fs.readFileSync(path.join(__dirname, '../plans/architect-alt-4-v2.json'), 'utf8'));
+const upper = plan.stairs.find(stair => stair.floorId.endsWith('-living'));
+assert(context.validCadStair(upper));
+assert.equal(upper.shape,'uturn');
+const upperPieces = context.stairFootprintPieces(upper);
+assert(Math.abs(area(upperPieces)-(.85*2.17+.85*1.08+1.8*.85))<1e-6);
+const shaft={x:5.9106,y:1.6831,w:1,h:1.5};
+assert(upperPieces.every(p=>p.x+p.w<=shaft.x || p.x>=shaft.x+shaft.w || p.y+p.h<=shaft.y || p.y>=shaft.y+shaft.h));
 
 // An opening crossing the slab edge must cut only its intersection.
 const square = context.slabRectPolygon({x:0,y:0,w:2,h:2});

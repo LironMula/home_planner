@@ -35,21 +35,40 @@ class Alt4V2Tests(unittest.TestCase):
         stairs={s['floorId'].rsplit('-',1)[-1]:s['height'] for s in self.plan['stairs']}
         self.assertEqual(stairs,{'basement':2.75,'ground':3.14,'living':2.584})
 
-    def test_upper_stair_uses_shared_core_not_arrival_sheet(self):
+    def test_upper_stair_uses_adjacent_departure_and_return_flights(self):
         stairs={s['floorId'].rsplit('-',1)[-1]:s for s in self.plan['stairs']}
         lower,upper=stairs['ground'],stairs['living']
-        self.assertEqual(upper['sourceHandles'],['1575','1D50','1D53','1D58','1D60','1D56'])
+        self.assertIn('188E',upper['sourceHandles'])
+        self.assertIn('132A',upper['sourceHandles'])
+        self.assertNotIn('1575',upper['sourceHandles'])
+        self.assertEqual(upper['shape'],'uturn')
         self.assertEqual(upper['rotation'],180)
-        self.assertEqual([run['dir'] for run in upper['cadRuns']],['x','z'])
-        self.assertTrue(all(run['reverse'] for run in upper['cadRuns']))
-        # The source sheets differ slightly in flight lengths, but share the
-        # eastern stair-core edge and northern landing edge after registration.
-        shared_east=lower['x']+lower['w']/2+lower['h']/2
-        shared_north=lower['y']+lower['h']/2-lower['w']/2
-        self.assertAlmostEqual(upper['x']+upper['w'],shared_east,places=3)
-        self.assertAlmostEqual(upper['y'],shared_north,places=3)
-        self.assertAlmostEqual(upper['x']+upper['w']*(1-upper['cadRuns'][1]['x']),shared_east,places=3)
-        self.assertAlmostEqual(upper['w']*upper['cadRuns'][1]['w'],lower['landing'],places=3)
+        self.assertEqual([run['dir'] for run in upper['cadRuns']],['z','z'])
+        self.assertEqual([run['reverse'] for run in upper['cadRuns']],[False,True])
+        self.assertEqual((upper['x'],upper['y'],upper['w'],upper['h']),(2.1,.7,1.8,3.02))
+        self.assertGreater(lower['x']-upper['x'],2)
+        self.assertAlmostEqual(upper['cadRuns'][0]['h']*upper['h'],2.17,places=6)
+        self.assertAlmostEqual(upper['cadRuns'][1]['h']*upper['h'],1.08,places=6)
+        self.assertAlmostEqual(upper['cadLanding']['h']*upper['h'],.85,places=6)
+
+    def test_elevator_shaft_alignment_and_top_enclosure(self):
+        from shapely.geometry import box
+        from shapely.ops import unary_union
+        expected=(5.9106,1.6831,1,1.5)
+        for floor in self.plan['floors']:
+            key=floor['id'].rsplit('-',1)[-1]
+            rooms=[r for r in self.plan['rooms'] if r['floorId']==floor['id'] and r.get('structuralSlab') and not r.get('outdoor')]
+            for room in rooms:
+                for field,required in [('floorHoles',key!='basement'),('ceilingHoles',key!='floor2')]:
+                    holes=[h for h in room.get(field,[]) if h.get('role')=='future-elevator']
+                    self.assertEqual(len(holes),int(required),(key,field))
+                    if holes:
+                        self.assertEqual(tuple(holes[0][v] for v in ('x','y','w','h')),expected)
+            if key=='floor2':
+                enclosure=unary_union([box(r['x'],r['y'],r['x']+r['w'],r['y']+r['h']) for r in rooms])
+                x,y,w,h=expected
+                self.assertTrue(enclosure.covers(box(x,y,x+w,y+h)))
+        self.assertEqual(self.audit['verticalCore']['elevator']['sourceLayer'],'H')
 
     def test_source_wall_reconstruction(self):
         for key,audit in self.audit['floors'].items():
@@ -81,6 +100,9 @@ class Alt4V2Tests(unittest.TestCase):
         donors={e['id']:e for e in self.donor['elements']}
         for element in self.plan['elements']:
             if element.get('context'):
+                continue
+            if element['elementKind']=='mirror' and 'materialSource' not in element:
+                self.assertEqual((element['color'],element['opacity']),('#b9d5df',1))
                 continue
             donor=donors[element['materialSource']]
             for field in ('color','opacity','type1','finish'):
