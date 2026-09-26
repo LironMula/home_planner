@@ -307,8 +307,8 @@ const server = http.createServer((req, res) => {
     });
     for(const check of walkDirections){
       assert(Math.abs(check.forward[1])<1e-8,JSON.stringify(check));
-      assert(Math.abs(check.forward[0]-check.expected[0]*.35)<1e-6,JSON.stringify(check));
-      assert(Math.abs(check.forward[2]-check.expected[2]*.35)<1e-6,JSON.stringify(check));
+      assert(Math.abs(check.forward[0]-check.expected[0]*.1)<1e-6,JSON.stringify(check));
+      assert(Math.abs(check.forward[2]-check.expected[2]*.1)<1e-6,JSON.stringify(check));
       assert(check.returned.every(value=>Math.abs(value)<1e-6),JSON.stringify(check));
     }
     const wheelDirections=await page.evaluate(() => {
@@ -344,8 +344,8 @@ const server = http.createServer((req, res) => {
         groundHeight:three.orbit.position.y,yawBefore:yaw,yawAfter:three.orbit.yaw};
     });
     assert(Math.abs(wheelDirections.forward[1])<1e-8,JSON.stringify(wheelDirections));
-    assert(Math.abs(wheelDirections.forward[0]-wheelDirections.heading[0]*.25)<1e-6,JSON.stringify(wheelDirections));
-    assert(Math.abs(wheelDirections.forward[2]-wheelDirections.heading[2]*.25)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.forward[0]-wheelDirections.heading[0]*.1)<1e-6,JSON.stringify(wheelDirections));
+    assert(Math.abs(wheelDirections.forward[2]-wheelDirections.heading[2]*.1)<1e-6,JSON.stringify(wheelDirections));
     assert(wheelDirections.returned.every(value=>Math.abs(value)<1e-6),JSON.stringify(wheelDirections));
     assert(Math.abs(wheelDirections.raised[1]-.2)<1e-6,JSON.stringify(wheelDirections));
     assert(wheelDirections.lowered.every(value=>Math.abs(value)<1e-6),JSON.stringify(wheelDirections));
@@ -355,6 +355,23 @@ const server = http.createServer((req, res) => {
     assert(Math.abs(wheelDirections.keyRaised[1]-.4)<1e-6,JSON.stringify(wheelDirections));
     assert.equal(wheelDirections.groundHeight,0);
     assert.equal(wheelDirections.yawAfter,wheelDirections.yawBefore);
+    const acceleratedWheel=await page.evaluate(() => {
+      three.orbit.position.set(4,1.5,6);
+      three.wheelSteps=[];
+      updateCamera();
+      const heading=cameraWalkVector();
+      const start=three.orbit.position.clone();
+      const distances=[];
+      for(let i=0;i<3;i++){
+        moveCameraByWheel({deltaX:0,deltaY:-120,deltaMode:0,shiftKey:false});
+        distances.push(three.orbit.position.clone().sub(start).dot(heading));
+      }
+      return {distances,height:three.orbit.position.y};
+    });
+    for(const [index,expected] of [.1,.2,1.2].entries()){
+      assert(Math.abs(acceleratedWheel.distances[index]-expected)<1e-6,JSON.stringify(acceleratedWheel));
+    }
+    assert.equal(acceleratedWheel.height,1.5);
     await page.evaluate(() => { three.orbit.position.y=1.5; three.orbit.pitch=.3; updateCamera(); });
     await page.locator('#horizonCameraBtn').click();
     const horizon=await page.evaluate(() => {
