@@ -1849,7 +1849,9 @@
     const id = prefix => `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
     const round = (value, places = 1) => Number(value.toFixed(places));
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-    const humanHorizontalFov = 100;
+    const humanHorizontalFov = 220;
+    const humanPanoramaVerticalFov = 150;
+    const fixedHorizontalFov = 100;
     const horizonViewPitch = -Math.PI / 12;
     const cameraVerticalStep = 0.2;
     const storageKey = "home-floor-planner-v1";
@@ -5077,8 +5079,78 @@
         ? fixedCameraBaselineAspect(viewRect)
         : aspect;
       three.camera.aspect = aspect;
-      three.camera.fov = humanVerticalFov(humanHorizontalFov, projectionAspect);
+      // The perspective camera remains the pose reference and the fixed-scale view.
+      three.camera.fov = humanVerticalFov(fixedHorizontalFov, projectionAspect);
       three.camera.updateProjectionMatrix();
+    }
+
+    function renderHumanPanorama() {
+      const renderer = three.renderer;
+      if (!three.panorama) {
+        const target = new THREE.WebGLCubeRenderTarget(512, {
+          minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter,
+          generateMipmaps: false
+        });
+        const capture = new THREE.CubeCamera(three.camera.near, three.camera.far, target);
+        const material = new THREE.ShaderMaterial({
+          uniforms: {
+            panorama: { value: target.texture },
+            angularSpan: { value: new THREE.Vector2(
+              humanHorizontalFov * Math.PI / 180, humanPanoramaVerticalFov * Math.PI / 180
+            ) }
+          },
+          depthTest: false, depthWrite: false,
+          vertexShader: `
+            varying vec2 screenUv;
+            void main() {
+              screenUv = uv;
+              gl_Position = vec4(position.xy, 0.0, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform samplerCube panorama;
+            uniform vec2 angularSpan;
+            varying vec2 screenUv;
+            void main() {
+              vec2 angle = (screenUv - 0.5) * angularSpan;
+              vec3 direction = vec3(sin(angle.x) * cos(angle.y),
+                sin(angle.y), -cos(angle.x) * cos(angle.y));
+              gl_FragColor = textureCube(panorama, direction);
+            }
+          `
+        });
+        const scene = new THREE.Scene();
+        scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+        three.panorama = { target, capture, scene, camera: new THREE.Camera() };
+      }
+      const panorama = three.panorama;
+      const size = renderer.getDrawingBufferSize(new THREE.Vector2());
+      const faceSize = Math.min(1024, Math.max(256, Math.ceil(Math.max(
+        size.x * 90 / humanHorizontalFov, size.y * 90 / humanPanoramaVerticalFov
+      ))));
+      if (panorama.target.width !== faceSize) panorama.target.setSize(faceSize, faceSize);
+      panorama.capture.position.copy(three.camera.position);
+      panorama.capture.quaternion.copy(three.camera.quaternion);
+      panorama.capture.updateMatrixWorld(true);
+      const previousTarget = renderer.getRenderTarget();
+      const previousFace = renderer.getActiveCubeFace();
+      const xrEnabled = renderer.xr.enabled;
+      const shadowAutoUpdate = renderer.shadowMap.autoUpdate;
+      renderer.xr.enabled = false;
+      try {
+        // Each cube face needs its own planar-mirror projection, including peripheral mirrors.
+        panorama.capture.children.forEach((camera, face) => {
+          updateMirrorReflections(camera);
+          renderer.setRenderTarget(panorama.target, face);
+          renderer.render(three.scene, camera);
+          renderer.shadowMap.autoUpdate = false;
+        });
+      } finally {
+        renderer.setRenderTarget(previousTarget, previousFace);
+        renderer.xr.enabled = xrEnabled;
+        renderer.shadowMap.autoUpdate = shadowAutoUpdate;
+      }
+      renderer.render(panorama.scene, panorama.camera);
     }
 
     function closeCameraModeMenu() {
@@ -5101,7 +5173,7 @@
 
     function updateCameraModeControl() {
       if (!els.cameraModeMenu || !els.cameraModeBtn) return;
-      const label = state.cameraMode === "fixed" ? "Fixed scale" : "Human field of view";
+      const label = state.cameraMode === "fixed" ? "Fixed scale" : "Human field of view (220 x 150 degrees)";
       els.cameraModeBtn.title = `Camera mode: ${label}`;
       els.cameraModeBtn.setAttribute("aria-label", `Camera mode: ${label}`);
       els.cameraModeMenu.querySelectorAll("[data-camera-mode]").forEach(option => {
@@ -5362,7 +5434,7 @@
       }, 2000);
     }
 
-    function updateMirrorReflections() {
+    function updateMirrorReflections(viewCamera = three.camera) {
       if (!three.mirrors.length || !three.reflectionAvatar || !three.orbit.position) return;
       const avatar = three.reflectionAvatar;
       avatar.position.set(
@@ -5373,6 +5445,7 @@
       avatar.rotation.y = three.orbit.yaw;
       avatar.visible = true;
       const currentTarget = three.renderer.getRenderTarget();
+      const currentFace = three.renderer.getActiveCubeFace();
       const xrEnabled = three.renderer.xr.enabled;
       const shadowAutoUpdate = three.renderer.shadowMap.autoUpdate;
       three.renderer.xr.enabled = false;
@@ -5380,10 +5453,10 @@
       three.mirrors.forEach(mirror => { mirror.surface.visible = false; });
       try {
         three.scene.updateMatrixWorld(true);
-        three.camera.updateMatrixWorld(true);
-        three.mirrors.forEach(renderPlanarMirror);
+        viewCamera.updateMatrixWorld(true);
+        three.mirrors.forEach(mirror => renderPlanarMirror(mirror, viewCamera));
       } finally {
-        three.renderer.setRenderTarget(currentTarget);
+        three.renderer.setRenderTarget(currentTarget, currentFace);
         three.renderer.xr.enabled = xrEnabled;
         three.renderer.shadowMap.autoUpdate = shadowAutoUpdate;
         avatar.visible = false;
@@ -5391,16 +5464,16 @@
       }
     }
 
-    function renderPlanarMirror(mirror) {
+    function renderPlanarMirror(mirror, viewCamera = three.camera) {
       const mirrorPosition = new THREE.Vector3().setFromMatrixPosition(mirror.surface.matrixWorld);
-      const cameraPosition = new THREE.Vector3().setFromMatrixPosition(three.camera.matrixWorld);
+      const cameraPosition = new THREE.Vector3().setFromMatrixPosition(viewCamera.matrixWorld);
       const rotationMatrix = new THREE.Matrix4().extractRotation(mirror.surface.matrixWorld);
       const normal = new THREE.Vector3(0, 0, 1).applyMatrix4(rotationMatrix);
       const view = new THREE.Vector3().subVectors(mirrorPosition, cameraPosition);
       if (view.dot(normal) > 0) return;
 
       view.reflect(normal).negate().add(mirrorPosition);
-      const cameraRotation = new THREE.Matrix4().extractRotation(three.camera.matrixWorld);
+      const cameraRotation = new THREE.Matrix4().extractRotation(viewCamera.matrixWorld);
       const lookAtPosition = new THREE.Vector3(0, 0, -1)
         .applyMatrix4(cameraRotation)
         .add(cameraPosition);
@@ -5414,9 +5487,9 @@
       virtualCamera.position.copy(view);
       virtualCamera.up.set(0, 1, 0).applyMatrix4(cameraRotation).reflect(normal);
       virtualCamera.lookAt(target);
-      virtualCamera.near = three.camera.near;
-      virtualCamera.far = three.camera.far;
-      virtualCamera.projectionMatrix.copy(three.camera.projectionMatrix);
+      virtualCamera.near = viewCamera.near;
+      virtualCamera.far = viewCamera.far;
+      virtualCamera.projectionMatrix.copy(viewCamera.projectionMatrix);
       virtualCamera.updateMatrixWorld(true);
       virtualCamera.matrixWorldInverse.copy(virtualCamera.matrixWorld).invert();
 
@@ -5470,8 +5543,12 @@
       three.camera.lookAt(target);
       updateCameraHeightControl();
       updateDoorProximity();
-      updateMirrorReflections();
-      three.renderer.render(three.scene, three.camera);
+      if (state.cameraMode === "human") {
+        renderHumanPanorama();
+      } else {
+        updateMirrorReflections();
+        three.renderer.render(three.scene, three.camera);
+      }
       draw();
     }
 
