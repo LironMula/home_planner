@@ -14,6 +14,7 @@ Translate the drawing as an architectural system, not as a bag of rectangles. Bu
 - Read `docs/architect-import-rules.md` when the source is Alt-4 or shares its drawing conventions.
 - Read [references/inference-and-qa.md](references/inference-and-qa.md) before interpreting a new drawing or diagnosing broad import errors.
 - For Alt-4 colors and finishes, read [references/alt4-materials.md](references/alt4-materials.md). The existing Alt-4 save is authoritative over older skill notes or importer defaults. Transfer appearance by floor and semantic role, not old geometry or CAD layer colors.
+- For fresh Alt-3/Alt-5 imports, read [references/alternative-reconstruction.md](references/alternative-reconstruction.md) for per-sheet layer gaps, mixed wall hatches, section registration, and split-level support.
 
 ## Workflow
 

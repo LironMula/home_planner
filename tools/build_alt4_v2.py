@@ -466,7 +466,7 @@ class Importer:
             if facing[0]*(direction.x-shape.centroid.x)+facing[1]*(direction.y-shape.centroid.y)<0:
                 desk['rotation']=(desk['rotation']+180)%360
             desk['separateChair']=True
-            desk['facingEvidence']=chair['sourceHandle']
+            desk['facingEvidence']=chair.get('sourceHandle',chair.get('sourceHandles',[]))
 
     def source_bounds(self, *handles):
         extents = bbox.extents([self.doc.entitydb[handle] for handle in handles])
@@ -483,7 +483,7 @@ class Importer:
                    "kitchen-island": .92, "kitchen-work-surface": .92, "sink": .85, "shower": 2.1,
                    "television": 1.02, "rug": .035, "refrigerator": 2.1, "laundry-closet": 2.5,
                    "sliding-window-opening": 2.1, "oven":.9, "mirror":.9, "wallpaper":2.6, "wall-art":1.0,
-                   "sofa":.82}
+                   "sofa":.82, "chair":.9, "round-table":.75}
         return self.item("elements", "assembly-"+name.lower().replace(" ", "-"), name, (cx-w/2, cy-h/2, cx+w/2, cy+h/2),
                          elementKind=kind, rotation=rotation, elevation=0, height=heights[kind],
                          sourceLayer="/".join(sorted({self.doc.entitydb[h].dxf.layer for h in handles})),

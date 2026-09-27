@@ -78,4 +78,16 @@ context.addRoom3D({...room, type:'space', structuralSlab:true}, {id:'lower',elev
 const ceiling = slabCalls.find(args => args[8] === 'ceiling');
 close(ceiling[1], (2.79 + 3.14) / 2);
 close(ceiling[2], .35);
+slabCalls.length = 0;
+context.addRoom3D({...room, type:'space', structuralSlab:true, ceiling:false, elevation:.516}, {id:'upper',elevation:5.724}, []);
+close(slabCalls[0][1], 6.24 + .04);
+slabCalls.length = 0;
+context.addRoom3D({...room, type:'space', structuralSlab:true}, {id:'lower',elevation:-2.75,clearHeight:2.2}, []);
+const basementCeiling=slabCalls.find(args=>args[8]==='ceiling');
+close(basementCeiling[1]-basementCeiling[2]/2,-.55);
+slabCalls.length = 0;
+context.addRoom3D({...room, type:'space', structuralSlab:true,ceilingElevation:6.24,clearHeight:2.75}, {id:'lower',elevation:3.14}, []);
+const upperCeiling=slabCalls.find(args=>args[8]==='ceiling');
+close(upperCeiling[1]+upperCeiling[2]/2,6.24);
+close(upperCeiling[2],.35);
 console.log('Stair rotations, exact cutout areas, CAD runs, edge clipping, story ownership and outdoor ceilings passed.');

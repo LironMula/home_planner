@@ -5630,7 +5630,7 @@
     }
 
     function addRoom3D(room, floor, openings, surfaceOptions = {}) {
-      const yBase = floor.elevation;
+      const yBase = floor.elevation + (Number(room.elevation) || 0);
       const isSpace = room.type === "space";
       const isStructuralSlab = room.structuralSlab === true;
       if (viewVisible("floor")) {
@@ -5645,17 +5645,19 @@
             opacityForView(isStructuralSlab ? 1 : itemOpacity(room), "floor"),
             floorHoles,
             true,
-            floor.finish,
+            room.surfaceColor ? null : floor.finish,
             "floor",
             Boolean(room.surfaceColor)
           );
         }
         if (isStructuralSlab && room.ceiling !== false && surfaceOptions.renderCeiling !== false) {
-          const ceilingThickness = Math.max(0.06, storyCeilingElevation(floor) - yBase - state.wallHeight);
+          const ceilingElevation = Number.isFinite(room.ceilingElevation) ? room.ceilingElevation : storyCeilingElevation(floor);
+          const clearHeight = room.clearHeight ?? floor.clearHeight ?? state.wallHeight;
+          const ceilingThickness = Math.max(0.06, ceilingElevation - yBase - clearHeight);
           const upperSlabHoles = [...stairHolesForSlab(room, floor, "current"), ...(room.ceilingHoles || [])];
           addSlabPieces3D(
             room,
-            storyCeilingElevation(floor) - ceilingThickness / 2,
+            ceilingElevation - ceilingThickness / 2,
             ceilingThickness,
             0xffffff,
             opacityForView(1, "floor"),
@@ -5899,6 +5901,7 @@
     }
 
     function addCustomWall3D(wall, floor, gaps = []) {
+      if (wall.elevation) floor = { ...floor, elevation: floor.elevation + Number(wall.elevation) };
       const height = wall.height ?? state.wallHeight;
       const color = colorToHex(itemColor(wall));
       const opacity = opacityForView(itemOpacity(wall), "walls");
@@ -6393,6 +6396,7 @@
     }
 
     function addOpening3D(opening, floor) {
+      if (opening.floorOffset) floor = { ...floor, elevation: floor.elevation + Number(opening.floorOffset) };
       const pos = openingPosition(opening);
       const color = colorToHex(itemColor(opening));
       const viewKey = opening.type === "door" ? "doors" : "windows";

@@ -1,0 +1,6626 @@
+{
+  "source": "Alt-3-verified.dxf",
+  "sourceSha256": "f28c9a9862ba3c563c01de9100cd30c3a69192d5e91a53d2d23f5740f7071945",
+  "layers": {
+    "A49": 389,
+    "A13": 516,
+    "H": 200,
+    "A10": 453,
+    "A14": 554,
+    "A24": 253,
+    "A12": 44,
+    "A34": 220,
+    "A11": 151,
+    "A16": 50,
+    "a-mabat": 12,
+    "A17": 115,
+    "A05": 20,
+    "1EVEN-GAN": 24,
+    "M1200": 28,
+    "KIR": 8,
+    "1BATIM": 28,
+    "A26": 5,
+    "0": 50,
+    "1": 10,
+    "1GADER-RESHET": 28,
+    "2OLD_PT": 16,
+    "tr_hetz": 8,
+    "nitsav": 4,
+    "1EVEN-SAFA": 16,
+    "1GADER-BETON": 72,
+    "1MADREGOT": 16,
+    "A02": 13,
+    "AREA": 8
+  },
+  "floors": {
+    "basement": {
+      "originCm": [
+        16604.73927477307,
+        -1621.407566898094
+      ],
+      "enclosureAreaM2": 113.0725,
+      "dimensions": [
+        {
+          "handle": "12A",
+          "metres": 0.9,
+          "endpoints": [
+            [
+              7.4,
+              5.6591
+            ],
+            [
+              8.3,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.1909
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "135",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              8.3,
+              5.6591
+            ],
+            [
+              9.5,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1909,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "140",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              9.5,
+              5.6591
+            ],
+            [
+              9.6,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "178",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              10.7,
+              7.8105
+            ],
+            [
+              10.9,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "184",
+          "metres": 3.3,
+          "endpoints": [
+            [
+              7.4,
+              7.8105
+            ],
+            [
+              10.7,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "18F",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              7.3,
+              7.8105
+            ],
+            [
+              7.4,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "19B",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              6.1,
+              7.8105
+            ],
+            [
+              7.3,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1B0",
+          "metres": 1.1,
+          "endpoints": [
+            [
+              9.6,
+              5.6591
+            ],
+            [
+              10.7,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0909
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1BB",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              10.7,
+              5.5091
+            ],
+            [
+              10.8,
+              5.5091
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2409,
+            0.2409
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1D7",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              12.1365,
+              3.1
+            ],
+            [
+              12.1365,
+              2.8
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.1646,
+            1.1635
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1E3",
+          "metres": 2.75,
+          "endpoints": [
+            [
+              12.1365,
+              5.85
+            ],
+            [
+              12.1365,
+              3.1
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.1646
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1EE",
+          "metres": 4.2,
+          "endpoints": [
+            [
+              10.8,
+              3.5147
+            ],
+            [
+              15.0,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1F9",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              10.7,
+              3.5147
+            ],
+            [
+              10.8,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "205",
+          "metres": 10.4,
+          "endpoints": [
+            [
+              0.3,
+              3.5147
+            ],
+            [
+              10.7,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7353,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "210",
+          "metres": 2.0,
+          "endpoints": [
+            [
+              -2.0,
+              3.5147
+            ],
+            [
+              0.0,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.1309,
+            0.7353
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "226",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              15.0,
+              3.5147
+            ],
+            [
+              15.2,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "231",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              0.0,
+              3.5147
+            ],
+            [
+              0.3,
+              3.5147
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7353,
+            0.7353
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "23D",
+          "metres": 4.2,
+          "endpoints": [
+            [
+              10.8,
+              5.6591
+            ],
+            [
+              15.0,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0909,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "248",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              7.3,
+              5.6591
+            ],
+            [
+              7.4,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "254",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              6.1,
+              5.6591
+            ],
+            [
+              7.3,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2591,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "25F",
+          "metres": 5.6,
+          "endpoints": [
+            [
+              0.3,
+              5.6591
+            ],
+            [
+              5.9,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.2591
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "26A",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              5.6591
+            ],
+            [
+              6.1,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2591,
+            0.2591
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "275",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              15.0,
+              5.6591
+            ],
+            [
+              15.2,
+              5.6591
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "280",
+          "metres": 2.7,
+          "endpoints": [
+            [
+              15.2,
+              7.8105
+            ],
+            [
+              17.9,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7395,
+            2.7994
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "28B",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              14.9,
+              7.8105
+            ],
+            [
+              15.2,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7395,
+            0.7395
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "297",
+          "metres": 4.0,
+          "endpoints": [
+            [
+              10.9,
+              7.8105
+            ],
+            [
+              14.9,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.7395
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "2A2",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              7.8105
+            ],
+            [
+              6.1,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "2AD",
+          "metres": 1.35,
+          "endpoints": [
+            [
+              4.55,
+              7.8105
+            ],
+            [
+              5.9,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "2B8",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              4.45,
+              7.8105
+            ],
+            [
+              4.55,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "2C4",
+          "metres": 4.15,
+          "endpoints": [
+            [
+              0.3,
+              7.8105
+            ],
+            [
+              4.45,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1105,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "2CF",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              0.0,
+              7.8105
+            ],
+            [
+              0.3,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1213,
+            0.1105
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "2DA",
+          "metres": 2.0,
+          "endpoints": [
+            [
+              -2.0,
+              7.8105
+            ],
+            [
+              0.0,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.053,
+            0.1213
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "2F0",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              17.9,
+              7.8105
+            ],
+            [
+              18.1,
+              7.8105
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.7994,
+            2.9928
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "2FB",
+          "metres": 3.1,
+          "endpoints": [
+            [
+              18.4326,
+              8.95
+            ],
+            [
+              18.4326,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            3.2326,
+            3.2326
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "306",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              12.1365,
+              9.15
+            ],
+            [
+              12.1365,
+              8.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "311",
+          "metres": 3.0,
+          "endpoints": [
+            [
+              12.1365,
+              8.95
+            ],
+            [
+              12.1365,
+              5.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "31C",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              12.1365,
+              5.95
+            ],
+            [
+              12.1365,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "328",
+          "metres": 2.6,
+          "endpoints": [
+            [
+              12.1365,
+              2.8
+            ],
+            [
+              12.1365,
+              0.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.1635,
+            1.1865
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "333",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              12.1365,
+              0.2
+            ],
+            [
+              12.1365,
+              -0.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.1865,
+            1.1865
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "33E",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              5.0899,
+              6.5
+            ],
+            [
+              5.0899,
+              6.4
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3101,
+            0.3101
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "34A",
+          "metres": 2.45,
+          "endpoints": [
+            [
+              5.0899,
+              8.95
+            ],
+            [
+              5.0899,
+              6.5
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.3101
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "355",
+          "metres": 1.65,
+          "endpoints": [
+            [
+              5.0899,
+              6.4
+            ],
+            [
+              5.0899,
+              4.75
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3101,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "360",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              1.0282,
+              1.9
+            ],
+            [
+              1.0282,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "36B",
+          "metres": 2.65,
+          "endpoints": [
+            [
+              1.0282,
+              4.55
+            ],
+            [
+              1.0282,
+              1.9
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "376",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              1.0282,
+              4.75
+            ],
+            [
+              1.0282,
+              4.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "381",
+          "metres": 4.2,
+          "endpoints": [
+            [
+              1.0282,
+              8.95
+            ],
+            [
+              1.0282,
+              4.75
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "38C",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              1.0282,
+              9.15
+            ],
+            [
+              1.0282,
+              8.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        }
+      ],
+      "openingGaps": [
+        {
+          "endpoints": [
+            [
+              0.15,
+              1.95
+            ],
+            [
+              0.15,
+              4.25
+            ]
+          ],
+          "thickness": 0.3,
+          "width": 2.3,
+          "a14Support": 4.6,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              6.0,
+              5.4
+            ],
+            [
+              6.0,
+              6.2
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.8,
+          "a14Support": 0.8,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              4.6,
+              6.45
+            ],
+            [
+              5.4,
+              6.45
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.8,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              15.05,
+              8.55
+            ],
+            [
+              15.05,
+              6.2
+            ]
+          ],
+          "thickness": 0.3,
+          "width": 2.35,
+          "a14Support": 15.2312,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              9.55,
+              4.87
+            ],
+            [
+              9.55,
+              4.12
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.75,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              9.8,
+              4.0200000000000005
+            ],
+            [
+              10.65,
+              4.0200000000000005
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.85,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.825,
+              1.39
+            ],
+            [
+              10.825,
+              2.34
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.95,
+          "a14Support": 3.1724,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.75,
+              4.9
+            ],
+            [
+              10.75,
+              5.75
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.85,
+          "a14Support": 0.0,
+          "doorHandles": [
+            "1CD"
+          ],
+          "classification": "door"
+        },
+        {
+          "endpoints": [
+            [
+              0.175,
+              7.7
+            ],
+            [
+              0.175,
+              8.676
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.976,
+          "a14Support": 0.976,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              4.525,
+              6.4
+            ],
+            [
+              4.525,
+              4.75
+            ]
+          ],
+          "thickness": 0.15,
+          "width": 1.65,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.825,
+              1.19
+            ],
+            [
+              10.825,
+              0.25
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.94,
+          "a14Support": 2.6986,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.7,
+              1.29
+            ],
+            [
+              8.8,
+              1.29
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 1.9,
+          "a14Support": 4.0529,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.875,
+              3.05
+            ],
+            [
+              10.875,
+              5.85
+            ]
+          ],
+          "thickness": 0.15,
+          "width": 2.8,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              13.3,
+              2.925
+            ],
+            [
+              10.95,
+              2.925
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 2.35,
+          "a14Support": 13.8371,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.7,
+              5.85
+            ],
+            [
+              9.6,
+              5.85
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 1.1,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              8.01
+            ],
+            [
+              10.8,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.94,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              7.41
+            ],
+            [
+              10.8,
+              5.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 1.46,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        }
+      ],
+      "labels": [
+        {
+          "handle": "123",
+          "text": "אחסון",
+          "position": [
+            6.3887,
+            8.7771
+          ]
+        },
+        {
+          "handle": "1C8",
+          "text": "במפלס מרתף",
+          "position": [
+            11.3358,
+            1.1252
+          ]
+        },
+        {
+          "handle": "1C9",
+          "text": "במפלס מרתף",
+          "position": [
+            15.257,
+            7.6427
+          ]
+        },
+        {
+          "handle": "433",
+          "text": "מטבחון",
+          "position": [
+            8.5293,
+            6.9764
+          ]
+        },
+        {
+          "handle": "441",
+          "text": "משרד",
+          "position": [
+            5.0969,
+            2.4379
+          ]
+        },
+        {
+          "handle": "442",
+          "text": "חדר אירוח",
+          "position": [
+            4.3969,
+            3.1288
+          ]
+        },
+        {
+          "handle": "443",
+          "text": "חדר משחקים",
+          "position": [
+            4.0469,
+            2.7735
+          ]
+        },
+        {
+          "handle": "449",
+          "text": "ממ''ד",
+          "position": [
+            2.9352,
+            6.1394
+          ]
+        },
+        {
+          "handle": "44A",
+          "text": "23.00 מ''ר",
+          "position": [
+            2.1702,
+            6.4672
+          ]
+        },
+        {
+          "handle": "4F3",
+          "text": "אופציה",
+          "position": [
+            6.2071,
+            6.7037
+          ]
+        },
+        {
+          "handle": "4F4",
+          "text": "מעלית",
+          "position": [
+            6.2329,
+            7.0314
+          ]
+        },
+        {
+          "handle": "526",
+          "text": " אנגלית",
+          "position": [
+            -1.8586,
+            8.466
+          ]
+        },
+        {
+          "handle": "527",
+          "text": "חצר  ",
+          "position": [
+            -1.9326,
+            8.1495
+          ]
+        },
+        {
+          "handle": "542",
+          "text": " אנגלית",
+          "position": [
+            -1.8931,
+            2.7747
+          ]
+        },
+        {
+          "handle": "543",
+          "text": "חצר  ",
+          "position": [
+            -1.967,
+            2.4582
+          ]
+        },
+        {
+          "handle": "545",
+          "text": "חצר אנגלית",
+          "position": [
+            11.468,
+            0.7984
+          ]
+        },
+        {
+          "handle": "546",
+          "text": " אנגלית",
+          "position": [
+            15.7056,
+            7.348
+          ]
+        },
+        {
+          "handle": "547",
+          "text": "חצר  ",
+          "position": [
+            15.9244,
+            7.0077
+          ]
+        },
+        {
+          "handle": "604",
+          "text": "קו בניין",
+          "position": [
+            17.8425,
+            8.745
+          ]
+        },
+        {
+          "handle": "609",
+          "text": "עץ קיים",
+          "position": [
+            17.5009,
+            10.3373
+          ]
+        },
+        {
+          "handle": "632",
+          "text": "קיר קיים",
+          "position": [
+            12.0911,
+            9.4815
+          ]
+        },
+        {
+          "handle": "633",
+          "text": "+42.74",
+          "position": [
+            12.1397,
+            9.8154
+          ]
+        },
+        {
+          "handle": "637",
+          "text": "גובה ריצוף 40.77",
+          "position": [
+            3.6807,
+            10.112
+          ]
+        },
+        {
+          "handle": "638",
+          "text": "בית שכן - ",
+          "position": [
+            4.6328,
+            9.6868
+          ]
+        }
+      ],
+      "terraceAreaM2": 0.0,
+      "unresolvedDoors": [],
+      "counts": {
+        "walls": 38,
+        "openings": 7,
+        "elements": 29,
+        "rooms": 3
+      },
+      "wallReconstructionDifferenceM2": 0.0,
+      "modelVerifiedDimensionCount": 21
+    },
+    "ground": {
+      "originCm": [
+        16604.73927477307,
+        920.00000000015
+      ],
+      "enclosureAreaM2": 113.0725,
+      "dimensions": [
+        {
+          "handle": "80",
+          "metres": 5.8,
+          "endpoints": [
+            [
+              12.8516,
+              8.95
+            ],
+            [
+              12.8516,
+              3.15
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0484
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "90",
+          "metres": 4.6,
+          "endpoints": [
+            [
+              6.1,
+              6.6355
+            ],
+            [
+              10.7,
+              6.6355
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.7745
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "9D",
+          "metres": 4.15,
+          "endpoints": [
+            [
+              10.7,
+              6.6355
+            ],
+            [
+              14.85,
+              6.6355
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7745,
+            0.15
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "BB",
+          "metres": 2.7,
+          "endpoints": [
+            [
+              6.1,
+              3.9612
+            ],
+            [
+              8.8,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            2.0612
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "C8",
+          "metres": 6.05,
+          "endpoints": [
+            [
+              8.8,
+              3.9612
+            ],
+            [
+              14.85,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.0612,
+            0.8112
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "D5",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              5.4836
+            ],
+            [
+              6.1,
+              5.4836
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.9164,
+            0.9164
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "E3",
+          "metres": 5.6,
+          "endpoints": [
+            [
+              0.3,
+              5.4836
+            ],
+            [
+              5.9,
+              5.4836
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0164,
+            0.9164
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F0",
+          "metres": 8.75,
+          "endpoints": [
+            [
+              6.1,
+              5.4836
+            ],
+            [
+              14.85,
+              5.4836
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.9164,
+            0.1664
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FD",
+          "metres": 0.35,
+          "endpoints": [
+            [
+              14.85,
+              5.4836
+            ],
+            [
+              15.2,
+              5.4836
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1664,
+            0.1664
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "82F",
+          "metres": 3.0,
+          "endpoints": [
+            [
+              -3.0,
+              3.9612
+            ],
+            [
+              0.0,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            3.0951,
+            0.7612
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F5C",
+          "metres": 6.1,
+          "endpoints": [
+            [
+              8.0188,
+              8.0
+            ],
+            [
+              8.0188,
+              1.9
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.95,
+            0.4312
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F69",
+          "metres": 0.95,
+          "endpoints": [
+            [
+              8.0188,
+              8.95
+            ],
+            [
+              8.0188,
+              8.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.95
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F76",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              8.0188,
+              1.9
+            ],
+            [
+              8.0188,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.4312,
+            0.4312
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F84",
+          "metres": 2.65,
+          "endpoints": [
+            [
+              8.0188,
+              1.65
+            ],
+            [
+              7.9744,
+              -1.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.4312,
+            2.6923
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FE0",
+          "metres": 1.3,
+          "endpoints": [
+            [
+              3.9,
+              3.9612
+            ],
+            [
+              5.2,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.3218,
+            0.2388
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FED",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              5.85,
+              3.9612
+            ],
+            [
+              6.1,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "FFB",
+          "metres": 0.65,
+          "endpoints": [
+            [
+              5.2,
+              3.9612
+            ],
+            [
+              5.85,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2388,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1008",
+          "metres": 2.5,
+          "endpoints": [
+            [
+              1.4,
+              3.9612
+            ],
+            [
+              3.9,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.3377,
+            1.3218
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1015",
+          "metres": 1.1,
+          "endpoints": [
+            [
+              0.3,
+              3.9612
+            ],
+            [
+              1.4,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7612,
+            1.3377
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1022",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              0.0,
+              3.9612
+            ],
+            [
+              0.3,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.7612,
+            0.7612
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1030",
+          "metres": 0.35,
+          "endpoints": [
+            [
+              14.85,
+              3.9612
+            ],
+            [
+              15.2,
+              3.9612
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.8112,
+            0.8112
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "117C",
+          "metres": 2.4,
+          "endpoints": [
+            [
+              -0.2709,
+              4.25
+            ],
+            [
+              -0.2709,
+              1.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.0844,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "132F",
+          "metres": 2.6,
+          "endpoints": [
+            [
+              12.8257,
+              2.8
+            ],
+            [
+              12.8257,
+              0.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.8757
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "133C",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              12.8257,
+              0.2
+            ],
+            [
+              12.8257,
+              0.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.8757,
+            1.8757
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "134D",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              12.8257,
+              9.15
+            ],
+            [
+              12.8257,
+              8.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "135B",
+          "metres": 0.15,
+          "endpoints": [
+            [
+              12.8516,
+              3.15
+            ],
+            [
+              12.825,
+              3.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0484,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1368",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              12.8257,
+              3.0
+            ],
+            [
+              12.8257,
+              2.8
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1693",
+          "metres": 0.1995,
+          "endpoints": [
+            [
+              -1.1984,
+              -1.0
+            ],
+            [
+              -1.1984,
+              -1.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.9084,
+            3.0917
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "16DD",
+          "metres": 3.3,
+          "endpoints": [
+            [
+              -0.2709,
+              7.55
+            ],
+            [
+              -0.2709,
+              4.25
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            1.0844
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "16EA",
+          "metres": 0.7,
+          "endpoints": [
+            [
+              -0.2709,
+              9.1
+            ],
+            [
+              -0.2709,
+              8.4
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "16F7",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              -0.2709,
+              1.85
+            ],
+            [
+              -0.2709,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1706",
+          "metres": 1.0,
+          "endpoints": [
+            [
+              2.7312,
+              0.0
+            ],
+            [
+              2.7312,
+              -1.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.428,
+            3.193
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1713",
+          "metres": 1.65,
+          "endpoints": [
+            [
+              2.7312,
+              1.65
+            ],
+            [
+              2.7312,
+              0.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.7812,
+            2.428
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1720",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              2.7312,
+              1.9
+            ],
+            [
+              2.7312,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.7812,
+            1.7812
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "172E",
+          "metres": 0.65,
+          "endpoints": [
+            [
+              2.7312,
+              2.55
+            ],
+            [
+              2.7312,
+              1.9
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.8961,
+            1.7812
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "173B",
+          "metres": 1.1,
+          "endpoints": [
+            [
+              2.7312,
+              3.65
+            ],
+            [
+              2.7312,
+              2.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.4725,
+            1.8961
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1748",
+          "metres": 1.1,
+          "endpoints": [
+            [
+              2.7312,
+              4.75
+            ],
+            [
+              2.7312,
+              3.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.75,
+            2.4725
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1755",
+          "metres": 1.1,
+          "endpoints": [
+            [
+              2.7312,
+              5.85
+            ],
+            [
+              2.7312,
+              4.75
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.65,
+            1.75
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1762",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              2.7312,
+              6.6
+            ],
+            [
+              2.7312,
+              6.5
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1770",
+          "metres": 0.6,
+          "endpoints": [
+            [
+              2.7312,
+              7.2
+            ],
+            [
+              2.7312,
+              6.6
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.6,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "177D",
+          "metres": 0.65,
+          "endpoints": [
+            [
+              2.7312,
+              6.5
+            ],
+            [
+              2.7312,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.65
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "178A",
+          "metres": 1.15,
+          "endpoints": [
+            [
+              2.7312,
+              8.35
+            ],
+            [
+              2.7312,
+              7.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.6,
+            0.6
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1797",
+          "metres": 0.6,
+          "endpoints": [
+            [
+              2.7312,
+              8.95
+            ],
+            [
+              2.7312,
+              8.35
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.6
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "17A4",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              2.7312,
+              9.15
+            ],
+            [
+              2.7312,
+              8.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        }
+      ],
+      "openingGaps": [
+        {
+          "endpoints": [
+            [
+              6.65,
+              1.775
+            ],
+            [
+              8.45,
+              1.775
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 1.8,
+          "a14Support": 1.8,
+          "doorHandles": [
+            "1870",
+            "18CF"
+          ],
+          "classification": "door"
+        },
+        {
+          "endpoints": [
+            [
+              5.15,
+              1.775
+            ],
+            [
+              0.95,
+              1.775
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 4.2,
+          "a14Support": 8.7766,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              0.15,
+              3.2
+            ],
+            [
+              0.15,
+              5.5
+            ]
+          ],
+          "thickness": 0.3,
+          "width": 2.3,
+          "a14Support": 15.0244,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              0.1,
+              6.65
+            ],
+            [
+              0.1,
+              7.45
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.8,
+          "a14Support": 0.9066,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              4.55,
+              7.45
+            ],
+            [
+              5.35,
+              7.45
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.8,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              0.1,
+              8.3
+            ],
+            [
+              0.1,
+              7.7
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.6,
+          "a14Support": 1.2,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.825,
+              0.25
+            ],
+            [
+              10.825,
+              1.89
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 1.64,
+          "a14Support": 3.7321,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              13.25,
+              2.9749999999999996
+            ],
+            [
+              14.85,
+              2.9749999999999996
+            ]
+          ],
+          "thickness": 0.35,
+          "width": 1.6,
+          "a14Support": 6.9677,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              15.024999999999999,
+              3.15
+            ],
+            [
+              15.024999999999999,
+              5.65
+            ]
+          ],
+          "thickness": 0.35,
+          "width": 2.5,
+          "a14Support": 7.5,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              6.05,
+              4.35
+            ],
+            [
+              6.05,
+              6.4
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 2.05,
+          "a14Support": 0.4502,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              0.25,
+              6.6
+            ],
+            [
+              0.25,
+              8.95
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 2.35,
+          "a14Support": 0.683,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              1.1,
+              6.55
+            ],
+            [
+              0.3,
+              6.55
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.8,
+          "a14Support": 0.0,
+          "doorHandles": [
+            "194D"
+          ],
+          "classification": "door"
+        },
+        {
+          "endpoints": [
+            [
+              6.0,
+              6.4
+            ],
+            [
+              6.0,
+              2.25
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 4.15,
+          "a14Support": 5.1022,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              0.2,
+              7.575
+            ],
+            [
+              3.55,
+              7.575
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 3.35,
+          "a14Support": 0.0809,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.875,
+              3.15
+            ],
+            [
+              10.875,
+              7.41
+            ]
+          ],
+          "thickness": 0.35,
+          "width": 4.26,
+          "a14Support": 0.1715,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              15.024999999999999,
+              7.9
+            ],
+            [
+              15.025,
+              8.95
+            ]
+          ],
+          "thickness": 0.35,
+          "width": 1.05,
+          "a14Support": 3.15,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              14.85,
+              7.800000000000001
+            ],
+            [
+              10.9,
+              7.8
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 3.95,
+          "a14Support": 0.0566,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              8.01
+            ],
+            [
+              10.8,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.94,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        }
+      ],
+      "labels": [
+        {
+          "handle": "6C",
+          "text": "גובה החלל הכפול",
+          "position": [
+            11.1431,
+            10.0968
+          ]
+        },
+        {
+          "handle": "6D",
+          "text": "חלון לכל",
+          "position": [
+            12.4597,
+            9.796
+          ]
+        },
+        {
+          "handle": "74",
+          "text": "אופציה-VT",
+          "position": [
+            10.7687,
+            3.4609
+          ]
+        },
+        {
+          "handle": "AE",
+          "text": "יציאה",
+          "position": [
+            -0.0735,
+            5.055
+          ]
+        },
+        {
+          "handle": "11B",
+          "text": "אופציה",
+          "position": [
+            -0.3613,
+            7.122
+          ]
+        },
+        {
+          "handle": "724",
+          "text": "במפלס מרתף",
+          "position": [
+            15.3604,
+            8.1679
+          ]
+        },
+        {
+          "handle": "725",
+          "text": "במפלס מרתף",
+          "position": [
+            10.9717,
+            1.0993
+          ]
+        },
+        {
+          "handle": "846",
+          "text": "למרפסת",
+          "position": [
+            -0.5146,
+            5.349
+          ]
+        },
+        {
+          "handle": "1660",
+          "text": "ירידה למרתף",
+          "position": [
+            8.5784,
+            0.998
+          ]
+        },
+        {
+          "handle": "1690",
+          "text": "גובה קיים",
+          "position": [
+            15.538,
+            5.2907
+          ]
+        },
+        {
+          "handle": "1691",
+          "text": "אופציה",
+          "position": [
+            6.5991,
+            7.7136
+          ]
+        },
+        {
+          "handle": "1692",
+          "text": "מעלית",
+          "position": [
+            6.9268,
+            7.6877
+          ]
+        },
+        {
+          "handle": "17BF",
+          "text": " אנגלית",
+          "position": [
+            -1.8586,
+            8.8089
+          ]
+        },
+        {
+          "handle": "17C0",
+          "text": "חצר  ",
+          "position": [
+            -1.9326,
+            8.4924
+          ]
+        },
+        {
+          "handle": "17C1",
+          "text": "+40.10",
+          "position": [
+            2.2919,
+            1.5123
+          ]
+        },
+        {
+          "handle": "17C6",
+          "text": "+40.20",
+          "position": [
+            -0.7543,
+            -1.2467
+          ]
+        },
+        {
+          "handle": "17C8",
+          "text": "+40.70",
+          "position": [
+            6.8255,
+            1.3461
+          ]
+        },
+        {
+          "handle": "17CB",
+          "text": "מזווה",
+          "position": [
+            1.02,
+            7.7122
+          ]
+        },
+        {
+          "handle": "17CC",
+          "text": "8.00 מ''ר",
+          "position": [
+            0.5563,
+            8.0429
+          ]
+        },
+        {
+          "handle": "1805",
+          "text": "רמפה-שיפוע %5",
+          "position": [
+            -0.147,
+            -0.2426
+          ]
+        },
+        {
+          "handle": "181A",
+          "text": " אנגלית",
+          "position": [
+            -1.8931,
+            2.7747
+          ]
+        },
+        {
+          "handle": "181B",
+          "text": "חצר  ",
+          "position": [
+            -1.967,
+            2.4582
+          ]
+        },
+        {
+          "handle": "181D",
+          "text": "חצר אנגלית",
+          "position": [
+            11.1982,
+            0.7984
+          ]
+        },
+        {
+          "handle": "181E",
+          "text": " אנגלית",
+          "position": [
+            15.7056,
+            6.8435
+          ]
+        },
+        {
+          "handle": "181F",
+          "text": "חצר  ",
+          "position": [
+            15.9244,
+            6.5033
+          ]
+        },
+        {
+          "handle": "1A83",
+          "text": "+40.77",
+          "position": [
+            15.759,
+            5.5854
+          ]
+        },
+        {
+          "handle": "1A87",
+          "text": "+41.09",
+          "position": [
+            -1.8942,
+            -0.5197
+          ]
+        },
+        {
+          "handle": "1AA3",
+          "text": "+40.88",
+          "position": [
+            16.3505,
+            0.2048
+          ]
+        },
+        {
+          "handle": "1AB2",
+          "text": "קו בניין",
+          "position": [
+            17.8425,
+            8.745
+          ]
+        },
+        {
+          "handle": "1AC1",
+          "text": "עץ קיים",
+          "position": [
+            17.8241,
+            2.2803
+          ]
+        },
+        {
+          "handle": "1AC3",
+          "text": "עץ קיים",
+          "position": [
+            17.5009,
+            10.3373
+          ]
+        },
+        {
+          "handle": "1AC5",
+          "text": "עץ קוטר ''7",
+          "position": [
+            17.5473,
+            2.6568
+          ]
+        },
+        {
+          "handle": "1AD1",
+          "text": "גובה ריצוף 40.77",
+          "position": [
+            3.6807,
+            10.112
+          ]
+        },
+        {
+          "handle": "1AD2",
+          "text": "בית שכן - ",
+          "position": [
+            4.6328,
+            9.6868
+          ]
+        }
+      ],
+      "terraceAreaM2": 6.6,
+      "unresolvedDoors": [],
+      "counts": {
+        "walls": 41,
+        "openings": 11,
+        "elements": 35,
+        "rooms": 4
+      },
+      "wallReconstructionDifferenceM2": 0.0,
+      "modelVerifiedDimensionCount": 5
+    },
+    "living": {
+      "originCm": [
+        16604.73927477307,
+        4507.707890333357
+      ],
+      "enclosureAreaM2": 122.635,
+      "dimensions": [
+        {
+          "handle": "F43",
+          "metres": 0.95,
+          "endpoints": [
+            [
+              13.4,
+              3.4687
+            ],
+            [
+              14.35,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.6
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "F97",
+          "metres": 0.95,
+          "endpoints": [
+            [
+              11.85,
+              4.1873
+            ],
+            [
+              12.8,
+              4.1873
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3627,
+            0.3627
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FA4",
+          "metres": 1.05,
+          "endpoints": [
+            [
+              10.8,
+              4.1873
+            ],
+            [
+              11.85,
+              4.1873
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.3627
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FB1",
+          "metres": 0.5,
+          "endpoints": [
+            [
+              12.8,
+              4.1873
+            ],
+            [
+              13.3,
+              4.1873
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3627,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FBE",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              11.6146,
+              4.55
+            ],
+            [
+              11.6146,
+              3.35
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.8146
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "FCB",
+          "metres": 0.9,
+          "endpoints": [
+            [
+              11.6146,
+              3.35
+            ],
+            [
+              11.6146,
+              2.45
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.8146,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1047",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              6.675
+            ],
+            [
+              6.1,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1054",
+          "metres": 0.95,
+          "endpoints": [
+            [
+              4.95,
+              6.675
+            ],
+            [
+              5.9,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1061",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              4.85,
+              6.675
+            ],
+            [
+              4.95,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "106F",
+          "metres": 4.55,
+          "endpoints": [
+            [
+              0.3,
+              6.675
+            ],
+            [
+              4.85,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.225,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "107C",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              0.0,
+              6.675
+            ],
+            [
+              0.3,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.225,
+            0.225
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1089",
+          "metres": 3.75,
+          "endpoints": [
+            [
+              6.1,
+              6.675
+            ],
+            [
+              9.85,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.1172
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1096",
+          "metres": 0.85,
+          "endpoints": [
+            [
+              9.85,
+              6.675
+            ],
+            [
+              10.7,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.1172,
+            0.725
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "10A3",
+          "metres": 4.21,
+          "endpoints": [
+            [
+              10.7,
+              6.675
+            ],
+            [
+              14.91,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.725,
+            0.6263
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "10B0",
+          "metres": 0.29,
+          "endpoints": [
+            [
+              14.91,
+              6.675
+            ],
+            [
+              15.2,
+              6.675
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.6263,
+            0.625
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "10BE",
+          "metres": 0.3,
+          "endpoints": [
+            [
+              0.0,
+              3.45
+            ],
+            [
+              0.3,
+              3.45
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "10CB",
+          "metres": 1.4,
+          "endpoints": [
+            [
+              -1.4,
+              3.4687
+            ],
+            [
+              0.0,
+              3.45
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.4,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "10D8",
+          "metres": 2.5,
+          "endpoints": [
+            [
+              0.3,
+              3.45
+            ],
+            [
+              2.8,
+              2.2187
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "10E5",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              2.8,
+              3.4687
+            ],
+            [
+              2.9,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "10F3",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              4.45,
+              3.4687
+            ],
+            [
+              4.55,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1313,
+            0.1313
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1101",
+          "metres": 1.55,
+          "endpoints": [
+            [
+              2.9,
+              3.4687
+            ],
+            [
+              4.45,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.1313
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "110E",
+          "metres": 3.05,
+          "endpoints": [
+            [
+              4.55,
+              3.4687
+            ],
+            [
+              7.6,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1313,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "111B",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              7.6,
+              3.4687
+            ],
+            [
+              7.7,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1129",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              10.7,
+              3.4687
+            ],
+            [
+              10.8,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1137",
+          "metres": 3.0,
+          "endpoints": [
+            [
+              7.7,
+              3.4687
+            ],
+            [
+              10.7,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1144",
+          "metres": 2.5,
+          "endpoints": [
+            [
+              10.8,
+              3.4687
+            ],
+            [
+              13.3,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1151",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              13.3,
+              3.4687
+            ],
+            [
+              13.4,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "115F",
+          "metres": 0.6,
+          "endpoints": [
+            [
+              14.35,
+              3.4687
+            ],
+            [
+              14.95,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.6,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "116C",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              14.95,
+              3.4687
+            ],
+            [
+              15.2,
+              3.4687
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "118C",
+          "metres": 2.45,
+          "endpoints": [
+            [
+              -0.2709,
+              4.3
+            ],
+            [
+              -0.2709,
+              1.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11B5",
+          "metres": 0.65,
+          "endpoints": [
+            [
+              12.4032,
+              2.2
+            ],
+            [
+              12.4032,
+              1.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3468,
+            0.7367
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11C2",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              12.4032,
+              2.45
+            ],
+            [
+              12.4032,
+              2.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3468,
+            0.3468
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11D0",
+          "metres": 2.1,
+          "endpoints": [
+            [
+              12.4032,
+              4.55
+            ],
+            [
+              12.4032,
+              2.45
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.3468
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11DD",
+          "metres": 3.1,
+          "endpoints": [
+            [
+              12.4032,
+              8.95
+            ],
+            [
+              12.4032,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.9468
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11EA",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              12.4032,
+              5.85
+            ],
+            [
+              12.4032,
+              4.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.9468,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "11F7",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              12.4032,
+              4.65
+            ],
+            [
+              12.4032,
+              4.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1205",
+          "metres": 1.2,
+          "endpoints": [
+            [
+              8.8243,
+              5.85
+            ],
+            [
+              8.7243,
+              4.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.2,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1212",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              8.7243,
+              4.65
+            ],
+            [
+              8.7243,
+              4.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1220",
+          "metres": 3.1,
+          "endpoints": [
+            [
+              8.7243,
+              8.95
+            ],
+            [
+              8.7243,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.2
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "122D",
+          "metres": 4.3,
+          "endpoints": [
+            [
+              8.7243,
+              4.55
+            ],
+            [
+              8.7243,
+              0.25
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.3743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "123A",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              8.7243,
+              0.25
+            ],
+            [
+              8.7243,
+              -0.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3743,
+            0.3743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "1248",
+          "metres": 2.65,
+          "endpoints": [
+            [
+              2.0719,
+              4.55
+            ],
+            [
+              2.0719,
+              1.9
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1255",
+          "metres": 4.3,
+          "endpoints": [
+            [
+              2.0719,
+              8.95
+            ],
+            [
+              2.0719,
+              4.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1262",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              2.0719,
+              4.65
+            ],
+            [
+              2.0719,
+              4.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "1270",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              2.0719,
+              9.15
+            ],
+            [
+              2.0719,
+              8.95
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "13BB",
+          "metres": 0.1995,
+          "endpoints": [
+            [
+              -1.1984,
+              -1.0
+            ],
+            [
+              -1.1984,
+              -1.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            2.9084,
+            3.0917
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "13EE",
+          "metres": 2.9,
+          "endpoints": [
+            [
+              -0.2709,
+              7.2
+            ],
+            [
+              -0.2709,
+              4.3
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "13FB",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              -0.2709,
+              1.85
+            ],
+            [
+              -0.2709,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.2709,
+            0.2709
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "140A",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              2.0719,
+              1.9
+            ],
+            [
+              2.0719,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        }
+      ],
+      "openingGaps": [
+        {
+          "endpoints": [
+            [
+              4.425,
+              0.65
+            ],
+            [
+              4.425,
+              1.55
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              6.05,
+              0.125
+            ],
+            [
+              6.95,
+              0.125
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 1.8,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              8.35,
+              0.125
+            ],
+            [
+              9.25,
+              0.125
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 1.8,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              6.05,
+              4.6
+            ],
+            [
+              5.2,
+              4.6
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.85,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              9.35,
+              4.6
+            ],
+            [
+              10.15,
+              4.6
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.8,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              3.65,
+              1.775
+            ],
+            [
+              2.95,
+              1.775
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.7,
+          "a14Support": 1.4,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              4.5,
+              2.85
+            ],
+            [
+              4.5,
+              3.6
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.75,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              4.1,
+              5.3
+            ],
+            [
+              4.1,
+              6.15
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.85,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              0.15,
+              4.7
+            ],
+            [
+              0.15,
+              6.9
+            ]
+          ],
+          "thickness": 0.3,
+          "width": 2.2,
+          "a14Support": 8.8,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              0.15,
+              7.75
+            ],
+            [
+              0.15,
+              8.45
+            ]
+          ],
+          "thickness": 0.3,
+          "width": 0.7,
+          "a14Support": 2.1,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.825,
+              0.65
+            ],
+            [
+              10.825,
+              1.55
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 1.8628,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              11.9,
+              2.325
+            ],
+            [
+              12.75,
+              2.325
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.85,
+          "a14Support": 1.7,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.75,
+              2.5
+            ],
+            [
+              10.75,
+              3.25
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.75,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              1.05,
+              4.6
+            ],
+            [
+              0.3,
+              4.6
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.75,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              6.0,
+              8.0
+            ],
+            [
+              6.0,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.95,
+          "a14Support": 1.2497,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              15.024999999999999,
+              8.55
+            ],
+            [
+              15.025,
+              6.05
+            ]
+          ],
+          "thickness": 0.35,
+          "width": 2.5,
+          "a14Support": 7.5,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              13.350000000000001,
+              4.9
+            ],
+            [
+              13.35,
+              8.95
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 4.05,
+          "a14Support": 0.26,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              14.25,
+              2.325
+            ],
+            [
+              13.4,
+              2.325
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.85,
+          "a14Support": 1.7,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              8.01
+            ],
+            [
+              10.8,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.94,
+          "a14Support": 1.3397,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              7.4
+            ],
+            [
+              10.8,
+              4.65
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 2.75,
+          "a14Support": 5.8884,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        }
+      ],
+      "labels": [
+        {
+          "handle": "62",
+          "text": "5.5 מ''א ארונות",
+          "position": [
+            1.2948,
+            5.5539
+          ]
+        },
+        {
+          "handle": "65",
+          "text": "מרפסת",
+          "position": [
+            -0.9166,
+            5.2485
+          ]
+        },
+        {
+          "handle": "8A0",
+          "text": "H=223",
+          "position": [
+            11.9604,
+            5.6937
+          ]
+        },
+        {
+          "handle": "FD8",
+          "text": "12.9",
+          "position": [
+            9.4432,
+            2.1968
+          ]
+        },
+        {
+          "handle": "FD9",
+          "text": "13.1",
+          "position": [
+            5.8033,
+            2.1968
+          ]
+        },
+        {
+          "handle": "FDF",
+          "text": "29.9 mr",
+          "position": [
+            8.4349,
+            6.5184
+          ]
+        },
+        {
+          "handle": "127E",
+          "text": "חלל כפול",
+          "position": [
+            8.2005,
+            6.2635
+          ]
+        },
+        {
+          "handle": "127F",
+          "text": "חלל כפול",
+          "position": [
+            13.0095,
+            7.268
+          ]
+        },
+        {
+          "handle": "129D",
+          "text": "חדר כביסה",
+          "position": [
+            14.0963,
+            5.495
+          ]
+        },
+        {
+          "handle": "12A7",
+          "text": "מסתור כביסה",
+          "position": [
+            12.5743,
+            1.4167
+          ]
+        },
+        {
+          "handle": "13B9",
+          "text": "אופציה",
+          "position": [
+            6.559,
+            7.7636
+          ]
+        },
+        {
+          "handle": "13BA",
+          "text": "מעלית",
+          "position": [
+            6.8868,
+            7.7377
+          ]
+        },
+        {
+          "handle": "144A",
+          "text": "רמפה-שיפוע %5",
+          "position": [
+            -0.147,
+            -0.2426
+          ]
+        },
+        {
+          "handle": "1454",
+          "text": " אנגלית",
+          "position": [
+            -1.8931,
+            2.5747
+          ]
+        },
+        {
+          "handle": "1455",
+          "text": "חצר  ",
+          "position": [
+            -1.967,
+            2.2582
+          ]
+        },
+        {
+          "handle": "1457",
+          "text": " אנגלית",
+          "position": [
+            15.7487,
+            6.3187
+          ]
+        },
+        {
+          "handle": "1458",
+          "text": "חצר  ",
+          "position": [
+            15.9244,
+            5.9784
+          ]
+        },
+        {
+          "handle": "155A",
+          "text": "+41.09",
+          "position": [
+            -1.8942,
+            -0.5197
+          ]
+        },
+        {
+          "handle": "1596",
+          "text": "קיר קיים",
+          "position": [
+            12.0911,
+            9.4815
+          ]
+        },
+        {
+          "handle": "1597",
+          "text": "+42.74",
+          "position": [
+            12.1397,
+            9.8154
+          ]
+        },
+        {
+          "handle": "1598",
+          "text": "גובה ריצוף 40.77",
+          "position": [
+            3.6807,
+            10.112
+          ]
+        },
+        {
+          "handle": "1599",
+          "text": "בית שכן - ",
+          "position": [
+            4.6328,
+            9.6868
+          ]
+        }
+      ],
+      "terraceAreaM2": 4.06,
+      "unresolvedDoors": [],
+      "applianceBays": [
+        {
+          "handle": "12FF",
+          "kind": "washing-machine"
+        }
+      ],
+      "counts": {
+        "walls": 59,
+        "openings": 15,
+        "elements": 28,
+        "rooms": 14
+      },
+      "wallReconstructionDifferenceM2": 0.0,
+      "modelVerifiedDimensionCount": 19
+    },
+    "top": {
+      "originCm": [
+        16604.73927477307,
+        7040.478604723506
+      ],
+      "enclosureAreaM2": 60.9603,
+      "dimensions": [
+        {
+          "handle": "728",
+          "metres": 7.1,
+          "endpoints": [
+            [
+              2.2221,
+              8.95
+            ],
+            [
+              2.2221,
+              1.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            3.6779,
+            5.2779
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "735",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              2.2221,
+              1.85
+            ],
+            [
+              2.2221,
+              1.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            5.2779,
+            5.2779
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "742",
+          "metres": 0.0167,
+          "endpoints": [
+            [
+              0.0,
+              8.2963
+            ],
+            [
+              0.0167,
+              8.2963
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            5.9,
+            5.8833
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "750",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              8.2963
+            ],
+            [
+              6.1,
+              8.2963
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "75E",
+          "metres": 5.8833,
+          "endpoints": [
+            [
+              0.0167,
+              8.2963
+            ],
+            [
+              5.9,
+              8.2963
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            5.8833,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "76B",
+          "metres": 5.65,
+          "endpoints": [
+            [
+              6.1,
+              8.2963
+            ],
+            [
+              11.75,
+              8.2963
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.6537
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "778",
+          "metres": 3.25,
+          "endpoints": [
+            [
+              11.75,
+              8.2963
+            ],
+            [
+              15.0,
+              8.2963
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.6537,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "7A9",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              14.9142,
+              6.9
+            ],
+            [
+              14.9142,
+              6.7
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "7B6",
+          "metres": 2.05,
+          "endpoints": [
+            [
+              14.9142,
+              8.95
+            ],
+            [
+              14.9142,
+              6.9
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "7C3",
+          "metres": 5.15,
+          "endpoints": [
+            [
+              14.9142,
+              6.7
+            ],
+            [
+              14.9142,
+              1.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.1622
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "8F9",
+          "metres": 3.3,
+          "endpoints": [
+            [
+              2.6,
+              6.2905
+            ],
+            [
+              5.9,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            3.3,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "906",
+          "metres": 2.4,
+          "endpoints": [
+            [
+              0.2,
+              6.2905
+            ],
+            [
+              2.6,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            5.7,
+            3.3
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "913",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              0.0,
+              6.2905
+            ],
+            [
+              0.2,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            5.9,
+            5.7
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "954",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              13.552,
+              6.2905
+            ],
+            [
+              13.752,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3595,
+            0.3595
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "962",
+          "metres": 2.852,
+          "endpoints": [
+            [
+              10.7,
+              6.2905
+            ],
+            [
+              13.552,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.1095,
+            0.3595
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "96F",
+          "metres": 5.55,
+          "endpoints": [
+            [
+              12.4032,
+              8.95
+            ],
+            [
+              12.4032,
+              3.4
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0588
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "97C",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              12.4032,
+              3.4
+            ],
+            [
+              12.4032,
+              3.3
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0588,
+            0.0588
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "98A",
+          "metres": 1.5,
+          "endpoints": [
+            [
+              12.4032,
+              3.3
+            ],
+            [
+              12.4032,
+              1.8
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0588,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "998",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              8.7243,
+              5.85
+            ],
+            [
+              8.7243,
+              5.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1743,
+            0.1743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "9AA",
+          "metres": 1.248,
+          "endpoints": [
+            [
+              13.752,
+              3.1483
+            ],
+            [
+              15.0,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.248
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "9B7",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              13.552,
+              3.1483
+            ],
+            [
+              13.752,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "9C5",
+          "metres": 2.752,
+          "endpoints": [
+            [
+              10.8,
+              3.1483
+            ],
+            [
+              13.552,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "AAA",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              5.9,
+              6.2905
+            ],
+            [
+              6.1,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "AB8",
+          "metres": 3.75,
+          "endpoints": [
+            [
+              6.1,
+              6.2905
+            ],
+            [
+              9.85,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            1.3726
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "AC5",
+          "metres": 0.85,
+          "endpoints": [
+            [
+              9.85,
+              6.2905
+            ],
+            [
+              10.7,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.3726,
+            1.1095
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "AD2",
+          "metres": 1.248,
+          "endpoints": [
+            [
+              13.752,
+              6.2905
+            ],
+            [
+              15.0,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3595,
+            0.4095
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "ADF",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              15.0,
+              6.2905
+            ],
+            [
+              15.2,
+              6.2905
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.4095,
+            0.4095
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "AEC",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              7.5,
+              3.1483
+            ],
+            [
+              7.7,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "AF9",
+          "metres": 0.1,
+          "endpoints": [
+            [
+              10.7,
+              3.1483
+            ],
+            [
+              10.8,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "B07",
+          "metres": 3.0,
+          "endpoints": [
+            [
+              7.7,
+              3.1483
+            ],
+            [
+              10.7,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "B14",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              15.0,
+              3.1483
+            ],
+            [
+              15.2,
+              3.1483
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            1.248,
+            1.448
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "B29",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              12.4032,
+              1.8
+            ],
+            [
+              12.4032,
+              1.55
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.0
+          ],
+          "modelVerified": true
+        },
+        {
+          "handle": "B37",
+          "metres": 1.0,
+          "endpoints": [
+            [
+              8.7243,
+              5.65
+            ],
+            [
+              8.7243,
+              4.65
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1743,
+            0.0
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "B44",
+          "metres": 0.2,
+          "endpoints": [
+            [
+              8.7243,
+              4.65
+            ],
+            [
+              8.7243,
+              4.45
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.1
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "B51",
+          "metres": 3.1,
+          "endpoints": [
+            [
+              8.7243,
+              8.95
+            ],
+            [
+              8.7243,
+              5.85
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.0,
+            0.1743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "B5E",
+          "metres": 4.2,
+          "endpoints": [
+            [
+              8.7243,
+              4.45
+            ],
+            [
+              8.7243,
+              0.25
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.1,
+            0.3743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "B6B",
+          "metres": 0.25,
+          "endpoints": [
+            [
+              8.7243,
+              0.25
+            ],
+            [
+              8.7243,
+              0.0
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            0.3743,
+            0.3743
+          ],
+          "modelVerified": false
+        },
+        {
+          "handle": "BB7",
+          "metres": 0.1995,
+          "endpoints": [
+            [
+              -1.1984,
+              -1.0
+            ],
+            [
+              -1.1984,
+              -1.2
+            ]
+          ],
+          "difference": 0.0,
+          "generatedWallFaceOffsets": [
+            8.7557,
+            8.7808
+          ],
+          "modelVerified": false
+        }
+      ],
+      "openingGaps": [
+        {
+          "endpoints": [
+            [
+              9.25,
+              0.125
+            ],
+            [
+              8.35,
+              0.125
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 1.8,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              7.6,
+              3.65
+            ],
+            [
+              7.6,
+              4.4
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.75,
+          "a14Support": 1.5,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              8.75,
+              4.6
+            ],
+            [
+              9.6,
+              4.6
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.85,
+          "a14Support": 0.0,
+          "doorHandles": [
+            "789"
+          ],
+          "classification": "door"
+        },
+        {
+          "endpoints": [
+            [
+              11.712,
+              3.3499999999999996
+            ],
+            [
+              12.462,
+              3.3499999999999996
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 0.75,
+          "a14Support": 0.0,
+          "doorHandles": [
+            "78F"
+          ],
+          "classification": "door"
+        },
+        {
+          "endpoints": [
+            [
+              13.652000000000001,
+              4.1
+            ],
+            [
+              13.652000000000001,
+              5.45
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 1.35,
+          "a14Support": 2.7,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              8.05,
+              5.75
+            ],
+            [
+              7.5,
+              5.75
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.55,
+          "a14Support": 1.1,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              13.652000000000001,
+              5.75
+            ],
+            [
+              13.652000000000001,
+              6.65
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.9,
+          "a14Support": 0.9066,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.825,
+              0.65
+            ],
+            [
+              10.825,
+              1.55
+            ]
+          ],
+          "thickness": 0.25,
+          "width": 0.9,
+          "a14Support": 1.8,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              8.55,
+              4.5
+            ],
+            [
+              10.7,
+              4.5
+            ]
+          ],
+          "thickness": 0.1,
+          "width": 2.15,
+          "a14Support": 0.0,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              14.252,
+              6.800000000000001
+            ],
+            [
+              13.752,
+              6.8
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.5,
+          "a14Support": 1.0,
+          "doorHandles": [],
+          "classification": "window-candidate"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              8.01
+            ],
+            [
+              10.8,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 0.94,
+          "a14Support": 1.3397,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              10.8,
+              7.4
+            ],
+            [
+              10.8,
+              3.4
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 4.0,
+          "a14Support": 7.7215,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        },
+        {
+          "endpoints": [
+            [
+              13.652000000000001,
+              6.9
+            ],
+            [
+              13.652,
+              8.95
+            ]
+          ],
+          "thickness": 0.2,
+          "width": 2.05,
+          "a14Support": 0.0566,
+          "doorHandles": [],
+          "classification": "unresolved-gap"
+        }
+      ],
+      "labels": [
+        {
+          "handle": "79A",
+          "text": "חלל כפול",
+          "position": [
+            5.7331,
+            3.5499
+          ]
+        },
+        {
+          "handle": "79C",
+          "text": "H=205",
+          "position": [
+            13.6257,
+            1.4764
+          ]
+        },
+        {
+          "handle": "79E",
+          "text": "H=205",
+          "position": [
+            8.199,
+            -0.0736
+          ]
+        },
+        {
+          "handle": "8DA",
+          "text": "H=180",
+          "position": [
+            14.3083,
+            8.8246
+          ]
+        },
+        {
+          "handle": "933",
+          "text": "מעבה מזגנים",
+          "position": [
+            14.1311,
+            4.5155
+          ]
+        },
+        {
+          "handle": "942",
+          "text": "דוד''ש",
+          "position": [
+            6.4598,
+            1.2982
+          ]
+        },
+        {
+          "handle": "945",
+          "text": "קולטי שמש",
+          "position": [
+            5.4392,
+            2.0496
+          ]
+        },
+        {
+          "handle": "946",
+          "text": "חלל כפול",
+          "position": [
+            7.8505,
+            6.7491
+          ]
+        },
+        {
+          "handle": "947",
+          "text": "גג",
+          "position": [
+            15.6453,
+            3.7008
+          ]
+        },
+        {
+          "handle": "948",
+          "text": "שרות",
+          "position": [
+            15.4651,
+            4.023
+          ]
+        },
+        {
+          "handle": "949",
+          "text": "רום הגג",
+          "position": [
+            10.4931,
+            1.5733
+          ]
+        },
+        {
+          "handle": "9E6",
+          "text": "מטבחון",
+          "position": [
+            12.3066,
+            4.5321
+          ]
+        },
+        {
+          "handle": "A30",
+          "text": "H=205",
+          "position": [
+            13.6479,
+            8.8361
+          ]
+        },
+        {
+          "handle": "A32",
+          "text": "H=180",
+          "position": [
+            7.5738,
+            -0.1117
+          ]
+        },
+        {
+          "handle": "AA8",
+          "text": "12.6 mr",
+          "position": [
+            8.4876,
+            3.6304
+          ]
+        },
+        {
+          "handle": "BB5",
+          "text": "אופציה",
+          "position": [
+            6.559,
+            7.7636
+          ]
+        },
+        {
+          "handle": "BB6",
+          "text": "מעלית",
+          "position": [
+            6.8868,
+            7.7377
+          ]
+        },
+        {
+          "handle": "C13",
+          "text": "רמפה-שיפוע %5",
+          "position": [
+            -0.147,
+            -0.2426
+          ]
+        },
+        {
+          "handle": "CEA",
+          "text": "+41.09",
+          "position": [
+            -1.8942,
+            -0.5197
+          ]
+        },
+        {
+          "handle": "D24",
+          "text": "קיר קיים",
+          "position": [
+            12.0911,
+            9.4815
+          ]
+        },
+        {
+          "handle": "D25",
+          "text": "+42.74",
+          "position": [
+            12.1397,
+            9.8154
+          ]
+        },
+        {
+          "handle": "D26",
+          "text": "גובה ריצוף 40.77",
+          "position": [
+            3.6807,
+            10.112
+          ]
+        },
+        {
+          "handle": "D27",
+          "text": "בית שכן - ",
+          "position": [
+            4.6328,
+            9.6868
+          ]
+        }
+      ],
+      "terraceAreaM2": 53.0572,
+      "unresolvedDoors": [],
+      "unclassifiedBlocks": [
+        {
+          "handle": "8C3",
+          "name": "plazma"
+        },
+        {
+          "handle": "8E9",
+          "name": "tbr6"
+        }
+      ],
+      "counts": {
+        "walls": 36,
+        "openings": 9,
+        "elements": 19,
+        "rooms": 18
+      },
+      "wallReconstructionDifferenceM2": 0.0,
+      "modelVerifiedDimensionCount": 10
+    }
+  },
+  "coordinateContract": "CAD centimetres to metres; common house X and registered per-sheet Y; Y inverted; no house-only rotation",
+  "contourAuthority": "User authorized A17 enclosures and A14/A13/H stair evidence where AREA is absent",
+  "materialAuthority": "Current Alt-4 v2 and subsequent user finish preferences",
+  "stairs": [
+    {
+      "sourceFloor": "basement",
+      "targetFloor": "ground",
+      "runs": [
+        {
+          "bounds": [
+            9.8,
+            1.19,
+            10.7,
+            2.87
+          ],
+          "dir": "z",
+          "reverse": true
+        },
+        {
+          "bounds": [
+            8.8,
+            1.19,
+            9.7,
+            3.15
+          ],
+          "dir": "z",
+          "reverse": false
+        }
+      ],
+      "landing": [
+        8.8,
+        0.25,
+        10.7,
+        1.19
+      ],
+      "footprintAreaM2": 5.062,
+      "sourceHandles": [
+        "4C1",
+        "517",
+        "518",
+        "519",
+        "51A",
+        "51B",
+        "523",
+        "521",
+        "550",
+        "4C4",
+        "4E5",
+        "516",
+        "51C",
+        "51D",
+        "51E",
+        "51F",
+        "549",
+        "54F",
+        "688",
+        "4E9",
+        "4EA",
+        "169",
+        "54A",
+        "1630",
+        "1631",
+        "1642",
+        "1643",
+        "163D",
+        "132B"
+      ]
+    },
+    {
+      "sourceFloor": "ground",
+      "targetFloor": "living",
+      "runs": [
+        {
+          "bounds": [
+            5.9,
+            8.0,
+            9.64,
+            8.95
+          ],
+          "dir": "x",
+          "reverse": true
+        },
+        {
+          "bounds": [
+            4.95,
+            6.55,
+            5.9,
+            8.0
+          ],
+          "dir": "z",
+          "reverse": true
+        }
+      ],
+      "landing": [
+        4.95,
+        8.0,
+        5.9,
+        8.95
+      ],
+      "footprintAreaM2": 5.833,
+      "sourceHandles": [
+        "16C2",
+        "18DC",
+        "18DD",
+        "18DE",
+        "18E2",
+        "18E3",
+        "18E5",
+        "1950",
+        "1954",
+        "1956",
+        "1957",
+        "1958",
+        "195A",
+        "195B",
+        "195C",
+        "16C6",
+        "16C7",
+        "16C8",
+        "16C5",
+        "16D6",
+        "16D7",
+        "16D8",
+        "16D9",
+        "16DA",
+        "16DB",
+        "1984",
+        "13AC",
+        "14B6",
+        "13AA",
+        "13AB",
+        "13E8",
+        "13E9",
+        "13EA",
+        "13EB",
+        "13EC",
+        "13ED"
+      ]
+    },
+    {
+      "sourceFloor": "living",
+      "targetFloor": "top",
+      "runs": [
+        {
+          "bounds": [
+            9.85,
+            5.85,
+            10.7,
+            8.01
+          ],
+          "dir": "z",
+          "reverse": false
+        },
+        {
+          "bounds": [
+            10.9,
+            6.66,
+            11.75,
+            8.01
+          ],
+          "dir": "z",
+          "reverse": true
+        }
+      ],
+      "landing": [
+        9.85,
+        8.01,
+        11.75,
+        8.95
+      ],
+      "footprintAreaM2": 4.7695,
+      "sourceHandles": [
+        "F41",
+        "1296",
+        "1297",
+        "1298",
+        "1299",
+        "129A",
+        "129B",
+        "129C",
+        "1294",
+        "138B",
+        "13B6",
+        "128A",
+        "128B",
+        "128C",
+        "128D",
+        "128E",
+        "128F",
+        "1284",
+        "1291",
+        "B7B",
+        "B7C",
+        "B7D",
+        "B7E",
+        "B7F",
+        "A39",
+        "1292",
+        "1293",
+        "14F1",
+        "B81",
+        "B82",
+        "A3A",
+        "A3B",
+        "B7A",
+        "B80",
+        "B83"
+      ]
+    }
+  ],
+  "voids": [
+    {
+      "role": "stair-basement-ground",
+      "bounds": [
+        8.8,
+        0.25,
+        10.7,
+        3.15
+      ],
+      "areaM2": 5.061999999999994,
+      "floorHoles": [
+        "ground"
+      ],
+      "ceilingHoles": [
+        "basement"
+      ],
+      "handles": [
+        "4C1",
+        "517",
+        "518",
+        "519",
+        "51A",
+        "51B",
+        "523",
+        "521",
+        "550",
+        "4C4",
+        "4E5",
+        "516",
+        "51C",
+        "51D",
+        "51E",
+        "51F",
+        "549",
+        "54F",
+        "688",
+        "4E9",
+        "4EA",
+        "169",
+        "54A",
+        "1630",
+        "1631",
+        "1642",
+        "1643",
+        "163D",
+        "132B"
+      ]
+    },
+    {
+      "role": "stair-ground-living",
+      "bounds": [
+        4.95,
+        6.55,
+        9.64,
+        8.95
+      ],
+      "areaM2": 5.8329999999999975,
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "16C2",
+        "18DC",
+        "18DD",
+        "18DE",
+        "18E2",
+        "18E3",
+        "18E5",
+        "1950",
+        "1954",
+        "1956",
+        "1957",
+        "1958",
+        "195A",
+        "195B",
+        "195C",
+        "16C6",
+        "16C7",
+        "16C8",
+        "16C5",
+        "16D6",
+        "16D7",
+        "16D8",
+        "16D9",
+        "16DA",
+        "16DB",
+        "1984",
+        "13AC",
+        "14B6",
+        "13AA",
+        "13AB",
+        "13E8",
+        "13E9",
+        "13EA",
+        "13EB",
+        "13EC",
+        "13ED"
+      ]
+    },
+    {
+      "role": "stair-living-top",
+      "bounds": [
+        9.85,
+        5.85,
+        11.75,
+        8.95
+      ],
+      "areaM2": 4.769499999999998,
+      "floorHoles": [
+        "top"
+      ],
+      "ceilingHoles": [
+        "living"
+      ],
+      "handles": [
+        "F41",
+        "1296",
+        "1297",
+        "1298",
+        "1299",
+        "129A",
+        "129B",
+        "129C",
+        "1294",
+        "138B",
+        "13B6",
+        "128A",
+        "128B",
+        "128C",
+        "128D",
+        "128E",
+        "128F",
+        "1284",
+        "1291",
+        "B7B",
+        "B7C",
+        "B7D",
+        "B7E",
+        "B7F",
+        "A39",
+        "1292",
+        "1293",
+        "14F1",
+        "B81",
+        "B82",
+        "A3A",
+        "A3B",
+        "B7A",
+        "B80",
+        "B83"
+      ]
+    },
+    {
+      "role": "Central double-height space",
+      "bounds": [
+        6.1,
+        5.9,
+        9.8,
+        7.95
+      ],
+      "areaM2": 7.585000000000002,
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "127E",
+        "1281",
+        "13AD",
+        "1313",
+        "129E"
+      ]
+    },
+    {
+      "role": "Salon double-height space",
+      "bounds": [
+        11.8,
+        5.85,
+        14.85,
+        8.95
+      ],
+      "areaM2": 9.454999999999995,
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "127F",
+        "130E",
+        "130F",
+        "1280",
+        "129E",
+        "14F9"
+      ]
+    },
+    {
+      "role": "Central double-height continuation",
+      "bounds": [
+        6.1,
+        5.9,
+        9.8,
+        8.0
+      ],
+      "areaM2": 7.770000000000001,
+      "floorHoles": [
+        "top"
+      ],
+      "ceilingHoles": [
+        "living"
+      ],
+      "handles": [
+        "946",
+        "BDD",
+        "B22",
+        "B79",
+        "C75"
+      ]
+    },
+    {
+      "role": "future-elevator-reservation",
+      "bounds": [
+        6.14,
+        6.45,
+        7.14,
+        7.95
+      ],
+      "areaM2": 1.5,
+      "floorHoles": [
+        "ground",
+        "living",
+        "top"
+      ],
+      "ceilingHoles": [
+        "basement",
+        "ground",
+        "living"
+      ],
+      "handles": [
+        "522",
+        "16D5",
+        "13E7",
+        "BE0"
+      ]
+    }
+  ],
+  "roof": {
+    "outerRadius": 5.81,
+    "innerRadius": 5.61,
+    "finishRadius": 5.86,
+    "centerElevation": 3.14,
+    "ridgeX": 17659.73927477274,
+    "axis": "z",
+    "overhang": 0.1,
+    "overhangM": 0.1,
+    "handles": [
+      "D9C",
+      "D9E",
+      "DA0",
+      "E56",
+      "DDE",
+      "997",
+      "949",
+      "E83",
+      "DAB",
+      "E37",
+      "E36",
+      "A93",
+      "A94"
+    ],
+    "status": "verified by six relative section-plan wall stations and exact matching roof-ridge line H997; roof coverage follows enclosed top footprint with user-authorized10cm overhang",
+    "ridgeXCoordinateSpace": "raw CAD plan centimetres",
+    "planAxis": "raw CAD Y / source planner Y / renderer Z",
+    "registration": {
+      "sectionToPlanXOffsetCm": 312.07160731100885,
+      "formula": "planX=sectionX+312.07160731100815",
+      "anchors": [
+        {
+          "name": "west exterior",
+          "sectionX": 16292.66766746235,
+          "planX": 16604.73927477307,
+          "sectionHandles": [
+            "E83"
+          ],
+          "planHandles": [
+            "C51",
+            "A46"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        },
+        {
+          "name": "east exterior",
+          "sectionX": 17812.66766746193,
+          "planX": 18124.73927477265,
+          "sectionHandles": [
+            "DAB"
+          ],
+          "planHandles": [
+            "C89"
+          ],
+          "residualCm": 2.874003257602453e-10
+        },
+        {
+          "name": "central void west outer face",
+          "sectionX": 16882.66766746223,
+          "planX": 17194.73927477296,
+          "sectionHandles": [
+            "E37"
+          ],
+          "planHandles": [
+            "BEF",
+            "C75"
+          ],
+          "residualCm": 2.764863893389702e-10
+        },
+        {
+          "name": "central void west inner face",
+          "sectionX": 16902.66766746223,
+          "planX": 17214.73927477296,
+          "sectionHandles": [
+            "E36"
+          ],
+          "planHandles": [
+            "BF0",
+            "C75"
+          ],
+          "residualCm": 2.764863893389702e-10
+        },
+        {
+          "name": "stair spine west face",
+          "sectionX": 17362.66766746094,
+          "planX": 17674.73927477166,
+          "sectionHandles": [
+            "A93"
+          ],
+          "planHandles": [
+            "C79",
+            "BB2"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        },
+        {
+          "name": "stair spine east face",
+          "sectionX": 17382.66766746094,
+          "planX": 17694.73927477166,
+          "sectionHandles": [
+            "A94"
+          ],
+          "planHandles": [
+            "C79",
+            "BB4"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        }
+      ],
+      "maxWallStationResidualCm": 2.9103830456733704e-10,
+      "ridgeLineHandle": "997",
+      "ridgeLabelHandle": "949",
+      "ridgeLineRawBounds": [
+        17659.73927477274,
+        6050.839404793806,
+        17659.73927477274,
+        7071.035817233005
+      ],
+      "heightChecks": [
+        {
+          "name": "bedroom H205",
+          "x": 17437.26230967269,
+          "floorElevationCm": 624,
+          "labelCm": 205,
+          "handles": [
+            "79D",
+            "79E"
+          ],
+          "roofUndersideClearanceCm": 204.99999999987494,
+          "residualCm": -1.2505552149377763e-10
+        },
+        {
+          "name": "sitting H205",
+          "x": 17976.05137543736,
+          "floorElevationCm": 572.4,
+          "labelCm": 205,
+          "handles": [
+            "8D9",
+            "A30"
+          ],
+          "roofUndersideClearanceCm": 204.92240931465244,
+          "residualCm": -0.07759068534755897
+        },
+        {
+          "name": "sitting H180",
+          "x": 18009.77704416314,
+          "floorElevationCm": 572.4,
+          "labelCm": 180,
+          "handles": [
+            "8DB",
+            "8DA"
+          ],
+          "roofUndersideClearanceCm": 180.00000000021942,
+          "residualCm": 2.1941559680271894e-10
+        },
+        {
+          "name": "bedroom west H180",
+          "x": 17374.73927477267,
+          "floorElevationCm": 624,
+          "labelCm": 180,
+          "handles": [
+            "79F",
+            "A32"
+          ],
+          "roofUndersideClearanceCm": 173.21423820078053,
+          "residualCm": -6.785761799219472
+        }
+      ]
+    },
+    "coverageAuthority": "User-authorized10cm overhang is a preference, not a dimension inferred from CAD. Limit coverage to top enclosed shell; terraces remain outside roof.",
+    "footprintAreaM2": 64.9003
+  },
+  "splitLevels": {
+    "zones": [
+      {
+        "name": "Upper bedroom",
+        "points": [
+          [
+            17354.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6885.4786
+          ],
+          [
+            17699.7393,
+            6885.4786
+          ],
+          [
+            17699.7393,
+            7040.4786
+          ],
+          [
+            17354.7393,
+            7040.4786
+          ]
+        ],
+        "localElevation": 0.516,
+        "handles": [
+          "C59",
+          "C5D",
+          "C47",
+          "C61",
+          "C69",
+          "8B8",
+          "C55",
+          "A05",
+          "A13"
+        ],
+        "status": "level source-verified; shared-wall edge follows audited outer face",
+        "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+      },
+      {
+        "name": "Upper lobby",
+        "points": [
+          [
+            17459.7393,
+            6455.4786
+          ],
+          [
+            17620.7393,
+            6455.4786
+          ],
+          [
+            17620.7393,
+            6575.4786
+          ],
+          [
+            17459.7393,
+            6575.4786
+          ]
+        ],
+        "localElevation": 0.516,
+        "handles": [
+          "9F2",
+          "A34",
+          "C71",
+          "C59",
+          "8F4"
+        ],
+        "status": "west of local steps; level source-verified",
+        "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+      },
+      {
+        "name": "Lower eastern interior",
+        "points": [
+          [
+            17979.9377,
+            6885.4786
+          ],
+          [
+            17979.9377,
+            6370.4786
+          ],
+          [
+            18124.7393,
+            6370.4786
+          ],
+          [
+            18124.7393,
+            6125.4786
+          ],
+          [
+            17194.7393,
+            6125.4786
+          ],
+          [
+            17194.7393,
+            6475.4786
+          ],
+          [
+            17459.7393,
+            6475.4786
+          ],
+          [
+            17459.7393,
+            6455.4786
+          ],
+          [
+            17674.7393,
+            6455.4786
+          ],
+          [
+            17674.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6885.4786
+          ]
+        ],
+        "localElevation": 0,
+        "handles": [
+          "C51",
+          "C75",
+          "C79",
+          "C81",
+          "C85",
+          "C89",
+          "C69",
+          "9E4",
+          "A53"
+        ],
+        "status": "exact polygon difference of enclosed floor minus upper zones and54cm local-step strip; staircase/shaft/double-height holes applied separately",
+        "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+      }
+    ],
+    "steps": [
+      {
+        "id": "top-local-west-ascent",
+        "floor": "top",
+        "sourceFloor": "top",
+        "targetFloor": "top",
+        "name": "Top split-level westward steps",
+        "bounds": [
+          17620.7393,
+          6455.4786,
+          17674.7393,
+          6575.4786
+        ],
+        "start": [
+          17674.7393,
+          6515.4786
+        ],
+        "end": [
+          17620.7393,
+          6515.4786
+        ],
+        "handles": [
+          "A34",
+          "A35",
+          "A36",
+          "9E7",
+          "9E8",
+          "9E9",
+          "9E0",
+          "9E1",
+          "9E2",
+          "9E3",
+          "9E4",
+          "9E5"
+        ],
+        "lowerLocalElevationM": 0,
+        "upperLocalElevationM": 0.516,
+        "riserCount": 3,
+        "riserHeightM": 0.172,
+        "goingCm": 27,
+        "steps": [
+          {
+            "name": "Lower intermediate tread",
+            "treadBounds": [
+              17647.7393,
+              6455.4786,
+              17674.7393,
+              6575.4786
+            ],
+            "topLocalElevationM": 0.172,
+            "handles": [
+              "A35",
+              "A36",
+              "9E4"
+            ]
+          },
+          {
+            "name": "Upper intermediate tread",
+            "treadBounds": [
+              17620.7393,
+              6455.4786,
+              17647.7393,
+              6575.4786
+            ],
+            "topLocalElevationM": 0.344,
+            "handles": [
+              "A34",
+              "A35",
+              "9E2"
+            ]
+          }
+        ],
+        "upperLanding": {
+          "points": [
+            [
+              17459.7393,
+              6455.4786
+            ],
+            [
+              17620.7393,
+              6455.4786
+            ],
+            [
+              17620.7393,
+              6575.4786
+            ],
+            [
+              17459.7393,
+              6575.4786
+            ]
+          ],
+          "topLocalElevationM": 0.516,
+          "alreadyRepresentedBySlabZone": "Upper lobby",
+          "handles": [
+            "A34",
+            "9E0"
+          ]
+        },
+        "notes": "Three risers, TWO27cm intermediate goings, then upper lobby landing. Do not invent a third27cm tread beyond the54cm plan footprint or duplicate the landing slab."
+      }
+    ],
+    "lowerElevation": 5.724,
+    "upperElevation": 6.24
+  },
+  "validation": {
+    "generatorChecksPassed": true,
+    "publicationReady": true,
+    "pending": [],
+    "planSha256": "b2d6518998c7e8f6de4b117539b022db4e3b136ce7b02946aa66f8c91a6ff023",
+    "sourceOverlayReviewed": true,
+    "browser": {
+      "planSha256": "b2d6518998c7e8f6de4b117539b022db4e3b136ce7b02946aa66f8c91a6ff023",
+      "checks": [
+        {
+          "floor": "architect-alt-3-v2-basement",
+          "colors": 871,
+          "surfaces": 17,
+          "holeChecks": 0,
+          "blocked": [],
+          "textures": 0
+        },
+        {
+          "floor": "architect-alt-3-v2-ground",
+          "colors": 1168,
+          "surfaces": 31,
+          "holeChecks": 135,
+          "blocked": [],
+          "textures": 14
+        },
+        {
+          "floor": "architect-alt-3-v2-living",
+          "colors": 1179,
+          "surfaces": 52,
+          "holeChecks": 612,
+          "blocked": [],
+          "textures": 27
+        },
+        {
+          "floor": "architect-alt-3-v2-top",
+          "colors": 980,
+          "surfaces": 29,
+          "holeChecks": 486,
+          "blocked": [],
+          "textures": 24
+        }
+      ],
+      "errors": []
+    },
+    "scope": "Visualization checked against source geometry. Inferred openings and source discrepancies remain documented in the source recipe; not a construction certification."
+  },
+  "sourceRecipe": "tools/alt3_v2_source.json",
+  "sourceRecipeSha256": "5bbfc742822006f40cfadb041d3543f5adc843898aa9304a73a0088ccfc9d44b"
+}

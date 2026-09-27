@@ -1,0 +1,6667 @@
+{
+  "schemaVersion": 1,
+  "design": "Alt-3 fresh Home Planner v2",
+  "auditStatus": "stable source recipe; final missing basement east bed436 added; all identified bed rectangles accounted for; exact source overlap and inferred bed orientation flagged",
+  "source": {
+    "dxf": "C:/Users/lironm/AppData/Local/Temp/home-planner-architect-designs/Alt-3-verified.dxf",
+    "inventory": "pdf_renders/alt3-v2/source-inventory.json",
+    "sha256": "f28c9a9862ba3c563c01de9100cd30c3a69192d5e91a53d2d23f5740f7071945",
+    "evidence": "Entity inventory and all five rendered source sheets inspected. No legacy preset coordinates used.",
+    "units": "centimetres (DXF INSUNITS=0; calibrated by dimension extension points)",
+    "precisionCm": 0.0001
+  },
+  "coordinateContract": {
+    "phase": "raw CAD centimetres unless explicitly named otherwise",
+    "boundsOrder": [
+      "xmin",
+      "ymin",
+      "xmax",
+      "ymax"
+    ],
+    "commonX": 16604.73927477307,
+    "plannerTransform": "x=(rawX-origin[0])/100; y=(origin[1]-rawY)/100",
+    "rotationConvention": "rotation is renderer degrees in source planner metres with Y down, before site transform. frontPlanner records independently verified front direction. Source fixture assemblies retain rotationDeg only as audited axis metadata.",
+    "siteTransform": null,
+    "registration": "All four main house envelopes share west X=16604.73927477307 and east X=18124.7392747727, width 1520 cm. Their common south edge is originY-915. The northern projection, southern facade, and three separate stair cores provide asymmetric anchors.",
+    "groundToLivingSheetDy": 3587.707890333273,
+    "livingToTopSheetDy": 2532.770714390083,
+    "basementToGroundSheetDy": 2541.407566898244,
+    "doNot": [
+      "Do not rename ground as basement.",
+      "Do not align floors by furniture or elevator bounds.",
+      "Do not copy Alt-4 roof radii or stair handles.",
+      "Do not use a whole stair bounding box for its slab cutout."
+    ]
+  },
+  "floors": {
+    "basement": {
+      "origin": [
+        16604.73927477307,
+        -1621.407566898094
+      ],
+      "sourceCrop": [
+        16400,
+        -2650,
+        18500,
+        -1500
+      ],
+      "enclosure": [
+        [
+          16604.7393,
+          -1786.4076
+        ],
+        [
+          17459.7393,
+          -1786.4076
+        ],
+        [
+          17459.7393,
+          -1621.4076
+        ],
+        [
+          17699.7393,
+          -1621.4076
+        ],
+        [
+          17699.7393,
+          -1901.4076
+        ],
+        [
+          18124.7393,
+          -1901.4076
+        ],
+        [
+          18124.7393,
+          -2536.4076
+        ],
+        [
+          16604.7393,
+          -2536.4076
+        ]
+      ],
+      "enclosureHandles": [
+        "688",
+        "584",
+        "4DD",
+        "4E1",
+        "4B9",
+        "678",
+        "67C",
+        "660"
+      ],
+      "enclosureStatus": "derived outer house shell; close verified facade openings; do not include English courts or west retaining branches",
+      "enclosureNotes": "584 also encloses the northern English court: exclude its x>17699.7393 branch above y=-1901.4076 from indoor floor/ceiling. 678 and 67C extend west of the house into retaining geometry; clip those branches, not the whole hatch. West facade has a local 5 cm jamb/recess variation at 16609.7393; the floor boundary remains the common outer facade 16604.7393.",
+      "terraces": [],
+      "exteriorCourts": [
+        {
+          "name": "North English court",
+          "polygon": [
+            [
+              17699.7393,
+              -1641.4076
+            ],
+            [
+              17934.7393,
+              -1641.4076
+            ],
+            [
+              17934.7393,
+              -1926.4076
+            ],
+            [
+              17699.7393,
+              -1926.4076
+            ]
+          ],
+          "handles": [
+            "584",
+            "444"
+          ],
+          "status": "not enclosed floor; striped exterior court, not an internal stair"
+        },
+        {
+          "name": "East English court",
+          "bounds": [
+            18124.7393,
+            -2516.4076,
+            18394.7393,
+            -2206.4076
+          ],
+          "handles": [
+            "5A4"
+          ],
+          "status": "candidate clear court; far edge not independently verified, exclude from house"
+        }
+      ],
+      "voids": [],
+      "elevator": {
+        "kind": "future-elevator-reservation",
+        "polygon": [
+          [
+            17218.74372417582,
+            -2416.407566898244
+          ],
+          [
+            17318.74372417582,
+            -2416.407566898244
+          ],
+          [
+            17318.74372417582,
+            -2266.407566898244
+          ],
+          [
+            17218.74372417582,
+            -2266.407566898244
+          ]
+        ],
+        "handles": [
+          "522",
+          "4F4"
+        ],
+        "baseFloorRetained": true,
+        "sourcePolygon": [
+          [
+            17218.7437,
+            -2411.4076
+          ],
+          [
+            17318.7437,
+            -2411.4076
+          ],
+          [
+            17318.7437,
+            -2261.4076
+          ],
+          [
+            17218.7437,
+            -2261.4076
+          ]
+        ],
+        "normalizedPolygon": [
+          [
+            17218.74372417582,
+            -2416.407566898244
+          ],
+          [
+            17318.74372417582,
+            -2416.407566898244
+          ],
+          [
+            17318.74372417582,
+            -2266.407566898244
+          ],
+          [
+            17218.74372417582,
+            -2266.407566898244
+          ]
+        ],
+        "normalization": {
+          "authorized": true,
+          "authority": "User explicitly authorized continuous shaft aligned to ground-floor outline",
+          "anchorFloor": "ground",
+          "deltaRawCm": [
+            0,
+            -5
+          ],
+          "notes": "Apply only to elevator shaft reservation/cuts, not floor/wall/furniture registration."
+        }
+      },
+      "fixtures": [
+        {
+          "name": "North hall closet",
+          "kind": "closet",
+          "handles": [
+            "3AB",
+            "3AC",
+            "3AD",
+            "3AE",
+            "3AF",
+            "3B0"
+          ],
+          "bounds": [
+            17214.7393,
+            -1871.4076,
+            17574.7393,
+            -1811.4076
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "East bedroom wardrobe",
+          "kind": "closet",
+          "handles": [
+            "1A6",
+            "1A8",
+            "1A9",
+            "1AA"
+          ],
+          "bounds": [
+            18044.7393,
+            -2196.4076,
+            18104.7393,
+            -1926.4076
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 270
+        },
+        {
+          "name": "East bedroom desk",
+          "kind": "study-desk",
+          "handles": [
+            "435"
+          ],
+          "componentHandles": [
+            "434"
+          ],
+          "bounds": [
+            17687.8687,
+            -2073.1243,
+            17752.8687,
+            -1933.1243
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "separateChair": true,
+          "rotation": 270
+        },
+        {
+          "name": "Shelter north cabinet",
+          "kind": "closet",
+          "handles": [
+            "457",
+            "458",
+            "45B",
+            "45C"
+          ],
+          "bounds": [
+            17074.7393,
+            -2156.4076,
+            17194.7393,
+            -2096.4076
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "Kitchenette corner tall bay",
+          "kind": "closet",
+          "handles": [
+            "124",
+            "126",
+            "127",
+            "14C"
+          ],
+          "bounds": [
+            17344.7393,
+            -2426.4076,
+            17409.7393,
+            -2366.4076
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "notes": "Do not automatically call this refrigerator; no appliance-specific proof.",
+          "rotation": 90
+        },
+        {
+          "name": "Kitchenette breakfast table",
+          "kind": "table",
+          "handles": [
+            "162"
+          ],
+          "componentHandles": [
+            "3B5",
+            "3CE"
+          ],
+          "bounds": [
+            17594.7393,
+            -2516.4076,
+            17674.7393,
+            -2396.4076
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "East sitting round table",
+          "kind": "table",
+          "handles": [
+            "3EF"
+          ],
+          "bounds": [
+            17885.71,
+            -2394.2288,
+            17955.71,
+            -2324.2288
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Central bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "15B",
+            "15C"
+          ],
+          "bounds": [
+            17344.7393,
+            -2206.4076,
+            17434.7393,
+            -2117.4076
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Central bathroom vanity",
+          "kind": "sink",
+          "handles": [
+            "15A",
+            "16A",
+            "16B"
+          ],
+          "bounds": [
+            17434.7393,
+            -2206.4076,
+            17554.7393,
+            -2156.4076
+          ],
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "Shelter bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "481",
+            "670",
+            "668"
+          ],
+          "bounds": [
+            17059.7393,
+            -2516.4076,
+            17194.7393,
+            -2426.4076
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Shelter bathroom basin",
+          "kind": "sink",
+          "handles": [
+            "4EC",
+            "4EF"
+          ],
+          "bounds": [
+            17154.8814,
+            -2328.9076,
+            17189.8814,
+            -2288.9076
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Basin-only bounds; cabinet size not established.",
+          "rotation": 90
+        },
+        {
+          "name": "North sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "399",
+            "39A",
+            "39B",
+            "39C",
+            "39D",
+            "39E",
+            "39F",
+            "3A0",
+            "3A1",
+            "3A2",
+            "3A3",
+            "3A4",
+            "3A5",
+            "3A6",
+            "3A7",
+            "3A8"
+          ],
+          "bounds": [
+            16736.6727,
+            -1914.9059,
+            17028.5379,
+            -1821.9059
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "East sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "407",
+            "408",
+            "409",
+            "40A",
+            "40B",
+            "40C",
+            "40D",
+            "40E",
+            "40F",
+            "410",
+            "411",
+            "412",
+            "413",
+            "414",
+            "415"
+          ],
+          "bounds": [
+            17848.2797,
+            -2509.9085,
+            18010.0514,
+            -2424.5156
+          ],
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "Kitchenette north counter",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "14D",
+            "14F"
+          ],
+          "bounds": [
+            17344.7393,
+            -2281.4076,
+            17564.7393,
+            -2216.4076
+          ],
+          "rotation": 0,
+          "replaces": [
+            "14D",
+            "14F"
+          ]
+        },
+        {
+          "name": "Kitchenette west counter return",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "14E"
+          ],
+          "bounds": [
+            17344.7393,
+            -2366.4076,
+            17409.7393,
+            -2281.4076
+          ],
+          "rotation": 270,
+          "replaces": [
+            "14E"
+          ]
+        },
+        {
+          "name": "Kitchenette mounted basin",
+          "kind": "sink",
+          "handles": [
+            "3E1"
+          ],
+          "bounds": [
+            17458.7003,
+            -2267.3206,
+            17518.7003,
+            -2222.3206
+          ],
+          "rotation": 180,
+          "countertopMounted": true
+        },
+        {
+          "name": "Shelter folded sofa",
+          "kind": "sofa",
+          "handles": [
+            "464",
+            "465",
+            "466",
+            "467",
+            "468",
+            "469",
+            "46A",
+            "46B",
+            "46C",
+            "46D",
+            "46E",
+            "46F",
+            "470",
+            "471",
+            "472"
+          ],
+          "bounds": [
+            16663.3863,
+            -2511.566,
+            16825.1579,
+            -2426.1732
+          ],
+          "rotation": 180,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "state": "folded-sofa",
+          "excludedProjectionHandles": [
+            "461",
+            "462",
+            "463"
+          ],
+          "notes": "Folded sofa state selected by user. Do not include projected bed extension to rawY=-2304.04998 in occupied footprint."
+        },
+        {
+          "name": "Basement east bedroom bed 140x200",
+          "kind": "bed",
+          "handles": [
+            "436"
+          ],
+          "bounds": [
+            17834.73927477272,
+            -2202.648275645382,
+            17974.73927477272,
+            -2002.648275645382
+          ],
+          "rotation": 180,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "orientationEvidence": "Inferred head at raw south beside bedroom south partition597; foot faces raw north toward clear aisle. Rectangle contains no explicit pillow/head marker.",
+          "notes": "Exact source140x200cm rectangle preserved. Raw south edge extends6.240708747cm beyond bedroom clear south face y=-2196.407566898361 into partition597; do not silently shorten or shift bed."
+        }
+      ],
+      "crop": [
+        16400,
+        -2650,
+        18500,
+        -1500
+      ],
+      "elevation": -2.75,
+      "clearHeight": 2.2,
+      "elevationStatus": "section relative to ground finished floor",
+      "terraceCandidates": [],
+      "sourceFixtures": [
+        {
+          "name": "North hall closet",
+          "kind": "closet",
+          "handles": [
+            "3AB",
+            "3AC",
+            "3AD",
+            "3AE",
+            "3AF",
+            "3B0"
+          ],
+          "bounds": [
+            17214.7393,
+            -1871.4076,
+            17574.7393,
+            -1811.4076
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "East bedroom wardrobe",
+          "kind": "closet",
+          "handles": [
+            "1A6",
+            "1A8",
+            "1A9",
+            "1AA"
+          ],
+          "bounds": [
+            18044.7393,
+            -2196.4076,
+            18104.7393,
+            -1926.4076
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "East bedroom desk",
+          "kind": "desk",
+          "handles": [
+            "435"
+          ],
+          "componentHandles": [
+            "434"
+          ],
+          "bounds": [
+            17687.8687,
+            -2073.1243,
+            17752.8687,
+            -1933.1243
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "separateChair": true
+        },
+        {
+          "name": "Shelter north cabinet",
+          "kind": "closet",
+          "handles": [
+            "457",
+            "458",
+            "45B",
+            "45C"
+          ],
+          "bounds": [
+            17074.7393,
+            -2156.4076,
+            17194.7393,
+            -2096.4076
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "Kitchenette L counter",
+          "kind": "counter",
+          "handles": [
+            "14D",
+            "14E",
+            "14F",
+            "127",
+            "14C",
+            "3E1"
+          ],
+          "polygon": [
+            [
+              17344.7393,
+              -2426.4076
+            ],
+            [
+              17409.7393,
+              -2426.4076
+            ],
+            [
+              17409.7393,
+              -2281.4076
+            ],
+            [
+              17564.7393,
+              -2281.4076
+            ],
+            [
+              17564.7393,
+              -2216.4076
+            ],
+            [
+              17344.7393,
+              -2216.4076
+            ]
+          ],
+          "rotationDeg": 0,
+          "notes": "Sink 3E1 is a component. Adjacent X bay 124/126 is retained separately; avoid double solids at its footprint."
+        },
+        {
+          "name": "Kitchenette corner tall bay",
+          "kind": "cabinet",
+          "handles": [
+            "124",
+            "126",
+            "127",
+            "14C"
+          ],
+          "bounds": [
+            17344.7393,
+            -2426.4076,
+            17409.7393,
+            -2366.4076
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "notes": "Do not automatically call this refrigerator; no appliance-specific proof."
+        },
+        {
+          "name": "Kitchenette breakfast table",
+          "kind": "table",
+          "handles": [
+            "162"
+          ],
+          "componentHandles": [
+            "3B5",
+            "3CE"
+          ],
+          "bounds": [
+            17594.7393,
+            -2516.4076,
+            17674.7393,
+            -2396.4076
+          ],
+          "rotationDeg": 90
+        },
+        {
+          "name": "East sitting round table",
+          "kind": "table",
+          "handles": [
+            "3EF"
+          ],
+          "bounds": [
+            17885.71,
+            -2394.2288,
+            17955.71,
+            -2324.2288
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Central bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "15B",
+            "15C"
+          ],
+          "bounds": [
+            17344.7393,
+            -2206.4076,
+            17434.7393,
+            -2117.4076
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Central bathroom vanity",
+          "kind": "vanity",
+          "handles": [
+            "15A",
+            "16A",
+            "16B"
+          ],
+          "bounds": [
+            17434.7393,
+            -2206.4076,
+            17554.7393,
+            -2156.4076
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "Shelter bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "481",
+            "670",
+            "668"
+          ],
+          "bounds": [
+            17059.7393,
+            -2516.4076,
+            17194.7393,
+            -2426.4076
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Shelter bathroom basin",
+          "kind": "vanity",
+          "handles": [
+            "4EC",
+            "4EF"
+          ],
+          "bounds": [
+            17154.8814,
+            -2328.9076,
+            17189.8814,
+            -2288.9076
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Basin-only bounds; cabinet size not established."
+        },
+        {
+          "name": "North sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "399",
+            "39A",
+            "39B",
+            "39C",
+            "39D",
+            "39E",
+            "39F",
+            "3A0",
+            "3A1",
+            "3A2",
+            "3A3",
+            "3A4",
+            "3A5",
+            "3A6",
+            "3A7",
+            "3A8"
+          ],
+          "bounds": [
+            16736.6727,
+            -1914.9059,
+            17028.5379,
+            -1821.9059
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "East sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "407",
+            "408",
+            "409",
+            "40A",
+            "40B",
+            "40C",
+            "40D",
+            "40E",
+            "40F",
+            "410",
+            "411",
+            "412",
+            "413",
+            "414",
+            "415"
+          ],
+          "bounds": [
+            17848.2797,
+            -2509.9085,
+            18010.0514,
+            -2424.5156
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            -1
+          ]
+        }
+      ],
+      "excludeWallHandles": [
+        "5A4",
+        "680",
+        "68C"
+      ]
+    },
+    "ground": {
+      "origin": [
+        16604.73927477307,
+        920.00000000015
+      ],
+      "sourceCrop": [
+        16400,
+        -120,
+        18550,
+        1060
+      ],
+      "enclosure": [
+        [
+          16604.7393,
+          755
+        ],
+        [
+          17459.7393,
+          755
+        ],
+        [
+          17459.7393,
+          920
+        ],
+        [
+          17699.7393,
+          920
+        ],
+        [
+          17699.7393,
+          640
+        ],
+        [
+          18124.7393,
+          640
+        ],
+        [
+          18124.7393,
+          5
+        ],
+        [
+          16604.7393,
+          5
+        ]
+      ],
+      "enclosureHandles": [
+        "132C"
+      ],
+      "enclosureStatus": "explicit AREA perimeter",
+      "terraces": [
+        {
+          "name": "West balcony",
+          "polygon": [
+            [
+              16404.7393,
+              165
+            ],
+            [
+              16604.7393,
+              165
+            ],
+            [
+              16604.7393,
+              495
+            ],
+            [
+              16404.7393,
+              495
+            ]
+          ],
+          "handles": [
+            "187E",
+            "187F",
+            "188A",
+            "188B",
+            "846"
+          ],
+          "status": "derived platform, 200x330; x=16404.7393 outer edge inferred 5 cm beyond first deck stripe",
+          "points": [
+            [
+              16404.7393,
+              165
+            ],
+            [
+              16604.7393,
+              165
+            ],
+            [
+              16604.7393,
+              495
+            ],
+            [
+              16404.7393,
+              495
+            ]
+          ]
+        }
+      ],
+      "voids": [],
+      "incomingStairArea": {
+        "handles": [
+          "132B"
+        ],
+        "bounds": [
+          17484.7393,
+          605,
+          17674.7393,
+          895
+        ],
+        "connection": "basement-ground",
+        "notes": "AREA describes incoming basement stair, not outgoing living stair."
+      },
+      "elevator": {
+        "kind": "future-elevator-reservation",
+        "polygon": [
+          [
+            17218.74372417582,
+            125
+          ],
+          [
+            17318.74372417582,
+            125
+          ],
+          [
+            17318.74372417582,
+            275
+          ],
+          [
+            17218.74372417582,
+            275
+          ]
+        ],
+        "handles": [
+          "16D5",
+          "1692"
+        ],
+        "sourcePolygon": [
+          [
+            17218.7437,
+            125
+          ],
+          [
+            17318.7437,
+            125
+          ],
+          [
+            17318.7437,
+            275
+          ],
+          [
+            17218.7437,
+            275
+          ]
+        ],
+        "normalizedPolygon": [
+          [
+            17218.74372417582,
+            125
+          ],
+          [
+            17318.74372417582,
+            125
+          ],
+          [
+            17318.74372417582,
+            275
+          ],
+          [
+            17218.74372417582,
+            275
+          ]
+        ],
+        "normalization": {
+          "authorized": true,
+          "authority": "User explicitly authorized continuous shaft aligned to ground-floor outline",
+          "anchorFloor": "ground",
+          "deltaRawCm": [
+            0,
+            0
+          ],
+          "notes": "Apply only to elevator shaft reservation/cuts, not floor/wall/furniture registration."
+        }
+      },
+      "fixtures": [
+        {
+          "name": "Kitchen island",
+          "kind": "kitchen-island",
+          "handles": [
+            "18EB",
+            "18EC",
+            "195D",
+            "195E",
+            "195F",
+            "1967",
+            "1969",
+            "196A",
+            "18E4"
+          ],
+          "bounds": [
+            16744.7393,
+            445,
+            16994.7393,
+            555
+          ],
+          "componentHandles": [
+            "18FA",
+            "18FB",
+            "1951",
+            "1952",
+            "1953"
+          ],
+          "notes": "250x110 cm outer assembly; inner linework subdivides worktop, not separate overlapping islands.",
+          "rotation": 0
+        },
+        {
+          "name": "Kitchen double-door refrigerator",
+          "kind": "refrigerator",
+          "handles": [
+            "1945",
+            "1946",
+            "1947",
+            "1948",
+            "1949"
+          ],
+          "bounds": [
+            16790.027,
+            270.985,
+            16913.027,
+            330.985
+          ],
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "confidence": "probable: paired door leaves and handles within distinct 126 cm bay, not an INSERT",
+          "parentAssembly": "Tall kitchen run",
+          "notes": "Source symbol 123x60 cm; bay is x16788.7393..16914.7393, y270..335. Do not replace adjacent cabinet modules with extra fridges.",
+          "rotation": 0
+        },
+        {
+          "name": "Pantry north bank",
+          "kind": "closet",
+          "handles": [
+            "1872",
+            "1873",
+            "188F",
+            "18AA"
+          ],
+          "bounds": [
+            16729.7393,
+            200,
+            16969.7393,
+            260
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "Pantry south bank",
+          "kind": "closet",
+          "handles": [
+            "18AE",
+            "193C",
+            "1968",
+            "196D"
+          ],
+          "bounds": [
+            16624.7393,
+            25,
+            16959.7393,
+            85
+          ],
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "notes": "Two banks retain 115 cm clear aisle y85..200; AREA 164F is pantry, not whole floor.",
+          "rotation": 0
+        },
+        {
+          "name": "WC tall cabinet",
+          "kind": "closet",
+          "handles": [
+            "1644",
+            "1645",
+            "1646",
+            "1649"
+          ],
+          "bounds": [
+            17149.7393,
+            180,
+            17194.7393,
+            280
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 270
+        },
+        {
+          "name": "Ground bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "7A0",
+            "7A1",
+            "1189"
+          ],
+          "bounds": [
+            16969.7393,
+            40,
+            17054.7393,
+            170
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Ground bathroom basin",
+          "kind": "sink",
+          "handles": [
+            "1652",
+            "165E"
+          ],
+          "bounds": [
+            17154.8814,
+            96,
+            17189.8814,
+            146
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Basin-only bounds; no inferred extra cabinet.",
+          "rotation": 90
+        },
+        {
+          "name": "Dining table",
+          "kind": "table",
+          "handles": [
+            "16C1"
+          ],
+          "componentHandles": [
+            "16B9",
+            "16BA",
+            "16BB",
+            "16BC",
+            "16BD",
+            "16BE",
+            "16BF",
+            "16C0"
+          ],
+          "bounds": [
+            17354.9606,
+            202.185,
+            17554.9606,
+            302.185
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Salon coffee table west",
+          "kind": "table",
+          "handles": [
+            "1916"
+          ],
+          "bounds": [
+            17830.1671,
+            168.861,
+            17870.1671,
+            348.861
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Salon coffee table east",
+          "kind": "table",
+          "handles": [
+            "1917"
+          ],
+          "bounds": [
+            17881.1671,
+            168.861,
+            17921.1671,
+            348.861
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Kitchen counter north",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "18B6"
+          ],
+          "bounds": [
+            16634.7393,
+            665,
+            17189.7393,
+            730
+          ],
+          "rotation": 0,
+          "replaces": [
+            "18B6"
+          ]
+        },
+        {
+          "name": "Tall kitchen left bay",
+          "kind": "closet",
+          "handles": [
+            "1860",
+            "1861",
+            "186A",
+            "18A8"
+          ],
+          "bounds": [
+            16723.7393,
+            270,
+            16788.7393,
+            335
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Tall kitchen right bay",
+          "kind": "closet",
+          "handles": [
+            "1825",
+            "1826",
+            "1827",
+            "18A9"
+          ],
+          "bounds": [
+            16914.7393,
+            270,
+            16979.7393,
+            335
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Tall kitchen east return",
+          "kind": "closet",
+          "handles": [
+            "1647",
+            "1648",
+            "164D"
+          ],
+          "bounds": [
+            16979.7393,
+            180,
+            17039.7393,
+            335
+          ],
+          "rotation": 270
+        },
+        {
+          "name": "Kitchen east counter south of cooker",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "189F",
+            "18A3",
+            "1994"
+          ],
+          "bounds": [
+            17124.73927477296,
+            500,
+            17189.73927477296,
+            537.5
+          ],
+          "rotation": 90,
+          "notes": "Counter piece stops at source appliance bay; no counter solid through oven."
+        },
+        {
+          "name": "Kitchen east counter north of cooker",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "189F",
+            "1994"
+          ],
+          "bounds": [
+            17124.73927477296,
+            627.5,
+            17189.73927477296,
+            665
+          ],
+          "rotation": 90,
+          "notes": "Counter piece begins at north edge of90cm source appliance bay."
+        },
+        {
+          "name": "Kitchen four burner cooker and oven bay",
+          "kind": "oven",
+          "handles": [
+            "1894",
+            "1895",
+            "1896",
+            "1897",
+            "1898",
+            "1899",
+            "189A",
+            "189B",
+            "189C",
+            "189D",
+            "189E"
+          ],
+          "bounds": [
+            17124.73927477296,
+            537.5000000000637,
+            17189.73927477296,
+            627.5000000000637
+          ],
+          "rotation": 270,
+          "height": 0.92,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "sourceApplianceOutlineBounds": [
+            17130.06845313739,
+            537.5000000000637,
+            17184.65602523773,
+            627.5000000000637
+          ],
+          "sourceHobInnerBounds": [
+            17136.6201088448,
+            540.0000000000637,
+            17182.15602523773,
+            625.0000000000637
+          ],
+          "roleEvidence": "Four large burner circles1895..1898 and five small west-side controls1899..189D inside nested rectangular outlines1894/189E. Front is west toward kitchen aisle.",
+          "bayEvidence": "90cm frontage from189E;65cm counter depth from FFB dimension and counter/backing faces17124.7393/17189.7393. Appliance outer symbol depth54.587572cm does not define entire cabinetry depth.",
+          "ovenEvidence": "Hob/range identity verified; below-counter oven compartment is inferred from cooker controls and renderer oven primitive, not a separate source elevation."
+        }
+      ],
+      "crop": [
+        16400,
+        -120,
+        18550,
+        1060
+      ],
+      "elevation": 0,
+      "clearHeight": 2.79,
+      "elevationStatus": "section relative to ground finished floor",
+      "terraceCandidates": [
+        {
+          "name": "East deck",
+          "polygon": null,
+          "bounds": null,
+          "handles": [
+            "AC",
+            "1317",
+            "1318",
+            "1321",
+            "1620",
+            "162B"
+          ],
+          "status": "visible deck starts x=17929.7393 north of house and continues east of x=18124.7393; y=335..1020. Far east extent not verified; do not invent a closed polygon."
+        }
+      ],
+      "sourceFixtures": [
+        {
+          "name": "Kitchen L counter",
+          "kind": "counter",
+          "handles": [
+            "18B6",
+            "189F",
+            "1994",
+            "182A"
+          ],
+          "polygon": [
+            [
+              16634.7393,
+              665
+            ],
+            [
+              17124.7393,
+              665
+            ],
+            [
+              17124.7393,
+              500
+            ],
+            [
+              17189.7393,
+              500
+            ],
+            [
+              17189.7393,
+              730
+            ],
+            [
+              16634.7393,
+              730
+            ]
+          ],
+          "rotationDeg": 0,
+          "notes": "Sink 182A belongs to this counter; east leg contains hob. A17 1994 backs east counter; do not model cabinet front 189F as wall."
+        },
+        {
+          "name": "Kitchen island",
+          "kind": "island",
+          "handles": [
+            "18EB",
+            "18EC",
+            "195D",
+            "195E",
+            "195F",
+            "1967",
+            "1969",
+            "196A",
+            "18E4"
+          ],
+          "bounds": [
+            16744.7393,
+            445,
+            16994.7393,
+            555
+          ],
+          "rotationDeg": 0,
+          "componentHandles": [
+            "18FA",
+            "18FB",
+            "1951",
+            "1952",
+            "1953"
+          ],
+          "notes": "250x110 cm outer assembly; inner linework subdivides worktop, not separate overlapping islands."
+        },
+        {
+          "name": "Tall kitchen run",
+          "kind": "cabinet-run",
+          "handles": [
+            "1860",
+            "1861",
+            "186A",
+            "1825",
+            "1826",
+            "1827",
+            "18A8",
+            "18A9",
+            "18AD",
+            "1647",
+            "1648",
+            "164D"
+          ],
+          "polygon": [
+            [
+              16723.7393,
+              270
+            ],
+            [
+              16979.7393,
+              270
+            ],
+            [
+              16979.7393,
+              180
+            ],
+            [
+              17039.7393,
+              180
+            ],
+            [
+              17039.7393,
+              335
+            ],
+            [
+              16723.7393,
+              335
+            ]
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "notes": "Preserve fridge bay below. Left/right X-marked cabinet bays flank appliance; tall return is x16979.7393..17039.7393."
+        },
+        {
+          "name": "Kitchen double-door refrigerator",
+          "kind": "fridge",
+          "handles": [
+            "1945",
+            "1946",
+            "1947",
+            "1948",
+            "1949"
+          ],
+          "bounds": [
+            16790.027,
+            270.985,
+            16913.027,
+            330.985
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "confidence": "probable: paired door leaves and handles within distinct 126 cm bay, not an INSERT",
+          "parentAssembly": "Tall kitchen run",
+          "notes": "Source symbol 123x60 cm; bay is x16788.7393..16914.7393, y270..335. Do not replace adjacent cabinet modules with extra fridges."
+        },
+        {
+          "name": "Pantry north bank",
+          "kind": "closet",
+          "handles": [
+            "1872",
+            "1873",
+            "188F",
+            "18AA"
+          ],
+          "bounds": [
+            16729.7393,
+            200,
+            16969.7393,
+            260
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "Pantry south bank",
+          "kind": "closet",
+          "handles": [
+            "18AE",
+            "193C",
+            "1968",
+            "196D"
+          ],
+          "bounds": [
+            16624.7393,
+            25,
+            16959.7393,
+            85
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "notes": "Two banks retain 115 cm clear aisle y85..200; AREA 164F is pantry, not whole floor."
+        },
+        {
+          "name": "WC tall cabinet",
+          "kind": "closet",
+          "handles": [
+            "1644",
+            "1645",
+            "1646",
+            "1649"
+          ],
+          "bounds": [
+            17149.7393,
+            180,
+            17194.7393,
+            280
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Ground bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "7A0",
+            "7A1",
+            "1189"
+          ],
+          "bounds": [
+            16969.7393,
+            40,
+            17054.7393,
+            170
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Ground bathroom basin",
+          "kind": "vanity",
+          "handles": [
+            "1652",
+            "165E"
+          ],
+          "bounds": [
+            17154.8814,
+            96,
+            17189.8814,
+            146
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Basin-only bounds; no inferred extra cabinet."
+        },
+        {
+          "name": "Dining table",
+          "kind": "table",
+          "handles": [
+            "16C1"
+          ],
+          "componentHandles": [
+            "16B9",
+            "16BA",
+            "16BB",
+            "16BC",
+            "16BD",
+            "16BE",
+            "16BF",
+            "16C0"
+          ],
+          "bounds": [
+            17354.9606,
+            202.185,
+            17554.9606,
+            302.185
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Salon paired coffee tables",
+          "kind": "table-pair",
+          "handles": [
+            "1916",
+            "1917"
+          ],
+          "bounds": [
+            17830.1671,
+            168.861,
+            17921.1671,
+            348.861
+          ],
+          "rotationDeg": 90,
+          "notes": "Two separate 40x180 cm tables, 11 cm gap; not one solid enclosing rectangle."
+        }
+      ],
+      "excludeWallHandles": [
+        "1B1C",
+        "1B20",
+        "1B24",
+        "1B28",
+        "1B2C",
+        "1B30",
+        "1B34",
+        "1B56",
+        "1B5A",
+        "1B5E",
+        "1B62"
+      ],
+      "openings": [
+        {
+          "handle": "reviewed-ground-west-patio",
+          "name": "Kitchen west patio sliding glass door",
+          "kind": "door",
+          "endpoints": [
+            [
+              16619.73927477307,
+              370
+            ],
+            [
+              16619.73927477307,
+              600
+            ]
+          ],
+          "thickness": 0.3,
+          "height": 2.35,
+          "sill": 0,
+          "glass": true,
+          "openingStyle": "sliding",
+          "color": "#45a9d8",
+          "opacity": 0.62,
+          "sourceHandles": [
+            "847",
+            "848",
+            "849",
+            "84A",
+            "84B",
+            "188B",
+            "18F5",
+            "198C",
+            "AE",
+            "846"
+          ],
+          "roleEvidence": "Three sliding panel rectangles and exit-to-balcony label;230cm host jamb gap.",
+          "heightEvidence": "2.35m provisional modeling height, not exact CAD head. Section west ground aperture E6F suggests2.40m elsewhere; cut Y not registered to this opening."
+        },
+        {
+          "handle": "reviewed-ground-east-patio",
+          "name": "Salon east deck sliding glass door",
+          "kind": "door",
+          "endpoints": [
+            [
+              18107.23927477284,
+              355
+            ],
+            [
+              18107.23927477284,
+              605
+            ]
+          ],
+          "thickness": 0.35,
+          "height": 2.35,
+          "sill": 0,
+          "glass": true,
+          "openingStyle": "sliding",
+          "color": "#45a9d8",
+          "opacity": 0.62,
+          "sourceHandles": [
+            "18E7",
+            "18E8",
+            "18E9",
+            "18EA",
+            "1980",
+            "190D",
+            "AC",
+            "1317"
+          ],
+          "roleEvidence": "250cm paired A17 jambs with parallel A13/H glazing and adjacent exterior deck. Floor-level access is inferred, not A12 swing.",
+          "heightEvidence": "2.35m provisional, no exact source head assigned."
+        }
+      ]
+    },
+    "living": {
+      "origin": [
+        16604.73927477307,
+        4507.707890333357
+      ],
+      "sourceCrop": [
+        16400,
+        3500,
+        18300,
+        4630
+      ],
+      "enclosure": [
+        [
+          16604.7393,
+          4342.7079
+        ],
+        [
+          17034.7393,
+          4342.7079
+        ],
+        [
+          17034.7393,
+          4507.7079
+        ],
+        [
+          17699.7393,
+          4507.7079
+        ],
+        [
+          17699.7393,
+          4287.7079
+        ],
+        [
+          18124.7393,
+          4287.7079
+        ],
+        [
+          18124.7393,
+          3592.7079
+        ],
+        [
+          16604.7393,
+          3592.7079
+        ]
+      ],
+      "enclosureHandles": [
+        "1316"
+      ],
+      "enclosureStatus": "explicit AREA perimeter; voids and arriving stair must be subtracted separately",
+      "terraces": [
+        {
+          "name": "West suite balcony",
+          "polygon": [
+            [
+              16464.7393,
+              3787.7079
+            ],
+            [
+              16604.7393,
+              3787.7079
+            ],
+            [
+              16604.7393,
+              4077.7079
+            ],
+            [
+              16464.7393,
+              4077.7079
+            ]
+          ],
+          "handles": [
+            "11B2",
+            "11B3",
+            "146F",
+            "65"
+          ],
+          "status": "three-sided A14 with closure against facade; 140x290 cm",
+          "points": [
+            [
+              16464.7393,
+              3787.7079
+            ],
+            [
+              16604.7393,
+              3787.7079
+            ],
+            [
+              16604.7393,
+              4077.7079
+            ],
+            [
+              16464.7393,
+              4077.7079
+            ]
+          ]
+        }
+      ],
+      "voids": [
+        {
+          "name": "Central double-height space",
+          "kind": "doubleheight",
+          "polygon": [
+            [
+              17214.7393,
+              3712.7079
+            ],
+            [
+              17584.7393,
+              3712.7079
+            ],
+            [
+              17584.7393,
+              3917.7079
+            ],
+            [
+              17214.7393,
+              3917.7079
+            ]
+          ],
+          "handles": [
+            "127E",
+            "1281",
+            "13AD",
+            "1313",
+            "129E"
+          ],
+          "status": "derived clear opening inside guarded AREA composite; subtract elevator overlap only once",
+          "bottomFloor": "ground",
+          "cutsFloor": true,
+          "cutsCeilingOf": "ground",
+          "continuesOnTop": true
+        },
+        {
+          "name": "Salon double-height space",
+          "kind": "doubleheight",
+          "polygon": [
+            [
+              17784.7393,
+              3612.7079
+            ],
+            [
+              18089.7393,
+              3612.7079
+            ],
+            [
+              18089.7393,
+              3922.7079
+            ],
+            [
+              17784.7393,
+              3922.7079
+            ]
+          ],
+          "handles": [
+            "127F",
+            "130E",
+            "130F",
+            "1280",
+            "129E",
+            "14F9"
+          ],
+          "status": "inferred stair-guard edge x17784.7393; X endpoints extend 20 cm west and must not set the opening boundary",
+          "bottomFloor": "ground",
+          "cutsFloor": true,
+          "cutsCeilingOf": "ground",
+          "continuesOnTop": false
+        }
+      ],
+      "areaClassification": {
+        "1310": "northeast bedroom",
+        "129E": "COMPOSITE enclosing arriving L stair, central void, outgoing U stair and salon void; never use as a solid floor or a single stair",
+        "12E8": "northwest bedroom"
+      },
+      "elevator": {
+        "kind": "future-elevator-reservation",
+        "polygon": [
+          [
+            17218.74372417582,
+            3712.7078903332067
+          ],
+          [
+            17318.74372417582,
+            3712.7078903332067
+          ],
+          [
+            17318.74372417582,
+            3862.7078903332067
+          ],
+          [
+            17218.74372417582,
+            3862.7078903332067
+          ]
+        ],
+        "handles": [
+          "13E7",
+          "13BA"
+        ],
+        "sourcePolygon": [
+          [
+            17214.7393,
+            3712.7079
+          ],
+          [
+            17314.7393,
+            3712.7079
+          ],
+          [
+            17314.7393,
+            3862.7079
+          ],
+          [
+            17214.7393,
+            3862.7079
+          ]
+        ],
+        "normalizedPolygon": [
+          [
+            17218.74372417582,
+            3712.7078903332067
+          ],
+          [
+            17318.74372417582,
+            3712.7078903332067
+          ],
+          [
+            17318.74372417582,
+            3862.7078903332067
+          ],
+          [
+            17218.74372417582,
+            3862.7078903332067
+          ]
+        ],
+        "normalization": {
+          "authorized": true,
+          "authority": "User explicitly authorized continuous shaft aligned to ground-floor outline",
+          "anchorFloor": "ground",
+          "deltaRawCm": [
+            4.004449402858,
+            0
+          ],
+          "notes": "Apply only to elevator shaft reservation/cuts, not floor/wall/furniture registration."
+        }
+      },
+      "fixtures": [
+        {
+          "name": "Northwest bedroom desk",
+          "kind": "study-desk",
+          "handles": [
+            "12C8"
+          ],
+          "componentHandles": [
+            "12BF"
+          ],
+          "bounds": [
+            17066.77,
+            4412.5579,
+            17226.77,
+            4477.5579
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "separateChair": true,
+          "rotation": 0
+        },
+        {
+          "name": "Northeast bedroom desk",
+          "kind": "study-desk",
+          "handles": [
+            "12C7"
+          ],
+          "componentHandles": [
+            "12C0"
+          ],
+          "bounds": [
+            17514.6789,
+            4414.4307,
+            17669.6789,
+            4479.4307
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "separateChair": true,
+          "rotation": 0
+        },
+        {
+          "name": "Northwest bedroom closet",
+          "kind": "closet",
+          "handles": [
+            "12CB",
+            "12CC",
+            "12CE",
+            "12D6"
+          ],
+          "bounds": [
+            17304.7393,
+            4262.7079,
+            17364.7393,
+            4482.7079
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 270
+        },
+        {
+          "name": "Northeast bedroom closet",
+          "kind": "closet",
+          "handles": [
+            "12C9",
+            "12CA",
+            "12CD",
+            "12D5"
+          ],
+          "bounds": [
+            17374.7393,
+            4262.7079,
+            17434.7393,
+            4482.7079
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "Suite north closet bank",
+          "kind": "closet",
+          "handles": [
+            "1396",
+            "1397",
+            "1398",
+            "13A9"
+          ],
+          "bounds": [
+            16714.7393,
+            3992.7079,
+            17009.7393,
+            4042.7079
+          ],
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "rotation": 180
+        },
+        {
+          "name": "Suite east closet bank",
+          "kind": "closet",
+          "handles": [
+            "1399",
+            "139A",
+            "139B"
+          ],
+          "bounds": [
+            17029.7393,
+            3612.7079,
+            17089.7393,
+            3867.7079
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Together with north bank accounts for approximately 5.5 m labelled closet length (62); do not turn either bank into structural wall.",
+          "rotation": 270
+        },
+        {
+          "name": "Suite shower",
+          "kind": "shower",
+          "handles": [
+            "11AB",
+            "11AC",
+            "11AD",
+            "11AE",
+            "12EB"
+          ],
+          "bounds": [
+            16724.7393,
+            4207.7079,
+            16869.7393,
+            4317.7079
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Middle bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "12F3",
+            "14DB",
+            "14D3"
+          ],
+          "bounds": [
+            16894.7393,
+            4052.7079,
+            17049.7393,
+            4142.7079
+          ],
+          "confidence": "enclosure and rendered X verified; diagonal handles not enumerated",
+          "rotation": 0
+        },
+        {
+          "name": "East bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "12E2",
+            "12E6",
+            "F91",
+            "F92",
+            "F94",
+            "F95"
+          ],
+          "bounds": [
+            17684.7393,
+            4052.7079,
+            17789.7393,
+            4172.7079
+          ],
+          "rotation": 0
+        },
+        {
+          "name": "Suite vanity",
+          "kind": "sink",
+          "handles": [
+            "12FD",
+            "12EC"
+          ],
+          "bounds": [
+            16834.7393,
+            4052.7079,
+            16884.7393,
+            4207.7079
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "Middle bathroom vanity",
+          "kind": "sink",
+          "handles": [
+            "12EE",
+            "1392"
+          ],
+          "bounds": [
+            16894.7393,
+            4142.7079,
+            16944.7393,
+            4317.7079
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "rotation": 270
+        },
+        {
+          "name": "East bathroom vanity",
+          "kind": "sink",
+          "handles": [
+            "12F6",
+            "12DF"
+          ],
+          "bounds": [
+            17884.7393,
+            4052.7079,
+            17934.7393,
+            4262.7079
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "Laundry sink counter",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "12A9",
+            "12AB",
+            "12AA"
+          ],
+          "bounds": [
+            18039.7393,
+            4062.7079,
+            18099.7393,
+            4262.7079
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "12AA basin is contained component, not standalone vanity.",
+          "rotation": 90,
+          "replaces": [
+            "12A9",
+            "12AB"
+          ]
+        },
+        {
+          "name": "Northwest bed",
+          "kind": "bed",
+          "handles": [
+            "12DA"
+          ],
+          "bounds": [
+            17244.8596,
+            4060.1286,
+            17354.8596,
+            4250.1286
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "Northeast bed",
+          "kind": "bed",
+          "handles": [
+            "12D9"
+          ],
+          "bounds": [
+            17383.1884,
+            4060.1286,
+            17498.1884,
+            4250.1286
+          ],
+          "rotation": 90
+        },
+        {
+          "name": "Laundry washer",
+          "kind": "laundry-closet",
+          "handles": [
+            "12FF"
+          ],
+          "bounds": [
+            18036.618,
+            3938.9378,
+            18096.618,
+            3998.9378
+          ],
+          "rotation": 90,
+          "sourceSemantic": "washing-machine",
+          "notes": "Renderer laundry-closet surrogate; actual WASH appliance bounds retained. Do not stretch to130cm bay."
+        },
+        {
+          "name": "Laundry mounted basin",
+          "kind": "sink",
+          "handles": [
+            "12AA"
+          ],
+          "bounds": [
+            18047.9372,
+            4176.7438,
+            18092.9372,
+            4236.7438
+          ],
+          "rotation": 90,
+          "countertopMounted": true
+        },
+        {
+          "name": "Master double bed 180x200",
+          "kind": "bed",
+          "handles": [
+            "13A8"
+          ],
+          "bounds": [
+            16725.62907823357,
+            3616.052370308125,
+            16905.62907823357,
+            3816.052370308125
+          ],
+          "rotation": 180,
+          "frontPlanner": [
+            0,
+            -1
+          ],
+          "notes": "180x200cm exact source rectangle; head at raw south beside source side tables, foot faces raw north."
+        },
+        {
+          "name": "Master bedside table west",
+          "kind": "table",
+          "handles": [
+            "13A7"
+          ],
+          "bounds": [
+            16665.62907823357,
+            3616.052370308125,
+            16725.62907823357,
+            3656.052370308125
+          ],
+          "rotation": 0,
+          "height": 0.45,
+          "notes": "60x40cm source footprint;45cm height inferred for bedside role."
+        },
+        {
+          "name": "Master bedside table east",
+          "kind": "table",
+          "handles": [
+            "13A6"
+          ],
+          "bounds": [
+            16905.62907823357,
+            3616.052370308125,
+            16965.62907823357,
+            3656.052370308125
+          ],
+          "rotation": 0,
+          "height": 0.45,
+          "notes": "60x40cm source footprint;45cm height inferred for bedside role."
+        }
+      ],
+      "crop": [
+        16400,
+        3500,
+        18300,
+        4630
+      ],
+      "elevation": 3.14,
+      "clearHeight": 2.234,
+      "elevationStatus": "section relative to ground finished floor",
+      "terraceCandidates": [],
+      "sourceFixtures": [
+        {
+          "name": "Northwest bedroom desk",
+          "kind": "desk",
+          "handles": [
+            "12C8"
+          ],
+          "componentHandles": [
+            "12BF"
+          ],
+          "bounds": [
+            17066.77,
+            4412.5579,
+            17226.77,
+            4477.5579
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "separateChair": true
+        },
+        {
+          "name": "Northeast bedroom desk",
+          "kind": "desk",
+          "handles": [
+            "12C7"
+          ],
+          "componentHandles": [
+            "12C0"
+          ],
+          "bounds": [
+            17514.6789,
+            4414.4307,
+            17669.6789,
+            4479.4307
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ],
+          "separateChair": true
+        },
+        {
+          "name": "Northwest bedroom closet",
+          "kind": "closet",
+          "handles": [
+            "12CB",
+            "12CC",
+            "12CE",
+            "12D6"
+          ],
+          "bounds": [
+            17304.7393,
+            4262.7079,
+            17364.7393,
+            4482.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Northeast bedroom closet",
+          "kind": "closet",
+          "handles": [
+            "12C9",
+            "12CA",
+            "12CD",
+            "12D5"
+          ],
+          "bounds": [
+            17374.7393,
+            4262.7079,
+            17434.7393,
+            4482.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ]
+        },
+        {
+          "name": "Suite north closet bank",
+          "kind": "closet",
+          "handles": [
+            "1396",
+            "1397",
+            "1398",
+            "13A9"
+          ],
+          "bounds": [
+            16714.7393,
+            3992.7079,
+            17009.7393,
+            4042.7079
+          ],
+          "rotationDeg": 0,
+          "frontPlanner": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "Suite east closet bank",
+          "kind": "closet",
+          "handles": [
+            "1399",
+            "139A",
+            "139B"
+          ],
+          "bounds": [
+            17029.7393,
+            3612.7079,
+            17089.7393,
+            3867.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Together with north bank accounts for approximately 5.5 m labelled closet length (62); do not turn either bank into structural wall."
+        },
+        {
+          "name": "Suite shower",
+          "kind": "shower",
+          "handles": [
+            "11AB",
+            "11AC",
+            "11AD",
+            "11AE",
+            "12EB"
+          ],
+          "bounds": [
+            16724.7393,
+            4207.7079,
+            16869.7393,
+            4317.7079
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Middle bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "12F3",
+            "14DB",
+            "14D3"
+          ],
+          "bounds": [
+            16894.7393,
+            4052.7079,
+            17049.7393,
+            4142.7079
+          ],
+          "rotationDeg": 0,
+          "confidence": "enclosure and rendered X verified; diagonal handles not enumerated"
+        },
+        {
+          "name": "East bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "12E2",
+            "12E6",
+            "F91",
+            "F92",
+            "F94",
+            "F95"
+          ],
+          "bounds": [
+            17684.7393,
+            4052.7079,
+            17789.7393,
+            4172.7079
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Suite vanity",
+          "kind": "vanity",
+          "handles": [
+            "12FD",
+            "12EC"
+          ],
+          "bounds": [
+            16834.7393,
+            4052.7079,
+            16884.7393,
+            4207.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Middle bathroom vanity",
+          "kind": "vanity",
+          "handles": [
+            "12EE",
+            "1392"
+          ],
+          "bounds": [
+            16894.7393,
+            4142.7079,
+            16944.7393,
+            4317.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ]
+        },
+        {
+          "name": "East bathroom vanity",
+          "kind": "vanity",
+          "handles": [
+            "12F6",
+            "12DF"
+          ],
+          "bounds": [
+            17884.7393,
+            4052.7079,
+            17934.7393,
+            4262.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Laundry sink counter",
+          "kind": "counter",
+          "handles": [
+            "12A9",
+            "12AB",
+            "12AA"
+          ],
+          "bounds": [
+            18039.7393,
+            4062.7079,
+            18099.7393,
+            4262.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "12AA basin is contained component, not standalone vanity."
+        },
+        {
+          "name": "Laundry washer bay",
+          "kind": "washing-machine",
+          "handles": [
+            "12FF",
+            "12AB"
+          ],
+          "bounds": [
+            18039.7393,
+            3932.7079,
+            18099.7393,
+            4062.7079
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "Bay extent 60x130, actual WASH symbol is 60x60 at 18036.618..18096.618 /3938.9378..3998.9378; do not stretch appliance to full bay."
+        },
+        {
+          "name": "Northwest bed",
+          "kind": "bed",
+          "handles": [
+            "12DA"
+          ],
+          "bounds": [
+            17244.8596,
+            4060.1286,
+            17354.8596,
+            4250.1286
+          ],
+          "rotationDeg": 90
+        },
+        {
+          "name": "Northeast bed",
+          "kind": "bed",
+          "handles": [
+            "12D9"
+          ],
+          "bounds": [
+            17383.1884,
+            4060.1286,
+            17498.1884,
+            4250.1286
+          ],
+          "rotationDeg": 90
+        },
+        {
+          "name": "Suite double bed and side tables",
+          "kind": "bed-assembly",
+          "handles": [
+            "13A8",
+            "13A6",
+            "13A7"
+          ],
+          "bounds": [
+            16665.6291,
+            3616.0524,
+            16965.6291,
+            3816.0524
+          ],
+          "rotationDeg": 0,
+          "notes": "Bed itself x16725.6291..16905.6291; side tables are independent 60x40 rectangles."
+        }
+      ],
+      "openings": [
+        {
+          "handle": "inferred-living-nw-bedroom",
+          "name": "Northwest bedroom entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              17124.73927477285,
+              4047.707890333455
+            ],
+            [
+              17209.73927477285,
+              4047.707890333455
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 180,
+          "sourceHandles": [
+            "14D3",
+            "1483"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "northwest bedroom"
+        },
+        {
+          "handle": "inferred-living-ne-bedroom",
+          "name": "Northeast bedroom entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              17539.73927477285,
+              4047.707890333455
+            ],
+            [
+              17619.73927477285,
+              4047.707890333455
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 180,
+          "sourceHandles": [
+            "1483",
+            "1473"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "northeast bedroom"
+        },
+        {
+          "handle": "inferred-living-master-entry",
+          "name": "Master suite entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              17014.73927477296,
+              3892.707890333273
+            ],
+            [
+              17014.73927477296,
+              3977.707890333273
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 180,
+          "sourceHandles": [
+            "14ED",
+            "14D3"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "west master suite"
+        },
+        {
+          "handle": "inferred-living-master-bath",
+          "name": "Master bathroom entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              16634.7392747731,
+              4047.707890333245
+            ],
+            [
+              16709.73927477305,
+              4047.707890333245
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 180,
+          "sourceHandles": [
+            "14B1",
+            "14D3"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "master bathroom north of entry"
+        },
+        {
+          "handle": "inferred-living-middle-bath",
+          "name": "Middle bathroom entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              17054.73927477284,
+              4147.707890333282
+            ],
+            [
+              17054.73927477284,
+              4222.707890333282
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 180,
+          "sourceHandles": [
+            "14D3",
+            "14DB"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "middle bathroom west of entry"
+        },
+        {
+          "handle": "inferred-living-east-bath",
+          "name": "East bathroom entry (inferred)",
+          "kind": "door",
+          "endpoints": [
+            [
+              17679.73927477168,
+              4182.70789033339
+            ],
+            [
+              17679.73927477168,
+              4257.70789033339
+            ]
+          ],
+          "thickness": 0.1,
+          "height": 2.1,
+          "sill": 0,
+          "swing": 0,
+          "sourceHandles": [
+            "1473",
+            "1477"
+          ],
+          "sourceRole": "inferred-room-entry-from-verified-A17-gap",
+          "doorLeafEvidence": "INFERRED; no A12 entity or source swing arc on living sheet",
+          "swingEvidence": "INFERRED conventional inward swing, not CAD; verify circulation in generated view",
+          "heightEvidence": "INFERRED2.10m head below2.234m nominal living clearance, not source dimension",
+          "opensInto": "east bathroom east of entry"
+        },
+        {
+          "handle": "reviewed-living-master-balcony",
+          "name": "Master balcony sliding glass door",
+          "kind": "door",
+          "endpoints": [
+            [
+              16619.73927477307,
+              3817.707890333157
+            ],
+            [
+              16619.73927477307,
+              4037.707890333197
+            ]
+          ],
+          "thickness": 0.3,
+          "height": 2.1,
+          "sill": 0,
+          "glass": true,
+          "openingStyle": "sliding",
+          "color": "#45a9d8",
+          "opacity": 0.62,
+          "sourceHandles": [
+            "1308",
+            "1309",
+            "130A",
+            "130B",
+            "14AD",
+            "14B1",
+            "11B2",
+            "11B3",
+            "146F",
+            "65"
+          ],
+          "roleEvidence": "Only suite-to-labelled-balcony facade aperture;220cm jamb gap and parallel A13 frames. Full-height access role inferred from circulation, not a source swing.",
+          "heightEvidence": "2.10m provisional head, not source-measured. Do not copy Alt-4 2.35m into this2.234m nominal story. Section west aperture has55cm sill and unregistered plan cut: do not claim it proves this balcony-door head.",
+          "swingEvidence": "sliding; no hinged swing"
+        }
+      ],
+      "openPassages": [
+        {
+          "name": "Main bedroom corridor",
+          "bounds": [
+            17019.7393,
+            3922.7079,
+            17934.7393,
+            4042.7079
+          ],
+          "status": "circulation, no inferred door or partition"
+        },
+        {
+          "name": "Stair landing to main corridor",
+          "status": "keep open; no new host wall across stair arrival"
+        },
+        {
+          "name": "Laundry access",
+          "endpoints": [
+            [
+              17941.7393,
+              3937.7079
+            ],
+            [
+              17941.7393,
+              4017.7079
+            ]
+          ],
+          "handles": [
+            "14F5",
+            "14F9"
+          ],
+          "status": "80cm access gap retained open; possible door not activated because adjacent caps have5cm lateral offset and no source leaf"
+        }
+      ]
+    },
+    "top": {
+      "origin": [
+        16604.73927477307,
+        7040.478604723506
+      ],
+      "sourceCrop": [
+        16400,
+        6000,
+        18300,
+        7160
+      ],
+      "enclosure": [
+        [
+          17194.7393,
+          6125.4786
+        ],
+        [
+          18124.7393,
+          6125.4786
+        ],
+        [
+          18124.7393,
+          6370.4786
+        ],
+        [
+          17979.9377,
+          6370.4786
+        ],
+        [
+          17979.9377,
+          6885.4786
+        ],
+        [
+          17699.7393,
+          6885.4786
+        ],
+        [
+          17699.7393,
+          7040.4786
+        ],
+        [
+          17354.7393,
+          7040.4786
+        ],
+        [
+          17354.7393,
+          6575.4786
+        ],
+        [
+          17459.7393,
+          6575.4786
+        ],
+        [
+          17459.7393,
+          6475.4786
+        ],
+        [
+          17194.7393,
+          6475.4786
+        ]
+      ],
+      "enclosureHandles": [
+        "C75",
+        "C71",
+        "C59",
+        "C5D",
+        "C47",
+        "C69",
+        "C6D",
+        "C7D",
+        "C89",
+        "C85",
+        "C81",
+        "C51",
+        "8C0",
+        "8C1",
+        "94E",
+        "9A5"
+      ],
+      "enclosureStatus": "derived A17 enclosed shell, including stair/central void envelope; not a full 1520x915 rectangle",
+      "enclosureNotes": "C51 spans both terrace parapet and enclosed south wall: split at x17194.7393. C75 north edge y6475.4786 faces terrace. Right service strip x17979.9377..18124.7393, y6370.4786..6885.4786 is exterior, not a room. Bedroom west edge is x17354.7393, not the broad terrace edge x16604.7393.",
+      "terraces": [
+        {
+          "name": "West main roof terrace",
+          "polygon": [
+            [
+              16604.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6575.4786
+            ],
+            [
+              17354.7393,
+              6575.4786
+            ],
+            [
+              17354.7393,
+              6675.4786
+            ],
+            [
+              17049.7393,
+              6675.4786
+            ],
+            [
+              17049.7393,
+              6875.4786
+            ],
+            [
+              16604.7393,
+              6875.4786
+            ]
+          ],
+          "handles": [
+            "C51",
+            "A46",
+            "A47",
+            "A48",
+            "B26",
+            "C75",
+            "C71",
+            "C59",
+            "8E5",
+            "8E6"
+          ],
+          "status": "derived terrace against enclosure and northwest roof/void region; 15 cm northwest transition x17034.7393 vs17049.7393 unresolved",
+          "openToSky": true,
+          "points": [
+            [
+              16604.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6575.4786
+            ],
+            [
+              17354.7393,
+              6575.4786
+            ],
+            [
+              17354.7393,
+              6675.4786
+            ],
+            [
+              17049.7393,
+              6675.4786
+            ],
+            [
+              17049.7393,
+              6875.4786
+            ],
+            [
+              16604.7393,
+              6875.4786
+            ]
+          ],
+          "localElevation": 0.486,
+          "elevationEvidence": {
+            "handles": [
+              "E5C",
+              "E63",
+              "E64"
+            ],
+            "sectionElevationM": 6.21,
+            "localElevation": 0.486,
+            "status": "section datum confirmed; extension to entire west terrace L shape is an audited approximation",
+            "notes": "3cm below upper indoor6.24m; do not transfer this datum to east service strip."
+          }
+        },
+        {
+          "name": "East service terrace",
+          "polygon": [
+            [
+              17979.9377,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6885.4786
+            ],
+            [
+              17979.9377,
+              6885.4786
+            ]
+          ],
+          "handles": [
+            "9F5",
+            "9FE",
+            "9FF",
+            "A00",
+            "C69",
+            "C89",
+            "933"
+          ],
+          "clearBounds": [
+            17979.9377,
+            6370.4786,
+            18104.7393,
+            6865.4786
+          ],
+          "openToSky": true,
+          "status": "exterior equipment strip, 124.8016 cm clear width; three condenser rectangles 932/934/935",
+          "points": [
+            [
+              17979.9377,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6885.4786
+            ],
+            [
+              17979.9377,
+              6885.4786
+            ]
+          ]
+        }
+      ],
+      "voids": [
+        {
+          "name": "Central double-height continuation",
+          "kind": "doubleheight",
+          "polygon": [
+            [
+              17214.7393,
+              6240.4786
+            ],
+            [
+              17584.7393,
+              6240.4786
+            ],
+            [
+              17584.7393,
+              6450.4786
+            ],
+            [
+              17214.7393,
+              6450.4786
+            ]
+          ],
+          "handles": [
+            "946",
+            "BDD",
+            "B22",
+            "B79",
+            "C75"
+          ],
+          "status": "clear opening inferred from source guards; elevator overlaps southwest corner; union openings rather than double-count",
+          "bottomFloor": "ground",
+          "cutsFloor": true,
+          "cutsCeilingOf": "living"
+        },
+        {
+          "name": "Northwest labelled double-height / roof plant region",
+          "kind": "doubleheight-with-roof-plant-above",
+          "polygon": [
+            [
+              17054.7393,
+              6680.4786
+            ],
+            [
+              17354.7393,
+              6680.4786
+            ],
+            [
+              17354.7393,
+              7020.4786
+            ],
+            [
+              17054.7393,
+              7020.4786
+            ]
+          ],
+          "handles": [
+            "79A",
+            "8E5",
+            "8E6",
+            "8E7",
+            "8E8",
+            "9EE",
+            "9EF",
+            "9ED",
+            "BA3",
+            "941",
+            "943",
+            "944",
+            "945",
+            "942"
+          ],
+          "status": "label says double-height; solar collectors and tank are drawn above it. Do not make habitable top floor here. Exact lower void extent and upper flat-roof level require cut registration.",
+          "cutsFloor": false,
+          "automaticCutAllowed": false,
+          "notes": "Outside derived enclosed top-floor footprint already. Do not delete living bedroom slab below; roof equipment is not furniture on an indoor floor."
+        }
+      ],
+      "elevator": {
+        "kind": "future-elevator-reservation",
+        "polygon": [
+          [
+            17218.74372417582,
+            6245.478604723356
+          ],
+          [
+            17318.74372417582,
+            6245.478604723356
+          ],
+          [
+            17318.74372417582,
+            6395.478604723356
+          ],
+          [
+            17218.74372417582,
+            6395.478604723356
+          ]
+        ],
+        "handles": [
+          "BE0",
+          "BB5",
+          "BB6"
+        ],
+        "sourcePolygon": [
+          [
+            17214.7393,
+            6245.4786
+          ],
+          [
+            17314.7393,
+            6245.4786
+          ],
+          [
+            17314.7393,
+            6395.4786
+          ],
+          [
+            17214.7393,
+            6395.4786
+          ]
+        ],
+        "normalizedPolygon": [
+          [
+            17218.74372417582,
+            6245.478604723356
+          ],
+          [
+            17318.74372417582,
+            6245.478604723356
+          ],
+          [
+            17318.74372417582,
+            6395.478604723356
+          ],
+          [
+            17218.74372417582,
+            6395.478604723356
+          ]
+        ],
+        "normalization": {
+          "authorized": true,
+          "authority": "User explicitly authorized continuous shaft aligned to ground-floor outline",
+          "anchorFloor": "ground",
+          "deltaRawCm": [
+            4.004449402858,
+            0
+          ],
+          "notes": "Apply only to elevator shaft reservation/cuts, not floor/wall/furniture registration."
+        }
+      },
+      "fixtures": [
+        {
+          "name": "Top bedroom desk",
+          "kind": "study-desk",
+          "handles": [
+            "B98"
+          ],
+          "componentHandles": [
+            "B91"
+          ],
+          "bounds": [
+            17379.4309,
+            6855.5717,
+            17444.4309,
+            7010.5717
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "separateChair": true,
+          "rotation": 270,
+          "localElevation": 0.516
+        },
+        {
+          "name": "Top bedroom wardrobe",
+          "kind": "closet",
+          "handles": [
+            "94A",
+            "94B",
+            "94C",
+            "94D"
+          ],
+          "bounds": [
+            17614.7393,
+            6585.4786,
+            17674.7393,
+            6765.4786
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 270,
+          "localElevation": 0.516
+        },
+        {
+          "name": "Top bedroom bed",
+          "kind": "bed",
+          "handles": [
+            "B9D"
+          ],
+          "bounds": [
+            17555.2653,
+            6820.4951,
+            17670.2653,
+            7010.4951
+          ],
+          "rotation": 90,
+          "localElevation": 0.516
+        },
+        {
+          "name": "Top kitchenette sink counter",
+          "kind": "kitchen-work-surface",
+          "handles": [
+            "931",
+            "940",
+            "B8D"
+          ],
+          "bounds": [
+            17684.7393,
+            6575.4786,
+            17749.7393,
+            6700.4786
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "rotation": 270,
+          "replaces": [
+            "931",
+            "940"
+          ],
+          "localElevation": 0
+        },
+        {
+          "name": "Top kitchenette east run",
+          "kind": "closet",
+          "handles": [
+            "930",
+            "936",
+            "937",
+            "938",
+            "93F"
+          ],
+          "bounds": [
+            17894.9377,
+            6475.4786,
+            17959.9377,
+            6700.4786
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "225x65 run with 65x65 X bay at north end; appliance role unproven, retain as cabinet.",
+          "rotation": 270,
+          "localElevation": 0
+        },
+        {
+          "name": "Top bathroom vanity",
+          "kind": "sink",
+          "handles": [
+            "9FC",
+            "B9E"
+          ],
+          "bounds": [
+            17684.7393,
+            6710.4786,
+            17734.7393,
+            6860.4786
+          ],
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "rotation": 270,
+          "localElevation": 0
+        },
+        {
+          "name": "Top bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "9FD",
+            "9EA",
+            "9EB",
+            "8C9"
+          ],
+          "bounds": [
+            17860.9377,
+            6710.4786,
+            17959.9377,
+            6845.4786
+          ],
+          "rotation": 0,
+          "localElevation": 0
+        },
+        {
+          "name": "Top sitting sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "8CA",
+            "8CB",
+            "8CC",
+            "8CD",
+            "8CE",
+            "8CF",
+            "8D0",
+            "8D1",
+            "8D2",
+            "8D3",
+            "8D4",
+            "8D5",
+            "8D6",
+            "8D7",
+            "8D8"
+          ],
+          "bounds": [
+            17983.4851,
+            6172.6115,
+            18060.8448,
+            6321.2132
+          ],
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "rotation": 90,
+          "localElevation": 0
+        },
+        {
+          "name": "Kitchenette mounted basin",
+          "kind": "sink",
+          "handles": [
+            "B8D"
+          ],
+          "bounds": [
+            17692.3079,
+            6610.2519,
+            17737.3079,
+            6670.2519
+          ],
+          "rotation": 270,
+          "countertopMounted": true
+        },
+        {
+          "name": "Terrace native chair 1",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8ED"
+          ],
+          "replaces": [],
+          "bounds": [
+            17083.412679041136,
+            6339.397862172779,
+            17133.762679041134,
+            6389.747862172776
+          ],
+          "rotation": 60,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8ED",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        },
+        {
+          "name": "Terrace native chair 2",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8EE"
+          ],
+          "replaces": [],
+          "bounds": [
+            17083.412679041136,
+            6253.8028621727835,
+            17133.762679041134,
+            6304.15286217278
+          ],
+          "rotation": 120,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EE",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        },
+        {
+          "name": "Terrace native chair 3",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8EF"
+          ],
+          "replaces": [],
+          "bounds": [
+            17009.28523460421,
+            6211.005362172786,
+            17059.635234604208,
+            6261.355362172782
+          ],
+          "rotation": 180,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EF",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        },
+        {
+          "name": "Terrace native chair 4",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F0"
+          ],
+          "replaces": [],
+          "bounds": [
+            16935.157790167283,
+            6253.8028621727835,
+            16985.50779016728,
+            6304.15286217278
+          ],
+          "rotation": 240,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F0",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        },
+        {
+          "name": "Terrace native chair 5",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F1"
+          ],
+          "replaces": [],
+          "bounds": [
+            16935.157790167283,
+            6339.397862172779,
+            16985.50779016728,
+            6389.747862172776
+          ],
+          "rotation": 300,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F1",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        },
+        {
+          "name": "Terrace native chair 6",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F2"
+          ],
+          "replaces": [],
+          "bounds": [
+            17009.28523460421,
+            6382.195362172777,
+            17059.635234604208,
+            6432.545362172774
+          ],
+          "rotation": 0,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F2",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation.",
+          "activationStatus": "active; native transformed child of8E9"
+        }
+      ],
+      "crop": [
+        16400,
+        6000,
+        18300,
+        7160
+      ],
+      "elevation": 5.724,
+      "clearHeight": 2.05,
+      "elevationStatus": "lower section level only; upper level6.24m requires separate regions; not a flat-story authorization",
+      "terraceCandidates": [],
+      "sourceFixtures": [
+        {
+          "name": "Top bedroom desk",
+          "kind": "desk",
+          "handles": [
+            "B98"
+          ],
+          "componentHandles": [
+            "B91"
+          ],
+          "bounds": [
+            17379.4309,
+            6855.5717,
+            17444.4309,
+            7010.5717
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ],
+          "separateChair": true
+        },
+        {
+          "name": "Top bedroom wardrobe",
+          "kind": "closet",
+          "handles": [
+            "94A",
+            "94B",
+            "94C",
+            "94D"
+          ],
+          "bounds": [
+            17614.7393,
+            6585.4786,
+            17674.7393,
+            6765.4786
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Top bedroom bed",
+          "kind": "bed",
+          "handles": [
+            "B9D"
+          ],
+          "bounds": [
+            17555.2653,
+            6820.4951,
+            17670.2653,
+            7010.4951
+          ],
+          "rotationDeg": 90
+        },
+        {
+          "name": "Top kitchenette sink counter",
+          "kind": "counter",
+          "handles": [
+            "931",
+            "940",
+            "B8D"
+          ],
+          "bounds": [
+            17684.7393,
+            6575.4786,
+            17749.7393,
+            6700.4786
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ]
+        },
+        {
+          "name": "Top kitchenette east run",
+          "kind": "cabinet-run",
+          "handles": [
+            "930",
+            "936",
+            "937",
+            "938",
+            "93F"
+          ],
+          "bounds": [
+            17894.9377,
+            6475.4786,
+            17959.9377,
+            6700.4786
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ],
+          "notes": "225x65 run with 65x65 X bay at north end; appliance role unproven, retain as cabinet."
+        },
+        {
+          "name": "Top bathroom vanity",
+          "kind": "vanity",
+          "handles": [
+            "9FC",
+            "B9E"
+          ],
+          "bounds": [
+            17684.7393,
+            6710.4786,
+            17734.7393,
+            6860.4786
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            1,
+            0
+          ]
+        },
+        {
+          "name": "Top bathroom shower",
+          "kind": "shower",
+          "handles": [
+            "9FD",
+            "9EA",
+            "9EB",
+            "8C9"
+          ],
+          "bounds": [
+            17860.9377,
+            6710.4786,
+            17959.9377,
+            6845.4786
+          ],
+          "rotationDeg": 0
+        },
+        {
+          "name": "Top sitting sofa exploded assembly",
+          "kind": "sofa",
+          "handles": [
+            "8CA",
+            "8CB",
+            "8CC",
+            "8CD",
+            "8CE",
+            "8CF",
+            "8D0",
+            "8D1",
+            "8D2",
+            "8D3",
+            "8D4",
+            "8D5",
+            "8D6",
+            "8D7",
+            "8D8"
+          ],
+          "bounds": [
+            17983.4851,
+            6172.6115,
+            18060.8448,
+            6321.2132
+          ],
+          "rotationDeg": 90,
+          "frontPlanner": [
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "Terrace dining set",
+          "kind": "table-with-chairs",
+          "handles": [
+            "8E9"
+          ],
+          "bounds": [
+            16925.9431,
+            6211.0054,
+            17142.9774,
+            6432.5454
+          ],
+          "rotationDeg": 0,
+          "notes": "Outdoor INSERT assembly; use native block transform, do not duplicate chairs."
+        }
+      ],
+      "slabZones": [
+        {
+          "name": "Upper bedroom",
+          "points": [
+            [
+              17354.7393,
+              6575.4786
+            ],
+            [
+              17684.7393,
+              6575.4786
+            ],
+            [
+              17684.7393,
+              6885.4786
+            ],
+            [
+              17699.7393,
+              6885.4786
+            ],
+            [
+              17699.7393,
+              7040.4786
+            ],
+            [
+              17354.7393,
+              7040.4786
+            ]
+          ],
+          "localElevation": 0.516,
+          "handles": [
+            "C59",
+            "C5D",
+            "C47",
+            "C61",
+            "C69",
+            "8B8",
+            "C55",
+            "A05",
+            "A13"
+          ],
+          "status": "level source-verified; shared-wall edge follows audited outer face",
+          "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+        },
+        {
+          "name": "Upper lobby",
+          "points": [
+            [
+              17459.7393,
+              6455.4786
+            ],
+            [
+              17620.7393,
+              6455.4786
+            ],
+            [
+              17620.7393,
+              6575.4786
+            ],
+            [
+              17459.7393,
+              6575.4786
+            ]
+          ],
+          "localElevation": 0.516,
+          "handles": [
+            "9F2",
+            "A34",
+            "C71",
+            "C59",
+            "8F4"
+          ],
+          "status": "west of local steps; level source-verified",
+          "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+        },
+        {
+          "name": "Lower eastern interior",
+          "points": [
+            [
+              17979.9377,
+              6885.4786
+            ],
+            [
+              17979.9377,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6370.4786
+            ],
+            [
+              18124.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6125.4786
+            ],
+            [
+              17194.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6475.4786
+            ],
+            [
+              17459.7393,
+              6455.4786
+            ],
+            [
+              17674.7393,
+              6455.4786
+            ],
+            [
+              17674.7393,
+              6575.4786
+            ],
+            [
+              17684.7393,
+              6575.4786
+            ],
+            [
+              17684.7393,
+              6885.4786
+            ]
+          ],
+          "localElevation": 0,
+          "handles": [
+            "C51",
+            "C75",
+            "C79",
+            "C81",
+            "C85",
+            "C89",
+            "C69",
+            "9E4",
+            "A53"
+          ],
+          "status": "exact polygon difference of enclosed floor minus upper zones and54cm local-step strip; staircase/shaft/double-height holes applied separately",
+          "schemaStatus": "supported points/localElevation; valid simple polygon without holes; voids applied separately"
+        }
+      ],
+      "nativeFixtureCandidates": [
+        {
+          "name": "Terrace native round dining table",
+          "kind": "round-table",
+          "handles": [
+            "8E9",
+            "8EC"
+          ],
+          "replaces": [
+            "8E9"
+          ],
+          "bounds": [
+            16958.93523460421,
+            6246.250362172784,
+            17109.985234604206,
+            6397.300362172776
+          ],
+          "rotation": 0,
+          "height": 0.75,
+          "localElevation": 0.486,
+          "materialRole": "Dining table",
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EC",
+          "sourceShape": "circle",
+          "radiusCm": 75.5249999999961
+        }
+      ]
+    }
+  },
+  "stairs": [
+    {
+      "id": "basement-ground",
+      "sourceFloor": "basement",
+      "targetFloor": "ground",
+      "shape": "U",
+      "start": [
+        17629.7393,
+        -1908.4076
+      ],
+      "end": [
+        17529.7393,
+        -1936.4076
+      ],
+      "targetArrival": [
+        17529.7393,
+        605
+      ],
+      "runs": [
+        {
+          "bounds": [
+            17584.7393,
+            -1908.4076,
+            17674.7393,
+            -1740.4076
+          ],
+          "start": [
+            17629.7393,
+            -1908.4076
+          ],
+          "end": [
+            17629.7393,
+            -1740.4076
+          ],
+          "handles": [
+            "4C1",
+            "517",
+            "518",
+            "519",
+            "51A",
+            "51B",
+            "523",
+            "521",
+            "550"
+          ],
+          "ascentRawDirection": [
+            0,
+            1
+          ]
+        },
+        {
+          "bounds": [
+            17484.7393,
+            -1936.4076,
+            17574.7393,
+            -1740.4076
+          ],
+          "start": [
+            17529.7393,
+            -1740.4076
+          ],
+          "end": [
+            17529.7393,
+            -1936.4076
+          ],
+          "handles": [
+            "4C4",
+            "4E5",
+            "516",
+            "51C",
+            "51D",
+            "51E",
+            "51F",
+            "549",
+            "54F"
+          ],
+          "ascentRawDirection": [
+            0,
+            -1
+          ]
+        }
+      ],
+      "landings": [
+        {
+          "bounds": [
+            17484.7393,
+            -1740.4076,
+            17674.7393,
+            -1646.4076
+          ],
+          "handles": [
+            "688",
+            "4E9",
+            "4EA",
+            "169",
+            "54A"
+          ]
+        }
+      ],
+      "arrivalHandles": [
+        "1630",
+        "1631",
+        "1642",
+        "1643",
+        "163D",
+        "132B"
+      ],
+      "arrivalMarkerRaw": [
+        17529.7393,
+        605
+      ],
+      "riseCm": 275,
+      "status": "direction verified against ground downward-pointing triangle; basement outgoing triangle is truncated by break graphics",
+      "notes": "Keep 10 cm central spine gap. Ground incoming drawing shows a further right-side tread at y605 whereas basement first full tread is y=-1908.4076 (maps to633); do not silently extend basement lower run by28 cm. Left upper endpoint registration is exact. Never assign ground AREA132B to ground-to-living.",
+      "landing": [
+        17484.7393,
+        -1740.4076,
+        17674.7393,
+        -1646.4076
+      ],
+      "handles": [
+        "4C1",
+        "517",
+        "518",
+        "519",
+        "51A",
+        "51B",
+        "523",
+        "521",
+        "550",
+        "4C4",
+        "4E5",
+        "516",
+        "51C",
+        "51D",
+        "51E",
+        "51F",
+        "549",
+        "54F",
+        "688",
+        "4E9",
+        "4EA",
+        "169",
+        "54A",
+        "1630",
+        "1631",
+        "1642",
+        "1643",
+        "163D",
+        "132B"
+      ]
+    },
+    {
+      "id": "ground-living",
+      "sourceFloor": "ground",
+      "targetFloor": "living",
+      "shape": "L",
+      "start": [
+        17568.7393,
+        70
+      ],
+      "end": [
+        17147.2393,
+        265
+      ],
+      "targetArrival": [
+        17147.2393,
+        3852.7079
+      ],
+      "runs": [
+        {
+          "bounds": [
+            17194.7393,
+            25,
+            17568.7393,
+            120
+          ],
+          "start": [
+            17568.7393,
+            70
+          ],
+          "end": [
+            17194.7393,
+            70
+          ],
+          "handles": [
+            "16C2",
+            "18DC",
+            "18DD",
+            "18DE",
+            "18E2",
+            "18E3",
+            "18E5",
+            "1950",
+            "1954",
+            "1956",
+            "1957",
+            "1958",
+            "195A",
+            "195B",
+            "195C",
+            "16C6",
+            "16C7",
+            "16C8"
+          ],
+          "ascentRawDirection": [
+            -1,
+            0
+          ]
+        },
+        {
+          "bounds": [
+            17099.7393,
+            120,
+            17194.7393,
+            265
+          ],
+          "start": [
+            17147.2393,
+            120
+          ],
+          "end": [
+            17147.2393,
+            265
+          ],
+          "handles": [
+            "16C5",
+            "16D6",
+            "16D7",
+            "16D8",
+            "16D9",
+            "16DA",
+            "16DB"
+          ],
+          "ascentRawDirection": [
+            0,
+            1
+          ]
+        }
+      ],
+      "landings": [
+        {
+          "bounds": [
+            17099.7393,
+            25,
+            17194.7393,
+            120
+          ],
+          "handles": [
+            "16C5",
+            "16DB",
+            "1984",
+            "13AC",
+            "14B6"
+          ]
+        }
+      ],
+      "arrivalHandles": [
+        "13AA",
+        "13AB",
+        "13AC",
+        "13E8",
+        "13E9",
+        "13EA",
+        "13EB",
+        "13EC",
+        "13ED",
+        "14B6"
+      ],
+      "arrivalMarkerRaw": [
+        17147.2393,
+        3852.7079
+      ],
+      "riseCm": 314,
+      "status": "verified L geometry and destination marker; return on ground is H projected linework, necessary to reconstruct full stair",
+      "notes": "95 cm flight width. Ground datum path y70 and living datum path y3657.7079 differ by2.5 cm after registration (living path centered at +72.5); do not shift floor for that graphic discrepancy. Union the two runs and landing; elevator lies outside stair footprint. Top repeats parts of this lower L stair as projection, not another outgoing top flight.",
+      "landing": [
+        17099.7393,
+        25,
+        17194.7393,
+        120
+      ],
+      "handles": [
+        "16C2",
+        "18DC",
+        "18DD",
+        "18DE",
+        "18E2",
+        "18E3",
+        "18E5",
+        "1950",
+        "1954",
+        "1956",
+        "1957",
+        "1958",
+        "195A",
+        "195B",
+        "195C",
+        "16C6",
+        "16C7",
+        "16C8",
+        "16C5",
+        "16D6",
+        "16D7",
+        "16D8",
+        "16D9",
+        "16DA",
+        "16DB",
+        "1984",
+        "13AC",
+        "14B6",
+        "13AA",
+        "13AB",
+        "13E8",
+        "13E9",
+        "13EA",
+        "13EB",
+        "13EC",
+        "13ED"
+      ]
+    },
+    {
+      "id": "living-top",
+      "sourceFloor": "living",
+      "targetFloor": "top",
+      "shape": "U",
+      "start": [
+        17632.2393,
+        3922.7079
+      ],
+      "end": [
+        17737.2393,
+        3841.7079
+      ],
+      "targetArrival": [
+        17737.2393,
+        6374.4786
+      ],
+      "runs": [
+        {
+          "bounds": [
+            17589.7393,
+            3706.7079,
+            17674.7393,
+            3922.7079
+          ],
+          "start": [
+            17632.2393,
+            3922.7079
+          ],
+          "end": [
+            17632.2393,
+            3706.7079
+          ],
+          "handles": [
+            "F41",
+            "1296",
+            "1297",
+            "1298",
+            "1299",
+            "129A",
+            "129B",
+            "129C",
+            "1294",
+            "138B",
+            "13B6"
+          ],
+          "ascentRawDirection": [
+            0,
+            -1
+          ]
+        },
+        {
+          "bounds": [
+            17694.7393,
+            3706.7079,
+            17779.7393,
+            3841.7079
+          ],
+          "start": [
+            17737.2393,
+            3706.7079
+          ],
+          "end": [
+            17737.2393,
+            3841.7079
+          ],
+          "handles": [
+            "128A",
+            "128B",
+            "128C",
+            "128D",
+            "128E",
+            "128F",
+            "1284",
+            "1291",
+            "B7B",
+            "B7C",
+            "B7D",
+            "B7E",
+            "B7F",
+            "A39"
+          ],
+          "ascentRawDirection": [
+            0,
+            1
+          ],
+          "notes": "Upper extent comes from complete destination marker A3A/A3B, not truncated living break arrow1287 at3787.7079. H1290 at3868.7079 extends one tread beyond mapped destination; retain as projection, not proof of longer flight."
+        }
+      ],
+      "landings": [
+        {
+          "bounds": [
+            17589.7393,
+            3612.7079,
+            17779.7393,
+            3706.7079
+          ],
+          "handles": [
+            "1291",
+            "1292",
+            "1293",
+            "14F1",
+            "B81",
+            "B82"
+          ]
+        }
+      ],
+      "arrivalHandles": [
+        "A39",
+        "A3A",
+        "A3B",
+        "B7A",
+        "B80",
+        "B82",
+        "B83"
+      ],
+      "arrivalMarkerRaw": [
+        17737.2393,
+        6374.4786
+      ],
+      "riseCm": 258.4,
+      "riseStatus": "section top lower baseline minus living =258.4; assignment to this arrival probable, plan/section cut mapping not proven",
+      "status": "85 cm U flights and94 cm landing verified; destination endpoint preferred over broken source projection",
+      "notes": "Keep20 cm central spine gap. Source and target X unchanged, Y offset2532.770714390083. Do not collapse into ground-to-living L footprint.",
+      "landing": [
+        17589.7393,
+        3612.7079,
+        17779.7393,
+        3706.7079
+      ],
+      "handles": [
+        "F41",
+        "1296",
+        "1297",
+        "1298",
+        "1299",
+        "129A",
+        "129B",
+        "129C",
+        "1294",
+        "138B",
+        "13B6",
+        "128A",
+        "128B",
+        "128C",
+        "128D",
+        "128E",
+        "128F",
+        "1284",
+        "1291",
+        "B7B",
+        "B7C",
+        "B7D",
+        "B7E",
+        "B7F",
+        "A39",
+        "1292",
+        "1293",
+        "14F1",
+        "B81",
+        "B82",
+        "A3A",
+        "A3B",
+        "B7A",
+        "B80",
+        "B83"
+      ]
+    }
+  ],
+  "topSplitLevelSteps": {
+    "sourceFloor": "top",
+    "targetFloor": "top",
+    "bounds": [
+      17620.7393,
+      6455.4786,
+      17674.7393,
+      6575.4786
+    ],
+    "handles": [
+      "A34",
+      "A35",
+      "A36",
+      "9E7",
+      "9E8",
+      "9E9",
+      "9E0",
+      "9E1",
+      "9E2",
+      "9E3",
+      "9E4",
+      "9E5"
+    ],
+    "markerRaw": [
+      17620.7393,
+      6515.4786
+    ],
+    "ascentRawDirection": [
+      -1,
+      0
+    ],
+    "riseCm": 51.6,
+    "status": "three17.2cm risers confirmed in section9E0/9E2/9E4; west-high/east-low confirmed by independent roof headroom checks",
+    "automaticFullFloorLevelAssignmentAllowed": false,
+    "zoneReference": "topSlabZones"
+  },
+  "elevatorRegistration": {
+    "sizeCm": [
+      100,
+      150
+    ],
+    "handles": [
+      "522",
+      "16D5",
+      "13E7",
+      "BE0"
+    ],
+    "status": "user-authorized normalization applied to continuous future shaft, anchored to ground outline",
+    "plannerBoundsCm": {
+      "basement": [
+        614.00444940275,
+        640.00000000015,
+        714.00444940275,
+        790.00000000015
+      ],
+      "ground": [
+        614.00444940275,
+        645.00000000015,
+        714.00444940275,
+        795.00000000015
+      ],
+      "living": [
+        610,
+        645,
+        710,
+        795
+      ],
+      "top": [
+        610,
+        645,
+        710,
+        795
+      ]
+    },
+    "notes": "Source discrepancy retained separately. User authorized ground-anchored normalization only for the shaft. Ground,living,top floors and basement,ground,living ceilings cut continuously; basement base and roof retained. Future reservation is not proof of installed cabin.",
+    "sourcePlannerBoundsCm": {
+      "basement": [
+        614.00444940275,
+        640.00000000015,
+        714.00444940275,
+        790.00000000015
+      ],
+      "ground": [
+        614.00444940275,
+        645.00000000015,
+        714.00444940275,
+        795.00000000015
+      ],
+      "living": [
+        610,
+        645,
+        710,
+        795
+      ],
+      "top": [
+        610,
+        645,
+        710,
+        795
+      ]
+    },
+    "normalizedPlannerBoundsCm": [
+      614.00444940275,
+      645,
+      714.00444940275,
+      795
+    ],
+    "normalizationOffsetsRawCm": {
+      "basement": [
+        0,
+        -5
+      ],
+      "ground": [
+        0,
+        0
+      ],
+      "living": [
+        4.004449402858,
+        0
+      ],
+      "top": [
+        4.004449402858,
+        0
+      ]
+    },
+    "normalizationOffsetsPlannerM": {
+      "basement": [
+        0,
+        0.05
+      ],
+      "ground": [
+        0,
+        0
+      ],
+      "living": [
+        0.04004449402858,
+        0
+      ],
+      "top": [
+        0.04004449402858,
+        0
+      ]
+    }
+  },
+  "wallClassification": {
+    "primaryLayer": "A17",
+    "rule": "Extract individual paired faces in house enclosure; split mixed hatches at enclosure boundary. A17 outside enclosure is not automatically full-height enclosed wall.",
+    "mixedHatches": [
+      {
+        "handles": [
+          "678",
+          "67C"
+        ],
+        "floor": "basement",
+        "splitX": 16604.7393,
+        "outsideRole": "west English-court/retaining branches",
+        "heightCm": null
+      },
+      {
+        "handles": [
+          "584"
+        ],
+        "floor": "basement",
+        "outsideBounds": [
+          17699.7393,
+          -1926.4076,
+          17954.7393,
+          -1621.4076
+        ],
+        "outsideRole": "English-court perimeter",
+        "heightCm": null
+      },
+      {
+        "handles": [
+          "C51"
+        ],
+        "floor": "top",
+        "splitX": 17194.7393,
+        "outsideRole": "terrace south parapet west of split; enclosed wall east of split",
+        "heightCm": null
+      }
+    ],
+    "outsideOnly": [
+      {
+        "handles": [
+          "5A4",
+          "680",
+          "68C"
+        ],
+        "floor": "basement",
+        "role": "court/site retaining geometry; not indoor wall"
+      },
+      {
+        "handles": [
+          "1B1C",
+          "1B20",
+          "1B24",
+          "1B28",
+          "1B2C",
+          "1B30",
+          "1B34",
+          "1B56",
+          "1B5A",
+          "1B5E",
+          "1B62"
+        ],
+        "floor": "ground",
+        "role": "site/ramp boundaries well outside AREA132C; exclude from indoor wall extraction"
+      }
+    ],
+    "parapetLinework": [
+      {
+        "floor": "top",
+        "handles": [
+          "A46",
+          "A47",
+          "A48",
+          "B26",
+          "9F5",
+          "9FE",
+          "9FF",
+          "A00",
+          "9EE",
+          "9EF",
+          "9ED",
+          "BA3"
+        ],
+        "role": "terrace or roof-region boundary, not enclosed bedroom wall",
+        "heightCm": null
+      }
+    ],
+    "unknownHeights": "No plan layer proves parapet height. Derive from a registered section or leave unknown; do not substitute story height."
+  },
+  "section": {
+    "sourceBounds": [
+      16000,
+      8700,
+      18700,
+      10050
+    ],
+    "groundBaselineRawY": 9089.96195885918,
+    "levels": {
+      "basement": {
+        "rawY": 8814.96195885918,
+        "relativeToGroundCm": -275,
+        "handles": [
+          "E93",
+          "E59",
+          "EB2"
+        ],
+        "status": "main finished-floor baseline"
+      },
+      "basementEastLocal": {
+        "rawY": 8811.96195885918,
+        "relativeToGroundCm": -278,
+        "handles": [
+          "806"
+        ],
+        "status": "3 cm lower local finished floor; plan region not proven"
+      },
+      "ground": {
+        "rawY": 9089.96195885918,
+        "relativeToGroundCm": 0,
+        "handles": [
+          "E86",
+          "E93",
+          "DDA",
+          "DDB"
+        ]
+      },
+      "groundEastLocal": {
+        "rawY": 9090.461958859181,
+        "relativeToGroundCm": 0.5,
+        "handles": [
+          "821",
+          "E08"
+        ]
+      },
+      "living": {
+        "rawY": 9403.96195885918,
+        "relativeToGroundCm": 314,
+        "handles": [
+          "E86",
+          "F03",
+          "E85"
+        ]
+      },
+      "topLower": {
+        "rawY": 9662.361958859177,
+        "relativeToGroundCm": 572.4,
+        "handles": [
+          "A53",
+          "A23",
+          "A60"
+        ],
+        "status": "section-established; exact plan polygon unassigned"
+      },
+      "topUpper": {
+        "rawY": 9713.96195885918,
+        "relativeToGroundCm": 624,
+        "handles": [
+          "A05",
+          "A13"
+        ],
+        "status": "section-established; exact plan polygon unassigned"
+      }
+    },
+    "clearHeightsAndBuildUps": [
+      {
+        "name": "Basement main clear height",
+        "cm": 220,
+        "handles": [
+          "EB2"
+        ],
+        "rawYPair": [
+          8814.96195885918,
+          9034.96195885918
+        ]
+      },
+      {
+        "name": "Basement east clear height",
+        "cm": 223,
+        "handles": [
+          "806"
+        ],
+        "rawYPair": [
+          8811.96195885918,
+          9034.96195885918
+        ]
+      },
+      {
+        "name": "Basement ceiling slab band",
+        "cm": 20,
+        "handles": [
+          "813",
+          "EBF"
+        ],
+        "rawYPair": [
+          9034.96195885918,
+          9054.96195885918
+        ]
+      },
+      {
+        "name": "Zone above basement slab to ground finished floor",
+        "cm": 35,
+        "handles": [
+          "ED1"
+        ],
+        "rawYPair": [
+          9054.96195885918,
+          9089.96195885918
+        ]
+      },
+      {
+        "name": "Ground clear height",
+        "cm": 279,
+        "handles": [
+          "EF6"
+        ],
+        "rawYPair": [
+          9089.96195885918,
+          9368.96195885918
+        ]
+      },
+      {
+        "name": "Ground-to-living interstory zone",
+        "cm": 35,
+        "handles": [
+          "F03"
+        ],
+        "rawYPair": [
+          9368.96195885918,
+          9403.96195885918
+        ]
+      },
+      {
+        "name": "Top lower slab/finish band",
+        "cm": 35,
+        "handles": [
+          "A53"
+        ],
+        "rawYPair": [
+          9627.361958859177,
+          9662.361958859177
+        ]
+      },
+      {
+        "name": "Ground-to-top-lower underside",
+        "cm": 537.4,
+        "handles": [
+          "9D2"
+        ],
+        "rawYPair": [
+          9089.96195885918,
+          9627.361958859177
+        ]
+      }
+    ],
+    "circularRoof": {
+      "centerRaw": [
+        17347.66766746173,
+        9403.961958859181
+      ],
+      "centerRelativeToGroundCm": 314,
+      "outerStructuralRadiusCm": 581,
+      "innerRadiusCm": 561,
+      "finishRadiusCm": 586,
+      "structuralThicknessCm": 20,
+      "finishThicknessCm": 5,
+      "crownRelativeToGroundCm": {
+        "structural": 895,
+        "inner": 875,
+        "finish": 900
+      },
+      "crownRawY": {
+        "structural": 9984.961958859181,
+        "inner": 9964.961958859181,
+        "finish": 9989.961958859181
+      },
+      "handles": {
+        "outerStructural": [
+          "D9C",
+          "B0",
+          "B2",
+          "D9F"
+        ],
+        "inner": [
+          "D9E",
+          "B1",
+          "B3"
+        ],
+        "glazedSegment": [
+          "B3",
+          "B4"
+        ],
+        "finish": [
+          "DA0"
+        ],
+        "radiusLabel": [
+          "E56"
+        ],
+        "crownDimension": [
+          "DDE"
+        ],
+        "centerMarker": [
+          "E55",
+          "E5A",
+          "E5B"
+        ]
+      },
+      "finishArcAnglesDeg": [
+        35.85505936424766,
+        144.1449406356384
+      ],
+      "finishArcBoundsRaw": [
+        16872.7139,
+        9747.2037,
+        17822.6214,
+        9989.962
+      ],
+      "equation": "sectionY=centerY+sqrt(radiusCm^2-(sectionX-centerX)^2)",
+      "planAxis": "raw CAD Y / source planner Y / renderer Z",
+      "planFootprint": {
+        "coordinateFloor": "top",
+        "geometryReference": "floors.top.enclosure",
+        "outwardBufferCm": 10,
+        "bufferAuthority": "user preference"
+      },
+      "status": "verified by six relative section-plan wall stations and exact matching roof-ridge line H997; roof coverage follows enclosed top footprint with user-authorized10cm overhang",
+      "notes": "Alt-3 R=586 labels finish, structural581/inner561. Section horizontal datum transfers to plan through six wall anchors, not equal absolute sheet coordinates. H997 and label949 independently confirm ridge. Keep asymmetry of ridge within stepped enclosed footprint; do not recenter it for a preferred rise.",
+      "planRidgeRawX": 17659.73927477274,
+      "registration": {
+        "sectionToPlanXOffsetCm": 312.07160731100885,
+        "formula": "planX=sectionX+312.07160731100815",
+        "anchors": [
+          {
+            "name": "west exterior",
+            "sectionX": 16292.66766746235,
+            "planX": 16604.73927477307,
+            "sectionHandles": [
+              "E83"
+            ],
+            "planHandles": [
+              "C51",
+              "A46"
+            ],
+            "residualCm": 2.9103830456733704e-10
+          },
+          {
+            "name": "east exterior",
+            "sectionX": 17812.66766746193,
+            "planX": 18124.73927477265,
+            "sectionHandles": [
+              "DAB"
+            ],
+            "planHandles": [
+              "C89"
+            ],
+            "residualCm": 2.874003257602453e-10
+          },
+          {
+            "name": "central void west outer face",
+            "sectionX": 16882.66766746223,
+            "planX": 17194.73927477296,
+            "sectionHandles": [
+              "E37"
+            ],
+            "planHandles": [
+              "BEF",
+              "C75"
+            ],
+            "residualCm": 2.764863893389702e-10
+          },
+          {
+            "name": "central void west inner face",
+            "sectionX": 16902.66766746223,
+            "planX": 17214.73927477296,
+            "sectionHandles": [
+              "E36"
+            ],
+            "planHandles": [
+              "BF0",
+              "C75"
+            ],
+            "residualCm": 2.764863893389702e-10
+          },
+          {
+            "name": "stair spine west face",
+            "sectionX": 17362.66766746094,
+            "planX": 17674.73927477166,
+            "sectionHandles": [
+              "A93"
+            ],
+            "planHandles": [
+              "C79",
+              "BB2"
+            ],
+            "residualCm": 2.9103830456733704e-10
+          },
+          {
+            "name": "stair spine east face",
+            "sectionX": 17382.66766746094,
+            "planX": 17694.73927477166,
+            "sectionHandles": [
+              "A94"
+            ],
+            "planHandles": [
+              "C79",
+              "BB4"
+            ],
+            "residualCm": 2.9103830456733704e-10
+          }
+        ],
+        "maxWallStationResidualCm": 2.9103830456733704e-10,
+        "ridgeLineHandle": "997",
+        "ridgeLabelHandle": "949",
+        "ridgeLineRawBounds": [
+          17659.73927477274,
+          6050.839404793806,
+          17659.73927477274,
+          7071.035817233005
+        ],
+        "heightChecks": [
+          {
+            "name": "bedroom H205",
+            "x": 17437.26230967269,
+            "floorElevationCm": 624,
+            "labelCm": 205,
+            "handles": [
+              "79D",
+              "79E"
+            ],
+            "roofUndersideClearanceCm": 204.99999999987494,
+            "residualCm": -1.2505552149377763e-10
+          },
+          {
+            "name": "sitting H205",
+            "x": 17976.05137543736,
+            "floorElevationCm": 572.4,
+            "labelCm": 205,
+            "handles": [
+              "8D9",
+              "A30"
+            ],
+            "roofUndersideClearanceCm": 204.92240931465244,
+            "residualCm": -0.07759068534755897
+          },
+          {
+            "name": "sitting H180",
+            "x": 18009.77704416314,
+            "floorElevationCm": 572.4,
+            "labelCm": 180,
+            "handles": [
+              "8DB",
+              "8DA"
+            ],
+            "roofUndersideClearanceCm": 180.00000000021942,
+            "residualCm": 2.1941559680271894e-10
+          },
+          {
+            "name": "bedroom west H180",
+            "x": 17374.73927477267,
+            "floorElevationCm": 624,
+            "labelCm": 180,
+            "handles": [
+              "79F",
+              "A32"
+            ],
+            "roofUndersideClearanceCm": 173.21423820078053,
+            "residualCm": -6.785761799219472
+          }
+        ]
+      }
+    },
+    "absoluteDatumWarning": "Section DDA says +40.75; repeated plan/site text says finished paving40.77. Use relative section levels; do not silently equate these absolute datums."
+  },
+  "importRules": [
+    "All handle lists refer to actual source entities; some are boundary/label proof rather than drawable furniture. Never feed a proof wall or label into furniture geometry.",
+    "Exploded furniture assemblies need one enclosing object and separate anchored components; deduplicate intentional overlaps. Preserve complete INSERT transforms including negative scale.",
+    "Fixtures with bounds only have those raw CAD enclosing bounds, not necessarily the exact occupied polygon. Basin-only symbols must not acquire guessed cabinet sizes.",
+    "Create slab cuts from individual arriving stair runs plus landing; create lower ceiling cuts from departing flight union. Elevator and double-height cuts are independent; combine by geometric union.",
+    "Do not place a new outgoing staircase on top merely because the ground/living L treads are projected there.",
+    "Any confidence/status caveat or null geometry is a hold on automatic architectural inference, not permission to fill a rectangle.",
+    "Use source labels and written dimensions for room ownership; retain original inventory precision when extracting handle geometry. Recipe rounded coordinates are in cm to0.0001."
+  ],
+  "unresolved": [
+    "Northwest top double-height label overlaps roof-plant graphics; do not cut an arbitrary hole through the living bedroom or put top indoor slab there.",
+    "Confirm basement starting tread versus projected ground continuation; do not extend lower run solely from arrival drawing.",
+    "Confirm living-to-top return beyond source break; endpoint recipe uses destination triangle and excludes one extra H projected tread.",
+    "East ground deck far boundary and exterior court far bounds not fully audited; no invented closure.",
+    "Parapet heights and terrace slab levels are not established by A17/A14 layer membership.",
+    "Kitchen fridge interpretation is probable, based on door/handle geometry; basement/top X cabinet bays lack equivalent proof and remain cabinets.",
+    "Top high/low level ownership established; exact shared-wall/terrace threshold clipping still needs local elevation QA.",
+    "Bedroom west H180 annotation differs6.8cm from registered inner roof; do not move verified ridge or floor for one inconsistent marker.",
+    "Top central void southern projected L-stair strip (y6145.4786..6240.4786) may also belong to the void; current cut stops at6240.4786 and requires overlay review of projected lower treads before accepting that strip as top slab."
+  ],
+  "voids": [
+    {
+      "role": "stair-basement-ground",
+      "coordinateFloor": "basement",
+      "parts": [
+        {
+          "bounds": [
+            17584.7393,
+            -1908.4076,
+            17674.7393,
+            -1740.4076
+          ]
+        },
+        {
+          "bounds": [
+            17484.7393,
+            -1936.4076,
+            17574.7393,
+            -1740.4076
+          ]
+        },
+        {
+          "bounds": [
+            17484.7393,
+            -1740.4076,
+            17674.7393,
+            -1646.4076
+          ]
+        }
+      ],
+      "floorHoles": [
+        "ground"
+      ],
+      "ceilingHoles": [
+        "basement"
+      ],
+      "handles": [
+        "4C1",
+        "517",
+        "518",
+        "519",
+        "51A",
+        "51B",
+        "523",
+        "521",
+        "550",
+        "4C4",
+        "4E5",
+        "516",
+        "51C",
+        "51D",
+        "51E",
+        "51F",
+        "549",
+        "54F",
+        "688",
+        "4E9",
+        "4EA",
+        "169",
+        "54A",
+        "1630",
+        "1631",
+        "1642",
+        "1643",
+        "163D",
+        "132B"
+      ]
+    },
+    {
+      "role": "stair-ground-living",
+      "coordinateFloor": "ground",
+      "parts": [
+        {
+          "bounds": [
+            17194.7393,
+            25,
+            17568.7393,
+            120
+          ]
+        },
+        {
+          "bounds": [
+            17099.7393,
+            120,
+            17194.7393,
+            265
+          ]
+        },
+        {
+          "bounds": [
+            17099.7393,
+            25,
+            17194.7393,
+            120
+          ]
+        }
+      ],
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "16C2",
+        "18DC",
+        "18DD",
+        "18DE",
+        "18E2",
+        "18E3",
+        "18E5",
+        "1950",
+        "1954",
+        "1956",
+        "1957",
+        "1958",
+        "195A",
+        "195B",
+        "195C",
+        "16C6",
+        "16C7",
+        "16C8",
+        "16C5",
+        "16D6",
+        "16D7",
+        "16D8",
+        "16D9",
+        "16DA",
+        "16DB",
+        "1984",
+        "13AC",
+        "14B6",
+        "13AA",
+        "13AB",
+        "13E8",
+        "13E9",
+        "13EA",
+        "13EB",
+        "13EC",
+        "13ED"
+      ]
+    },
+    {
+      "role": "stair-living-top",
+      "coordinateFloor": "living",
+      "parts": [
+        {
+          "bounds": [
+            17589.7393,
+            3706.7079,
+            17674.7393,
+            3922.7079
+          ]
+        },
+        {
+          "bounds": [
+            17694.7393,
+            3706.7079,
+            17779.7393,
+            3841.7079
+          ]
+        },
+        {
+          "bounds": [
+            17589.7393,
+            3612.7079,
+            17779.7393,
+            3706.7079
+          ]
+        }
+      ],
+      "floorHoles": [
+        "top"
+      ],
+      "ceilingHoles": [
+        "living"
+      ],
+      "handles": [
+        "F41",
+        "1296",
+        "1297",
+        "1298",
+        "1299",
+        "129A",
+        "129B",
+        "129C",
+        "1294",
+        "138B",
+        "13B6",
+        "128A",
+        "128B",
+        "128C",
+        "128D",
+        "128E",
+        "128F",
+        "1284",
+        "1291",
+        "B7B",
+        "B7C",
+        "B7D",
+        "B7E",
+        "B7F",
+        "A39",
+        "1292",
+        "1293",
+        "14F1",
+        "B81",
+        "B82",
+        "A3A",
+        "A3B",
+        "B7A",
+        "B80",
+        "B83"
+      ]
+    },
+    {
+      "role": "Central double-height space",
+      "coordinateFloor": "living",
+      "points": [
+        [
+          17214.7393,
+          3712.7079
+        ],
+        [
+          17584.7393,
+          3712.7079
+        ],
+        [
+          17584.7393,
+          3917.7079
+        ],
+        [
+          17214.7393,
+          3917.7079
+        ]
+      ],
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "127E",
+        "1281",
+        "13AD",
+        "1313",
+        "129E"
+      ],
+      "status": "derived clear opening inside guarded AREA composite; subtract elevator overlap only once"
+    },
+    {
+      "role": "Salon double-height space",
+      "coordinateFloor": "living",
+      "points": [
+        [
+          17784.7393,
+          3612.7079
+        ],
+        [
+          18089.7393,
+          3612.7079
+        ],
+        [
+          18089.7393,
+          3922.7079
+        ],
+        [
+          17784.7393,
+          3922.7079
+        ]
+      ],
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "handles": [
+        "127F",
+        "130E",
+        "130F",
+        "1280",
+        "129E",
+        "14F9"
+      ],
+      "status": "inferred stair-guard edge x17784.7393; X endpoints extend 20 cm west and must not set the opening boundary"
+    },
+    {
+      "role": "Central double-height continuation",
+      "coordinateFloor": "top",
+      "points": [
+        [
+          17214.7393,
+          6240.4786
+        ],
+        [
+          17584.7393,
+          6240.4786
+        ],
+        [
+          17584.7393,
+          6450.4786
+        ],
+        [
+          17214.7393,
+          6450.4786
+        ]
+      ],
+      "floorHoles": [
+        "top"
+      ],
+      "ceilingHoles": [
+        "living"
+      ],
+      "handles": [
+        "946",
+        "BDD",
+        "B22",
+        "B79",
+        "C75"
+      ],
+      "status": "clear opening inferred from source guards; elevator overlaps southwest corner; union openings rather than double-count"
+    },
+    {
+      "role": "future-elevator-reservation",
+      "coordinateFloor": "ground",
+      "points": [
+        [
+          17218.74372417582,
+          125
+        ],
+        [
+          17318.74372417582,
+          125
+        ],
+        [
+          17318.74372417582,
+          275
+        ],
+        [
+          17218.74372417582,
+          275
+        ]
+      ],
+      "floorHoles": [
+        "ground",
+        "living",
+        "top"
+      ],
+      "ceilingHoles": [
+        "basement",
+        "ground",
+        "living"
+      ],
+      "handles": [
+        "522",
+        "16D5",
+        "13E7",
+        "BE0"
+      ],
+      "status": "enabled; user-authorized continuous shaft aligned to ground; basement floor and roof retained",
+      "normalizationReference": "elevatorRegistration"
+    }
+  ],
+  "elevatorCutCandidates": [
+    {
+      "role": "future-elevator-reservation",
+      "coordinateFloor": "basement",
+      "points": [
+        [
+          17218.7437,
+          -2411.4076
+        ],
+        [
+          17318.7437,
+          -2411.4076
+        ],
+        [
+          17318.7437,
+          -2261.4076
+        ],
+        [
+          17218.7437,
+          -2261.4076
+        ]
+      ],
+      "handles": [
+        "522",
+        "4F4"
+      ],
+      "floorHoles": [],
+      "ceilingHoles": [
+        "basement"
+      ],
+      "status": "superseded by enabled ground-coordinate continuous shaft void; preserved original per-sheet evidence only"
+    },
+    {
+      "role": "future-elevator-reservation",
+      "coordinateFloor": "ground",
+      "points": [
+        [
+          17218.7437,
+          125
+        ],
+        [
+          17318.7437,
+          125
+        ],
+        [
+          17318.7437,
+          275
+        ],
+        [
+          17218.7437,
+          275
+        ]
+      ],
+      "handles": [
+        "16D5",
+        "1692"
+      ],
+      "floorHoles": [
+        "ground"
+      ],
+      "ceilingHoles": [
+        "ground"
+      ],
+      "status": "superseded by enabled ground-coordinate continuous shaft void; preserved original per-sheet evidence only"
+    },
+    {
+      "role": "future-elevator-reservation",
+      "coordinateFloor": "living",
+      "points": [
+        [
+          17214.7393,
+          3712.7079
+        ],
+        [
+          17314.7393,
+          3712.7079
+        ],
+        [
+          17314.7393,
+          3862.7079
+        ],
+        [
+          17214.7393,
+          3862.7079
+        ]
+      ],
+      "handles": [
+        "13E7",
+        "13BA"
+      ],
+      "floorHoles": [
+        "living"
+      ],
+      "ceilingHoles": [
+        "living"
+      ],
+      "status": "superseded by enabled ground-coordinate continuous shaft void; preserved original per-sheet evidence only"
+    },
+    {
+      "role": "future-elevator-reservation",
+      "coordinateFloor": "top",
+      "points": [
+        [
+          17214.7393,
+          6245.4786
+        ],
+        [
+          17314.7393,
+          6245.4786
+        ],
+        [
+          17314.7393,
+          6395.4786
+        ],
+        [
+          17214.7393,
+          6395.4786
+        ]
+      ],
+      "handles": [
+        "BE0",
+        "BB5",
+        "BB6"
+      ],
+      "floorHoles": [
+        "top"
+      ],
+      "ceilingHoles": [],
+      "status": "superseded by enabled ground-coordinate continuous shaft void; preserved original per-sheet evidence only"
+    }
+  ],
+  "roof": {
+    "outerRadius": 5.81,
+    "innerRadius": 5.61,
+    "finishRadius": 5.86,
+    "centerElevation": 3.14,
+    "ridgeX": 17659.73927477274,
+    "axis": "z",
+    "overhang": 0.1,
+    "overhangM": 0.1,
+    "handles": [
+      "D9C",
+      "D9E",
+      "DA0",
+      "E56",
+      "DDE",
+      "997",
+      "949",
+      "E83",
+      "DAB",
+      "E37",
+      "E36",
+      "A93",
+      "A94"
+    ],
+    "status": "verified by six relative section-plan wall stations and exact matching roof-ridge line H997; roof coverage follows enclosed top footprint with user-authorized10cm overhang",
+    "ridgeXCoordinateSpace": "raw CAD plan centimetres",
+    "planAxis": "raw CAD Y / source planner Y / renderer Z",
+    "registration": {
+      "sectionToPlanXOffsetCm": 312.07160731100885,
+      "formula": "planX=sectionX+312.07160731100815",
+      "anchors": [
+        {
+          "name": "west exterior",
+          "sectionX": 16292.66766746235,
+          "planX": 16604.73927477307,
+          "sectionHandles": [
+            "E83"
+          ],
+          "planHandles": [
+            "C51",
+            "A46"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        },
+        {
+          "name": "east exterior",
+          "sectionX": 17812.66766746193,
+          "planX": 18124.73927477265,
+          "sectionHandles": [
+            "DAB"
+          ],
+          "planHandles": [
+            "C89"
+          ],
+          "residualCm": 2.874003257602453e-10
+        },
+        {
+          "name": "central void west outer face",
+          "sectionX": 16882.66766746223,
+          "planX": 17194.73927477296,
+          "sectionHandles": [
+            "E37"
+          ],
+          "planHandles": [
+            "BEF",
+            "C75"
+          ],
+          "residualCm": 2.764863893389702e-10
+        },
+        {
+          "name": "central void west inner face",
+          "sectionX": 16902.66766746223,
+          "planX": 17214.73927477296,
+          "sectionHandles": [
+            "E36"
+          ],
+          "planHandles": [
+            "BF0",
+            "C75"
+          ],
+          "residualCm": 2.764863893389702e-10
+        },
+        {
+          "name": "stair spine west face",
+          "sectionX": 17362.66766746094,
+          "planX": 17674.73927477166,
+          "sectionHandles": [
+            "A93"
+          ],
+          "planHandles": [
+            "C79",
+            "BB2"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        },
+        {
+          "name": "stair spine east face",
+          "sectionX": 17382.66766746094,
+          "planX": 17694.73927477166,
+          "sectionHandles": [
+            "A94"
+          ],
+          "planHandles": [
+            "C79",
+            "BB4"
+          ],
+          "residualCm": 2.9103830456733704e-10
+        }
+      ],
+      "maxWallStationResidualCm": 2.9103830456733704e-10,
+      "ridgeLineHandle": "997",
+      "ridgeLabelHandle": "949",
+      "ridgeLineRawBounds": [
+        17659.73927477274,
+        6050.839404793806,
+        17659.73927477274,
+        7071.035817233005
+      ],
+      "heightChecks": [
+        {
+          "name": "bedroom H205",
+          "x": 17437.26230967269,
+          "floorElevationCm": 624,
+          "labelCm": 205,
+          "handles": [
+            "79D",
+            "79E"
+          ],
+          "roofUndersideClearanceCm": 204.99999999987494,
+          "residualCm": -1.2505552149377763e-10
+        },
+        {
+          "name": "sitting H205",
+          "x": 17976.05137543736,
+          "floorElevationCm": 572.4,
+          "labelCm": 205,
+          "handles": [
+            "8D9",
+            "A30"
+          ],
+          "roofUndersideClearanceCm": 204.92240931465244,
+          "residualCm": -0.07759068534755897
+        },
+        {
+          "name": "sitting H180",
+          "x": 18009.77704416314,
+          "floorElevationCm": 572.4,
+          "labelCm": 180,
+          "handles": [
+            "8DB",
+            "8DA"
+          ],
+          "roofUndersideClearanceCm": 180.00000000021942,
+          "residualCm": 2.1941559680271894e-10
+        },
+        {
+          "name": "bedroom west H180",
+          "x": 17374.73927477267,
+          "floorElevationCm": 624,
+          "labelCm": 180,
+          "handles": [
+            "79F",
+            "A32"
+          ],
+          "roofUndersideClearanceCm": 173.21423820078053,
+          "residualCm": -6.785761799219472
+        }
+      ]
+    },
+    "coverageAuthority": "User-authorized10cm overhang is a preference, not a dimension inferred from CAD. Limit coverage to top enclosed shell; terraces remain outside roof."
+  },
+  "builderCompatibility": {
+    "target": "tools/build_alternative_v2.py",
+    "readyForUnattendedRun": false,
+    "notes": [
+      "Floor crop/elevation/clearHeight, terrace points, renderer-supported fixture kind/rotation, stair landing/handles and top-level voids supplied.",
+      "sourceFixtures retain original semantic assemblies including nonrectangular counters and components; fixtures are their rectangular renderer-compatible subset/parts.",
+      "Do not flatten source polygons into bounding rectangles. Source fixture assemblies remain the authority for component relationships.",
+      "Roof ridgeX17659.73927477274 is now verified; axisz follows H997.10cm overhang authorized by user.",
+      "Continuous elevator void now enabled at ground source polygon with user-authorized normalization offsets.",
+      "Main agent reports wall clipping implemented; clipping still requires source-overlay QA.",
+      "floors.top.slabZones now has explicit points/localElevation; localStairs has two intermediate treadBounds/topLocalElevationM plus three-riser metadata and existing upper landing.",
+      "Top fixture offsets supplied via localElevation; west terrace localElevation0.486 corresponds section6.21m with whole-L extrapolation explicitly marked.",
+      "Six dining chairs active with exact native centers and orientations. One nativeFixtureCandidates round-table remains pending helper support; no geometry uncertainty.",
+      "All three slabZones use actual polygon points plus localElevation. Lower polygon has no holes; actual stair/shaft/double-height openings are separate void specs. Zone union plus local step strip exactly equals top enclosure."
+    ],
+    "readinessNote": "Core schema populated and initial builder reportedly succeeds; source-local elevation integration and visual QA still required."
+  },
+  "topSlabZones": {
+    "status": "west-high/east-low ownership verified by section wall registration, ridge/headroom markers, and local step direction; exact shared-wall slab trimming is an audited approximation",
+    "baseElevationM": 5.724,
+    "upperElevationM": 6.24,
+    "riseM": 0.516,
+    "directionEvidence": {
+      "handles": [
+        "9E7",
+        "9E8",
+        "9E9",
+        "A34",
+        "A35",
+        "A36",
+        "9E0",
+        "9E1",
+        "9E2",
+        "9E3",
+        "9E4",
+        "9E5",
+        "79D",
+        "79E",
+        "8D9",
+        "A30",
+        "8DB",
+        "8DA"
+      ],
+      "ascentRawDirection": [
+        -1,
+        0
+      ],
+      "notes": "Three section risers are explicitly17.2cm each. Plan arrow points west. Bedroom H205 at x17437.2623 matches561cm inner circle over floor6.24m to numerical precision; sitting H205/H180 match floor5.724m within0.078cm. Bedroom west H180 remains inconsistent by6.8cm and must not drive a whole-roof shift."
+    },
+    "zones": [
+      {
+        "id": "top-high-bedroom",
+        "name": "Bedroom upper zone",
+        "localElevationM": 0.516,
+        "points": [
+          [
+            17354.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6575.4786
+          ],
+          [
+            17684.7393,
+            6885.4786
+          ],
+          [
+            17699.7393,
+            6885.4786
+          ],
+          [
+            17699.7393,
+            7040.4786
+          ],
+          [
+            17354.7393,
+            7040.4786
+          ]
+        ],
+        "handles": [
+          "C59",
+          "C5D",
+          "C47",
+          "C61",
+          "C69",
+          "8B8",
+          "C55",
+          "A05",
+          "A13"
+        ],
+        "confidence": "level ownership verified; slab boundary follows wall faces and source step footprint",
+        "notes": "Bedroom reached from west/uphill lobby. At shared east wall use wall face17684.7393, not service-terrace boundary. Bedroom roof remains curved; no constant205cm full-room ceiling implied."
+      },
+      {
+        "id": "top-high-lobby",
+        "name": "Lobby above short steps",
+        "localElevationM": 0.516,
+        "bounds": [
+          17459.7393,
+          6455.4786,
+          17620.7393,
+          6575.4786
+        ],
+        "handles": [
+          "9F2",
+          "A34",
+          "C71",
+          "C59",
+          "8F4"
+        ],
+        "confidence": "level ownership verified; slab boundary follows wall faces and source step footprint",
+        "notes": "Bounded south by central void guard, west by terrace glazing, north by bedroom entry, east by step flight."
+      },
+      {
+        "id": "top-low-interior",
+        "name": "Eastern sitting kitchenette and bathroom",
+        "localElevationM": 0,
+        "geometryOperation": {
+          "base": "floors.top.enclosure",
+          "subtract": [
+            "top-high-bedroom",
+            "top-high-lobby",
+            "top-local-step-footprint",
+            "all top floor voids",
+            "living-top arriving stair opening",
+            "elevator reservation if normalized"
+          ]
+        },
+        "handles": [
+          "A23",
+          "A53",
+          "A60",
+          "C69",
+          "C89",
+          "A34",
+          "A35",
+          "A36"
+        ],
+        "confidence": "level ownership verified; slab boundary follows wall faces and source step footprint",
+        "notes": "Use polygon difference, not one enclosing rectangle. Bathroom shares east-side circulation with lower sitting area. No additional interior level marker observed."
+      }
+    ],
+    "localSteps": {
+      "id": "top-local-step-footprint",
+      "sourceFloor": "top",
+      "targetFloor": "top",
+      "shape": "straight",
+      "bounds": [
+        17620.7393,
+        6455.4786,
+        17674.7393,
+        6575.4786
+      ],
+      "start": [
+        17674.7393,
+        6515.4786
+      ],
+      "end": [
+        17620.7393,
+        6515.4786
+      ],
+      "lowerLocalElevationM": 0,
+      "upperLocalElevationM": 0.516,
+      "riseM": 0.516,
+      "nominalRiserCount": 3,
+      "nominalRiserHeightM": 0.172,
+      "treadsRawX": [
+        17674.7393,
+        17647.7393,
+        17620.7393
+      ],
+      "handles": [
+        "A34",
+        "A35",
+        "A36",
+        "9E7",
+        "9E8",
+        "9E9",
+        "9E0",
+        "9E1",
+        "9E2",
+        "9E3",
+        "9E4",
+        "9E5"
+      ],
+      "landingBounds": [
+        17459.7393,
+        6455.4786,
+        17620.7393,
+        6575.4786
+      ],
+      "confidence": "three17.2cm risers verified in section; plan54cm flight used for footprint",
+      "notes": "Section9E0/9E2/9E4 proves3x17.2cm=51.6cm. Its28cm goings and mapped riserX17610.7393/17638.7393/17666.7393 differ8-10cm from plan17620.7393/17647.7393/17674.7393. Use PLAN horizontal footprint, SECTION rise; record drafting discrepancy, do not shift walls.",
+      "sectionRiserRawX": [
+        17298.66766746094,
+        17326.66766746094,
+        17354.66766746094
+      ],
+      "sectionRiserRegisteredPlanX": [
+        17610.73927477195,
+        17638.73927477195,
+        17666.73927477195
+      ],
+      "sectionTreadSpacingCm": 28,
+      "planTreadSpacingCm": 27
+    },
+    "fixtureOffsetsM": {
+      "Top bedroom desk": 0.516,
+      "Top bedroom wardrobe": 0.516,
+      "Top bedroom bed": 0.516,
+      "Top kitchenette sink counter": 0,
+      "Top kitchenette east run": 0,
+      "Top bathroom vanity": 0,
+      "Top bathroom shower": 0,
+      "Top sitting sofa exploded assembly": 0
+    },
+    "wallOffsetPolicy": "Split walls at level-zone interfaces; high bedroom and high-lobby perimeter wall bases follow+0.516. East bathroom/kitchenette/sitting wall bases remain0. Shared walls need stepped bottoms or retain lowest base; do not lift whole mixed C61/C69 hatch as one object.",
+    "terraceLevelM": null,
+    "terraceNotes": "West section terrace finished level6.21m is confirmed, but exact all-terrace zone assignment remains an audited approximation. East service strip threshold remains unverified.",
+    "unresolved": [
+      "Exact threshold/terrace zone boundaries remain unverified.",
+      "Shared high/low wall-bottom clipping requires local geometry support.",
+      "Plan27cm and section28cm local-step goings differ; plan footprint retained.",
+      "Bedroom west H180 label differs6.8cm from registered inner roof; other headroom markers strongly agree."
+    ],
+    "terraceLevelEvidence": {
+      "name": "West flat terrace section",
+      "rawY": 9710.96195885918,
+      "elevationM": 6.21,
+      "localElevationAboveLowestTopM": 0.486,
+      "handles": [
+        "E5C",
+        "E63",
+        "E64"
+      ],
+      "planSpanX": [
+        16624.73927477307,
+        17194.73927477296
+      ],
+      "notes": "Section establishes6.21m finished terrace,3cm below upper indoor level. Mapping this datum to the entire L-shaped terrace and northern roof-plant region is not yet proven; enable on matched western zone only with appropriate clipping."
+    }
+  },
+  "fixtureCoverage": {
+    "status": "Source bed coverage complete: five explicit bed rectangles plus three native BED inserts. Missing basement east140x200 bed436 now active. Other current fixture integration notes retained.",
+    "classifiedButNotInActiveFixtures": [
+      {
+        "floor": "top",
+        "name": "Terrace native round dining table",
+        "handles": [
+          "8E9",
+          "8EC"
+        ],
+        "reason": "Only helper round-table height0.75 entry missing; renderer supports round-table. Exact diameter151.05cm and materialRole Dining table already supplied in nativeFixtureCandidates. Six chairs are active."
+      }
+    ],
+    "stillUnresolved": [
+      "Basement southwest yellow outlined furnishing at x17344..17410,y-2516..-2426 may be cabinet/appliance; no fridge-specific proof.",
+      "Basement/top X-marked tall bays classified as cabinets, not unproven refrigerators.",
+      "Roof solar collectors, tank and three air-conditioning condenser rectangles are classified external equipment; no furniture conversion required."
+    ],
+    "notes": "Active fixture list is a renderer-compatible subset with split counters. Auto-INSERT extraction remains responsible for native chair/toilet/bed symbols. Render overlay review is still required."
+  },
+  "openingInferencePolicy": {
+    "livingSourceHasA12": false,
+    "livingSourceHasSwingArcs": false,
+    "addedLivingInteriorDoorCount": 6,
+    "enabledRoles": "bedroom and bathroom entry only; inferred swings/heights explicitly marked",
+    "handleNote": "opening.handle beginning inferred-/reviewed- is a synthetic importer identity, not DXF handle. Actual evidence is sourceHandles.",
+    "heightPolicy": "Patio/balcony role and zero sill inferred separately from head height. No exact head dimension claimed without matched section cut.",
+    "circulationPolicy": "Do not fill main corridor, stair access, laundry passage, closet fronts or random gaps with doors."
+  },
+  "hobOvenAudit": {
+    "floor": "ground",
+    "handles": [
+      "1894",
+      "1895",
+      "1896",
+      "1897",
+      "1898",
+      "1899",
+      "189A",
+      "189B",
+      "189C",
+      "189D",
+      "189E",
+      "189F",
+      "18A3",
+      "FFB",
+      "1994"
+    ],
+    "outerSymbolBounds": [
+      17130.06845313739,
+      537.5000000000637,
+      17184.65602523773,
+      627.5000000000637
+    ],
+    "hobInsetBounds": [
+      17136.6201088448,
+      540.0000000000637,
+      17182.15602523773,
+      625.0000000000637
+    ],
+    "cabinetBayBounds": [
+      17124.73927477296,
+      537.5,
+      17189.73927477296,
+      627.5
+    ],
+    "frontRawDirection": [
+      -1,
+      0
+    ],
+    "frontPlannerDirection": [
+      -1,
+      0
+    ],
+    "frontageCm": 90,
+    "cabinetDepthCm": 65,
+    "counterAdjacentRunsRawY": [
+      [
+        500,
+        537.5
+      ],
+      [
+        627.5,
+        665
+      ]
+    ],
+    "classification": "source-verified four-burner cooker; oven-below component inferred, clearly distinguished",
+    "heightM": 0.92,
+    "heightStatus": "modeling assumption aligned to kitchen worktop, not source dimension"
+  },
+  "localStairs": [
+    {
+      "id": "top-local-west-ascent",
+      "floor": "top",
+      "sourceFloor": "top",
+      "targetFloor": "top",
+      "name": "Top split-level westward steps",
+      "bounds": [
+        17620.7393,
+        6455.4786,
+        17674.7393,
+        6575.4786
+      ],
+      "start": [
+        17674.7393,
+        6515.4786
+      ],
+      "end": [
+        17620.7393,
+        6515.4786
+      ],
+      "handles": [
+        "A34",
+        "A35",
+        "A36",
+        "9E7",
+        "9E8",
+        "9E9",
+        "9E0",
+        "9E1",
+        "9E2",
+        "9E3",
+        "9E4",
+        "9E5"
+      ],
+      "lowerLocalElevationM": 0,
+      "upperLocalElevationM": 0.516,
+      "riserCount": 3,
+      "riserHeightM": 0.172,
+      "goingCm": 27,
+      "steps": [
+        {
+          "name": "Lower intermediate tread",
+          "treadBounds": [
+            17647.7393,
+            6455.4786,
+            17674.7393,
+            6575.4786
+          ],
+          "topLocalElevationM": 0.172,
+          "handles": [
+            "A35",
+            "A36",
+            "9E4"
+          ]
+        },
+        {
+          "name": "Upper intermediate tread",
+          "treadBounds": [
+            17620.7393,
+            6455.4786,
+            17647.7393,
+            6575.4786
+          ],
+          "topLocalElevationM": 0.344,
+          "handles": [
+            "A34",
+            "A35",
+            "9E2"
+          ]
+        }
+      ],
+      "upperLanding": {
+        "points": [
+          [
+            17459.7393,
+            6455.4786
+          ],
+          [
+            17620.7393,
+            6455.4786
+          ],
+          [
+            17620.7393,
+            6575.4786
+          ],
+          [
+            17459.7393,
+            6575.4786
+          ]
+        ],
+        "topLocalElevationM": 0.516,
+        "alreadyRepresentedBySlabZone": "Upper lobby",
+        "handles": [
+          "A34",
+          "9E0"
+        ]
+      },
+      "notes": "Three risers, TWO27cm intermediate goings, then upper lobby landing. Do not invent a third27cm tread beyond the54cm plan footprint or duplicate the landing slab."
+    }
+  ],
+  "nativeAssemblies": [
+    {
+      "floor": "top",
+      "name": "Terrace tbr6 native dining set",
+      "insertHandle": "8E9",
+      "block": "tbr6",
+      "insertRaw": [
+        17034.46023460421,
+        6321.77536217278
+      ],
+      "scale": [
+        1.006999999999948,
+        1.006999999999948
+      ],
+      "rotation": 0,
+      "blockMemberHandles": [
+        "8EC",
+        "8ED",
+        "8EE",
+        "8EF",
+        "8F0",
+        "8F1",
+        "8F2"
+      ],
+      "worldBounds": [
+        16925.943100627013,
+        6211.005362172786,
+        17142.977368581403,
+        6432.545362172774
+      ],
+      "components": [
+        {
+          "name": "Terrace native round dining table",
+          "kind": "round-table",
+          "handles": [
+            "8E9",
+            "8EC"
+          ],
+          "replaces": [
+            "8E9"
+          ],
+          "bounds": [
+            16958.93523460421,
+            6246.250362172784,
+            17109.985234604206,
+            6397.300362172776
+          ],
+          "rotation": 0,
+          "height": 0.75,
+          "localElevation": 0.486,
+          "materialRole": "Dining table",
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EC",
+          "sourceShape": "circle",
+          "radiusCm": 75.5249999999961
+        },
+        {
+          "name": "Terrace native chair 1",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8ED"
+          ],
+          "replaces": [],
+          "bounds": [
+            17083.412679041136,
+            6339.397862172779,
+            17133.762679041134,
+            6389.747862172776
+          ],
+          "rotation": 60,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8ED",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        },
+        {
+          "name": "Terrace native chair 2",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8EE"
+          ],
+          "replaces": [],
+          "bounds": [
+            17083.412679041136,
+            6253.8028621727835,
+            17133.762679041134,
+            6304.15286217278
+          ],
+          "rotation": 120,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EE",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        },
+        {
+          "name": "Terrace native chair 3",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8EF"
+          ],
+          "replaces": [],
+          "bounds": [
+            17009.28523460421,
+            6211.005362172786,
+            17059.635234604208,
+            6261.355362172782
+          ],
+          "rotation": 180,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8EF",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        },
+        {
+          "name": "Terrace native chair 4",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F0"
+          ],
+          "replaces": [],
+          "bounds": [
+            16935.157790167283,
+            6253.8028621727835,
+            16985.50779016728,
+            6304.15286217278
+          ],
+          "rotation": 240,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F0",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        },
+        {
+          "name": "Terrace native chair 5",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F1"
+          ],
+          "replaces": [],
+          "bounds": [
+            16935.157790167283,
+            6339.397862172779,
+            16985.50779016728,
+            6389.747862172776
+          ],
+          "rotation": 300,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F1",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        },
+        {
+          "name": "Terrace native chair 6",
+          "kind": "chair",
+          "handles": [
+            "8E9",
+            "8F2"
+          ],
+          "replaces": [],
+          "bounds": [
+            17009.28523460421,
+            6382.195362172777,
+            17059.635234604208,
+            6432.545362172774
+          ],
+          "rotation": 0,
+          "height": 0.9,
+          "localElevation": 0.486,
+          "sourceInsert": "8E9",
+          "sourceBlockMember": "8F2",
+          "boundsSemantics": "unrotated50.35cm square placement box at transformed native centroid; apply rotation to recover actual source footprint",
+          "frontEvidence": "Faces table center; native source square edges preserved by stated rotation."
+        }
+      ],
+      "activationStatus": "Six chairs now active in floors.top.fixtures. Round table remains the sole candidate: helper needs round-table height0.75; renderer already supports it. Promote the one remaining nativeFixtureCandidates entry unchanged when enabled.",
+      "deduplication": "Do not import8E9 bounding box as another table. One circle plus six squares only."
+    }
+  ],
+  "recipeHandoff": {
+    "schemaStable": true,
+    "scope": "Only tools/alt3_v2_source.json edited",
+    "activeFixtureCount": 70,
+    "remainingIntegration": [
+      {
+        "item": "Terrace round table",
+        "needed": "Add round-table:0.75 to shared fixture helper heights, then promote floors.top.nativeFixtureCandidates[0] to fixtures; no geometry extraction needed.",
+        "sourceKnown": true
+      }
+    ],
+    "qaNotes": [
+      "Source-confirmed clockwise/counterclockwise transformations and front-facing direction retained for chairs.",
+      "Provisional door head heights and inferred living swings remain labelled.",
+      "Do not treat this source audit as browser QA or publication approval."
+    ]
+  },
+  "bedCoverage": {
+    "status": "all identified source bed rectangles covered",
+    "explicitBedRectangles": [
+      {
+        "floor": "basement",
+        "handle": "436",
+        "sizeCm": [
+          140,
+          200
+        ]
+      },
+      {
+        "floor": "living",
+        "handle": "12DA",
+        "sizeCm": [
+          110,
+          190
+        ]
+      },
+      {
+        "floor": "living",
+        "handle": "12D9",
+        "sizeCm": [
+          115,
+          190
+        ]
+      },
+      {
+        "floor": "living",
+        "handle": "13A8",
+        "sizeCm": [
+          180,
+          200
+        ]
+      },
+      {
+        "floor": "top",
+        "handle": "B9D",
+        "sizeCm": [
+          115,
+          190
+        ]
+      }
+    ],
+    "nativeInsertBeds": [
+      {
+        "floor": "basement",
+        "handle": "44B",
+        "block": "BED"
+      },
+      {
+        "floor": "basement",
+        "handle": "473",
+        "block": "BED"
+      },
+      {
+        "floor": "basement",
+        "handle": "474",
+        "block": "BED"
+      }
+    ],
+    "notes": "Three native BED inserts are handled by generic INSERT extraction, not duplicated in fixtures. Folded shelter sofa intentionally excludes H projected bed extension. No other identified A34 bed rectangle omission remains."
+  }
+}
