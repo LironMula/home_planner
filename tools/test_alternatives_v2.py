@@ -2,16 +2,94 @@
 
 import json
 import math
+import copy
 from pathlib import Path
 import unittest
 
 from shapely.geometry import box
 from shapely.ops import unary_union
+from alternative_site import register_site, rotate_house
 
 ROOT=Path(__file__).resolve().parents[1]
 
 
 class AlternativeTests(unittest.TestCase):
+    def test_shared_split_slab_holes_rotate_once(self):
+        hole=dict(x=1,y=2,w=.8,h=1.2)
+        slab=dict(x=0,y=0,w=4,h=5,floorHoles=[hole])
+        plan={c:[] for c in ('rooms','walls','stairs','elements','roofs','boundaries','openings','rulers')}
+        plan['rooms']=[dict(slab,id='a'),dict(slab,id='b')]
+        rotate_house(plan,10,10)
+        for room in plan['rooms']:
+            self.assertEqual(room['floorHoles'],[dict(x=8.2,y=6.8,w=.8,h=1.2)])
+        self.assertIsNot(plan['rooms'][0]['floorHoles'][0],plan['rooms'][1]['floorHoles'][0])
+
+    def test_site_and_camera(self):
+        donor=json.loads((ROOT/'plans/architect-alt-4-v2.json').read_text())
+        exterior=json.loads((ROOT/'plans/ruchama-18-20-external.json').read_text())
+        for alt in (3,5):
+            with self.subTest(alternative=alt):
+                key=f'architect-alt-{alt}-v2'
+                plan=json.loads((ROOT/f'plans/{key}.json').read_text())
+                audit=json.loads((ROOT/f'docs/alt{alt}-v2-layer-audit.json').read_text(encoding='utf-8'))
+                site=plan['siteRegistration']
+                tx,ty=site['xTranslation'],site['yTranslation']
+                self.assertEqual(site,audit['siteRegistration'])
+                self.assertEqual(site['rotationDegrees'],180)
+                self.assertEqual(plan['cameraMode'],'35mm')
+                snapshot=copy.deepcopy(plan)
+                register_site(plan,donor,exterior)
+                self.assertEqual(plan,snapshot,'Registration must not duplicate or rotate twice')
+                reverse=copy.deepcopy(plan)
+                rotate_house(reverse,tx,ty)
+                rotate_house(reverse,tx,ty)
+                self.assertEqual(reverse,plan,'All world-space geometry must round-trip together')
+                ground=[r for r in plan['rooms'] if r['floorId']==key+'-ground']
+                indoors=[r for r in ground if not r.get('outdoor')]
+                self.assertAlmostEqual(max(r['x']+r['w'] for r in indoors),12.65)
+                self.assertAlmostEqual(min(r['y'] for r in indoors),.5)
+                footprint=unary_union([box(r['x'],r['y'],r['x']+r['w'],r['y']+r['h']) for r in ground])
+                entrance=[o for o in plan['openings'] if o['id'] in site['entranceIds']]
+                camera=plan['camera']; pos=camera['position']
+                self.assertAlmostEqual(pos['x'],sum(o['x'] for o in entrance)/len(entrance))
+                self.assertAlmostEqual(pos['z'],sum(o['y'] for o in entrance)/len(entrance)+4)
+                self.assertEqual(pos['y'],1.6)
+                self.assertAlmostEqual(camera['yaw'],math.pi)
+                self.assertEqual(camera['pitch'],0)
+                from shapely.geometry import Point
+                self.assertFalse(footprint.contains(Point(pos['x'],pos['z'])))
+                for collection in ('walls','elements'):
+                    copied=[e for e in plan[collection] if e.get('context')]
+                    self.assertEqual({e['sourceSiteId'] for e in copied},{e['id'] for e in exterior[collection]})
+                    for source in exterior[collection]:
+                        parts=[e for e in copied if e['sourceSiteId']==source['id']]
+                        for part in parts:
+                            self.assertEqual(part['floorId'],key+'-ground')
+                            for field in ('color','opacity','height','rotation','elementKind','type1'):
+                                self.assertEqual(part.get(field),source.get(field))
+                        if source.get('elementKind')=='grass' and source.get('rotation',0)==0:
+                            actual=unary_union([box(e['x'],e['y'],e['x']+e['w'],e['y']+e['h']) for e in parts])
+                            expected=box(source['x'],source['y'],source['x']+source['w'],source['y']+source['h']).difference(footprint)
+                            self.assertLess(actual.symmetric_difference(expected).area,.00001)
+                        else:
+                            self.assertEqual(len(parts),1)
+                            delta=.55 if '-garden-' in source['id'] else 0
+                            self.assertAlmostEqual(parts[0]['x'],source['x']+delta)
+                            for field in ('y','w','h'):
+                                self.assertEqual(parts[0][field],source[field])
+                for entry in audit['stairs']:
+                    stair=next(s for s in plan['stairs'] if s['floorId']==key+'-'+entry['sourceFloor'])
+                    bounds=[r['bounds'] for r in entry['runs']]+[entry['landing']]
+                    self.assertAlmostEqual(stair['x'],tx-max(b[2] for b in bounds),places=3)
+                    self.assertAlmostEqual(stair['y'],ty-max(b[3] for b in bounds),places=3)
+                    self.assertEqual(stair['rotation'],180)
+                for room in plan['rooms']:
+                    for field in ('floorHoles','ceilingHoles'):
+                        for hole in room.get(field,[]):
+                            source=next(v for v in audit['voids'] if v['role']==hole['role'])
+                            source_piece=box(tx-hole['x']-hole['w'],ty-hole['y']-hole['h'],tx-hole['x'],ty-hole['y'])
+                            self.assertTrue(box(*source['bounds']).buffer(.001).covers(source_piece))
+
     def test_saved_plans(self):
         for alt in (3,5):
             with self.subTest(alternative=alt):

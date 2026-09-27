@@ -12,11 +12,15 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon as Patch
 
 from build_alt4_v2 import item_polygon
+from alternative_site import rotate_house
 
 
 def render(alternative, source):
     key=f'architect-alt-{alternative}-v2'
     plan=json.loads(Path(f'plans/{key}.json').read_text())
+    registration=plan.get('siteRegistration')
+    if registration:
+        rotate_house(plan, registration['xTranslation'], registration['yTranslation'])
     recipe=json.loads(Path(f'tools/alt{alternative}_v2_source.json').read_text(encoding='utf-8'))
     doc=ezdxf.readfile(source)
     output=Path(f'pdf_renders/alt{alternative}-v2')
@@ -50,7 +54,7 @@ def render(alternative, source):
                     continue
         for collection,color in [('walls','#d82540'),('elements','#326cc1')]:
             for obj in plan[collection]:
-                if obj['floorId']!=key+'-'+floor:
+                if obj['floorId']!=key+'-'+floor or obj.get('context'):
                     continue
                 shape=item_polygon(obj)
                 axes[1].add_patch(Patch(list(shape.exterior.coords),fill=False,edgecolor=color,linewidth=1))

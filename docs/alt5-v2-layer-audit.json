@@ -4576,7 +4576,7 @@
       "modelVerifiedDimensionCount": 7
     }
   },
-  "coordinateContract": "CAD centimetres to metres; common house X and registered per-sheet Y; Y inverted; no house-only rotation",
+  "coordinateContract": "CAD centimetres to registered source metres with Y inverted; then whole-house 180-degree site placement. Floor/dimension/stair/void audit coordinates remain in source metres; serialized plan geometry is in final site metres.",
   "contourAuthority": "User authorized A17 enclosures and A14/A13/H stair evidence where AREA is absent",
   "materialAuthority": "Current Alt-4 v2 and subsequent user finish preferences",
   "stairs": [
@@ -5112,14 +5112,38 @@
     "generatorChecksPassed": true,
     "publicationReady": true,
     "pending": [],
-    "planSha256": "273d57a683debcaabcda6cfb5db111dfd7cd7309e4db3c5eace48a42d58c1c9c",
+    "planSha256": "9735f6ec2f21ea993c71a467883a0b6b0447fda9550fb660fbfa102b5273feb4",
     "sourceOverlayReviewed": true,
     "browser": {
-      "planSha256": "273d57a683debcaabcda6cfb5db111dfd7cd7309e4db3c5eace48a42d58c1c9c",
+      "planSha256": "9735f6ec2f21ea993c71a467883a0b6b0447fda9550fb660fbfa102b5273feb4",
+      "entrance": {
+        "facing": 1,
+        "projected": [
+          0,
+          0,
+          0.9501950195019503
+        ],
+        "openingId": "architect-alt-5-v2-ground-audited-main-entry",
+        "hit": {
+          "distance": 3.9600000008940706,
+          "point": [
+            3.02,
+            1.6,
+            7.33999999910593
+          ],
+          "data": {}
+        },
+        "position": [
+          3.02,
+          1.6,
+          11.3
+        ],
+        "context": 31
+      },
       "checks": [
         {
           "floor": "architect-alt-5-v2-basement",
-          "colors": 828,
+          "colors": 1114,
           "surfaces": 15,
           "holeChecks": 0,
           "blocked": [],
@@ -5127,7 +5151,7 @@
         },
         {
           "floor": "architect-alt-5-v2-ground",
-          "colors": 1211,
+          "colors": 1499,
           "surfaces": 22,
           "holeChecks": 135,
           "blocked": [],
@@ -5135,7 +5159,7 @@
         },
         {
           "floor": "architect-alt-5-v2-living",
-          "colors": 1243,
+          "colors": 2059,
           "surfaces": 37,
           "holeChecks": 351,
           "blocked": [],
@@ -5143,7 +5167,7 @@
         },
         {
           "floor": "architect-alt-5-v2-top",
-          "colors": 749,
+          "colors": 1484,
           "surfaces": 23,
           "holeChecks": 189,
           "blocked": [],
@@ -5155,5 +5179,34 @@
     "scope": "Visualization checked against source geometry. Inferred openings and source discrepancies remain documented in the source recipe; not a construction certification."
   },
   "sourceRecipe": "tools/alt5_v2_source.json",
-  "sourceRecipeSha256": "847c33b0045be1b4fc35ab796e86a92ae6fe1b575eb2b503dfffd5c81ee7a3ac"
+  "sourceRecipeSha256": "847c33b0045be1b4fc35ab796e86a92ae6fe1b575eb2b503dfffd5c81ee7a3ac",
+  "siteRegistration": {
+    "rotationDegrees": 180,
+    "xTranslation": 12.65,
+    "yTranslation": 8.51,
+    "anchors": "Alt-4 garden-side facade X and rear setback Y; source front entrance now faces the approach",
+    "exteriorSave": "plans/ruchama-18-20-external.json",
+    "exteriorSha256": "7edd91af1a1c9022d2f179aec5eda5549d9fcfe2e5eb043dca5b845cf9bb765a",
+    "adjustments": [
+      {
+        "role": "garden dining assembly",
+        "xTranslation": 0.55,
+        "reason": "Keep all seven pieces together, clear of the house facade"
+      },
+      {
+        "sourceId": "ruchama-18-20-external-landscape-element-4t0cavv",
+        "role": "lawn",
+        "reason": "Trim only where house slabs or terraces replace grass"
+      },
+      {
+        "sourceId": "ruchama-18-20-external-landscape-element-igaeaty",
+        "role": "lawn",
+        "reason": "Trim only where house slabs or terraces replace grass"
+      }
+    ],
+    "entranceIds": [
+      "architect-alt-5-v2-ground-audited-main-entry"
+    ],
+    "defaultCamera": "35 mm, 1.6 m eye height, 4 m outside the front entrance, looking straight at it"
+  }
 }

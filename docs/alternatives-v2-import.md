@@ -7,7 +7,29 @@ Two separate saves are registered in Load GitHub:
 
 The earlier alternatives are retained. Each new save was reconstructed from
 its own native drawing through a fresh layer-preserving DXF conversion.
-Alt-4 supplies semantic materials, not house coordinates.
+Alt-4 supplies semantic materials and the surrounding site, not internal house geometry.
+
+## Site And Camera
+
+Both alternatives use the saved `ruchama-18-20-external` surroundings. A final
+180-degree house-only rotation aligns the garden-side facade and rear setback
+with Alt-4. All floors, opening hosts, stairs, shaft/ceiling holes, fixtures,
+and circular roof profiles share that transform; source dimensions do not change.
+Roads, fences, trees, pool, and neighboring buildings retain their saved positions.
+Lawns are trimmed at ground-floor slabs/terraces, and the seven-piece garden
+dining assembly shifts 55 cm outward to keep the chairs clear of the facade.
+
+The default 35 mm camera stands 4 m outside each alternative's own front door,
+at 1.6 m eye height, looking directly toward the entrance. This is an eye-level
+entry view, not a copy of Alt-4's saved elevated overview.
+
+`tools/alternative_site.py` also updates existing audited saves without rerunning
+CAD extraction, and prevents a second rotation. The importer applies the same
+registration after source-space validation. Layer-audit measurements remain in
+source coordinates; the site transform is recorded separately in each plan/audit.
+Source overlays invert that transform and omit the copied site objects.
+Detach shared nested hole dictionaries before transforming split-level slabs:
+an in-memory shared hole must not rotate a second time with its other owner.
 
 ## Source Decisions
 

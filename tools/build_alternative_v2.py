@@ -19,6 +19,7 @@ from shapely.ops import unary_union
 
 from build_alt4_v2 import Importer, LAYERS, item_polygon, polygons, rects, rounded
 from cad_text import decode_architect_text
+from alternative_site import SITE, register_site, record_registration
 
 
 class AlternativeImporter(Importer):
@@ -404,6 +405,8 @@ class AlternativeImporter(Importer):
             audit['counts']={c:sum(v.get('floorId')==self.key+'-'+key for v in self.plan[c]) for c in ('walls','openings','elements','rooms')}
         self.audit['sourceRecipe']=f'tools/alt{self.alternative}_v2_source.json'
         self.audit['sourceRecipeSha256']=hashlib.sha256(json.dumps(self.recipe,sort_keys=True).encode()).hexdigest()
+        external=json.loads(SITE.read_text(encoding='utf-8'))
+        record_registration(self.audit, register_site(self.plan, self.material_donor, external))
         self.plan['importAudit']=f'docs/alt{self.alternative}-v2-layer-audit.json'
         Path(f'plans/{self.key}.json').write_text(json.dumps(self.plan,indent=2)+'\n',encoding='utf-8')
         Path(self.plan['importAudit']).write_text(json.dumps(self.audit,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

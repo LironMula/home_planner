@@ -5693,7 +5693,7 @@
       "modelVerifiedDimensionCount": 10
     }
   },
-  "coordinateContract": "CAD centimetres to metres; common house X and registered per-sheet Y; Y inverted; no house-only rotation",
+  "coordinateContract": "CAD centimetres to registered source metres with Y inverted; then whole-house 180-degree site placement. Floor/dimension/stair/void audit coordinates remain in source metres; serialized plan geometry is in final site metres.",
   "contourAuthority": "User authorized A17 enclosures and A14/A13/H stair evidence where AREA is absent",
   "materialAuthority": "Current Alt-4 v2 and subsequent user finish preferences",
   "stairs": [
@@ -6579,14 +6579,38 @@
     "generatorChecksPassed": true,
     "publicationReady": true,
     "pending": [],
-    "planSha256": "b2d6518998c7e8f6de4b117539b022db4e3b136ce7b02946aa66f8c91a6ff023",
+    "planSha256": "11e9b6a37724730e577b35536f541106b6623c9d939bbaf6f6f8b83583f02dbf",
     "sourceOverlayReviewed": true,
     "browser": {
-      "planSha256": "b2d6518998c7e8f6de4b117539b022db4e3b136ce7b02946aa66f8c91a6ff023",
+      "planSha256": "11e9b6a37724730e577b35536f541106b6623c9d939bbaf6f6f8b83583f02dbf",
+      "entrance": {
+        "facing": 1,
+        "projected": [
+          0,
+          0,
+          0.9501950195019503
+        ],
+        "openingId": "architect-alt-3-v2-ground-door-1870-0",
+        "hit": {
+          "distance": 3.9849805842902986,
+          "point": [
+            5.545500000100582,
+            1.6,
+            7.91499999910593
+          ],
+          "data": {}
+        },
+        "position": [
+          5.1,
+          1.6,
+          11.875
+        ],
+        "context": 32
+      },
       "checks": [
         {
           "floor": "architect-alt-3-v2-basement",
-          "colors": 871,
+          "colors": 1088,
           "surfaces": 17,
           "holeChecks": 0,
           "blocked": [],
@@ -6594,7 +6618,7 @@
         },
         {
           "floor": "architect-alt-3-v2-ground",
-          "colors": 1168,
+          "colors": 1574,
           "surfaces": 31,
           "holeChecks": 135,
           "blocked": [],
@@ -6602,19 +6626,19 @@
         },
         {
           "floor": "architect-alt-3-v2-living",
-          "colors": 1179,
-          "surfaces": 52,
+          "colors": 1762,
+          "surfaces": 53,
           "holeChecks": 612,
           "blocked": [],
           "textures": 27
         },
         {
           "floor": "architect-alt-3-v2-top",
-          "colors": 980,
-          "surfaces": 29,
+          "colors": 1447,
+          "surfaces": 30,
           "holeChecks": 486,
           "blocked": [],
-          "textures": 24
+          "textures": 25
         }
       ],
       "errors": []
@@ -6622,5 +6646,35 @@
     "scope": "Visualization checked against source geometry. Inferred openings and source discrepancies remain documented in the source recipe; not a construction certification."
   },
   "sourceRecipe": "tools/alt3_v2_source.json",
-  "sourceRecipeSha256": "5bbfc742822006f40cfadb041d3543f5adc843898aa9304a73a0088ccfc9d44b"
+  "sourceRecipeSha256": "5bbfc742822006f40cfadb041d3543f5adc843898aa9304a73a0088ccfc9d44b",
+  "siteRegistration": {
+    "rotationDegrees": 180,
+    "xTranslation": 12.65,
+    "yTranslation": 9.65,
+    "anchors": "Alt-4 garden-side facade X and rear setback Y; source front entrance now faces the approach",
+    "exteriorSave": "plans/ruchama-18-20-external.json",
+    "exteriorSha256": "7edd91af1a1c9022d2f179aec5eda5549d9fcfe2e5eb043dca5b845cf9bb765a",
+    "adjustments": [
+      {
+        "role": "garden dining assembly",
+        "xTranslation": 0.55,
+        "reason": "Keep all seven pieces together, clear of the house facade"
+      },
+      {
+        "sourceId": "ruchama-18-20-external-landscape-element-4t0cavv",
+        "role": "lawn",
+        "reason": "Trim only where house slabs or terraces replace grass"
+      },
+      {
+        "sourceId": "ruchama-18-20-external-landscape-element-igaeaty",
+        "role": "lawn",
+        "reason": "Trim only where house slabs or terraces replace grass"
+      }
+    ],
+    "entranceIds": [
+      "architect-alt-3-v2-ground-door-1870-0",
+      "architect-alt-3-v2-ground-door-18CF-1"
+    ],
+    "defaultCamera": "35 mm, 1.6 m eye height, 4 m outside the front entrance, looking straight at it"
+  }
 }

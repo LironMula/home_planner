@@ -34,6 +34,34 @@ const server = http.createServer((req, res) => {
       await page.goto(`http://127.0.0.1:${server.address().port}/`);
       await page.waitForFunction(() => typeof three !== 'undefined' && three.isReady);
       await page.evaluate(value => applyPlanSnapshot(value), plan);
+      const entrance = await page.evaluate(ids => {
+        updateCamera();
+        const openings=state.openings.filter(o => ids.includes(o.id));
+        const center=new THREE.Vector3(openings.reduce((s,o)=>s+o.x,0)/openings.length,
+          three.orbit.position.y, openings.reduce((s,o)=>s+o.y,0)/openings.length);
+        const direction=center.clone().sub(three.orbit.position).normalize();
+        const facing=direction.dot(cameraForwardVector());
+        const projected=center.clone().project(three.camera);
+        // Aim into a leaf, not the sub-millimetre seam between paired leaves.
+        const leafDirection=new THREE.Vector3(openings[0].x,center.y,openings[0].y)
+          .sub(three.orbit.position).normalize();
+        const ray=new THREE.Raycaster(three.orbit.position,leafDirection,0,4.1);
+        ray.camera=three.camera;
+        const hit=ray.intersectObjects(three.root.children,true).find(h => h.object.isMesh);
+        let object=hit?.object, openingId;
+        while(object) {
+          openingId ||= three.doors.find(d => d.parent === object)?.opening.id;
+          object=object.parent;
+        }
+        return {facing, projected:projected.toArray(), openingId, hit:hit && {distance:hit.distance,
+          point:hit.point.toArray(), data:hit.object.userData}, position:three.orbit.position.toArray(),
+          context:state.elements.filter(e=>e.context).length};
+      }, plan.siteRegistration.entranceIds);
+      await page.screenshot({path:path.join(output,'browser-default-entrance.png')});
+      assert(entrance.facing > .9999 && Math.abs(entrance.projected[0]) < .001);
+      assert(plan.siteRegistration.entranceIds.includes(entrance.openingId), JSON.stringify(entrance));
+      assert(entrance.context >= 28);
+      await page.screenshot({path:path.join(output,'browser-default-entrance.png')});
       const checks = [];
       for (const floor of plan.floors) {
         const key = floor.id.split('-').at(-1);
@@ -108,6 +136,9 @@ const server = http.createServer((req, res) => {
         await page.screenshot({path: path.join(output, `browser-exterior-${index}.png`)});
       }
       await page.setViewportSize({width: 390, height: 844});
+      await page.evaluate(camera => {
+        applyCameraSnapshot(camera); updateCamera();
+      }, plan.camera);
       await page.locator('.view-shell').scrollIntoViewIfNeeded();
       await page.evaluate(() => { document.getElementById('viewShell').requestFullscreen = undefined; });
       await page.locator('#fullscreen3DBtn').click();
@@ -116,7 +147,7 @@ const server = http.createServer((req, res) => {
       await page.screenshot({path: path.join(output, 'browser-mobile.png')});
       assert.equal(errors.length, 0, errors.join('\n'));
       const planSha256 = createHash('sha256').update(fs.readFileSync(path.join(root, `plans/architect-alt-${alt}-v2.json`))).digest('hex');
-      fs.writeFileSync(path.join(output, 'browser-checks.json'), JSON.stringify({planSha256, checks, errors}, null, 2));
+      fs.writeFileSync(path.join(output, 'browser-checks.json'), JSON.stringify({planSha256, entrance, checks, errors}, null, 2));
       console.log(JSON.stringify({alternative: alt, checks, errors}));
       await page.close();
     }
