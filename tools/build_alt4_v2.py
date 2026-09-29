@@ -19,6 +19,8 @@ from shapely.geometry import LineString, Point, Polygon, box
 from shapely.ops import polygonize, unary_union
 from cad_text import decode_architect_text
 from alt4_sections import section_constraints
+from door_finishes import apply_interior_door_finish
+from opening_guards import add_opening_guards
 
 KEY = "architect-alt-4-v2"
 LAYERS = ("AREA", "A17", "A34", "A24", "A49", "A16", "A12", "A14", "A13", "H")
@@ -950,9 +952,11 @@ class Importer:
         self.stairs()
         self.future_elevator()
         self.apply_materials()
+        apply_interior_door_finish(self.plan)
         self.geometry_checks()
         self.section_roof()
         self.register_to_saved_site()
+        add_opening_guards(self.plan)
         ids=[item["id"] for key in ("rooms","walls","openings","stairs","elements") for item in self.plan[key]]
         assert len(ids)==len(set(ids)), "Duplicate source ids"
         self.plan["importAudit"] = "docs/alt4-v2-layer-audit.json"

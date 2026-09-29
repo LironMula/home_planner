@@ -1551,8 +1551,9 @@
               <span class="camera-icon" aria-hidden="true"></span>
             </button>
             <div class="camera-mode-menu" id="cameraModeMenu" role="menu" hidden>
-              <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="35mm">35 mm</button>
+              <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="17mm">17 mm</button>
               <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="24mm">24 mm</button>
+              <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="35mm">35 mm</button>
               <button class="camera-mode-option" type="button" role="menuitemradio" data-camera-mode="fixed">Fixed scale</button>
             </div>
           </div>
@@ -1628,6 +1629,7 @@
     const canvas = document.getElementById("planCanvas");
     const ctx = canvas.getContext("2d");
     const threeCanvas = document.getElementById("threeCanvas");
+    const cameraModePreferenceKey = "home-floor-planner-camera-mode";
 
     const state = {
       scale: 52,
@@ -1637,7 +1639,7 @@
       selectedId: null,
       selectedIds: [],
       splitRatio: 0.58,
-      cameraMode: "35mm",
+      cameraMode: readCameraModePreference(),
       controlAutoHide: false,
       controlCollapsed: false,
       controlExpandedWidth: 210,
@@ -2807,6 +2809,8 @@
       ];
       return items.filter(item => !items.some(other => {
         if (other.id === item.id) return false;
+        // Low edge guards coexist with structural walls; rotated AABBs are not occlusion proof.
+        if (item.openingGuard || other.openingGuard) return false;
         if (item.type === "space" || other.type === "space") return false;
         return itemOpacity(other) > itemOpacity(item) && itemsMeaningfullyOverlap(item, other);
       }));
@@ -3981,7 +3985,6 @@
         wallHeight: state.wallHeight,
         camera: cameraSnapshot(),
         splitRatio: state.splitRatio,
-        cameraMode: state.cameraMode,
         activeFloorId: state.activeFloorId,
         viewFloor: state.viewFloor,
         view: normalizeViewState(state.view),
@@ -4397,7 +4400,6 @@
       state.scale = saved.scale || state.scale;
       state.wallHeight = saved.wallHeight || state.wallHeight;
       state.splitRatio = clamp(saved.splitRatio || state.splitRatio || 0.58, 0.16, 0.84);
-      state.cameraMode = normalizeCameraMode(saved.cameraMode);
       applyCameraProjection();
       state.activeFloorId = saved.activeFloorId || saved.floors[0]?.id || state.activeFloorId;
       state.viewFloor = saved.viewFloor || "all";
@@ -5055,7 +5057,15 @@
     }
 
     function normalizeCameraMode(mode) {
-      return mode === "24mm" || mode === "fixed" ? mode : "35mm";
+      return ["17mm", "24mm", "35mm", "fixed"].includes(mode) ? mode : "17mm";
+    }
+
+    function readCameraModePreference() {
+      try {
+        return normalizeCameraMode(window.localStorage.getItem(cameraModePreferenceKey));
+      } catch {
+        return "17mm";
+      }
     }
 
     function perspectiveVerticalFov(horizontalFov, aspect) {
@@ -5086,7 +5096,7 @@
       } else {
         // Full-frame-equivalent lenses, with the 36 mm film gate on the longer axis.
         three.camera.filmGauge = 36;
-        three.camera.setFocalLength(state.cameraMode === "24mm" ? 24 : 35);
+        three.camera.setFocalLength(parseInt(normalizeCameraMode(state.cameraMode), 10));
       }
     }
 
@@ -5110,7 +5120,7 @@
 
     function updateCameraModeControl() {
       if (!els.cameraModeMenu || !els.cameraModeBtn) return;
-      const label = state.cameraMode === "fixed" ? "Fixed scale" : state.cameraMode === "24mm" ? "24 mm" : "35 mm";
+      const label = state.cameraMode === "fixed" ? "Fixed scale" : `${parseInt(normalizeCameraMode(state.cameraMode), 10)} mm`;
       els.cameraModeBtn.title = `Camera mode: ${label}`;
       els.cameraModeBtn.setAttribute("aria-label", `Camera mode: ${label}`);
       els.cameraModeMenu.querySelectorAll("[data-camera-mode]").forEach(option => {
@@ -5122,6 +5132,11 @@
 
     function setCameraMode(mode) {
       state.cameraMode = normalizeCameraMode(mode);
+      try {
+        window.localStorage.setItem(cameraModePreferenceKey, state.cameraMode);
+      } catch {
+        // Keep the lens usable when browser storage is unavailable.
+      }
       updateCameraModeControl();
       closeCameraModeMenu();
       applyCameraProjection();
@@ -5912,6 +5927,23 @@
 
     function addCustomWall3D(wall, floor, gaps = []) {
       if (wall.elevation) floor = { ...floor, elevation: floor.elevation + Number(wall.elevation) };
+      if (wall.openingGuard) {
+        const group = new THREE.Group();
+        group.position.set(wall.x + wall.w / 2, floor.elevation, wall.y + wall.h / 2);
+        group.rotation.y = -(wall.rotation || 0) * Math.PI / 180;
+        group.userData.openingGuard = wall.id;
+        const height = wall.height ?? .9;
+        const glass = makeBox(wall.w, height - .06, .012, colorToHex(itemColor(wall)), opacityForView(itemOpacity(wall), "walls"));
+        glass.position.y = (height - .04) / 2 + .01;
+        applyGlassWallMaterial(glass, wall);
+        const rail = makeBox(wall.w + .02, .04, .045, colorToHex(wall.handrailColor || "#a08060"), opacityForView(1, "walls"));
+        rail.position.y = height - .02;
+        rail.material.roughness = .65;
+        rail.castShadow = true;
+        group.add(glass, rail);
+        three.root.add(group);
+        return;
+      }
       const height = wall.height ?? state.wallHeight;
       const color = colorToHex(itemColor(wall));
       const opacity = opacityForView(itemOpacity(wall), "walls");

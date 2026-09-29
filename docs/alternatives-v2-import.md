@@ -19,9 +19,40 @@ Roads, fences, trees, pool, and neighboring buildings retain their saved positio
 Lawns are trimmed at ground-floor slabs/terraces, and the seven-piece garden
 dining assembly shifts 55 cm outward to keep the chairs clear of the facade.
 
-The default 35 mm camera stands 4 m outside each alternative's own front door,
+The default camera stands 4 m outside each alternative's own front door,
 at 1.6 m eye height, looking directly toward the entrance. This is an eye-level
 entry view, not a copy of Alt-4's saved elevated overview.
+The lens is an app-wide browser preference (17 mm by default), not part of a
+project save. Loading a plan ignores legacy camera-mode fields.
+
+Internal doors in Alt-3/4/5 v2 use warm taupe/greige `#a89b8c`, per the user's
+finish selection. `tools/door_finishes.py` preserves source-reviewed exterior
+doors and glass doors, and is shared by the generators. Existing leaf opacity
+and opening styles remain unchanged.
+
+Alt-5 kitchen corner correction: the A34 inner L edges were mistaken for two
+complete counter bounds, omitting the 63 cm corner. The north run now reaches
+the west frame face. A14 handles 117E/1188 and 10F2/10F5 form an L-shaped exterior
+window, which the straight-gap detector missed because the corner has no A17
+jamb. The recipe explicitly supplies both perpendicular window hosts and panes.
+Window widths follow CAD; the 1 m sill and 1.2 m height remain display assumptions.
+QA checks counter connectivity, corner coverage, and raycasts both rendered panes.
+
+The Alt-5 living-floor master toilet also lost its window host at a stepped
+facade. A14 18C8/FFD/185A and A17 18CA/1991 establish a 110 cm opening in a
+25 cm exterior wall. Its recipe now restores the wall below/above the window;
+1.2 m sill and 1 m glazing height are explicit display assumptions. Tests check
+both wall-end connections and rendered opaque/glass/opaque vertical bands.
+
+Alt-3/4/5 v2 entrance and living floors have user-requested 90 cm opening guards:
+clear glass with a slim 4 cm warm-wood top rail (90 cm total, not 90 cm plus rail).
+`tools/opening_guards.py` unions actual incoming stair flights/landings with
+explicit elevator and double-height holes. It removes existing protective walls,
+stair arrivals, and departing stair footprints from eligible edges. It does not
+guard unused corners of stair bounding boxes or change other floor levels.
+Run it after geometry edits to refresh the generated guards; both importers do
+this after site registration. These are visualization details, not engineered
+glazing, mounting, or building-code specifications.
 
 `tools/alternative_site.py` also updates existing audited saves without rerunning
 CAD extraction, and prevents a second rotation. The importer applies the same

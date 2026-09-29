@@ -20,6 +20,8 @@ from shapely.ops import unary_union
 from build_alt4_v2 import Importer, LAYERS, item_polygon, polygons, rects, rounded
 from cad_text import decode_architect_text
 from alternative_site import SITE, register_site, record_registration
+from door_finishes import apply_interior_door_finish
+from opening_guards import add_opening_guards
 
 
 class AlternativeImporter(Importer):
@@ -398,6 +400,7 @@ class AlternativeImporter(Importer):
         self.voids()
         self.roof()
         self.apply_materials()
+        apply_interior_door_finish(self.plan)
         self.vertical_geometry()
         self.fit_roof_openings()
         self.validate()
@@ -407,6 +410,7 @@ class AlternativeImporter(Importer):
         self.audit['sourceRecipeSha256']=hashlib.sha256(json.dumps(self.recipe,sort_keys=True).encode()).hexdigest()
         external=json.loads(SITE.read_text(encoding='utf-8'))
         record_registration(self.audit, register_site(self.plan, self.material_donor, external))
+        add_opening_guards(self.plan)
         self.plan['importAudit']=f'docs/alt{self.alternative}-v2-layer-audit.json'
         Path(f'plans/{self.key}.json').write_text(json.dumps(self.plan,indent=2)+'\n',encoding='utf-8')
         Path(self.plan['importAudit']).write_text(json.dumps(self.audit,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

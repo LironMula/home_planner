@@ -27,17 +27,19 @@ const server = http.createServer((req, res) => {
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
     await page.waitForFunction(() => typeof three !== 'undefined' && three.isReady);
-    assert.equal(await page.evaluate(() => state.cameraMode), '35mm', 'Fresh default');
+    assert.equal(await page.evaluate(() => state.cameraMode), '17mm', 'Fresh default');
     const plan = JSON.parse(fs.readFileSync(path.join(root, 'plans/architect-alt-4-v2.json'), 'utf8'));
-    for (const [savedMode, expected] of [[null, '35mm'], ['human', '35mm'], ['invalid', '35mm'],
-      ['24mm', '24mm'], ['35mm', '35mm'], ['fixed', 'fixed']]) {
-      const loaded = await page.evaluate(({ plan, savedMode }) => {
-        applyPlanSnapshot({ ...plan, cameraMode: savedMode });
-        return { mode: state.cameraMode, saved: planSnapshot().cameraMode, focal: three.camera.getFocalLength() };
-      }, { plan, savedMode });
-      assert.equal(loaded.mode, expected);
-      assert.equal(loaded.saved, expected);
-      if (expected !== 'fixed') assert(Math.abs(loaded.focal - parseInt(expected)) < 1e-8);
+    for (const expected of ['17mm', '24mm', '35mm', 'fixed']) {
+      await page.evaluate(mode => setCameraMode(mode), expected);
+      for (const savedMode of [undefined, null, 'human', 'invalid', '17mm', '24mm', '35mm', 'fixed']) {
+        const loaded = await page.evaluate(({ plan, savedMode }) => {
+          applyPlanSnapshot({ ...plan, cameraMode: savedMode });
+          return { mode: state.cameraMode, saved: Object.hasOwn(planSnapshot(), 'cameraMode'), focal: three.camera.getFocalLength() };
+        }, { plan, savedMode });
+        assert.equal(loaded.mode, expected);
+        assert.equal(loaded.saved, false, 'Lens must not be serialized with the project');
+        if (expected !== 'fixed') assert(Math.abs(loaded.focal - parseInt(expected)) < 1e-8);
+      }
     }
     const output = path.join(root, 'pdf_renders/camera-lenses');
     fs.mkdirSync(output, { recursive: true });
@@ -49,7 +51,7 @@ const server = http.createServer((req, res) => {
       if (layout === 'mobile') await page.setViewportSize({ width: 390, height: 844 });
       await page.waitForTimeout(200);
       const fovs = [];
-      for (const lens of [35, 24]) {
+      for (const lens of [35, 24, 17]) {
         await page.locator('#cameraModeBtn').click();
         await page.locator(`[data-camera-mode="${lens}mm"]`).click();
         assert.equal(await page.locator(`[data-camera-mode="${lens}mm"]`).getAttribute('aria-checked'), 'true');
@@ -121,6 +123,7 @@ const server = http.createServer((req, res) => {
         console.log(JSON.stringify({ layout, lens, projectionChecks: checks.results.length, fov: checks.actualFov, house }));
       }
       assert(fovs[1] > fovs[0], '24 mm must be wider than 35 mm');
+      assert(fovs[2] > fovs[1], '17 mm must be wider than 24 mm');
       const fixed = await page.evaluate(() => {
         setCameraMode('fixed');
         const rect = threeCanvas.getBoundingClientRect();
@@ -130,7 +133,7 @@ const server = http.createServer((req, res) => {
       assert(Math.abs(fixed.actual - fixed.expected) < 1e-8);
     }
     const reflection = await page.evaluate(() => {
-      setCameraMode('35mm');
+      setCameraMode('17mm');
       const mirror = three.mirrors[0];
       if (!mirror) return null;
       three.scene.updateMatrixWorld(true);
@@ -151,10 +154,14 @@ const server = http.createServer((req, res) => {
     assert(reflection?.colors > 5, JSON.stringify(reflection));
     assert(reflection.avatarHidden && reflection.targetRestored);
     await page.screenshot({ path: path.join(output, 'mirror.png') });
-    await page.evaluate(() => { setCameraMode('24mm'); savePlan(); });
+    await page.evaluate(() => { savePlan(); setCameraMode('24mm'); });
     await page.reload();
     await page.waitForFunction(() => typeof three !== 'undefined' && three.isReady);
-    assert.equal(await page.evaluate(() => state.cameraMode), '24mm');
+    assert.equal(await page.evaluate(() => state.cameraMode), '24mm', 'Lens persists without saving the project');
+    await page.evaluate(() => localStorage.setItem(cameraModePreferenceKey, 'invalid'));
+    await page.reload();
+    await page.waitForFunction(() => typeof three !== 'undefined' && three.isReady);
+    assert.equal(await page.evaluate(() => state.cameraMode), '17mm', 'Invalid system preference uses the default');
     assert.deepEqual(errors, []);
     console.log('Lens projection, straight lines, persistence, migration, mirrors and navigation passed.');
   } finally {

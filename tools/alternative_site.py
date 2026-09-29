@@ -110,13 +110,14 @@ def register_site(plan, donor, external):
     door_x = sum(o['x'] for o in entrances) / len(entrances)
     door_y = sum(o['y'] for o in entrances) / len(entrances)
     plan['camera'] = dict(position=dict(x=round(door_x,3), y=1.6, z=round(door_y+4,3)), yaw=math.pi, pitch=0)
-    plan.update(cameraMode='35mm', activeFloorId=ground, viewFloor='all')
+    plan.pop('cameraMode', None)
+    plan.update(activeFloorId=ground, viewFloor='all')
     registration = dict(rotationDegrees=180, xTranslation=round(tx,3), yTranslation=round(ty,3),
         anchors='Alt-4 garden-side facade X and rear setback Y; source front entrance now faces the approach',
         exteriorSave='plans/ruchama-18-20-external.json',
         exteriorSha256=hashlib.sha256(SITE.read_bytes()).hexdigest(),
         adjustments=adjustments, entranceIds=[o['id'] for o in entrances],
-        defaultCamera='35 mm, 1.6 m eye height, 4 m outside the front entrance, looking straight at it')
+        defaultCamera='1.6 m eye height, 4 m outside the front entrance, looking straight at it; lens uses the system preference')
     plan['siteRegistration'] = registration
     return registration
 

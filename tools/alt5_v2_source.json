@@ -8417,6 +8417,30 @@
     "ground": {
       "openings": [
         {
+          "handle": "audited-kitchen-north-corner-window",
+          "name": "Kitchen north corner window",
+          "kind": "window",
+          "endpoints": [[28622.36685133668, 3187.902926138083], [28932.36685133668, 3187.902926138083]],
+          "thickness": 0.3,
+          "height": 1.2,
+          "sill": 1,
+          "handles": ["117E", "1188", "1093", "109B"],
+          "heightBasis": "Assumed 1 m sill and 1.2 m glazing, consistent with other counter-height windows; CAD plan establishes horizontal frame extent only.",
+          "geometryEvidence": "A14 inner/outer L frame at A17 facade corner; shared centerline with west return."
+        },
+        {
+          "handle": "audited-kitchen-west-corner-window",
+          "name": "Kitchen west corner window",
+          "kind": "window",
+          "endpoints": [[28622.36685133668, 3067.902926138083], [28622.36685133668, 3187.902926138083]],
+          "thickness": 0.3,
+          "height": 1.2,
+          "sill": 1,
+          "handles": ["10F2", "10F5", "1094", "11DE"],
+          "heightBasis": "Assumed 1 m sill and 1.2 m glazing, matching the north corner window.",
+          "geometryEvidence": "A14 frame turns 90 degrees at the corner instead of terminating at an A17 jamb."
+        },
+        {
           "handle": "audited-pantry-kitchen-entry",
           "name": "Pantry to kitchen door",
           "kind": "door",
@@ -8786,7 +8810,7 @@
             "10EC"
           ],
           "bounds": [
-            28700.36685133668,
+            28637.36685133668,
             3110.902926138083,
             29062.36685133668,
             3172.902926138083
@@ -8797,7 +8821,7 @@
             0,
             -1
           ],
-          "note": "Keep source bay widths; sink1109 is a component."
+          "note": "Include the 63 cm corner back to the west wall/frame face; A34 1051/1052 and 11D1/11D2 mark the inner L turn, not a gap. Sink1109 remains a component."
         },
         {
           "name": "Kitchen west work surface return",
@@ -9840,6 +9864,18 @@
     },
     "living": {
       "openings": [
+        {
+          "handle": "audited-master-toilet-window",
+          "name": "Master bathroom window behind toilet",
+          "kind": "window",
+          "endpoints": [[28619.86685133668, 5564.783665959826], [28619.86685133668, 5674.783665959826]],
+          "thickness": 0.25,
+          "sill": 1.2,
+          "height": 1.0,
+          "handles": ["18C8", "FFD", "185A", "18CA", "1991"],
+          "geometryEvidence": "110 cm A14 framed facade gap between A17 18CA and 1991; exterior wall faces at X28607.3669 and X28632.3669. Restore solid host below and above glazing.",
+          "heightBasis": "Display assumption: 1.2 m sill above toilet cistern and 1 m window height; no source vertical window dimensions."
+        },
         {
           "handle": "audited-master-suite-entry",
           "name": "Master suite entrance",

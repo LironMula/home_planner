@@ -2236,8 +2236,8 @@
         }
       ],
       "counts": {
-        "walls": 47,
-        "openings": 11,
+        "walls": 49,
+        "openings": 13,
         "elements": 37,
         "rooms": 4
       },
@@ -3839,8 +3839,8 @@
         }
       ],
       "counts": {
-        "walls": 66,
-        "openings": 18,
+        "walls": 67,
+        "openings": 19,
         "elements": 34,
         "rooms": 12
       },
@@ -5112,10 +5112,10 @@
     "generatorChecksPassed": true,
     "publicationReady": true,
     "pending": [],
-    "planSha256": "9735f6ec2f21ea993c71a467883a0b6b0447fda9550fb660fbfa102b5273feb4",
+    "planSha256": "715eac665cbcad30cd87604fc7ebb46356dc3412fd60b00e98360d89eed974f9",
     "sourceOverlayReviewed": true,
     "browser": {
-      "planSha256": "9735f6ec2f21ea993c71a467883a0b6b0447fda9550fb660fbfa102b5273feb4",
+      "planSha256": "715eac665cbcad30cd87604fc7ebb46356dc3412fd60b00e98360d89eed974f9",
       "entrance": {
         "facing": 1,
         "projected": [
@@ -5143,7 +5143,7 @@
       "checks": [
         {
           "floor": "architect-alt-5-v2-basement",
-          "colors": 1114,
+          "colors": 1025,
           "surfaces": 15,
           "holeChecks": 0,
           "blocked": [],
@@ -5151,7 +5151,7 @@
         },
         {
           "floor": "architect-alt-5-v2-ground",
-          "colors": 1499,
+          "colors": 2585,
           "surfaces": 22,
           "holeChecks": 135,
           "blocked": [],
@@ -5159,7 +5159,7 @@
         },
         {
           "floor": "architect-alt-5-v2-living",
-          "colors": 2059,
+          "colors": 1510,
           "surfaces": 37,
           "holeChecks": 351,
           "blocked": [],
@@ -5167,7 +5167,7 @@
         },
         {
           "floor": "architect-alt-5-v2-top",
-          "colors": 1484,
+          "colors": 940,
           "surfaces": 23,
           "holeChecks": 189,
           "blocked": [],
@@ -5179,7 +5179,7 @@
     "scope": "Visualization checked against source geometry. Inferred openings and source discrepancies remain documented in the source recipe; not a construction certification."
   },
   "sourceRecipe": "tools/alt5_v2_source.json",
-  "sourceRecipeSha256": "847c33b0045be1b4fc35ab796e86a92ae6fe1b575eb2b503dfffd5c81ee7a3ac",
+  "sourceRecipeSha256": "d8e376aadbdf0a3227ec5e362f3d2f908b3a359bce5480b3b6108baeb79e4a31",
   "siteRegistration": {
     "rotationDegrees": 180,
     "xTranslation": 12.65,
@@ -5207,6 +5207,6 @@
     "entranceIds": [
       "architect-alt-5-v2-ground-audited-main-entry"
     ],
-    "defaultCamera": "35 mm, 1.6 m eye height, 4 m outside the front entrance, looking straight at it"
+    "defaultCamera": "1.6 m eye height, 4 m outside the front entrance, looking straight at it; lens uses the system preference"
   }
 }

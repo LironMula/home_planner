@@ -127,6 +127,51 @@ const server = http.createServer((req, res) => {
         }, floor);
         await page.screenshot({path: path.join(output, `browser-${key}-human.png`)});
       }
+      if (alt === 5) {
+        const glazing = await page.evaluate(() => {
+          state.viewFloor = 'architect-alt-5-v2-ground';
+          state.activeFloorId = state.viewFloor;
+          els.viewFloorSelect.value = state.viewFloor;
+          const rect = canvas.getBoundingClientRect();
+          state.scale = 110;
+          state.offset = {x:rect.width/2-7.7*state.scale,y:rect.height/2-6.7*state.scale};
+          three.orbit.position.set(7.2, 1.6, 5.4);
+          three.orbit.yaw = .45; three.orbit.pitch = -.08;
+          renderAll();
+          return state.openings.filter(o => o.id.includes('kitchen-') && o.id.includes('corner-window')).map(o => {
+            const direction = o.name.includes('north') ? new THREE.Vector3(0,0,1) : new THREE.Vector3(1,0,0);
+            const origin = new THREE.Vector3(o.x, 1.6, o.y).addScaledVector(direction,-.4);
+            const ray = new THREE.Raycaster(origin,direction,0,.8);
+            ray.camera = three.camera;
+            const hit = ray.intersectObjects(three.root.children,true).find(h => h.object.isMesh);
+            return {id:o.id, color:hit?.object.material.color?.getHexString()};
+          });
+        });
+        assert.equal(glazing.length,2);
+        for (const pane of glazing) assert.equal(pane.color,'45a9d8',JSON.stringify(pane));
+        await page.screenshot({path:path.join(output,'browser-kitchen-corner.png')});
+        const bathroom = await page.evaluate(() => {
+          state.viewFloor = 'architect-alt-5-v2-living';
+          state.activeFloorId = state.viewFloor;
+          els.viewFloorSelect.value = state.viewFloor;
+          const floor = state.floors.find(f => f.id === state.viewFloor);
+          const rect = canvas.getBoundingClientRect();
+          state.scale = 150;
+          state.offset = {x:rect.width/2-9*state.scale,y:rect.height/2-7.2*state.scale};
+          three.orbit.position.set(8.65,floor.elevation+1.6,7.6);
+          three.orbit.yaw = Math.PI/2; three.orbit.pitch = -.12;
+          renderAll();
+          return [.9,1.6,2.4].map(height => {
+            const ray = new THREE.Raycaster(new THREE.Vector3(9.6,floor.elevation+height,7.5),
+              new THREE.Vector3(1,0,0),0,.6);
+            ray.camera = three.camera;
+            const hit = ray.intersectObjects(three.root.children,true).find(h => h.object.isMesh);
+            return hit?.object.material.color?.getHexString();
+          });
+        });
+        assert.deepEqual(bathroom,['fefdfa','45a9d8','fefdfa'],'Bathroom wall below/above glazing');
+        await page.screenshot({path:path.join(output,'browser-master-toilet-wall.png')});
+      }
       for (const [index, pose] of [[18, 9, 14, 3.95], [-3, 9, 14, 2.4], [18, 9, -5, -1.1], [-3, 9, -5, .85]].entries()) {
         await page.evaluate(pose => {
           state.viewFloor = 'all'; els.viewFloorSelect.value = 'all';

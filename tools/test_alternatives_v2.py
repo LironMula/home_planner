@@ -14,6 +14,41 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class AlternativeTests(unittest.TestCase):
+    def test_alt5_master_toilet_enclosure(self):
+        from build_alt4_v2 import item_polygon
+        from shapely.geometry import Point
+        plan=json.loads((ROOT/'plans/architect-alt-5-v2.json').read_text())
+        opening=next(o for o in plan['openings'] if o['id'].endswith('audited-master-toilet-window'))
+        wall=next(w for w in plan['walls'] if w['id']==opening['wallId'])
+        toilet=next(e for e in plan['elements'] if e['id'].endswith('fixture-18D0'))
+        self.assertAlmostEqual(opening['width'],1.1)
+        self.assertGreater(opening['sill'],toilet['height'])
+        self.assertGreater(wall['height'],opening['sill']+opening['height'])
+        self.assertTrue(item_polygon(wall).covers(Point(9.925,7.81)))
+        neighbors=[item_polygon(w) for w in plan['walls'] if w['floorId']==wall['floorId'] and w['id']!=wall['id']]
+        for y in (7.16,8.26):
+            self.assertLess(Point(9.925,y).distance(unary_union(neighbors)),.001)
+
+    def test_alt5_kitchen_corner(self):
+        from build_alt4_v2 import item_polygon
+        plan=json.loads((ROOT/'plans/architect-alt-5-v2.json').read_text())
+        counters=[e for e in plan['elements'] if e['name'] in
+                  ('Kitchen north work surface','Kitchen west work surface return')]
+        self.assertEqual(len(counters),2)
+        a,b=[item_polygon(e) for e in counters]
+        self.assertLess(a.distance(b),.0001)
+        self.assertGreater(a.buffer(.0001).intersection(b.buffer(.0001)).length,.6)
+        self.assertTrue(unary_union([a,b]).buffer(.0001).covers(box(9,7.59,9.63,8.21)))
+        windows=[o for o in plan['openings'] if 'kitchen-' in o['id'] and 'corner-window' in o['id']]
+        self.assertEqual(len(windows),2)
+        self.assertEqual(sorted(o['width'] for o in windows),[1.2,3.1])
+        for opening in windows:
+            self.assertEqual(opening['type'],'window')
+            self.assertGreater(opening['sill'],counters[0]['height'])
+            host=next(w for w in plan['walls'] if w['id']==opening['wallId'])
+            self.assertEqual(host['rotation'],opening['rotation'])
+            self.assertGreater(host['height'],opening['sill']+opening['height'])
+
     def test_shared_split_slab_holes_rotate_once(self):
         hole=dict(x=1,y=2,w=.8,h=1.2)
         slab=dict(x=0,y=0,w=4,h=5,floorHoles=[hole])
@@ -36,7 +71,7 @@ class AlternativeTests(unittest.TestCase):
                 tx,ty=site['xTranslation'],site['yTranslation']
                 self.assertEqual(site,audit['siteRegistration'])
                 self.assertEqual(site['rotationDegrees'],180)
-                self.assertEqual(plan['cameraMode'],'35mm')
+                self.assertNotIn('cameraMode',plan)
                 snapshot=copy.deepcopy(plan)
                 register_site(plan,donor,exterior)
                 self.assertEqual(plan,snapshot,'Registration must not duplicate or rotate twice')

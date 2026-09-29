@@ -6579,10 +6579,10 @@
     "generatorChecksPassed": true,
     "publicationReady": true,
     "pending": [],
-    "planSha256": "11e9b6a37724730e577b35536f541106b6623c9d939bbaf6f6f8b83583f02dbf",
+    "planSha256": "b0d21ddfd74feb1830e4e7c5d59e610755bad4184523b41feb62485438c36eb5",
     "sourceOverlayReviewed": true,
     "browser": {
-      "planSha256": "11e9b6a37724730e577b35536f541106b6623c9d939bbaf6f6f8b83583f02dbf",
+      "planSha256": "b0d21ddfd74feb1830e4e7c5d59e610755bad4184523b41feb62485438c36eb5",
       "entrance": {
         "facing": 1,
         "projected": [
@@ -6610,7 +6610,7 @@
       "checks": [
         {
           "floor": "architect-alt-3-v2-basement",
-          "colors": 1088,
+          "colors": 998,
           "surfaces": 17,
           "holeChecks": 0,
           "blocked": [],
@@ -6618,7 +6618,7 @@
         },
         {
           "floor": "architect-alt-3-v2-ground",
-          "colors": 1574,
+          "colors": 2046,
           "surfaces": 31,
           "holeChecks": 135,
           "blocked": [],
@@ -6626,7 +6626,7 @@
         },
         {
           "floor": "architect-alt-3-v2-living",
-          "colors": 1762,
+          "colors": 1554,
           "surfaces": 53,
           "holeChecks": 612,
           "blocked": [],
@@ -6634,7 +6634,7 @@
         },
         {
           "floor": "architect-alt-3-v2-top",
-          "colors": 1447,
+          "colors": 1015,
           "surfaces": 30,
           "holeChecks": 486,
           "blocked": [],
@@ -6675,6 +6675,6 @@
       "architect-alt-3-v2-ground-door-1870-0",
       "architect-alt-3-v2-ground-door-18CF-1"
     ],
-    "defaultCamera": "35 mm, 1.6 m eye height, 4 m outside the front entrance, looking straight at it"
+    "defaultCamera": "1.6 m eye height, 4 m outside the front entrance, looking straight at it; lens uses the system preference"
   }
 }
